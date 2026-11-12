@@ -437,7 +437,7 @@ var T = {
         career:['2022~ 심플리파이어 대표 — 스타트업 플레잉코칭·기업 강연, AI 에이전트 서비스 Carvit','빗썸 COO','요기요(딜리버리히어로 코리아) CPO — 조직이 50명에서 1,000명으로','삼성전자 스마트TV PM','네이버 콘텐츠서비스 팀장','2001 다모임 기획자 — 첫 회사'],
         links:[['링크드인','https://www.linkedin.com/in/simplifier/'],['브런치','https://brunch.co.kr/@simplifier'],['홈페이지','https://simplifier.co.kr/']]},
   jun: {img:'img/jun.jpg', pic:'manLaptop', nm:'이준혁', role:'THE BUILDER', line:'잡코리아 PO · 전 텐덤 COO·CPO', book:'《우리는 아직도 출근 중입니다》 《우리는 아직도 퇴근 중입니다》 저자',
-        proof:'두 번의 M&A를 경험한 빌더로서 자동화 에이전트를 매일 직접 운영하는 PO', job:'실습 — 내 업무 에이전트를 끝까지 만들어 돌리기', jobS:'실습: 업무 에이전트 끝까지 만들기',
+        proof:'두 번의 M&A를 경험한 빌더로서 자동화 에이전트를 매일 직접 운영하는 PO', proofS:'M&A 두 번을 겪은 빌더, 에이전트를 매일 운영하는 PO', job:'실습 — 내 업무 에이전트를 끝까지 만들어 돌리기', jobS:'실습: 업무 에이전트 끝까지 만들기',
         does:'크몽·미디어윌 두 번의 M&A를 겪으며 조직과 업무가 통째로 바뀌는 과정을 현장에서 운영했어요. 그때 익힌 일을 쪼개고 다시 짜는 법으로, 지금은 반복 업무를 AI 에이전트에게 맡겨 매일 직접 돌립니다. PAUSE에서는 내 업무 하나를 골라 설계부터 테스트까지 끝까지 만들어 보는 실습을 맡아요.',
         career:['잡코리아 PO','전 텐덤 COO·CPO','메디아이플러스 사업본부장','마케팀을담다 신사업 PO (크몽 M&A)','전 스테이션3(부동산플랫폼 다방) 운영총괄팀장 (미디어윌 M&A)'],
         links:[['링크드인','https://www.linkedin.com/in/junhyuck-l-7707081aa/'],['브런치','https://brunch.co.kr/@5e7ac6b8a3314c9']]},
@@ -614,7 +614,7 @@ function vHome(){
 
   '<section class="section dark"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Hosts</p><h2 class="h2">세 강사가 함께 들어가요</h2></div><a class="btn btn-line btn-sm" href="#team">강사 소개</a></div>' +
-    '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#team">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proof) + '</p></a>'; }).join('') + '</div>' +
+    '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#team">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proofS || t.proof) + '</p></a>'; }).join('') + '</div>' +
   '</div></section>' +
 
   '<section class="section"><div class="wrap split">' +
@@ -853,7 +853,7 @@ function vTeam(){
   return '<section class="section dark"><div class="wrap">' +
     '<p class="eyebrow">Hosts</p><h1 class="h1 one" style="font-size:clamp(28px,3.9vw,50px)">집중을 지키는 사람, 설계하는 사람, 만드는 사람</h1>' +
     '<p class="lead" style="max-width:680px;margin:16px 0 48px">세 사람이 한 워크샵에 함께 들어가는 이유예요. 무엇을 맡길지 정하고, 끝까지 만들어 돌리고, 그 사이 집중이 끊기지 않게 지켜요.</p>' +
-    '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#t-' + k + '">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proof) + '</p><p>워크샵에서 · ' + esc(t.jobS) + '</p></a>'; }).join('') + '</div>' +
+    '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#t-' + k + '">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proofS || t.proof) + '</p><p>워크샵에서 · ' + esc(t.jobS) + '</p></a>'; }).join('') + '</div>' +
   '</div></section>' +
   ['lee','han','jun'].map(function(k, i){ var t = T[k]; return '<section class="section' + (i % 2 ? ' paper' : '') + '" id="t-' + k + '"><div class="wrap bio">' +
     tph(t, 900, 'bio-pic') +
