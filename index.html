@@ -428,26 +428,18 @@ function blurb(t){ return t.nm + ' (' + t.role + ') — ' + t.line + '. ' + t.bo
 
 /* ===== 워크샵 ===== */
 var W = [
-  {id:'afternoon', kind:'오후 6시간', badge:'대표 프로그램', title:'오후 워크샵 13:00~19:00', sub:'오전 업무를 마치고 들어와, 저녁 전에 팀이 쓸 에이전트 하나를 들고 나가는 6시간. 마무리는 차 한 잔과 시연이에요',
-   photos:['laptops','teaPour','notes'], more:['laugh','bookLaptop','teaCup','pointNotes'], who:['han','jun','lee'], size:'10~30명', place:'귀사 교육장 / 외부 공간', tools:'Claude 1개로 집중',
+  {id:'outdoor', kind:'종일 · 야외', hours:'09:30~17:30 · 7시간', badge:'대표 프로그램 1', title:'숲에서 보내는 종일 워크샵', sub:'사무실을 벗어나 서울 근교·강원 숲속 교육장에서 하루. 오전엔 걷고 차를 마시고, 낮엔 팀이 쓸 에이전트를 만들고, 오후엔 숲속 티 세션으로 닫아요',
+   photos:['birch','woods','cabin'], more:['pine','teaPour','sunForest','forest'], who:['han','jun','lee'], size:'15~40명', place:'서울 근교·강원(홍천 등) 야외 교육장·숲속 숙소 — 장소 연결 가능', tools:'Claude + 팀 과제 1개',
+   fit:'연말·분기 팀 워크샵, 힐링과 교육을 한 번에 하고 싶을 때, 직무가 섞인 부서',
+   make:['팀이 함께 쓰는 업무 에이전트 1개','직무별 에이전트 (보고서·데이터·CS 중 택)','다음 90일 팀 약속'],
+   opt:'1박 2일로 늘리기 — 저녁 숲속 티 세션, 우리 팀 퀴즈·룰렛 게임 레크리에이션, 다음 날 아침 산책과 쇼케이스를 더해요.',
+   tl:[['09:30','도착 · 숲길 산책과 아침의 차','핸드폰을 잠시 내려놓고 20분 걷기',1],['10:10','진단','무엇을 AI에게 맡기고 무엇을 사람이 정할까 (한성희)'],['10:50','문 여는 실습','팀 캐릭터·퀴즈 게임을 30분 만에'],['11:30','본 실습 ①','팀 과제 고르고 에이전트 설계 (이준혁)'],['12:30','야외 점심','—'],['13:30','본 실습 ②','완성하고 서로 써 보기, 검수하는 법'],['15:00','숲속 티 세션 · 30분','계절 차와 1:1 질문 (이유진)',1],['15:30','팀 쇼케이스','팀별 시연과 투표'],['16:40','회고와 약속','다음 90일에 해 볼 것 적기'],['17:30','끝','24시간 안에 HR 리포트 전달']]},
+  {id:'office', kind:'오후 · 사무실', hours:'13:00~18:00(5시간) 또는 19:00(6시간)', badge:'대표 프로그램 2', title:'사무실에서 보내는 오후 워크샵', sub:'오전 업무를 마치고 귀사 교육장으로. 저녁 전까지 팀이 쓸 에이전트 하나를 만들고, 마무리는 차 한 잔과 시연이에요',
+   photos:['laptops','teaPour','notes'], more:['laugh','bookLaptop','teaCup','pointNotes'], who:['han','jun','lee'], size:'10~30명', place:'귀사 교육장·회의실', tools:'Claude 1개로 집중',
+   fit:'한 팀이 같은 업무를 바꾸고 싶을 때, 하루를 통째로 비우기 어려울 때, 정기프로그램의 분기 회차',
    make:['팀이 매주 쓰는 보고서·회의록 정리 에이전트','고객 문의 답변 초안 봇 또는 경쟁사 조사 자동화','각자 “다음 2주에 해 볼 한 가지” 약속'],
-   tl:[['13:00','진단','무엇을 맡기고 무엇을 사람이 정할까 (한성희)'],['13:40','문 여는 실습','추억의 게임이나 퀴즈 하나를 30분 만에 만들기'],['14:20','본 실습 ①','우리 팀 업무 1개 고르고 에이전트 설계 (이준혁)'],['15:30','티 브레이크 · 20분','눈을 쉬는 차 한 잔, 테이블마다 1:1 질문 (이유진)',1],['15:50','본 실습 ②','완성하고 서로 써 보기, 검수하는 법'],['17:20','쇼케이스','팀별 3분 시연과 투표'],['18:20','마무리 차 한 잔','저녁의 차와 다음 2주 약속 적기',1],['19:00','끝','24시간 안에 HR 리포트 전달']]},
-  {id:'talk', kind:'2~4시간', badge:'단발 특강', title:'단발 특강: 우리 팀 첫 에이전트', sub:'전사 특강이나 처음 써 보는 팀, 임원 대상. 2~4시간 안에 각자 결과물 하나를 만들어 가요',
-   photos:['desk2','teaCup','manLaptop'], more:['laptops','teaPour','notes','laugh'], who:['jun','lee'], size:'10~100명', place:'귀사 회의실 / 강당', tools:'Claude 1개',
-   make:['문 여는 실습 결과물 1개 (미니 게임·퀴즈·추천 앱)','매주 쓰는 문서를 정리하는 간단한 에이전트'],
-   tl:[['0:00','문 여는 실습','30분 만에 미니 게임이나 퀴즈 만들기'],['0:35','본 실습','우리 팀 업무 1개를 에이전트로'],['1:05','티 브레이크 · 15분','차 한 잔과 1:1 질문',1],['1:20','완성과 공유','서로 써 보기'],['1:50','마무리','내일 바로 쓸 체크리스트 · 4시간 과정은 실습을 한 번 더']]},
-  {id:'fullday', kind:'하루', badge:'직무별 스프린트', title:'하루 워크샵 09:30~17:30', sub:'직무가 섞인 부서를 위한 7시간. 직무별로 나눠 보고서·데이터·CS 업무를 에이전트에게 넘겨요',
-   photos:['brainstorm','teapot','pointNotes'], more:['team','desk','notes','teaCup'], who:['han','jun','lee'], size:'20~40명', place:'귀사 교육장 / 외부 공간', tools:'Claude + 사내 문서 양식',
-   make:['직무별 에이전트 (엑셀·데이터 정리, 채용 공고 초안, 사내 FAQ 등)','팀 쇼케이스와 다음 분기 확장 후보'],
-   tl:[['09:30','진단','무엇을 맡기고 무엇을 사람이 정할까'],['10:20','문 여는 실습','하나만 골라 30분'],['11:00','오전 티 브레이크','아침의 차 한 잔',1],['11:20','직무별 실습 ①','사전 진단으로 받은 양식으로 설계'],['12:30','점심','—'],['13:30','직무별 실습 ②','완성·검수'],['15:00','오후 티 브레이크','1:1 질문',1],['15:20','쇼케이스','팀별 시연과 투표'],['16:50','마무리','다음 2주 약속과 설문']]},
-  {id:'retreat', kind:'1박 2일', badge:'힐링 리트리트', title:'숲에서 1박 2일, AI 리트리트', sub:'홍천처럼 서울에서 두 시간 안팎 숲속 숙소에서. 낮엔 만들고, 저녁엔 차를 우리고, 아침엔 걷습니다',
-   photos:['birch','cabin','woods'], more:['pine','teaPour','sunForest','forest'], who:['han','jun','lee'], size:'15~40명', place:'강원 홍천 등 숲속 숙소 (연결 가능)', tools:'Claude + 팀 과제 1개',
-   make:['팀이 함께 쓰는 업무 에이전트 1개','우리 팀 퀴즈·룰렛 게임 (저녁 레크리에이션)','오늘의 티 추천 에이전트'],
-   tl:[['1일차 14:00','체크인 · 문 여는 실습','팀 캐릭터와 이모티콘 만들기'],['15:30','팀 프로젝트','팀이 함께 쓸 에이전트 설계·제작'],['18:00','저녁','—'],['20:00','숲속 티 세션','이유진 티마스터와 저녁의 차, 무카페인 라인업',1],['2일차 08:00','아침 산책과 차 한 잔','핸드폰 없이 30분',1],['09:30','쇼케이스','팀별 시연과 다음 분기 약속'],['11:30','체크아웃','24시간 안에 HR 리포트 전달']]},
-  {id:'pilot', kind:'60~90분', badge:'파일럿', title:'첫 고객 파일럿 클래스', sub:'10~15명이 60~90분 동안 맛보는 축소판. 후기·사례 공유를 조건으로 진행해요',
-   photos:['desk2','teaPour','bookLaptop'], more:['laptops','teaCup','manLaptop','laugh'], who:['jun','lee'], size:'10~15명', place:'귀사 회의실', tools:'Claude 1개',
-   make:['오늘의 점심·티 추천 미니 앱','회의록 자동 정리 에이전트'],
-   tl:[['0:00','문 여는 실습','미니 앱 하나 만들기'],['0:30','티 브레이크 · 10분','차 한 잔과 질문',1],['0:40','업무 실습','회의록 정리 에이전트'],['1:20','마무리','설문과 후기']]}
+   opt:'5시간은 18:00, 6시간은 시연을 늘려 19:00에 끝나요.',
+   tl:[['13:00','진단','무엇을 맡기고 무엇을 사람이 정할까 (한성희)'],['13:40','문 여는 실습','추억의 게임이나 퀴즈 하나를 30분 만에'],['14:20','본 실습 ①','우리 팀 업무 1개 고르고 에이전트 설계 (이준혁)'],['15:30','티 브레이크 · 20분','눈을 쉬는 차 한 잔, 테이블마다 1:1 질문 (이유진)',1],['15:50','본 실습 ②','완성하고 서로 써 보기, 검수하는 법'],['17:00','쇼케이스','팀별 시연과 투표'],['17:40','마무리 차 한 잔','저녁의 차와 다음 2주 약속 (5시간 과정 18:00 종료)',1],['18:00~19:00','6시간 과정','팀별 시연 확대와 다음 업무 후보 정하기']]}
 ];
 /* 모든 워크샵에 공통으로 붙는 앞뒤 흐름 */
 var FLOW = [['D-3','사전 진단 + 사전학습 VOD','보안·접속 확인, 30분 이내 영상으로 기본 용어와 계정 점검'],['당일','실습 절반 이상','듣는 시간보다 만드는 시간이 길어요. 툴은 하나로'],['24시간','HR 1쪽 리포트','참여율, 만든 결과물, 만족도, 다음 90일 제안'],['48시간','각자에게 한 번 더','당일 적은 약속과 연습 과제를 보내요'],['30일','짧은 설문','만든 에이전트를 아직 쓰는지 확인'],['60~90일','성과 점검','처음 정한 지표를 같이 봐요']];
@@ -541,17 +533,17 @@ function vHome(){
     '<div><strong>24h</strong><span>HR용 1쪽 성과 리포트</span></div>' +
   '</div></div>' +
   '<section class="section" style="padding-bottom:0"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">A day at PAUSE</p><h2 class="h2">오후 워크샵은 이렇게 흘러가요</h2></div><p class="lead">점심 먹고 들어와 저녁 전에 나가요. 13:00~19:00, 만들고 차 한 잔 하고 다시 만들어요.</p></div>' +
+    '<div class="sec-head"><div><p class="eyebrow">A day at PAUSE</p><h2 class="h2">오후 사무실 워크샵은 이렇게 흘러가요</h2></div><p class="lead">점심 먹고 들어와 저녁 전에 나가요. 13:00~18:00(또는 19:00), 만들고 차 한 잔 하고 다시 만들어요.</p></div>' +
     '<div class="day">' +
       dayCell('pointNotes','13:00','오늘 맡길 업무 고르기') + dayCell('manLaptop','14:20','에이전트 만들기') + dayCell('teapot','15:30','티 브레이크 20분') +
-      dayCell('laugh','17:20','서로 써 보고 웃기') + dayCell('bookLaptop','18:20','마무리 차 한 잔과 약속') +
+      dayCell('laugh','17:00','서로 써 보고 웃기') + dayCell('bookLaptop','17:40','마무리 차 한 잔과 약속') +
     '</div>' +
   '</div></section>' +
 
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Start here</p><h2 class="h2">세 가지로 시작해요</h2></div><p class="lead">한 번의 워크샵으로 맛보고, 1년 프로그램으로 이어 가고, 온라인으로 복습해요.</p></div>' +
     '<div class="doors">' +
-      door('#workshop','01 / WORKSHOP','워크샵','대표는 오후 6시간(13~19시). 짧은 특강부터 1박 2일 리트리트까지.','laugh','2~4시간 · 오후 6시간 · 하루 · 1박 2일') +
+      door('#workshop','01 / WORKSHOP','워크샵','숲에서 보내는 종일 야외, 귀사에서 하는 오후 5~6시간. 두 가지로 깊게.','laugh','종일 야외 · 오후 사무실') +
       door('#program','02 / ANNUAL','정기프로그램','워크샵 → 90일 시범 → 1년. 분기마다 진단하고, 만들고, 보여 주고, 쉬어 갑니다.','team','90일 시범 · 1년 정기') +
       door('#online','03 / ONLINE','온라인강의','워크샵 전 사전학습, 워크샵 뒤 복습. 같은 예제로 만든 VOD와 티 라이브.','desk2','사전학습 · 사후 복습 · 개인 수강') +
     '</div>' +
@@ -587,9 +579,9 @@ function vHome(){
   '</div></section>' +
 
   '<section class="band">' + ph('woods', 1800) +
-    '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Retreat · 1박 2일</p><h2 class="h1" style="font-size:clamp(32px,5vw,60px)">팀 워크샵,<br>이번엔 숲으로.</h2>' +
-    '<p class="lead">홍천처럼 서울에서 두 시간 안팎의 숲속 숙소에서. 낮엔 팀이 함께 쓸 에이전트를 만들고, 저녁엔 차를 우리고, 아침엔 걷습니다. 장소 연결부터 일정표까지 짜 드려요.</p>' +
-    '<div class="btns" style="margin-top:22px"><a class="btn btn-lime" href="#w-retreat">리트리트 일정 보기</a></div></div>' +
+    '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Outdoor · 종일</p><h2 class="h1" style="font-size:clamp(32px,5vw,60px)">팀 워크샵,<br>이번엔 숲으로.</h2>' +
+    '<p class="lead">홍천처럼 서울에서 두 시간 안팎의 숲속 교육장에서 하루. 아침엔 걷고, 낮엔 팀이 함께 쓸 에이전트를 만들고, 오후엔 숲속 티 세션으로 닫아요. 1박 2일로 늘릴 수도 있어요. 장소 연결부터 일정표까지 짜 드려요.</p>' +
+    '<div class="btns" style="margin-top:22px"><a class="btn btn-lime" href="#w-outdoor">종일 야외 일정 보기</a></div></div>' +
   '</section>' +
 
   '<section class="section dark"><div class="wrap">' +
@@ -599,9 +591,9 @@ function vHome(){
 
   '<section class="section"><div class="wrap split">' +
     '<div style="display:flex;flex-direction:column;gap:18px">' +
-      '<p class="eyebrow">For HR</p><h2 class="h2">한 번 해 보고 싶다면,<br>파일럿부터 가볍게</h2>' +
-      '<p class="lead">10~15명, 60~90분짜리 파일럿 클래스로 먼저 맛보세요. 후기와 사례 공유에 동의해 주시면 조건을 맞춰 드려요. 반응이 좋으면 정기프로그램으로 이어 가면 됩니다.</p>' +
-      '<div class="btns"><a class="btn btn-lime" href="#contact?type=pilot">파일럿 문의하기</a><a class="btn btn-line" href="#program">1년 프로그램 보기</a></div>' +
+      '<p class="eyebrow">For HR</p><h2 class="h2">숲으로 하루, 또는<br>사무실에서 오후</h2>' +
+      '<p class="lead">워크샵은 두 가지예요. 종일 야외 워크샵은 연말·분기 팀 워크샵을 겸하고, 오후 사무실 워크샵(5~6시간)은 한 팀이 같은 업무를 바꿀 때 좋아요. 어느 쪽이든 끝나면 90일 시범과 정기프로그램으로 이어 갈 수 있어요.</p>' +
+      '<div class="btns"><a class="btn btn-lime" href="#workshop">두 워크샵 비교하기</a><a class="btn btn-line" href="#program">1년 프로그램 보기</a></div>' +
     '</div>' + ph('laptops', 1200) +
   '</div></section>';
 }
@@ -625,11 +617,17 @@ function bindHome(){
 function vWorkshop(){
   return '<section class="section tight"><div class="wrap">' +
     '<p class="eyebrow">Workshops</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">워크샵</h1>' +
-    '<p class="lead" style="max-width:680px;margin-top:16px">기업 교육은 반나절과 하루가 가장 흔해요. PAUSE는 그 사이 <b>오후 6시간(13:00~19:00)</b>을 대표로 두고, 짧은 특강부터 1박 2일까지 골라 쓰게 했어요.</p>' +
+    '<p class="lead" style="max-width:680px;margin-top:16px">워크샵은 두 가지예요. 숲에서 보내는 <b>종일 야외 워크샵</b>, 그리고 귀사 교육장에서 하는 <b>오후 5~6시간 사무실 워크샵</b>. 듣고 끝나는 짧은 특강 대신, 팀이 결과물을 들고 나갈 만큼 충분한 시간을 써요.</p>' +
   '</div></section>' +
-  '<section style="padding-bottom:88px"><div class="wrap">' +
-    '<div class="filters" role="group" aria-label="길이로 보기">' + ['전체'].concat(W.map(function(w){ return w.kind; })).map(function(f, i){ return '<button type="button" data-f="' + f + '" aria-pressed="' + (i === 0) + '">' + f + '</button>'; }).join('') + '</div>' +
+  '<section style="padding-bottom:56px"><div class="wrap">' +
     '<div class="wlist" id="wlist">' + W.map(wCard).join('') + '</div>' +
+  '</div></section>' +
+  '<section class="section paper"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">Compare</p><h2 class="h2">어떤 걸 고를까요</h2></div></div>' +
+    '<div class="tbl-wrap"><table class="cmp"><thead><tr><th scope="col"></th>' + W.map(function(w){ return '<th scope="col">' + esc(w.title) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      [['시간','hours'],['장소','place'],['인원','size'],['이럴 때','fit'],['더하기','opt']].map(function(r){ return '<tr><td>' + r[0] + '</td>' + W.map(function(w){ return '<td>' + esc(w[r[1]]) + '</td>'; }).join('') + '</tr>'; }).join('') +
+      '<tr><td>차</td><td>아침의 차 + 숲속 티 세션 30분</td><td>티 브레이크 20분 + 마무리 차 한 잔</td></tr>' +
+    '</tbody></table></div>' +
   '</div></section>' + flowSection();
 }
 function flowSection(){
@@ -642,7 +640,7 @@ function wCard(w){
   return '<a class="wcard" href="#w-' + w.id + '" data-kind="' + esc(w.kind) + '">' + ph(w.photos[0], 1100) +
     '<div class="wcard-body"><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge">' + esc(w.badge) + '</span><span class="badge ln">' + esc(w.kind) + '</span></div>' +
     '<h2 class="h2" style="font-size:28px">' + esc(w.title) + '</h2><p class="muted" style="margin:0">' + esc(w.sub) + '</p>' +
-    '<div class="wmeta"><span><b>강사</b>' + who(w.who) + '</span><span><b>인원</b>' + esc(w.size) + '</span><span><b>장소</b>' + esc(w.place) + '</span></div>' +
+    '<div class="wmeta"><span><b>시간</b>' + esc(w.hours) + '</span><span><b>강사</b>' + who(w.who) + '</span><span><b>인원</b>' + esc(w.size) + '</span><span><b>장소</b>' + esc(w.place) + '</span></div>' +
     '<span style="font-weight:700">자세히 보기 →</span></div></a>';
 }
 function bindWorkshop(){
@@ -664,8 +662,10 @@ function vWDetail(w){
       '<div style="display:flex;gap:6px;margin-bottom:14px"><span class="badge">' + esc(w.badge) + '</span><span class="badge ln">' + esc(w.kind) + '</span></div>' +
       '<h1 class="h1" style="font-size:clamp(30px,4.4vw,50px)">' + esc(w.title) + '</h1>' +
       '<p class="lead" style="margin-top:16px">' + esc(w.sub) + '</p>' +
+      '<p class="bio-proof" style="margin-top:20px">이럴 때 좋아요 — ' + esc(w.fit) + '</p>' +
       '<h2>만들어 가는 것</h2><ul class="checks">' + w.make.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h2>진행 순서</h2><ol class="tl">' + w.tl.map(function(r){ return '<li' + (r[3] ? ' class="tea"' : '') + '><span class="t">' + esc(r[0]) + '</span><b>' + esc(r[1]) + (r[3] ? ' ☕' : '') + '</b><span>' + esc(r[2]) + '</span></li>'; }).join('') + '</ol>' +
+      (w.opt ? '<h2>더하기</h2><p>' + esc(w.opt) + '</p>' : '') +
       '<h2>현장은 이런 분위기예요</h2><div class="mosaic">' + (w.more || []).map(function(p){ return ph(p, 700); }).join('') + '</div>' +
       '<h2>담당자님께 미리 받는 것 (D-3)</h2><ul class="checks"><li>사내 보안 규정과 외부 AI 서비스 접속 가능 여부</li><li>직무별로 매주 쓰는 업무 양식 1~2개 (실습 예제로 씁니다)</li><li>참가 인원과 직무 구성, 카페인·알레르기 제한</li></ul>' +
       '<h2>끝나고 이어지는 것</h2><ul class="checks"><li>24시간 안에 HR용 1쪽 리포트</li><li>48시간 안에 참가자에게 약속과 연습 과제</li><li>사후 복습 VOD로 같은 예제를 다시</li><li>원하면 90일 시범으로 이어 가기 — <a href="#program">정기프로그램 보기</a></li></ul>' +
@@ -674,7 +674,7 @@ function vWDetail(w){
     '</div>' +
     '<aside class="aside" aria-label="워크샵 요약">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
-      '<dl><dt>길이</dt><dd>' + esc(w.kind) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>구성에 따라 견적</dd></dl>' +
+      '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>구성에 따라 견적</dd></dl>' +
       '<a class="btn btn-lime" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>' +
       '<a class="btn btn-line btn-sm" href="#program">1년 프로그램으로 이어 가기</a>' +
       '<p class="muted" style="margin:0;font-size:13px">제안서가 필요하면 문의 폼에 체크해 주세요.</p>' +
@@ -685,10 +685,10 @@ function vWDetail(w){
 /* ===== 정기프로그램: 1년 기업 전담 ===== */
 function vProgram(){
   var Q = [
-    ['Q1','진단과 킥오프','team',['전 직원 AI 활용 진단 설문','오후 워크샵으로 첫 에이전트','부서별 자동화 후보 업무 목록']],
-    ['Q2','직무별 심화','laptops',['하루 워크샵으로 직무별 스프린트','부서마다 에이전트 1개 운영 시작','팀장급 합류']],
+    ['Q1','진단과 킥오프','team',['전 직원 AI 활용 진단 설문','오후 사무실 워크샵으로 첫 에이전트','부서별 자동화 후보 업무 목록']],
+    ['Q2','직무별 심화','laptops',['오후 사무실 워크샵, 직무별로','부서마다 에이전트 1개 운영 시작','팀장급 합류']],
     ['Q3','쇼케이스','laugh',['부서별 에이전트 시연회','잘 쓰는 사례 사내 공유','다음 확장 업무 선정']],
-    ['Q4','리트리트와 회고','cabin',['1박 2일 숲속 리트리트','1년 성과 리포트','다음 해 계획 제안']]
+    ['Q4','숲에서 회고','cabin',['종일 야외 워크샵 (1박 2일 선택)','1년 성과 리포트','다음 해 계획 제안']]
   ];
   return '<section class="hero" style="min-height:min(70vh,640px)">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1" style="font-size:clamp(34px,5vw,60px)">한 회사를 1년 동안<br>맡아요</h1>' +
@@ -699,7 +699,7 @@ function vProgram(){
   '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">How it starts</p><h2 class="h2">워크샵 한 번에서 1년까지, 세 단계</h2></div><p class="lead">처음부터 연간 계약을 권하지 않아요. 각 단계의 결과가 다음 단계를 제안할 근거가 돼요.</p></div>' +
     '<ol class="stages">' +
-      '<li><span class="en">STEP 1</span><b>워크샵</b><p>오후 6시간 또는 2~4시간 특강. 끝날 때 각자 “다음 2주에 해 볼 한 가지”를 적어요.</p><small>24시간 리포트 끝에 90일 제안</small></li>' +
+      '<li><span class="en">STEP 1</span><b>워크샵</b><p>종일 야외 또는 오후 사무실(5~6시간). 끝날 때 각자 “다음 2주에 해 볼 한 가지”를 적어요.</p><small>24시간 리포트 끝에 90일 제안</small></li>' +
       '<li><span class="en">STEP 2</span><b>90일 시범</b><p>월 1회 온라인 체크인 2~3번, 사내 챔피언 1~2명, 점심 티 세션 1회. 내부 결재가 가벼운 크기예요.</p><small>체크인 성과로 연장 제안</small></li>' +
       '<li class="on"><span class="en">STEP 3</span><b>연간 정기프로그램</b><p>분기마다 대면 1회와 매달 체크인·티 세션, 회차별 리포트와 연말 성과 리포트.</p><small>아래 1년 흐름</small></li>' +
     '</ol>' +
@@ -748,7 +748,7 @@ function vOnline(){
       '<tr><td>정기프로그램 이용권</td><td>계약 기간 동안</td><td>다음 분기 주제 예습 + 월간 티 라이브</td><td>대면 회차 사이를 이어요</td></tr>' +
       '<tr><td>개인 수강</td><td>언제든</td><td>강사별 대표 강의</td><td>“우리 회사에도 해 보자”의 시작</td></tr>' +
     '</tbody></table></div>' +
-    '<div class="price-box" style="margin-top:28px"><div><p class="eyebrow">Package</p><div class="big" style="font-size:28px">오후 워크샵 + 3개월 이용권</div><p class="muted" style="margin:8px 0 0">워크샵 참가자 전원에게 사후 복습 VOD와 티 라이브를 3개월 열어 드려요. 3개월 뒤 90일 시범이나 정기프로그램으로 이어 갈지 함께 봐요.</p></div><a class="btn btn-lime" href="#contact?type=afternoon">패키지 문의</a></div>' +
+    '<div class="price-box" style="margin-top:28px"><div><p class="eyebrow">Package</p><div class="big" style="font-size:28px">워크샵 + 3개월 이용권</div><p class="muted" style="margin:8px 0 0">워크샵 참가자 전원에게 사후 복습 VOD와 티 라이브를 3개월 열어 드려요. 3개월 뒤 90일 시범이나 정기프로그램으로 이어 갈지 함께 봐요.</p></div><a class="btn btn-lime" href="#contact">패키지 문의</a></div>' +
   '</div></section>' +
   '<section style="padding-bottom:88px"><div class="wrap"><div class="cgrid">' +
     C.map(function(c){ return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span class="badge ln" style="align-self:flex-start">' + esc(c.kind) + '</span><h2 class="h3" style="font-size:22px">' + esc(c.title) + '</h2><p class="muted" style="margin:0">' + esc(c.hook) + '</p><span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
