@@ -284,6 +284,11 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 .ol-hero .photo{border-radius:14px}.ol-hero .photo>img{position:absolute;inset:0}
 @media (max-width:700px){.ol-hero{grid-template-columns:minmax(0,1fr);height:200px}.ol-hero .photo:not(:first-child){display:none}}
 
+.crit{margin-top:20px;border:1.5px solid var(--ink);border-radius:14px;padding:18px 20px;background:var(--lime-t)}
+.crit b{display:block;margin-bottom:10px;font-size:17px}
+.crit .checks li{font-size:15px}
+.pv-note{background:var(--lime);color:var(--ink);text-align:center;padding:10px 16px;font-size:14px;font-weight:700}
+.pv-note a{color:var(--ink)}
 /* footer */
 footer{background:var(--ink);color:#CFCFCA;padding:56px 0 40px;font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px}
@@ -296,6 +301,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 </head>
 <body>
 <a class="sr" href="#app">본문으로 건너뛰기</a>
+<div class="pv-note" id="pvNote" hidden>이 미리보기 화면에서는 사진이 보이지 않아요. 사진이 들어간 실제 사이트: <a href="https://pause-site-seven.vercel.app/" target="_blank" rel="noopener">pause-site-seven.vercel.app</a></div>
 <header class="hd">
   <div class="hbar">
     <a class="logo" href="#home" aria-label="PAUSE 홈"><i aria-hidden="true"></i><b>PAUSE</b></a>
@@ -422,8 +428,8 @@ var C = [
 
 /* ===== 실습 소재 ===== */
 var ACT = {
-  a:{label:'문 여는 실습', note:'30분 안에 결과가 보이는 것. 하나만 고릅니다.', items:[['추억의 게임 만들기','벽돌깨기·테트리스·지뢰찾기·뱀 게임'],['우리 회사 퀴즈·룰렛','신입 온보딩 퀴즈, 회식 메뉴 룰렛'],['팀 캐릭터와 이모티콘','팀원 캐리커처, 메신저 스티커'],['랜딩 페이지 한 장','내 사이드 프로젝트 소개 페이지'],['퍼스널 미니 앱','오늘의 점심 추천, 운세']]},
-  b:{label:'업무 실습', note:'HR이 교육 명분으로 삼기 좋은 본 실습. 직무가 같으면 여기서 고릅니다.', items:[['보고서·회의록 정리 에이전트','한 번 만들면 매주 씁니다'],['고객 문의 답변 초안 봇','CS·영업팀'],['경쟁사 조사 자동화','기획·마케팅팀'],['엑셀·데이터 정리 도우미','총무·재무팀'],['사내 FAQ 챗봇','보안 규정상 공개 자료로'],['채용 공고·직무기술서 초안','HR팀'],['수상작 기반 사이트·소개서 개편','브랜드·마케팅팀']]},
+  a:{label:'문 여는 실습', note:'30분 안에 결과가 보이는 것. 하나만 고릅니다.', items:[['추억의 게임 만들기','벽돌깨기·테트리스·지뢰찾기·두더지잡기·뱀 게임. 연령대가 높은 팀일수록 반응이 좋아요'],['우리 회사 퀴즈·룰렛','신입 온보딩 퀴즈, 회식 메뉴 룰렛. 팀에서 바로 써요'],['팀 캐릭터와 이모티콘','팀원 캐리커처, 메신저 스티커'],['랜딩 페이지 한 장','내 사이드 프로젝트 소개 페이지'],['퍼스널 미니 앱','오늘의 점심 추천, 티 추천, 운세']]},
+  b:{label:'업무 실습', note:'업무에 바로 닿는 본 실습. HR이 교육 명분으로 삼기 좋아요.', items:[['수상작 기반 사이트·소개서 개편','잘 만든 사례를 기준으로 우리 것을 고쳐 봐요'],['보고서·회의록 정리 에이전트','매주 쓰는 문서, 한 번 만들어 두면 계속 써요'],['고객 문의 답변 초안 봇','CS·영업팀'],['경쟁사 조사 자동화','기획·마케팅팀'],['엑셀·데이터 정리 도우미','총무·재무팀'],['사내 FAQ 챗봇','보안 규정 때문에 공개 자료로만 만들어요'],['채용 공고·직무기술서 초안','HR팀']]},
   c:{label:'차와 엮는 실습', note:'PAUSE에서만 하는 것.', items:[['오늘의 티 추천 에이전트','기분과 컨디션을 넣으면 차를 골라 줍니다'],['5분 휴식 알림 앱','실습 중 브레이크 시간에 바로 씁니다'],['티 브랜딩 키트','가상의 차 브랜드 로고·패키지·상세페이지']]}
 };
 
@@ -517,7 +523,9 @@ function vHome(){
     '<div class="tabs" role="tablist" aria-label="실습 소재">' +
       Object.keys(ACT).map(function(k, i){ return '<button type="button" role="tab" id="tab-' + k + '" aria-controls="actPanel" aria-selected="' + (i === 1) + '" data-act="' + k + '">' + esc(ACT[k].label) + '</button>'; }).join('') +
     '</div>' +
-    '<div class="mk"><div id="actPanel" role="tabpanel" aria-labelledby="tab-b">' + actPanel('b') + '</div>' + ph('notes', 900) + '</div>' +
+    '<div class="mk"><div><div id="actPanel" role="tabpanel" aria-labelledby="tab-b">' + actPanel('b') + '</div>' +
+      '<div class="crit"><b>이렇게 골라요</b><ul class="checks"><li>팀 직무가 같으면 업무 실습에서, 직무가 섞여 있으면 문 여는 실습을 넣어요</li><li>문 여는 실습은 하나만. 여러 개 하면 본 실습 시간이 줄어요</li><li>실제 회사 자료를 쓰는 실습은 보안 점검이 먼저예요</li></ul></div></div>' +
+      ph('notes', 900) + '</div>' +
   '</div></section>' +
 
   '<section class="section dark"><div class="wrap">' +
@@ -842,6 +850,7 @@ document.addEventListener('click', function(e){
 $('#burger').addEventListener('click', function(){ var o = $('#mnav').classList.toggle('open'); this.setAttribute('aria-expanded', String(o)); });
 window.addEventListener('hashchange', route);
 renderAuth();
+if(!/vercel\.app$|^localhost$|^127\.|\.test$|^x\.test$/.test(location.hostname)) $('#pvNote').hidden = false;
 route();
 })();
 </script>
