@@ -316,6 +316,21 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 .career li{position:relative;padding:0 0 12px 20px;line-height:1.6}
 .career li::before{content:'';position:absolute;left:-6px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--lime);border:2px solid var(--ink)}
 @media (max-width:860px){.bio{grid-template-columns:minmax(0,1fr);gap:24px}.bio .bio-pic{max-width:360px}}
+.field-gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.field-gal .photo{aspect-ratio:4/3;border-radius:12px}
+.field-gal .photo:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+.field-gal .photo:first-child>img{position:absolute;inset:0}
+@media (max-width:640px){.field-gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.reviews{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.rv{margin:0;border:1px solid var(--hair);border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.rv .photo{aspect-ratio:16/10}
+.rv blockquote{margin:0;padding:16px 16px 6px;font-size:15px;line-height:1.7}
+.rv figcaption{padding:0 16px 16px;font-size:13px;color:var(--muted)}
+.rv .sk{padding:16px 16px 4px;display:flex;flex-direction:column;gap:8px}
+.rv .sk-who{padding:4px 16px 18px}
+.rv .sk i{display:block;height:10px;border-radius:5px;background:var(--soft)}
+@media (max-width:760px){.reviews{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:901px){.one{white-space:nowrap}}
 /* footer */
 footer{background:var(--ink);color:#CFCFCA;padding:56px 0 40px;font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px}
@@ -520,7 +535,7 @@ function vHome(){
   '<section class="hero">' +
     '<div class="hero-copy">' +
       '<p class="hero-tag"><span aria-hidden="true"></span>기업 교육 담당자를 위한 AI 워크샵</p>' +
-      '<h1 class="h1" style="font-size:clamp(34px,4.8vw,64px)">AI가 일하는 동안,<br><span style="white-space:nowrap">우리 팀은 차 한 잔.</span></h1>' +
+      '<h1 class="h1 one" style="font-size:clamp(30px,2.6vw,40px)">AI가 일하는 동안, 우리 팀은 차 한 잔.</h1>' +
       '<p class="lead">듣고 끝나는 AI 특강 말고, 팀원 모두가 오늘 만든 에이전트를 내일 출근시키는 워크샵. 실습 사이사이 티마스터가 우려 주는 차 한 잔으로 머리를 식힙니다.</p>' +
       '<div class="btns"><a class="btn btn-lime" href="#contact">우리 팀 워크샵 문의</a><a class="btn btn-line" href="#workshop">워크샵 둘러보기</a></div>' +
     '</div>' +
@@ -553,7 +568,7 @@ function vHome(){
   '<section class="section paper"><div class="wrap split">' +
     ph('teaPour', 1200) +
     '<div style="display:flex;flex-direction:column;gap:18px">' +
-      '<p class="eyebrow">Why tea</p><h2 class="h2">차는 “마음을 가다듬자”가 아니라<br>브레인 브레이크예요</h2>' +
+      '<p class="eyebrow">Why tea</p><h2 class="h2 one">차는 브레인 브레이크예요</h2>' +
       '<p class="lead">실습이 40분을 넘으면 눈과 머리가 먼저 지쳐요. 그때 15분, 모니터를 덮고 차 한 잔. 그 사이 강사가 테이블을 돌며 막힌 부분을 1:1로 풀어 드려요. 참가자 만족도가 가장 높은 시간이에요.</p>' +
       '<ul class="checks"><li>실습 흐름 안에 넣는 휴식 — 갑자기 명상하지 않아요</li><li>무카페인 라인업 상시 준비, 알레르기는 사전 확인</li><li>20명이 넘으면 보조 진행자가 함께 들어가요</li></ul>' +
     '</div>' +
@@ -580,7 +595,7 @@ function vHome(){
   '</div></section>' +
 
   '<section class="band">' + ph('woods', 1800) +
-    '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Outdoor · 종일</p><h2 class="h1" style="font-size:clamp(32px,5vw,60px)">팀 워크샵,<br>이번엔 숲으로.</h2>' +
+    '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Outdoor · 종일</p><h2 class="h1 one" style="font-size:clamp(32px,5vw,60px)">팀 워크샵, 이번엔 숲으로.</h2>' +
     '<p class="lead">홍천처럼 서울에서 두 시간 안팎의 숲속 교육장에서 하루. 아침엔 걷고, 낮엔 팀이 함께 쓸 에이전트를 만들고, 오후엔 숲속 티 세션으로 닫아요. 1박 2일로 늘릴 수도 있어요. 장소 연결부터 일정표까지 짜 드려요.</p>' +
     '<div class="btns" style="margin-top:22px"><a class="btn btn-lime" href="#w-outdoor">종일 야외 일정 보기</a></div></div>' +
   '</section>' +
@@ -592,7 +607,7 @@ function vHome(){
 
   '<section class="section"><div class="wrap split">' +
     '<div style="display:flex;flex-direction:column;gap:18px">' +
-      '<p class="eyebrow">For HR</p><h2 class="h2">숲으로 하루, 또는<br>사무실에서 오후</h2>' +
+      '<p class="eyebrow">For HR</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">숲으로 하루, 또는 사무실에서 오후</h2>' +
       '<p class="lead">워크샵은 두 가지예요. 종일 야외 워크샵은 연말·분기 팀 워크샵을 겸하고, 오후 사무실 워크샵(5~6시간)은 한 팀이 같은 업무를 바꿀 때 좋아요. 어느 쪽이든 끝나면 90일 시범과 정기프로그램으로 이어 갈 수 있어요.</p>' +
       '<div class="btns"><a class="btn btn-lime" href="#workshop">두 워크샵 비교하기</a><a class="btn btn-line" href="#program">1년 프로그램 보기</a></div>' +
     '</div>' + ph('laptops', 1200) +
@@ -667,11 +682,13 @@ function vWDetail(w){
       '<h2>만들어 가는 것</h2><ul class="checks">' + w.make.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h2>진행 순서</h2><ol class="tl">' + w.tl.map(function(r){ return '<li' + (r[3] ? ' class="tea"' : '') + '><span class="t">' + esc(r[0]) + '</span><b>' + esc(r[1]) + (r[3] ? ' ☕' : '') + '</b><span>' + esc(r[2]) + '</span></li>'; }).join('') + '</ol>' +
       (w.opt ? '<h2>더하기</h2><p>' + esc(w.opt) + '</p>' : '') +
-      '<h2>현장은 이런 분위기예요</h2><div class="mosaic">' + (w.more || []).map(function(p){ return ph(p, 700); }).join('') + '</div>' +
+      '<h2>현장 사진</h2><div class="field-gal">' + (w.more || []).concat(w.photos.slice(1)).map(function(p){ return ph(p, 700); }).join('') + '</div>' +
       '<h2>담당자님께 미리 받는 것 (D-3)</h2><ul class="checks"><li>사내 보안 규정과 외부 AI 서비스 접속 가능 여부</li><li>직무별로 매주 쓰는 업무 양식 1~2개 (실습 예제로 씁니다)</li><li>참가 인원과 직무 구성, 카페인·알레르기 제한</li></ul>' +
       '<h2>끝나고 이어지는 것</h2><ul class="checks"><li>24시간 안에 HR용 1쪽 리포트</li><li>48시간 안에 참가자에게 약속과 연습 과제</li><li>사후 복습 VOD로 같은 예제를 다시</li><li>원하면 90일 시범으로 이어 가기 — <a href="#program">정기프로그램 보기</a></li></ul>' +
       '<h2>함께하는 강사</h2>' + w.who.map(function(k){ var t = T[k]; return '<p><b>' + t.nm + '</b> <span class="muted">· ' + esc(t.line) + '</span><br>이 워크샵에서 맡는 일: ' + esc(t.job) + '</p>'; }).join('') +
-      '<p class="note" style="margin-top:28px">실제 워크샵 사진과 참가자 후기가 생기면 이 페이지의 사진과 후기 자리를 채워요.</p>' +
+      '<h2>참가자 후기</h2><div class="reviews">' + (w.reviews && w.reviews.length ? w.reviews : [null, null, null]).map(function(r, i){ var pic = [w.photos[0]].concat(w.more || []).at(i) || w.photos[0];
+        return r ? '<figure class="rv">' + ph(r.photo || pic, 500) + '<blockquote>' + esc(r.text) + '</blockquote><figcaption>' + esc(r.who) + '</figcaption></figure>'
+                 : '<figure class="rv rv-empty" aria-hidden="true">' + ph(pic, 500) + '<div class="sk"><i></i><i></i><i style="width:60%"></i></div><div class="sk sk-who"><i style="width:40%"></i></div></figure>'; }).join('') + '</div>' +
     '</div>' +
     '<aside class="aside" aria-label="워크샵 요약">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
@@ -692,7 +709,7 @@ function vProgram(){
     ['Q4','숲에서 회고','cabin',['종일 야외 워크샵 (1박 2일 선택)','1년 성과 리포트','다음 해 계획 제안']]
   ];
   return '<section class="hero" style="min-height:min(70vh,640px)">' +
-    '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1" style="font-size:clamp(34px,5vw,60px)">한 회사를 1년 동안<br>맡아요</h1>' +
+    '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">한 회사를 1년 동안 맡아요</h1>' +
     '<p class="lead">한 번의 특강은 그날로 끝나요. 정기프로그램은 분기마다 진단하고, 만들고, 보여 주고, 쉬어 가면서 AI를 팀의 일하는 방식으로 자리 잡게 합니다.</p>' +
     '<div class="btns"><a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a><a class="btn btn-line" href="#contact?type=proposal">제안서 요청</a></div></div>' +
     ph('team', 1600, '', true) +
@@ -714,7 +731,7 @@ function vProgram(){
     '<div class="fit"><div><b>분기마다 다시 설계</b><br>대면 회차 전에 짧은 설문으로 “지난 분기에 만든 에이전트 중 아직 쓰는 것”을 세요. 이 숫자가 연말 리포트의 핵심 지표예요.</div><div><b>우리 회사 사례로 가르치기</b><br>잘 쓰는 팀의 사례를 다음 회차 예제로 써요. 회차가 쌓일수록 귀사만의 교재가 돼요.</div><div><b>사내 챔피언</b><br>부서마다 1~2명이 체크인 사이 동료의 질문을 받아요. 리더도 두 번째 회차부터 참가자로 들어와요.</div><div><b>월간 티 세션</b><br>점심시간 30분, 온라인으로 함께 차를 우려요. 티 키트는 미리 보내 드려요.</div><div><b>담당자 체크인</b><br>매달 30분, 교육 담당자님과 진행 상황과 다음 분기 준비를 맞춰요.</div><div><b>온라인강의 이용권</b><br>참가자는 VOD로 복습할 수 있어요. 워크샵과 어떻게 연결할지는 함께 정해요.</div></div>' +
   '</div></section>' +
   '<section class="band" style="min-height:440px">' + ph('birch', 1800) +
-    '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Q4 · Retreat</p><h2 class="h2" style="font-size:clamp(28px,4vw,48px)">1년의 마지막은<br>자작나무 숲에서 회고로.</h2></div>' +
+    '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Q4 · Retreat</p><h2 class="h2 one" style="font-size:clamp(26px,3.6vw,46px)">1년의 마지막은 자작나무 숲에서 회고로.</h2></div>' +
   '</section>' +
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Compare</p><h2 class="h2">단발 워크샵과 무엇이 다른가요</h2></div></div>' +
@@ -727,7 +744,7 @@ function vProgram(){
     '</tbody></table></div>' +
   '</div></section>' +
   '<section class="section dark"><div class="wrap split">' +
-    '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">Proposal</p><h2 class="h2">내부 검토용<br>제안서를 보내 드려요</h2>' +
+    '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">Proposal</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">내부 검토용 제안서를 보내 드려요</h2>' +
     '<p class="lead">도입을 검토 중이라면 제안서 한 부로 먼저 살펴보세요.</p>' +
     '<ul class="checks" style="color:#fff"><li>1년 커리큘럼과 회차별 구성</li><li>세 강사 소개</li><li>예상 비용</li></ul>' +
     '<div class="btns"><a class="btn btn-lime" href="#contact?type=proposal">제안서 요청하기</a></div></div>' +
@@ -822,7 +839,7 @@ function notifyDialog(c){
 /* ===== 강사 ===== */
 function vTeam(){
   return '<section class="section dark"><div class="wrap">' +
-    '<p class="eyebrow">Hosts</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">쉬게 하는 사람, 설계하는 사람,<br>만드는 사람</h1>' +
+    '<p class="eyebrow">Hosts</p><h1 class="h1 one" style="font-size:clamp(28px,3.9vw,50px)">쉬게 하는 사람, 설계하는 사람, 만드는 사람</h1>' +
     '<p class="lead" style="max-width:680px;margin:16px 0 48px">세 사람이 한 워크샵에 함께 들어가는 이유예요. 차 한 잔으로 머리를 식히고, 무엇을 맡길지 정하고, 끝까지 만들어 돌려요.</p>' +
     '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#t-' + k + '">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proof) + '</p><p>워크샵에서: ' + esc(t.job) + '</p></a>'; }).join('') + '</div>' +
   '</div></section>' +
@@ -836,7 +853,7 @@ function vTeam(){
       '<div class="btns" style="margin-top:24px">' + t.links.map(function(l){ return '<a class="btn btn-line btn-sm" href="' + l[1] + '" target="_blank" rel="noopener">' + esc(l[0]) + ' ↗</a>'; }).join('') + '<button type="button" class="btn btn-line btn-sm" data-copybio="' + k + '">담당자용 소개 3줄 복사</button></div>' +
     '</div></div></section>'; }).join('') +
   '<section class="section dark"><div class="wrap split">' + ph('laugh', 1200) +
-    '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">For HR</p><h2 class="h2">내부 결재에 붙일<br>강사 소개가 필요하면</h2><p class="lead">세 강사 소개를 한 번에 복사해 결재 문서에 붙여 넣으세요. 출강 사례와 프로필 PDF는 문의 주시면 보내 드려요.</p><div class="btns"><button type="button" class="btn btn-lime" data-copybio="all">세 강사 소개 복사</button><a class="btn btn-line" href="#contact?type=proposal">제안서 요청</a></div></div>' +
+    '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">For HR</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">결재에 붙일 강사 소개가 필요하면</h2><p class="lead">세 강사 소개를 한 번에 복사해 결재 문서에 붙여 넣으세요. 출강 사례와 프로필 PDF는 문의 주시면 보내 드려요.</p><div class="btns"><button type="button" class="btn btn-lime" data-copybio="all">세 강사 소개 복사</button><a class="btn btn-line" href="#contact?type=proposal">제안서 요청</a></div></div>' +
   '</div></section>';
 }
 function bindTeam(){
@@ -853,7 +870,7 @@ function bindTeam(){
 function vContact(q){
   var type = (q.match(/type=([^&]+)/) || [])[1] || '';
   var opts = [['','선택해 주세요']].concat(W.map(function(w){ return [w.id, w.title + ' (' + w.kind + ')']; }), [['annual','1년 정기프로그램'],['proposal','제안서 요청'],['online','온라인강의 단체 수강'],['etc','아직 모르겠어요']]);
-  return '<section class="ct-hero">' + ph('teapot', 1800, '', true) + '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Let&#39;s pause</p><p class="h2" style="color:#fff">차 한 잔 하면서<br>이야기 나눠요.</p></div></section>' +
+  return '<section class="ct-hero">' + ph('teapot', 1800, '', true) + '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Let&#39;s pause</p><p class="h2 one" style="color:#fff">차 한 잔 하면서 이야기 나눠요.</p></div></section>' +
   '<section class="section tight"><div class="wrap" style="max-width:880px">' +
     '<p class="eyebrow">Contact</p><h1 class="h1" style="font-size:clamp(32px,4.6vw,52px)">도입 문의</h1>' +
     '<p class="lead" style="margin:16px 0 36px">아는 만큼만 적어 주세요. 영업일 기준 [N]일 안에 연락드리고, 확정되면 출강 3일 전에 사전 진단 폼을 따로 보내 드려요.</p>' +
