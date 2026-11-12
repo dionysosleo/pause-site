@@ -289,6 +289,9 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 .crit .checks li{font-size:15px}
 .pv-note{background:var(--lime);color:var(--ink);text-align:center;padding:10px 16px;font-size:14px;font-weight:700}
 .pv-note a{color:var(--ink)}
+.photo.portrait img{object-position:50% 20%}
+.tch .photo.portrait{aspect-ratio:4/5}
+.sp-portrait{aspect-ratio:4/5!important;max-width:440px;justify-self:center;width:100%}
 /* footer */
 footer{background:var(--ink);color:#CFCFCA;padding:56px 0 40px;font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px}
@@ -372,7 +375,7 @@ var PH = {
   manLaptop:{id:'1573183205228-df337e65dab0', alt:'테이블에서 노트북으로 일하는 사람', by:'Miguel Dominguez'}
 };
 function src(k, w){ return 'https://images.unsplash.com/photo-' + PH[k].id + '?auto=format&fit=crop&w=' + (w || 1200) + '&q=70'; }
-function tph(t, w, cls){ return t.img ? '<div class="photo' + (cls ? ' ' + cls : '') + '"><img src="' + esc(t.img) + '" alt="' + esc(t.nm) + ' 사진" loading="lazy"></div>' : ph(t.pic, w, cls); }
+function tph(t, w, cls){ return t.img ? '<div class="photo portrait' + (cls ? ' ' + cls : '') + '"><img src="' + esc(t.img) + '" alt="' + esc(t.nm) + ' 사진" loading="lazy"></div>' : ph(t.pic, w, cls); }
 function ph(k, w, cls, eager){
   var p = PH[k];
   return '<div class="photo' + (cls ? ' ' + cls : '') + '"><img src="' + src(k, w) + '" alt="' + esc(p.alt) + '"' + (eager ? '' : ' loading="lazy"') + ' decoding="async"><span class="credit">Photo: ' + (p.by ? esc(p.by) + ' / ' : '') + 'Unsplash</span></div>';
@@ -381,9 +384,9 @@ function ph(k, w, cls, eager){
 /* ===== 강사 ===== */
 /* img: 강사 본인이 보내 준 사진 파일 경로 (예: 'img/han.jpg'). 비어 있으면 분위기 사진(pic)을 씁니다 */
 var T = {
-  han: {img:'', pic:'brainstorm', nm:'한성희', role:'THE AGENT', line:'Simplifier 대표 · 전 요기요 CPO, 빗썸 COO', book:'《기획자의 질문법》 《UX의 언어들》 저자', does:'AI 에이전트로 업무를 덜어내는 법. 무엇을 맡기고 무엇을 사람이 정할지부터 묻습니다.'},
-  jun: {img:'', pic:'manLaptop', nm:'이준혁', role:'THE BUILDER', line:'잡코리아 PO · 전 텐덤 COO·CPO · 전 스테이션3 운영총괄팀장', book:'《우리는 아직도 출근 중입니다》 저자', does:'직접 굴리는 자동화 에이전트를 예제로, 현장에서 끝까지 만들어 보는 실습을 맡습니다.'},
-  lee: {img:'', pic:'teapot', nm:'이유진', role:'THE TEA', line:'2009년부터 활동한 티마스터 · 웰니스협회', book:'《차와 일상》 《오후 4시 홍차에 빠지다》 저자', does:'실습 사이의 브레인 브레이크. 차 한 잔과 10분의 대화로 머리를 식힙니다.'}
+  han: {img:'img/han.jpg', pic:'brainstorm', nm:'한성희', role:'THE AGENT', line:'Simplifier 대표 · 전 요기요 CPO, 빗썸 COO', book:'《기획자의 질문법》 《UX의 언어들》 저자', does:'AI 에이전트로 업무를 덜어내는 법. 무엇을 맡기고 무엇을 사람이 정할지부터 묻습니다.'},
+  jun: {img:'img/jun.jpg', pic:'manLaptop', nm:'이준혁', role:'THE BUILDER', line:'잡코리아 PO · 전 텐덤 COO·CPO · 전 스테이션3 운영총괄팀장', book:'《우리는 아직도 출근 중입니다》 저자', does:'직접 굴리는 자동화 에이전트를 예제로, 현장에서 끝까지 만들어 보는 실습을 맡습니다.'},
+  lee: {img:'img/lee.jpg', pic:'teapot', nm:'이유진', role:'THE TEA', line:'2009년부터 활동한 티마스터 · 웰니스협회', book:'《차와 일상》 《오후 4시 홍차에 빠지다》 저자', does:'실습 사이의 브레인 브레이크. 차 한 잔과 10분의 대화로 머리를 식힙니다.'}
 };
 
 /* ===== 워크샵 ===== */
@@ -548,7 +551,7 @@ function vHome(){
 
   '<section class="section dark"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Hosts</p><h2 class="h2">세 강사가 함께 들어가요</h2></div><a class="btn btn-line btn-sm" href="#team">강사 소개</a></div>' +
-    '<div class="trio">' + ['han','jun','lee'].map(function(k){ var t = T[k]; return '<a class="tch" href="#team"><span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '<br>' + esc(t.book) + '</p></a>'; }).join('') + '</div>' +
+    '<div class="trio">' + ['han','jun','lee'].map(function(k){ var t = T[k]; return '<a class="tch" href="#team">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '<br>' + esc(t.book) + '</p></a>'; }).join('') + '</div>' +
   '</div></section>' +
 
   '<section class="section"><div class="wrap split">' +
@@ -714,7 +717,7 @@ function vCourse(c){
   '</div></section>' +
   '<section class="section dark"><div class="wrap split">' +
     '<div style="display:flex;flex-direction:column;gap:14px"><p class="eyebrow">Instructor</p><h2 class="h2">' + t.nm + '</h2><p class="lead">' + esc(t.line) + '<br>' + esc(t.book) + '</p><p class="lead">' + esc(t.does) + '</p></div>' +
-    tph(t, 1000, 'rounded54') +
+    tph(t, 1000, 'rounded54 sp-portrait') +
   '</div></section>' +
   '<section class="section"><div class="wrap" style="max-width:960px">' +
     '<div class="sec-head"><div><p class="eyebrow">Reviews</p><h2 class="h2">수강 후기</h2></div></div>' +
