@@ -338,6 +338,27 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 .brief .bh{margin:44px 0 14px;font-size:20px;font-weight:900;letter-spacing:-.02em}
 .brief .bt th[scope="row"]{width:120px;text-align:left;vertical-align:top;padding:14px 12px;border-bottom:1px solid var(--hair);font-size:15px}
 @media print{.hd,footer,.btns{display:none!important}}
+.steep{position:absolute;left:24px;bottom:24px;display:flex;gap:16px;align-items:center;background:#fff;border-radius:16px;padding:16px 18px;box-shadow:0 12px 32px rgba(0,0,0,.2);max-width:360px}
+.steep-dial{position:relative;width:72px;height:72px;flex:0 0 72px}
+.steep-dial svg{width:72px;height:72px;transform:rotate(-90deg)}
+.steep-dial .trk{fill:none;stroke:var(--soft);stroke-width:6}
+.steep-dial .arc{fill:none;stroke:#8A5A2B;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .1s linear}
+.steep-t{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.steep-log b{display:block;font-size:11px;letter-spacing:.08em;color:var(--green);margin-bottom:6px}
+.steep-log ol{margin:0;padding:0;list-style:none;font-size:13px;line-height:1.55}
+.steep-log li{color:#B8B8B0;padding-left:16px;position:relative}
+.steep-log li::before{content:'○';position:absolute;left:0}
+.steep-log li.on{color:var(--ink)}
+.steep-log li.on::before{content:'●';color:var(--green)}
+.steep-log li.done.on{font-weight:700}
+@media (max-width:900px){.steep{left:16px;right:16px;bottom:16px;max-width:none}}
+.lex{margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1.5px solid var(--ink)}
+.lex div{padding:20px 18px 22px 0;border-bottom:1px solid var(--hair)}
+.lex dt{font-weight:900;font-size:19px;letter-spacing:-.02em;margin-bottom:6px}
+.lex dt span{font-size:13px;color:var(--green);font-weight:700;margin-left:4px}
+.lex dd{margin:0;color:var(--ink2);font-size:14.5px;line-height:1.65}
+@media (max-width:960px){.lex{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.lex{grid-template-columns:minmax(0,1fr)}}
 /* footer */
 footer{background:var(--ink);color:#CFCFCA;padding:56px 0 40px;font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px}
@@ -379,7 +400,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
   <div class="wrap">
     <div style="display:flex;flex-direction:column;gap:12px;max-width:420px">
       <a class="logo" href="#home"><i aria-hidden="true"></i><b>PAUSE</b></a>
-      <p style="margin:0"><b class="en" style="color:#fff">Pause &amp; Rebuild.</b> 바쁘게 돌던 일을 잠깐 멈추고, AI와 함께 다시 설계하는 기업 워크샵.</p>
+      <p style="margin:0"><b class="en" style="color:#fff">Pause &amp; Rebuild.</b> 우러날수록 깊어지는 일. 잠깐 멈추고, AI와 함께 다시 설계하는 기업 워크샵.</p>
       <p style="margin:0" class="en">[상호] · [대표자] · [사업자등록번호] · [문의 이메일]</p>
     </div>
     <nav aria-label="하단 메뉴">
@@ -456,16 +477,16 @@ var W = [
    fit:'연말·분기 팀 워크샵을 교육 성과로 남기고 싶을 때, 하루를 통째로 집중해 팀 과제를 끝내고 싶을 때',
    make:['팀이 함께 쓰는 업무 에이전트 1개','직무별 에이전트 (보고서·데이터·CS 중 택)','다음 90일 팀 약속'],
    opt:'1박 2일로 늘리기 — 저녁 숲속 티 세션, 우리 팀 퀴즈·룰렛 게임 레크리에이션, 다음 날 아침 산책과 쇼케이스를 더해요.',
-   tl:[['09:30','도착 · 숲길 산책과 아침의 차','핸드폰을 잠시 내려놓고 20분 걷기',1],['10:10','진단','무엇을 AI에게 맡기고 무엇을 사람이 정할까 (한성희)'],['10:50','문 여는 실습','팀 캐릭터·퀴즈 게임을 30분 만에'],['11:30','본 실습 ①','팀 과제 고르고 에이전트 설계 (이준혁)'],['12:30','야외 점심','—'],['13:30','본 실습 ②','완성하고 서로 써 보기, 검수하는 법'],['15:00','숲속 티 세션 · 30분','계절 차와 1:1 질문 (이유진)',1],['15:30','팀 쇼케이스','팀별 시연과 투표'],['16:40','회고와 약속','다음 90일에 해 볼 것 적기'],['17:30','끝','24시간 안에 HR 리포트 전달']]},
+   tl:[['09:30','아침의 잔 · 숲길 산책','핸드폰을 내려놓고 20분 걷고, 오늘의 찻잎을 고르기',1],['10:10','첫 잔 · 진단','무엇을 AI에게 맡기고 무엇을 사람이 정할까 (한성희)'],['10:50','두 번째 잔 · 3분 챌린지','차가 우러나는 3분 안에 끝나는 일을 눈앞에서 보고, 문 여는 실습 하나'],['11:30','세 번째 잔 · 설계','팀 과제 고르고 에이전트 설계 (이준혁)'],['12:30','야외 점심','—'],['13:30','네 번째 잔 · 다섯 번 고치기','만들고, 써 보고, 고치기를 반복해 완성'],['15:00','숲속 우림 세션 · 30분','계절 차와 1:1 질문 (이유진)',1],['15:30','시음회 · 쇼케이스','팀 에이전트에 그날 마신 차 이름을 붙여 시연과 투표'],['16:40','마지막 잔 · 첫 잔 약속','찻잔 받침 카드에 다음 90일 약속 적기',1],['17:30','끝','다음 날 우림 리포트 전달']]},
   {id:'office', kind:'오후 · 사무실', hours:'13:00~18:00(5시간) 또는 19:00(6시간)', badge:'대표 프로그램 2', title:'사무실에서 보내는 오후 워크샵', sub:'오전 업무를 마치고 귀사 교육장으로. 저녁 전까지 팀이 쓸 에이전트 하나를 만들고, 마무리는 차 한 잔과 시연이에요',
    photos:['laptops','teaPour','notes'], more:['laugh','bookLaptop','teaCup','pointNotes'], who:['lee','han','jun'], size:'10~30명', place:'귀사 교육장·회의실', tools:'Claude 1개로 집중',
    fit:'한 팀이 같은 업무를 바꾸고 싶을 때, 하루를 통째로 비우기 어려울 때, 정기프로그램의 분기 회차',
    make:['팀이 매주 쓰는 보고서·회의록 정리 에이전트','고객 문의 답변 초안 봇 또는 경쟁사 조사 자동화','각자 “다음 2주에 해 볼 한 가지” 약속'],
    opt:'5시간은 18:00, 6시간은 시연을 늘려 19:00에 끝나요.',
-   tl:[['13:00','진단','무엇을 맡기고 무엇을 사람이 정할까 (한성희)'],['13:40','문 여는 실습','추억의 게임이나 퀴즈 하나를 30분 만에'],['14:20','본 실습 ①','우리 팀 업무 1개 고르고 에이전트 설계 (이준혁)'],['15:30','티 브레이크 · 20분','눈을 쉬는 차 한 잔, 테이블마다 1:1 질문 (이유진)',1],['15:50','본 실습 ②','완성하고 서로 써 보기, 검수하는 법'],['17:00','쇼케이스','팀별 시연과 투표'],['17:40','마무리 차 한 잔','저녁의 차와 다음 2주 약속 (5시간 과정 18:00 종료)',1],['18:00~19:00','6시간 과정','팀별 시연 확대와 다음 업무 후보 정하기']]}
+   tl:[['13:00','첫 잔 · 진단','무엇을 맡기고 무엇을 사람이 정할까 (한성희)'],['13:40','두 번째 잔 · 3분 챌린지','차가 우러나는 3분 안에 끝나는 일을 눈앞에서 보고, 문 여는 실습 하나'],['14:20','세 번째 잔 · 설계','우리 팀 업무 1개 고르고 에이전트 설계 (이준혁)'],['15:30','우림 브레이크 · 20분','차 한 잔과 테이블마다 1:1 질문 (이유진)',1],['15:50','네 번째 잔 · 다섯 번 고치기','만들고, 써 보고, 고치기를 반복해 완성'],['17:00','시음회 · 쇼케이스','팀 에이전트에 그날 마신 차 이름을 붙여 시연과 투표'],['17:40','마지막 잔 · 첫 잔 약속','찻잔 받침 카드에 다음 2주 약속 적기 (5시간 과정 18:00 종료)',1],['18:00~19:00','6시간 과정','시음회 확대와 다음 업무 후보 정하기']]}
 ];
 /* 모든 워크샵에 공통으로 붙는 앞뒤 흐름 */
-var FLOW = [['D-3','사전 진단 + 사전학습 VOD','보안·접속 확인, 30분 이내 영상으로 기본 용어와 계정 점검'],['당일','실습 절반 이상','듣는 시간보다 만드는 시간이 길어요. 툴은 하나로'],['24시간','HR 1쪽 리포트','참여율, 만든 결과물, 만족도, 다음 90일 제안'],['48시간','각자에게 한 번 더','당일 적은 약속과 연습 과제를 보내요'],['30일','짧은 설문','만든 에이전트를 아직 쓰는지 확인'],['60~90일','성과 점검','처음 정한 지표를 같이 봐요']];
+var FLOW = [['D-3','찻잎 고르기','사전 진단 + 사전학습 VOD. 보안·접속 확인, 기본 용어와 계정 점검'],['당일','다섯 잔 실습','만들고, 써 보고, 고치기를 다섯 번. 툴은 하나로'],['24시간','우림 리포트','HR 1쪽 — 참여율, 만든 결과물, 만족도, 다음 90일 제안'],['48시간','첫 잔 약속 돌려받기','당일 찻잔 받침에 적은 약속 카드와 연습 과제가 각자에게'],['30일','두 번째 우림','짧은 설문 — 만든 에이전트를 아직 쓰는지'],['60~90일','숙성 점검','처음 정한 업무 지표를 같이 봐요']];
 
 /* ===== 온라인강의 (셀링 페이지) ===== */
 var C = [
@@ -543,36 +564,51 @@ function vHome(){
   '<section class="hero">' +
     '<div class="hero-copy">' +
       '<p class="hero-tag"><span aria-hidden="true"></span>기업 AI 실무 워크샵 · Pause &amp; Rebuild</p>' +
-      '<h1 class="h1 one" style="font-size:clamp(30px,2.6vw,40px)">하루 만에, 팀마다 일하는 에이전트 하나.</h1>' +
-      '<p class="lead">듣고 끝나는 특강이 아니라, 팀원 모두가 실제 업무 하나를 AI 에이전트로 바꿔 가는 워크샵이에요. 결과는 24시간 안에 1쪽 리포트로, 90일 뒤에는 실제로 쓰는지로 확인해요.</p>' +
+      '<h1 class="h1 one" style="font-size:clamp(32px,3.2vw,48px)">우러나는 3분, 끝나는 일 하나.</h1>' +
+      '<p class="lead">차 한 잔이 우러나는 3분 동안 끝나는 일을, 팀마다 하나씩 AI 에이전트로 만들어요. 듣고 끝나는 특강이 아니라 실제 업무가 바뀌는 하루예요. 결과는 다음 날 우림 리포트로, 90일 뒤에는 실제로 쓰는지로 확인해요.</p>' +
       '<div class="btns"><a class="btn btn-lime" href="#contact">워크샵 문의</a><a class="btn btn-line" href="#brief">결재용 한 페이지 보기</a></div>' +
     '</div>' +
     '<div class="photo"><img src="' + src('desk', 1600) + '" alt="' + esc(PH.desk.alt) + '" fetchpriority="high"><span class="credit">Photo: ' + esc(PH.desk.by) + ' / Unsplash</span>' +
-      '<div class="hero-float" aria-hidden="true"><b>CLAUDE</b><span class="typing">이번 주 회의록 5개를 정리했어요. 액션 아이템은 12개, 담당자별로 나눠 둘게요.</span></div></div>' +
+      '<div class="steep" id="steep" role="img" aria-label="3분 타이머: 차가 우러나는 동안 에이전트가 회의록 정리를 끝내는 장면">' +
+        '<div class="steep-dial"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" class="trk"/><circle cx="32" cy="32" r="28" class="arc" id="steepArc"/></svg><span class="steep-t en" id="steepT">3:00</span></div>' +
+        '<div class="steep-log"><b class="en">STEEP · 3:00</b><ol id="steepLog"><li>회의록 5개 읽는 중</li><li>액션 아이템 12개 찾음</li><li>담당자별로 나눠 메일 초안 작성</li><li class="done">끝 — 차가 다 우러났어요</li></ol></div>' +
+      '</div></div>' +
   '</section>' +
   '<div class="wrap"><div class="proof">' +
-    '<div><strong>70%</strong><span>실습 비중 — 각자 결과물 1개</span></div>' +
-    '<div><strong>15min</strong><span>티 브레이크와 1:1 질문</span></div>' +
-    '<div><strong>D-3</strong><span>보안·접속 사전 진단</span></div>' +
-    '<div><strong>24h</strong><span>HR용 1쪽 성과 리포트</span></div>' +
+    '<div><strong>3:00</strong><span>우러나는 동안 끝나는 일 하나</span></div>' +
+    '<div><strong>5 cups</strong><span>다섯 번 고쳐 완성하는 실습</span></div>' +
+    '<div><strong>D-3</strong><span>찻잎 고르기 — 보안·접속 사전 진단</span></div>' +
+    '<div><strong>24h</strong><span>우림 리포트 — HR 1쪽</span></div>' +
   '</div></div>' +
   '<section class="section tight" style="padding-bottom:0"><div class="wrap"><div class="pr">' +
     '<p class="pr-word en">Pause <span>&amp;</span> Rebuild</p>' +
     '<p class="lead" style="margin:0">PAUSE는 쉬자는 뜻이 아니에요. 바쁘게 돌던 일을 잠깐 <b>멈추고</b>, 무엇을 AI에게 맡길지 정해 <b>다시 설계</b>하자는 뜻이에요. 그 하루가 끝나면 팀마다 실제로 일하는 에이전트가 하나씩 남아요.</p>' +
   '</div></div></section>' +
   '<section class="section" style="padding-bottom:0"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">A day at PAUSE</p><h2 class="h2">오후 사무실 워크샵은 이렇게 흘러가요</h2></div><p class="lead">점심 먹고 들어와 저녁 전에 나가요. 13:00~18:00(또는 19:00), 만들고 차 한 잔 하고 다시 만들어요.</p></div>' +
+    '<div class="sec-head"><div><p class="eyebrow">Only at PAUSE</p><h2 class="h2">PAUSE에만 있는 다섯 장면</h2></div><p class="lead">같은 찻잎을 여러 번 우리면 잔마다 깊어져요. 에이전트도 그렇게 만들어요.</p></div>' +
     '<div class="day">' +
-      dayCell('pointNotes','13:00','오늘 맡길 업무 고르기') + dayCell('manLaptop','14:20','에이전트 만들기') + dayCell('teapot','15:30','티 브레이크 20분') +
-      dayCell('laugh','17:00','서로 써 보고 웃기') + dayCell('bookLaptop','17:40','마무리 차 한 잔과 약속') +
+      dayCell('teapot','3:00','3분 챌린지 — 우러나는 동안 끝나는 일') + dayCell('manLaptop','5 CUPS','다섯 잔 — 다섯 번 고쳐 완성') + dayCell('teaCup','NAMING','차 이름 붙이기 — “다즐링 리포터”') +
+      dayCell('notes','COASTER','첫 잔 약속 — 찻잔 받침 카드') + dayCell('bookLaptop','REPORT','우림 리포트 — 다음 날 HR 1쪽') +
     '</div>' +
+  '</div></section>' +
+  '<section class="section tight"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">Our words</p><h2 class="h2">PAUSE의 말</h2></div><p class="lead">우리는 교육 용어 대신 차의 말로 일해요.</p></div>' +
+    '<dl class="lex">' +
+      '<div><dt>우림 <span class="en">Steep</span></dt><dd>실습 한 바퀴. 만들고, 써 보고, 고치기.</dd></div>' +
+      '<div><dt>3분 챌린지</dt><dd>차가 우러나는 3분 안에 에이전트가 끝내는 일을 눈앞에서 확인해요.</dd></div>' +
+      '<div><dt>다섯 잔</dt><dd>같은 찻잎을 다섯 번 우리듯, 에이전트도 다섯 번 고쳐 완성해요.</dd></div>' +
+      '<div><dt>첫 잔 약속</dt><dd>찻잔 받침 카드에 적는 “다음 2주에 해 볼 한 가지”. 48시간 뒤 돌려받아요.</dd></div>' +
+      '<div><dt>우림 리포트</dt><dd>워크샵 다음 날 HR에 가는 1쪽 성과 리포트.</dd></div>' +
+      '<div><dt>숙성 90일</dt><dd>만든 에이전트가 실제로 쓰이는지 지켜보는 90일.</dd></div>' +
+      '<div><dt>사계절 프로그램</dt><dd>1년 정기프로그램. 분기마다 그 계절의 차와 함께 우려요.</dd></div>' +
+    '</dl>' +
   '</div></section>' +
 
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Start here</p><h2 class="h2">세 가지로 시작해요</h2></div><p class="lead">한 번의 워크샵으로 맛보고, 1년 프로그램으로 이어 가고, 온라인으로 복습해요.</p></div>' +
     '<div class="doors">' +
       door('#workshop','01 / WORKSHOP','워크샵','숲에서 보내는 종일 야외, 귀사에서 하는 오후 5~6시간. 두 가지로 깊게.','laugh','종일 야외 · 오후 사무실') +
-      door('#program','02 / ANNUAL','정기프로그램','워크샵 → 90일 시범 → 1년. 분기마다 진단하고, 만들고, 시연하고, 성과를 봐요.','team','90일 시범 · 1년 정기') +
+      door('#program','02 / ANNUAL','정기프로그램','워크샵 → 숙성 90일 → 사계절 프로그램. 분기마다 그 계절의 차와 함께 진단하고, 만들고, 시연해요.','team','숙성 90일 · 사계절 1년') +
       door('#online','03 / ONLINE','온라인강의','워크샵 전 사전학습, 워크샵 뒤 복습. 같은 예제로 만든 VOD와 티 라이브.','desk2','사전학습 · 사후 복습 · 개인 수강') +
     '</div>' +
   '</div></section>' +
@@ -620,7 +656,7 @@ function vHome(){
   '<section class="section"><div class="wrap split">' +
     '<div style="display:flex;flex-direction:column;gap:18px">' +
       '<p class="eyebrow">For HR</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">숲으로 하루, 또는 사무실에서 오후</h2>' +
-      '<p class="lead">워크샵은 두 가지예요. 종일 야외 워크샵은 연말·분기 팀 워크샵을 겸하고, 오후 사무실 워크샵(5~6시간)은 한 팀이 같은 업무를 바꿀 때 좋아요. 어느 쪽이든 끝나면 90일 시범과 정기프로그램으로 이어 갈 수 있어요.</p>' +
+      '<p class="lead">워크샵은 두 가지예요. 종일 야외 워크샵은 연말·분기 팀 워크샵을 겸하고, 오후 사무실 워크샵(5~6시간)은 한 팀이 같은 업무를 바꿀 때 좋아요. 어느 쪽이든 끝나면 숙성 90일과 정기프로그램으로 이어 갈 수 있어요.</p>' +
       '<div class="btns"><a class="btn btn-lime" href="#workshop">두 워크샵 비교하기</a><a class="btn btn-line" href="#program">1년 프로그램 보기</a></div>' +
     '</div>' + ph('laptops', 1200) +
   '</div></section>';
@@ -633,7 +669,25 @@ function actPanel(k){
   var a = ACT[k];
   return '<p class="muted" style="margin:0 0 16px">' + esc(a.note) + '</p><div class="acts">' + a.items.map(function(it){ return '<div class="act"><b>' + esc(it[0]) + '</b><span>' + esc(it[1]) + '</span></div>'; }).join('') + '</div>';
 }
+var steepTimer = null;
+function startSteep(){
+  if(steepTimer){ clearInterval(steepTimer); steepTimer = null; }
+  var T = $('#steepT'), arc = $('#steepArc'), items = $$('#steepLog li');
+  if(!T || !arc) return;
+  var C = 2 * Math.PI * 28; arc.style.strokeDasharray = C;
+  var show = function(sec){ var left = 180 - sec; T.textContent = Math.floor(left / 60) + ':' + ('0' + (left % 60)).slice(-2); arc.style.strokeDashoffset = C * (1 - sec / 180);
+    items.forEach(function(li, i){ li.classList.toggle('on', sec >= [20, 70, 125, 180].at(i)); }); };
+  var reduce = false; try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+  if(reduce){ show(180); return; }
+  var sec = 0, hold = 0; show(0);
+  steepTimer = setInterval(function(){
+    if(!document.body.contains(T)){ clearInterval(steepTimer); steepTimer = null; return; }
+    if(sec >= 180){ if(++hold > 25){ sec = 0; hold = 0; } show(sec); return; }
+    sec = Math.min(180, sec + 2); show(sec);
+  }, 100);
+}
 function bindHome(){
+  startSteep();
   $$('[data-act]').forEach(function(b){ b.addEventListener('click', function(){
     var k = b.getAttribute('data-act');
     $$('[data-act]').forEach(function(x){ x.setAttribute('aria-selected', String(x === b)); });
@@ -660,7 +714,7 @@ function vWorkshop(){
 }
 function flowSection(){
   return '<section class="section dark"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">Before · After</p><h2 class="h2">어떤 워크샵이든 앞뒤가 붙어요</h2></div><p class="lead">하루로 끝나는 행사가 아니라, 팀이 실제로 쓰게 될 때까지 따라가요.</p></div>' +
+    '<div class="sec-head"><div><p class="eyebrow">Before · After</p><h2 class="h2">한 번 우리고 끝나지 않아요</h2></div><p class="lead">좋은 찻잎은 여러 번 우러나요. 워크샵 하루가 끝나도 팀이 실제로 쓰게 될 때까지 따라가요.</p></div>' +
     '<ol class="flow">' + FLOW.map(function(f){ return '<li><span class="en">' + esc(f[0]) + '</span><b>' + esc(f[1]) + '</b><p>' + esc(f[2]) + '</p></li>'; }).join('') + '</ol>' +
   '</div></section>';
 }
@@ -696,7 +750,7 @@ function vWDetail(w){
       (w.opt ? '<h2>더하기</h2><p>' + esc(w.opt) + '</p>' : '') +
       '<h2>현장 사진</h2><div class="field-gal">' + (w.more || []).concat(w.photos.slice(1)).map(function(p){ return ph(p, 700); }).join('') + '</div>' +
       '<h2>담당자님께 미리 받는 것 (D-3)</h2><ul class="checks"><li>사내 보안 규정과 외부 AI 서비스 접속 가능 여부</li><li>직무별로 매주 쓰는 업무 양식 1~2개 (실습 예제로 씁니다)</li><li>참가 인원과 직무 구성, 카페인·알레르기 제한</li></ul>' +
-      '<h2>끝나고 이어지는 것</h2><ul class="checks"><li>24시간 안에 HR용 1쪽 리포트</li><li>48시간 안에 참가자에게 약속과 연습 과제</li><li>사후 복습 VOD로 같은 예제를 다시</li><li>원하면 90일 시범으로 이어 가기 — <a href="#program">정기프로그램 보기</a></li></ul>' +
+      '<h2>끝나고 이어지는 것</h2><ul class="checks"><li>24시간 안에 우림 리포트 (HR 1쪽)</li><li>48시간 안에 첫 잔 약속 카드와 연습 과제가 각자에게</li><li>사후 복습 VOD로 같은 예제를 다시</li><li>원하면 숙성 90일으로 이어 가기 — <a href="#program">정기프로그램 보기</a></li></ul>' +
       '<h2>함께하는 강사</h2>' + w.who.map(function(k){ var t = T[k]; return '<p><b>' + t.nm + '</b> <span class="muted">· ' + esc(t.line) + '</span><br>이 워크샵에서 맡는 일: ' + esc(t.job) + '</p>'; }).join('') +
       '<h2>참가자 후기</h2><div class="reviews">' + (w.reviews && w.reviews.length ? w.reviews : [null, null, null]).map(function(r, i){ var pic = [w.photos[0]].concat(w.more || []).at(i) || w.photos[0];
         return r ? '<figure class="rv">' + ph(r.photo || pic, 500) + '<blockquote>' + esc(r.text) + '</blockquote><figcaption>' + esc(r.who) + '</figcaption></figure>'
@@ -715,10 +769,10 @@ function vWDetail(w){
 /* ===== 정기프로그램: 1년 기업 전담 ===== */
 function vProgram(){
   var Q = [
-    ['Q1','진단과 킥오프','team',['전 직원 AI 활용 진단 설문','오후 사무실 워크샵으로 첫 에이전트','부서별 자동화 후보 업무 목록']],
-    ['Q2','직무별 심화','laptops',['오후 사무실 워크샵, 직무별로','부서마다 에이전트 1개 운영 시작','팀장급 합류']],
-    ['Q3','쇼케이스','laugh',['부서별 에이전트 시연회','잘 쓰는 사례 사내 공유','다음 확장 업무 선정']],
-    ['Q4','숲에서 회고','cabin',['종일 야외 워크샵 (1박 2일 선택)','1년 성과 리포트','다음 해 계획 제안']]
+    ['Q1 · 봄 · 첫물차','진단과 킥오프','team',['전 직원 AI 활용 진단 설문','오후 사무실 워크샵으로 첫 에이전트','부서별 자동화 후보 업무 목록']],
+    ['Q2 · 여름 · 냉침','직무별 심화','laptops',['오후 사무실 워크샵, 직무별로','부서마다 에이전트 1개 운영 시작','팀장급 합류']],
+    ['Q3 · 가을 · 우롱','시음회 · 쇼케이스','laugh',['부서별 에이전트 시연회','잘 쓰는 사례 사내 공유','다음 확장 업무 선정']],
+    ['Q4 · 겨울 · 숙성 보이','숲에서 회고','cabin',['종일 야외 워크샵 (1박 2일 선택)','1년 성과 리포트','다음 해 계획 제안']]
   ];
   return '<section class="hero" style="min-height:min(70vh,640px)">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">한 회사를 1년 동안 맡아요</h1>' +
@@ -730,12 +784,12 @@ function vProgram(){
     '<div class="sec-head"><div><p class="eyebrow">How it starts</p><h2 class="h2">워크샵 한 번에서 1년까지, 세 단계</h2></div><p class="lead">처음부터 연간 계약을 권하지 않아요. 각 단계의 결과가 다음 단계를 제안할 근거가 돼요.</p></div>' +
     '<ol class="stages">' +
       '<li><span class="en">STEP 1</span><b>워크샵</b><p>종일 야외 또는 오후 사무실(5~6시간). 끝날 때 각자 “다음 2주에 해 볼 한 가지”를 적어요.</p><small>24시간 리포트 끝에 90일 제안</small></li>' +
-      '<li><span class="en">STEP 2</span><b>90일 시범</b><p>월 1회 온라인 체크인 2~3번, 사내 챔피언 1~2명, 점심 티 세션 1회. 내부 결재가 가벼운 크기예요.</p><small>체크인 성과로 연장 제안</small></li>' +
-      '<li class="on"><span class="en">STEP 3</span><b>연간 정기프로그램</b><p>분기마다 대면 1회와 매달 체크인·티 세션, 회차별 리포트와 연말 성과 리포트.</p><small>아래 1년 흐름</small></li>' +
+      '<li><span class="en">STEP 2</span><b>숙성 90일</b><p>만든 에이전트가 실제로 쓰이는지 지켜봐요. 월 1회 온라인 체크인 2~3번, 사내 챔피언 1~2명, 점심 티 세션 1회. 내부 결재가 가벼운 크기예요.</p><small>체크인 성과로 연장 제안</small></li>' +
+      '<li class="on"><span class="en">STEP 3</span><b>사계절 프로그램 (연간)</b><p>분기마다 대면 1회와 매달 체크인·티 세션, 회차별 리포트와 연말 성과 리포트.</p><small>아래 1년 흐름</small></li>' +
     '</ol>' +
   '</div></section>' +
   '<section class="section"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">One year</p><h2 class="h2">1년은 이렇게 흘러가요</h2></div><p class="lead">분기별 대면 프로그램 4회에 매달 온라인 티 세션과 담당자 체크인이 더해져요.</p></div>' +
+    '<div class="sec-head"><div><p class="eyebrow">One year</p><h2 class="h2">사계절 프로그램: 1년을 네 번 우려요</h2></div><p class="lead">분기별 대면 프로그램 4회에 매달 온라인 티 세션과 담당자 체크인이 더해져요.</p></div>' +
     '<div class="year">' + Q.map(function(q){ return '<div class="q">' + ph(q[2], 700) + '<div class="q-body"><span class="qn">' + q[0] + '</span><h3 class="h3">' + q[1] + '</h3><ul>' + q[3].map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div></div>'; }).join('') + '</div>' +
   '</div></section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -752,7 +806,7 @@ function vProgram(){
       '<tr><td>맞춤</td><td>표준 70% + 맞춤 30%</td><td>분기마다 진단 결과로 다음 회차를 다시 설계</td></tr>' +
       '<tr><td>성과 보고</td><td>회차별 1쪽 리포트</td><td>회차별 리포트 + 연간 성과 리포트</td></tr>' +
       '<tr><td>쉼</td><td>현장 티 브레이크</td><td>현장 티 브레이크 + 월간 티 세션 + 리트리트</td></tr>' +
-      '<tr><td>이어짐</td><td>48시간 연락 · 30일 설문</td><td>매달 체크인 + 분기 진단 + 사후 복습 VOD</td></tr><tr><td>계약</td><td>회차별 견적</td><td>90일 시범 후 연간 계약</td></tr>' +
+      '<tr><td>이어짐</td><td>48시간 연락 · 30일 설문</td><td>매달 체크인 + 분기 진단 + 사후 복습 VOD</td></tr><tr><td>계약</td><td>회차별 견적</td><td>숙성 90일 후 연간 계약</td></tr>' +
     '</tbody></table></div>' +
   '</div></section>' +
   '<section class="section dark"><div class="wrap split">' +
@@ -778,7 +832,7 @@ function vOnline(){
       '<tr><td>정기프로그램 이용권</td><td>계약 기간 동안</td><td>다음 분기 주제 예습 + 월간 티 라이브</td><td>대면 회차 사이를 이어요</td></tr>' +
       '<tr><td>개인 수강</td><td>언제든</td><td>강사별 대표 강의</td><td>“우리 회사에도 해 보자”의 시작</td></tr>' +
     '</tbody></table></div>' +
-    '<div class="price-box" style="margin-top:28px"><div><p class="eyebrow">Package</p><div class="big" style="font-size:28px">워크샵 + 3개월 이용권</div><p class="muted" style="margin:8px 0 0">워크샵 참가자 전원에게 사후 복습 VOD와 티 라이브를 3개월 열어 드려요. 3개월 뒤 90일 시범이나 정기프로그램으로 이어 갈지 함께 봐요.</p></div><a class="btn btn-lime" href="#contact">패키지 문의</a></div>' +
+    '<div class="price-box" style="margin-top:28px"><div><p class="eyebrow">Package</p><div class="big" style="font-size:28px">워크샵 + 3개월 이용권</div><p class="muted" style="margin:8px 0 0">워크샵 참가자 전원에게 사후 복습 VOD와 티 라이브를 3개월 열어 드려요. 3개월 뒤 숙성 90일이나 정기프로그램으로 이어 갈지 함께 봐요.</p></div><a class="btn btn-lime" href="#contact">패키지 문의</a></div>' +
   '</div></section>' +
   '<section style="padding-bottom:88px"><div class="wrap"><div class="cgrid">' +
     C.map(function(c){ return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span class="badge ln" style="align-self:flex-start">' + esc(c.kind) + '</span><h2 class="h3" style="font-size:22px">' + esc(c.title) + '</h2><p class="muted" style="margin:0">' + esc(c.hook) + '</p><span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
@@ -851,8 +905,8 @@ function notifyDialog(c){
 /* ===== 강사 ===== */
 function vTeam(){
   return '<section class="section dark"><div class="wrap">' +
-    '<p class="eyebrow">Hosts</p><h1 class="h1 one" style="font-size:clamp(28px,3.9vw,50px)">집중을 지키는 사람, 설계하는 사람, 만드는 사람</h1>' +
-    '<p class="lead" style="max-width:680px;margin:16px 0 48px">세 사람이 한 워크샵에 함께 들어가는 이유예요. 무엇을 맡길지 정하고, 끝까지 만들어 돌리고, 그 사이 집중이 끊기지 않게 지켜요.</p>' +
+    '<p class="eyebrow">Hosts</p><h1 class="h1 one" style="font-size:clamp(28px,3.9vw,50px)">세 사람이 우린 하나의 블렌드</h1>' +
+    '<p class="lead" style="max-width:680px;margin:16px 0 48px">집중을 지키는 사람, 설계하는 사람, 만드는 사람. 차도 블렌드할 때 맛이 완성되듯, 세 사람이 한 워크샵에 함께 들어가요.</p>' +
     '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#t-' + k + '">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proofS || t.proof) + '</p><p>워크샵에서 · ' + esc(t.jobS) + '</p></a>'; }).join('') + '</div>' +
   '</div></section>' +
   ['lee','han','jun'].map(function(k, i){ var t = T[k]; return '<section class="section' + (i % 2 ? ' paper' : '') + '" id="t-' + k + '"><div class="wrap bio">' +
@@ -883,13 +937,13 @@ function vBrief(){
   var row = function(k, v){ return '<tr><th scope="row">' + k + '</th><td>' + v + '</td></tr>'; };
   return '<section class="section tight brief"><div class="wrap" style="max-width:920px">' +
     '<p class="eyebrow">For decision makers · 결재용 요약</p>' +
-    '<h1 class="h1 one" style="font-size:clamp(26px,3vw,40px)">PAUSE 워크샵 한 페이지 요약</h1>' +
+    '<h1 class="h1 one" style="font-size:clamp(26px,3vw,40px)">PAUSE 워크샵 한 잔 요약</h1>' +
     '<p class="lead" style="margin:14px 0 0">팀원 모두가 실제 업무 하나를 AI 에이전트로 바꾸고, 그 결과를 숫자로 확인하는 실무 워크샵이에요.</p>' +
     '<div class="btns" style="margin:20px 0 8px"><button type="button" class="btn btn-lime btn-sm" data-copylink>이 페이지 링크 복사</button><button type="button" class="btn btn-line btn-sm" data-copybrief>요약 텍스트 복사</button></div>' +
     '<h2 class="bh">1. 무엇이 남나요</h2><div class="tbl-wrap"><table class="cmp bt">' +
       row('결과물', '팀마다 실제 업무에 쓰는 AI 에이전트 1개 이상 (보고서·회의록 정리, 고객 문의 답변 초안, 경쟁사 조사 등)') +
       row('개인', '각자 “다음 2주에 해 볼 한 가지” 실행 약속') +
-      row('보고', '24시간 안에 HR 1쪽 리포트 — 참여율, 만든 결과물, 만족도, 다음 90일 제안') +
+      row('보고', '우림 리포트 — 24시간 안에 HR 1쪽: 참여율, 만든 결과물, 만족도, 다음 90일 제안') +
     '</table></div>' +
     '<h2 class="bh">2. 성과는 이렇게 봐요</h2><div class="tbl-wrap"><table class="cmp bt"><thead><tr><th scope="col">시점</th><th scope="col">지표</th></tr></thead><tbody>' +
       '<tr><td>당일</td><td>에이전트를 완성한 참가자 비율</td></tr><tr><td>30일</td><td>만든 에이전트를 아직 쓰는 비율 (설문)</td></tr><tr><td>60~90일</td><td>처음 함께 정한 업무 지표 (예: 주간 보고 작성 시간)</td></tr>' +
@@ -901,12 +955,12 @@ function vBrief(){
     '</tbody></table></div>' +
     '<h2 class="bh">4. 리스크는 이렇게 줄여요</h2><ul class="checks"><li>출강 3일 전 보안 규정·외부 AI 접속 여부 확인. 막혀 있으면 공개 자료와 별도 실습 계정으로 진행</li><li>실제 회사 자료는 보안 점검 후에만 사용</li><li>툴은 하나로 좁혀 현장 혼란을 줄임</li></ul>' +
     '<h2 class="bh">5. 누가 진행하나요</h2><ul class="checks">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<li><b>' + t.nm + '</b> — ' + esc(t.line) + '. ' + esc(t.proof) + '</li>'; }).join('') + '</ul>' +
-    '<h2 class="bh">6. 다음 단계</h2><p style="margin:0;line-height:1.8">워크샵 → <b>90일 시범</b>(월 체크인 2~3회) → <b>연간 정기프로그램</b>(분기 대면 + 연말 성과 리포트). 각 단계의 결과를 보고 다음 단계를 결정하시면 돼요.</p>' +
+    '<h2 class="bh">6. 다음 단계</h2><p style="margin:0;line-height:1.8">워크샵 → <b>숙성 90일</b>(월 체크인 2~3회) → <b>사계절 프로그램</b>(연간 · 분기 대면 + 연말 성과 리포트). 각 단계의 결과를 보고 다음 단계를 결정하시면 돼요.</p>' +
     '<div class="btns" style="margin-top:32px"><a class="btn btn-lime" href="#contact?type=proposal">제안서 요청</a><a class="btn btn-line" href="#workshop">워크샵 자세히 보기</a></div>' +
   '</div></section>';
 }
 function briefText(){
-  return ['[PAUSE 워크샵 요약]','무엇: 팀원 모두가 실제 업무 하나를 AI 에이전트로 바꾸는 실무 워크샵','결과물: 팀별 업무 에이전트 1개 이상, 개인별 2주 실행 약속, 24시간 내 HR 1쪽 리포트','성과 지표: 당일 완성률 / 30일 사용 유지율 / 60~90일 업무 지표','형태: ' + W.map(function(w){ return w.title + ' (' + w.hours + ')'; }).join(', '),'진행: ' + ['lee','han','jun'].map(function(k){ return T[k].nm + '(' + T[k].line + ')'; }).join(', '),'다음 단계: 90일 시범 → 연간 정기프로그램','자세히: ' + location.origin + location.pathname + '#brief'].join('\n');
+  return ['[PAUSE 워크샵 요약]','무엇: 팀원 모두가 실제 업무 하나를 AI 에이전트로 바꾸는 실무 워크샵','결과물: 팀별 업무 에이전트 1개 이상, 개인별 2주 실행 약속, 24시간 내 HR 1쪽 리포트','성과 지표: 당일 완성률 / 30일 사용 유지율 / 60~90일 업무 지표','형태: ' + W.map(function(w){ return w.title + ' (' + w.hours + ')'; }).join(', '),'진행: ' + ['lee','han','jun'].map(function(k){ return T[k].nm + '(' + T[k].line + ')'; }).join(', '),'다음 단계: 숙성 90일 → 연간 정기프로그램','자세히: ' + location.origin + location.pathname + '#brief'].join('\n');
 }
 function copyText(txt){
   var fallback = function(){ openDialog('<h2>아래 내용을 복사해 주세요</h2><textarea readonly style="width:100%;min-height:180px;border:1px solid var(--hair);border-radius:10px;padding:12px;font-size:14px">' + esc(txt) + '</textarea>'); };
