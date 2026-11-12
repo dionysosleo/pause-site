@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAUSE — AI가 일하는 동안, 당신은 잠깐 멈춤</title>
+<meta name="description" content="AI 에이전트와 티 웰니스 클래스. 한성희 대표의 AI 에이전트 강의, 이유진 티마스터의 티 클래스, 두 강사가 함께하는 기업 출강.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFFFFF;--surface:#fff;--ink:#0E0E0E;--ink2:#333333;--muted:#5A5A5A;--line:#0E0E0E;--hair:#D9D9D4;--soft:#F1F1EC;--green:#0E0E0E;--green-d:#000;--green-t:#EEF7CF;--lime:#C8E46A;--amber:#6B9A1F;--amber-d:#4E7314;--amber-t:#EEF7CF;--dark:#0E0E0E;--red:#B42318;--r:4px;--max:1280px;--en:'Space Grotesk',sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--bg);color:var(--ink);word-break:keep-all;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink);text-underline-offset:3px}a:hover{color:var(--amber-d)}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+.eyebrow{margin:0;font-family:var(--en);font-size:14px;font-weight:500;color:var(--ink);letter-spacing:.04em;text-transform:uppercase}
+.h1{margin:0;font-size:clamp(34px,5vw,56px);line-height:1.12;font-weight:900;letter-spacing:-.04em}
+.h2{margin:0;font-size:clamp(24px,3.2vw,34px);font-weight:900;letter-spacing:-.02em;line-height:1.3}
+.lead{margin:0;font-size:clamp(16px,1.6vw,18px);line-height:1.75;color:var(--ink2)}
+.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:13px 24px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:background .15s,color .15s;line-height:1.2}
+.btn-primary{background:var(--lime);color:var(--ink)}.btn-primary:hover{background:var(--ink);color:var(--lime)}
+.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}.btn-outline:hover{background:var(--ink);color:#fff}
+.btn-white{background:var(--lime);color:var(--ink)}.btn-white:hover{background:#fff;color:var(--ink)}
+.btn-ghost-w{background:transparent;color:#fff;border-color:#fff}.btn-ghost-w:hover{background:#fff;color:var(--ink)}
+.btn-sm{min-height:44px;padding:10px 18px;font-size:15px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.icon-btn{width:44px;height:44px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:relative;text-decoration:none;flex:0 0 auto}
+.icon-btn:hover{border-color:var(--ink);color:var(--ink)}
+.dot-count{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--lime);color:var(--ink);border:1.5px solid var(--ink);font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:5px 9px;border-radius:999px;line-height:1.1}
+.b-dark{background:var(--dark);color:#fff}.b-amber{background:var(--amber-d);color:#fff}.b-green{background:var(--green);color:#fff}.b-soft{background:var(--soft);color:var(--ink)}.b-red{background:var(--red);color:#fff}.b-lime{background:var(--lime);color:var(--ink)}.b-tint{background:var(--green-t);color:var(--ink)}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r)}
+.grid{display:grid;gap:20px}
+.g-cards{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.section{padding:72px 0}
+.band-white{background:#fff;border-top:1.5px solid var(--line);border-bottom:1.5px solid var(--line)}
+.ph{background:var(--soft);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:28px}
+.sec-head .more{font-weight:700;font-size:15px;padding:10px 0;text-decoration:none}
+.page-head{padding:56px 0 28px;display:flex;flex-direction:column;gap:14px}
+.crumb{font-size:13px;color:var(--muted);margin:0}
+.crumb a{color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.note{font-size:13px;line-height:1.6;color:var(--muted);background:var(--soft);border-radius:12px;padding:12px 14px;margin:0}
+
+/* header */
+.site-header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border-bottom:1.5px solid var(--line)}
+.hbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 24px;max-width:var(--max);margin:0 auto}
+.logo{text-decoration:none;color:var(--ink);font-family:var(--en);font-weight:700;font-size:24px;letter-spacing:-.04em;white-space:nowrap;display:inline-flex;align-items:center;gap:8px}
+.mark{display:inline-flex;gap:3px}.mark i{display:block;width:5px;height:18px;background:var(--amber);border-radius:1px}.logo:hover{color:var(--ink)}
+.gnb{display:flex;gap:0;margin:0;padding:0;list-style:none}
+.gnb>li{position:relative}
+.gnb>li>a,.gnb>li>button{display:block;background:none;border:0;cursor:pointer;text-decoration:none;color:var(--ink);font-family:var(--en);font-weight:500;font-size:15px;padding:14px 14px;border-bottom:2px solid transparent}
+.gnb>li.on>a,.gnb>li.on>button{border-bottom-color:var(--amber)}
+.sub{position:absolute;top:100%;left:0;min-width:180px;background:#fff;border:1.5px solid var(--line);border-radius:4px;padding:8px;list-style:none;margin:0;display:none;box-shadow:0 8px 24px rgba(23,32,27,.08)}
+.gnb>li:hover .sub,.gnb>li:focus-within .sub{display:block}
+.sub a{display:block;padding:10px 12px;border-radius:8px;text-decoration:none;color:var(--ink);font-size:15px;white-space:nowrap}
+.sub a:hover{background:var(--green-t)}
+.vod-link{white-space:nowrap}
+.hutil{display:flex;align-items:center;gap:6px}
+.auth-link{background:none;border:0;cursor:pointer;color:var(--muted);font-size:14px;padding:12px 8px;white-space:nowrap;text-decoration:none}
+.auth-link:hover{color:var(--ink)}
+.menu-toggle{display:none}
+@media (max-width:1080px){.gnb,.vod-link{display:none}.menu-toggle{display:inline-flex}}
+@media (max-width:520px){.auth-link{display:none}}
+
+/* side panels */
+.panel-back{position:fixed;inset:0;background:rgba(23,32,27,.45);z-index:80;display:none}
+.panel-back.open{display:block}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--bg);z-index:81;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;overflow:auto}
+.panel.open{transform:none}
+.panel-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg)}
+.panel-head h2{margin:0;font-size:18px}
+.panel-body{padding:16px 20px 32px;display:flex;flex-direction:column;gap:12px}
+.m-group{border-bottom:1px solid var(--line);padding:8px 0 12px}
+.m-group p{margin:8px 0;font-size:13px;font-weight:700;color:var(--muted)}
+.m-group a{display:block;padding:10px 0;text-decoration:none;color:var(--ink);font-size:16px;font-weight:500}
+
+/* search layer */
+.search-layer{position:fixed;inset:0;background:rgba(247,246,242,.98);z-index:85;display:none;overflow:auto}
+.search-layer.open{display:block}
+.search-box{display:flex;gap:8px;align-items:center;border-bottom:2px solid var(--ink);padding:8px 0}
+.search-box input{flex:1;border:0;background:transparent;font-family:inherit;font-size:clamp(20px,3vw,28px);font-weight:700;padding:10px 0;color:var(--ink);min-width:0}
+.search-box input:focus{outline:none}
+.sr-item{display:flex;gap:12px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.sr-item:hover{color:var(--green)}
+
+/* hero slider */
+.slider{position:relative;overflow:hidden;border-radius:28px;margin-top:24px}
+.slides{display:flex;transition:transform .5s ease}
+.slide{flex:0 0 100%;min-height:440px;padding:56px clamp(24px,5vw,64px);display:flex;flex-wrap:wrap;gap:32px;align-items:center}
+.slide .copy{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:18px}
+.slide .copy p,.slide .copy h2{margin:0}
+.slide .art{flex:0 1 320px;min-width:0;height:300px;border-radius:20px}
+.s-dark{background:var(--dark);color:#fff}.s-green{background:var(--green);color:#fff}.s-amber{background:var(--amber-t);color:var(--ink)}.s-tint{background:var(--green-t);color:var(--ink)}
+.slider-ui{position:absolute;left:clamp(24px,5vw,64px);bottom:24px;display:flex;align-items:center;gap:10px}
+.slider-ui button{width:44px;height:44px;border-radius:999px;border:1px solid currentColor;background:rgba(255,255,255,.9);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.slider-ui .count{font-size:14px;font-weight:700;background:rgba(255,255,255,.9);color:var(--ink);padding:10px 14px;border-radius:999px}
+
+/* marquee */
+.marquee{overflow:hidden;background:var(--dark);color:#fff;padding:18px 0;white-space:nowrap}
+.marquee-track{display:inline-flex;gap:48px;animation:mq 30s linear infinite;font-size:clamp(18px,2.4vw,26px);font-weight:900;letter-spacing:-.01em}
+.marquee-track span::after{content:'✦';color:var(--amber);margin-left:48px}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marquee-track{animation:none}.slides{transition:none}}
+
+/* product card */
+.pcard{display:flex;flex-direction:column;overflow:hidden;text-decoration:none;color:var(--ink);position:relative}
+.pcard:hover{background:var(--soft);color:var(--ink)}
+.pcard .thumb{aspect-ratio:16/10;position:relative}
+.pcard .badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap}
+.pcard .body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pcard .cat{margin:0;font-size:12px;font-weight:700;color:var(--muted)}
+.pcard h3{margin:0;font-size:17px;font-weight:700;line-height:1.45}
+.pcard .soldout-veil{position:absolute;inset:0;background:rgba(23,32,27,.55);color:#fff;font-weight:900;font-size:22px;display:flex;align-items:center;justify-content:center;letter-spacing:.1em}
+.wish{position:absolute;top:10px;right:10px;z-index:2}
+.wish[aria-pressed="true"]{color:var(--red);border-color:var(--red)}
+.prices{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+.prices .list{font-size:13px;color:var(--muted);text-decoration:line-through}
+.prices .rate{font-size:17px;font-weight:900;color:var(--red)}
+.prices .now{font-size:18px;font-weight:900}
+.prices .tbd{font-size:14px;font-weight:700;color:var(--muted)}
+
+/* boards */
+.blist{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--ink)}
+.blist li{border-bottom:1px solid var(--hair)}
+.blist a{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;padding:18px 4px;text-decoration:none;color:var(--ink)}
+.blist a:hover .bt{color:var(--green);text-decoration:underline}
+.blist .bt{flex:1 1 300px;min-width:0;font-size:16px;font-weight:500}
+.blist .bd{font-size:13px;color:var(--muted)}
+.bcats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.chip{font-size:14px;font-weight:700;padding:9px 16px;min-height:40px;border-radius:999px;cursor:pointer;background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+.chip[aria-pressed="true"]{background:var(--lime);color:var(--ink);border-color:var(--ink)}
+.empty{padding:48px 24px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r);background:#fff}
+.pager{display:flex;gap:6px;justify-content:center;margin-top:24px}
+.pager button{min-width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:700}
+.pager button[aria-current="page"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* review */
+.rcard{padding:22px;display:flex;flex-direction:column;gap:10px;min-height:180px}
+.rcard p{margin:0}
+.stars{color:var(--amber);letter-spacing:2px;font-size:15px}
+.hscroll{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(280px,1fr);gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.hscroll>*{scroll-snap-align:start}
+
+/* faq */
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:20px 4px;font-size:17px;font-weight:700;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-size:22px;color:var(--muted)}
+.faq details[open] summary::after{content:'−'}
+.faq .ans{padding:0 4px 22px;color:var(--ink2);line-height:1.75;font-size:15px}
+
+/* detail */
+.detail{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+.detail .media{flex:1 1 460px;min-width:0;aspect-ratio:16/10;border-radius:var(--r)}
+.detail .info{flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:16px;position:sticky;top:88px}
+.dtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:40px 0 24px;overflow-x:auto}
+.dtabs button{background:none;border:0;border-bottom:2px solid transparent;padding:14px 16px;font-size:16px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap}
+.dtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.spec{display:grid;grid-template-columns:96px 1fr;gap:10px 16px;margin:0;font-size:15px}
+.spec dt{color:var(--muted)}.spec dd{margin:0}
+.curr{margin:0;padding:0;list-style:none;counter-reset:c}
+.curr li{counter-increment:c;padding:16px 0;border-top:1px solid var(--line);display:flex;gap:16px}
+.curr li::before{content:counter(c,decimal-leading-zero);font-weight:900;color:var(--green);min-width:28px}
+
+/* misc blocks */
+.split{border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:14px}
+.steps{margin:0;padding:0;list-style:none}
+.steps li{display:flex;flex-wrap:wrap;gap:6px 20px;padding:15px 0;border-top:1px solid #3A3A3A}
+.steps li:last-child{border-bottom:1px solid #3A3A3A}
+.steps .tm{flex:0 0 64px;font-weight:700;color:var(--lime)}
+.corp{background:var(--dark);color:#fff}.corp .eyebrow{color:var(--lime)}
+.tl{margin:0;padding:0;list-style:none}
+.tl li{display:flex;flex-wrap:wrap;gap:6px 24px;padding:18px 0;border-top:1px solid var(--line);align-items:baseline}
+.tl li:last-child{border-bottom:1px solid var(--line)}
+.tl .tm{flex:0 0 112px;font-size:14px;font-weight:700;color:var(--muted)}
+.tl .what{flex:1 1 280px;min-width:0;font-size:17px;font-weight:700}
+.tl .what span{font-weight:400;color:var(--muted)}
+.teacher{padding:28px;display:flex;flex-wrap:wrap;gap:24px}
+.teacher .photo{flex:0 0 140px;height:176px;border-radius:14px}
+.teacher .tb{flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.teacher p,.teacher h3{margin:0}
+.chan{padding:22px;display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink)}
+.chan:hover{border-color:var(--ink);color:var(--ink)}
+.swatch{height:96px;border-radius:14px;border:1px solid var(--line)}
+
+/* forms */
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.form .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:700}
+.field input,.field select,.field textarea{font-family:inherit;font-size:16px;font-weight:400;padding:12px 14px;min-height:48px;border:1px solid #C9C6BC;border-radius:12px;background:#fff;color:var(--ink);width:100%}
+.field textarea{resize:vertical;min-height:120px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green);outline:2px solid var(--green-t)}
+.field .err{font-weight:500;font-size:13px;color:var(--red);display:none}
+.field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--red)}
+.field.invalid .err{display:block}
+.check{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--ink2);font-weight:500}
+.check input{width:20px;height:20px;flex:0 0 auto}
+@media (max-width:640px){.form{grid-template-columns:minmax(0,1fr)}}
+.switch{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);font-size:15px}
+.switch input{width:22px;height:22px}
+
+/* cart */
+.cart-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:18px 0;border-top:1px solid var(--line)}
+.cart-row:last-child{border-bottom:1px solid var(--line)}
+.cart-row .info{flex:1 1 240px;min-width:0}
+.cart-row .info p{margin:0}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:#fff}
+.qty button{width:44px;height:44px;border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--ink)}
+.qty span{min-width:28px;text-align:center;font-weight:700}
+
+/* floating, toast, dialog */
+.floats{position:fixed;right:20px;bottom:20px;display:flex;flex-direction:column;gap:10px;z-index:50}
+.fbtn{width:56px;height:56px;border-radius:999px;border:0;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(23,32,27,.18);text-decoration:none}
+.f-kakao{background:#FEE500;color:#191600}
+.f-top{background:#fff;color:var(--ink);border:1px solid var(--line);display:none}
+.f-top.show{display:flex}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:14px 20px;border-radius:999px;font-size:15px;z-index:90;transition:transform .25s;display:flex;gap:14px;align-items:center;max-width:calc(100% - 120px)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast a{color:#C8E46A;font-weight:700;white-space:nowrap}
+.dialog-back{position:fixed;inset:0;background:rgba(23,32,27,.5);display:none;align-items:center;justify-content:center;z-index:95;padding:20px}
+.dialog-back.open{display:flex}
+.dialog{background:#fff;border-radius:24px;padding:28px;max-width:480px;width:100%;max-height:90vh;overflow:auto;display:flex;flex-direction:column;gap:14px}
+.dialog h2,.dialog p{margin:0}
+.atabs{display:flex;border:1px solid var(--line);border-radius:999px;padding:4px}
+.atabs button{flex:1;min-height:40px;border:0;border-radius:999px;background:transparent;font-weight:700;cursor:pointer;color:var(--muted)}
+.atabs button[aria-selected="true"]{background:var(--ink);color:#fff}
+
+footer{background:var(--dark);color:#BDBDB8;font-size:14px;line-height:1.8}
+footer a{color:#E4E4DE;text-decoration:none}footer a:hover{color:#fff;text-decoration:underline}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px;padding:56px 0 32px}
+.fgrid p{margin:0 0 10px;color:#fff;font-weight:700}
+.fgrid ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.fbottom{border-top:1px solid #333;padding:24px 0 40px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+.view{display:none}.view.active{display:block}
+.wordmark{margin:0;font-family:var(--en);font-weight:700;font-size:clamp(110px,20vw,290px);line-height:.82;letter-spacing:-.07em;display:flex;align-items:flex-end;gap:.06em}
+.wordmark .mark{gap:.05em;margin-bottom:.09em}.wordmark .mark i{width:.09em;height:.62em}
+.quad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-left:1.5px solid var(--ink)}
+.quad a{text-decoration:none;color:var(--ink);padding:28px;border-right:1.5px solid var(--ink);display:flex;flex-direction:column;justify-content:space-between;gap:56px;min-height:250px}
+.quad a:hover{background:var(--soft)}
+.quad .no{font-family:var(--en);font-size:14px;font-weight:500}
+.quad .ttl{font-size:26px;font-weight:900;display:block}
+.quad .sub2{font-size:15px;line-height:1.6;color:#4A4A4A;display:block;margin-top:8px}
+@media (max-width:900px){.quad{grid-template-columns:repeat(2,minmax(0,1fr));border-top:1.5px solid var(--ink)}.quad a{border-bottom:1.5px solid var(--ink);min-height:180px}}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+@media (max-width:700px){.duo{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<a href="#main" class="sr">본문으로 건너뛰기</a>
+
+<header class="site-header">
+  <div class="hbar">
+    <a href="#home" class="logo" aria-label="PAUSE 홈">PAUSE<span class="mark" aria-hidden="true"><i></i><i></i></span></a>
+    <nav aria-label="주 메뉴">
+      <ul class="gnb" id="gnb">
+        <li data-grp="class"><a href="#classes">Class</a></li>
+        <li data-grp="corp"><a href="#corporate">For Teams</a></li>
+        <li data-grp="store"><button type="button" aria-haspopup="true">Store</button>
+          <ul class="sub"><li><a href="#package">패키지</a></li><li><a href="#pdf">전자책</a></li><li><a href="#ebook">ebook</a></li></ul></li>
+        <li data-grp="comm"><button type="button" aria-haspopup="true">Journal</button>
+          <ul class="sub"><li><a href="#news">뉴스</a></li><li><a href="#reviews">리뷰</a></li><li><a href="#column">칼럼</a></li><li><a href="#event">이벤트</a></li></ul></li>
+        <li data-grp="about"><a href="#about">About</a></li>
+        <li data-grp="info"><button type="button" aria-haspopup="true">Help</button>
+          <ul class="sub"><li><a href="#faq">자주 묻는 질문</a></li><li><a href="#notice">공지</a></li><li><a href="#qna">문의와 답변</a></li></ul></li>
+      </ul>
+    </nav>
+    <div class="hutil">
+      <button type="button" class="icon-btn" id="searchOpen" aria-label="검색">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      <a href="#cart" class="icon-btn" aria-label="장바구니">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.2"/><circle cx="17.5" cy="20" r="1.2"/></svg>
+        <span class="dot-count" id="cartCount" hidden>0</span></a>
+      <span id="authArea"></span>
+      <button type="button" class="icon-btn menu-toggle" id="menuOpen" aria-label="전체 메뉴">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<!-- HOME -->
+<section class="view" id="view-home" aria-label="홈">
+  <div class="wrap" style="padding-top:48px">
+    <p class="eyebrow" style="margin-bottom:10px">AI Agent × Tea Wellness</p>
+    <h1 class="wordmark">PAUSE<span class="mark" aria-hidden="true"><i></i><i></i></span></h1>
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px;padding:36px 0 56px;border-bottom:1.5px solid var(--ink)">
+      <p style="margin:0;font-size:clamp(26px,3vw,38px);font-weight:900;line-height:1.3;letter-spacing:-.03em;max-width:640px">AI가 일하는 동안,<br>당신은 잠깐 멈춤.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap"><a href="#classes" class="btn btn-primary" style="border:1.5px solid var(--ink)">클래스 보기</a><a href="#corporate" class="btn btn-outline">팀으로 듣기</a></div>
+    </div>
+  </div>
+  <div class="wrap" style="padding-top:40px;padding-bottom:80px">
+    <nav class="quad" aria-label="주요 메뉴">
+      <a href="#classes"><span class="no">01 / CLASS</span><span><span class="ttl">클래스</span><span class="sub2">AI 에이전트 VOD · 티 라이브 · 현장 워크숍</span></span></a>
+      <a href="#corporate" style="background:var(--lime)"><span class="no">02 / FOR TEAMS</span><span><span class="ttl">기업 출강</span><span class="sub2" style="color:#2A3410">AI 전환 교육 + 임직원 웰니스, 2시간</span></span></a>
+      <a href="#package"><span class="no">03 / STORE</span><span><span class="ttl">스토어</span><span class="sub2">패키지 · 전자책 · ebook</span></span></a>
+      <a href="#news"><span class="no">04 / JOURNAL</span><span><span class="ttl">저널</span><span class="sub2">뉴스 · 칼럼 · 후기</span></span></a>
+    </nav>
+  </div>
+
+  <div style="background:var(--dark);color:#fff"><div class="wrap section duo">
+    <a href="#han" style="text-decoration:none;color:#fff;display:flex;flex-direction:column;gap:12px;padding-right:24px;border-right:1px solid #3A3A3A">
+      <span style="font-family:var(--en);font-size:14px;color:var(--lime)">THE AGENT</span><span style="font-size:40px;font-weight:900;letter-spacing:-.03em">한성희</span>
+      <span style="font-size:16px;line-height:1.7;color:#CFCFCF">Simplifier 대표 · 전 요기요 CPO, 빗썸 COO<br>《기획자의 질문법》 저자</span></a>
+    <a href="#lee" style="text-decoration:none;color:#fff;display:flex;flex-direction:column;gap:12px">
+      <span style="font-family:var(--en);font-size:14px;color:var(--lime)">THE TEA</span><span style="font-size:40px;font-weight:900;letter-spacing:-.03em">이유진</span>
+      <span style="font-size:16px;line-height:1.7;color:#CFCFCF">2009년부터 활동한 티마스터<br>《차와 일상》 저자</span></a>
+  </div></div>
+
+  <div class="wrap section">
+    <div class="sec-head"><div><p class="eyebrow">Featured</p><h2 class="h2">추천 클래스</h2></div><a class="more" href="#classes">전체 보기 →</a></div>
+    <div class="grid g-cards" id="homeRecommend"></div>
+  </div>
+
+  <div class="band-white"><div class="wrap section" style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+    <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:12px"><p class="eyebrow">Journal</p><h2 class="h2">PAUSE 소식</h2><a class="more" href="#news" style="font-weight:700;text-decoration:none;padding:10px 0">모두 보기 →</a></div>
+    <ul class="blist" id="homeNews" style="flex:2 1 520px;min-width:0"></ul>
+  </div></div>
+</section>
+
+<!-- ABOUT -->
+<section class="view" id="view-about">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › PAUSE 소개</p><p class="eyebrow">ABOUT</p><h1 class="h1">AI가 일하는 동안,<br>당신은 잠깐 멈춤.</h1>
+    <p class="lead" style="max-width:720px">PAUSE(잠깐 멈춤)는 AI 에이전트에게 일을 맡기는 법과, 그 사이 차 한 잔으로 멈춰 다시 집중하는 법을 함께 가르칩니다. 로고의 두 막대는 일시정지 기호이자 AI와 TEA 두 강사를 뜻합니다. 도구가 답을 주는 시대에 사람에게 남는 일은 좋은 질문을 던지는 것이고, 그러려면 멈추는 시간이 필요하다고 믿습니다.</p></div>
+  <div class="wrap" style="padding-bottom:72px">
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+      <div class="split" style="background:var(--dark);color:#fff"><p class="eyebrow" style="color:#C8E46A">01 덜어내기</p><p style="margin:0;font-size:22px;font-weight:700">더하기보다 빼기</p><p style="margin:0;color:#CFCFCF;line-height:1.7">AI 에이전트에게 맡길 반복 업무를 고르고, 사람이 정할 일에 집중합니다.</p></div>
+      <div class="split" style="background:var(--green-t)"><p class="eyebrow">02 멈춤</p><p style="margin:0;font-size:22px;font-weight:700">한 잔의 집중</p><p style="margin:0;color:var(--ink2);line-height:1.7">차를 우리는 몇 분이 주의를 되찾게 하고, 다음 일을 선명하게 만듭니다.</p></div>
+      <div class="split" style="background:var(--amber-t)"><p class="eyebrow" style="color:var(--amber-d)">03 질문</p><p style="margin:0;font-size:22px;font-weight:700">질문하는 사람</p><p style="margin:0;color:var(--ink2);line-height:1.7">무엇을 만들고 어떤 문제를 풀지 정하는 일은 여전히 사람의 몫입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEACHERS -->
+<section class="view" id="view-teachers">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › 강사 소개</p><p class="eyebrow">TEACHERS</p><h1 class="h1">일을 덜어내는 사람,<br>시간을 채우는 사람</h1></div>
+  <div class="wrap" style="padding-bottom:72px;display:flex;flex-direction:column;gap:24px">
+    <article class="card teacher" id="han">
+      <div class="photo ph" role="img" aria-label="한성희 강사 사진 자리">강사 사진</div>
+      <div class="tb">
+        <p style="font-size:13px;font-weight:700;color:var(--green)">AI 에이전트 · VOD · 오프라인</p>
+        <h2 style="margin:0;font-size:28px;font-weight:900">한성희 <span class="muted" style="font-size:16px;font-weight:500">Simplifier 대표</span></h2>
+        <p style="font-size:15px;line-height:1.75;color:var(--ink2)">네이버 콘텐츠서비스 팀장, 삼성전자 스마트TV Head PM, 요기요 CPO, 빗썸 COO를 거쳤습니다. 지금은 스타트업에 함께 출근하며 제품과 조직을 같이 만드는 ‘플레잉 코치’로 일합니다.</p>
+        <dl class="spec"><dt>저서</dt><dd>《기획자의 질문법》 《UX의 언어들》 《유니콘의 리더십》</dd><dt>강의</dt><dd>기업 리더십·PM 강연, 프로덕트 리더십 과정, 스타트업 프로그램 코치</dd><dt>채널</dt><dd><a href="https://brunch.co.kr/@simplifier" target="_blank" rel="noopener">브런치</a> · <a href="https://kr.linkedin.com/in/simplifier" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://simplifier.co.kr/" target="_blank" rel="noopener">simplifier.co.kr</a></dd></dl>
+      </div>
+    </article>
+    <article class="card teacher" id="lee">
+      <div class="photo ph" role="img" aria-label="이유진 강사 사진 자리">강사 사진</div>
+      <div class="tb">
+        <p style="font-size:13px;font-weight:700;color:var(--amber-d)">티 · 라이브클래스 · 오프라인</p>
+        <h2 style="margin:0;font-size:28px;font-weight:900">이유진 <span class="muted" style="font-size:16px;font-weight:500">티마스터 · [협회명]</span></h2>
+        <p style="font-size:15px;line-height:1.75;color:var(--ink2)">2009년 티마스터로 시작해 차를 전해 왔습니다. 인도에서 4년간 지내며 요가·아유르베다·아로마테라피·명상을 접했고, 차로 몸과 마음을 돌보는 ‘티 앤 웰니스’를 이야기합니다.</p>
+        <dl class="spec"><dt>저서</dt><dd>《차와 일상》 《오후 4시 홍차에 빠지다》 《홍차가 더 좋아지는 시간》 《차를 타고 떠나는 차 여행》</dd><dt>활동</dt><dd>티라이프디렉터, 일상찻집</dd><dt>채널</dt><dd><a href="https://brunch.co.kr/@@8kAR" target="_blank" rel="noopener">브런치</a></dd></dl>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- PEOPLE -->
+<section class="view" id="view-people">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › 함께하는 사람들</p><p class="eyebrow">PEOPLE</p><h1 class="h1">함께하는 사람들</h1><p class="lead">PAUSE를 함께 만드는 운영진과 파트너를 소개합니다.</p></div>
+  <div class="wrap" style="padding-bottom:72px"><div class="grid g-cards">
+    <div class="card" style="padding:24px;display:flex;flex-direction:column;gap:10px"><div class="ph" style="aspect-ratio:1;border-radius:14px">사진</div><p style="margin:0;font-weight:700">[이름]</p><p style="margin:0" class="muted">[역할]</p></div>
+    <div class="card" style="padding:24px;display:flex;flex-direction:column;gap:10px"><div class="ph" style="aspect-ratio:1;border-radius:14px">사진</div><p style="margin:0;font-weight:700">[이름]</p><p style="margin:0" class="muted">[역할]</p></div>
+    <div class="card" style="padding:24px;display:flex;flex-direction:column;gap:10px"><div class="ph" style="aspect-ratio:1;border-radius:14px">사진</div><p style="margin:0;font-weight:700">[이름]</p><p style="margin:0" class="muted">[역할]</p></div>
+  </div></div>
+</section>
+
+<!-- PRODUCT LIST (classes / offline / online / package / pdf) -->
+<section class="view" id="view-list">
+  <div class="wrap page-head"><p class="crumb" id="listCrumb"></p><p class="eyebrow" id="listEyebrow"></p><h1 class="h1" id="listTitle"></h1><p class="lead" id="listLead" style="max-width:680px"></p></div>
+  <div class="wrap" style="padding-bottom:80px">
+    <div class="bcats" role="group" aria-label="클래스 분류" id="listTabs"></div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px">
+      <p style="margin:0;font-size:14px" class="muted" id="listCount" aria-live="polite"></p>
+      <label class="muted" style="font-size:14px;display:flex;gap:8px;align-items:center">정렬
+        <select id="listSort" style="font-family:inherit;font-size:14px;padding:8px 10px;min-height:40px;border:1px solid var(--line);border-radius:10px;background:#fff"><option value="rec">추천순</option><option value="new">최신순</option><option value="low">낮은 가격순</option><option value="high">높은 가격순</option></select></label>
+    </div>
+    <div class="grid g-cards" id="listGrid"></div>
+  </div>
+</section>
+
+<!-- PRODUCT DETAIL -->
+<section class="view" id="view-detail"><div class="wrap" style="padding:40px 24px 80px" id="detailRoot"></div></section>
+
+<!-- EBOOK -->
+<section class="view" id="view-ebook">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › <a href="#classes">클래스</a> › ebook</p><p class="eyebrow">EBOOK</p><h1 class="h1">두 강사의 책</h1><p class="lead">출간 도서는 온라인 서점으로 연결됩니다.</p></div>
+  <div class="wrap" style="padding-bottom:80px"><div class="grid" id="bookGrid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:28px 20px"></div></div>
+</section>
+
+<!-- PREMIUM -->
+<section class="view" id="view-premium">
+  <div class="s-dark"><div class="wrap" style="padding:80px 24px;display:flex;flex-direction:column;gap:18px">
+    <p class="crumb" style="color:#9A9A94"><a href="#home" style="color:#9A9A94">홈</a> › 프리미엄 클래스</p>
+    <p class="eyebrow" style="color:var(--amber)">PREMIUM CLASS · 기수제</p>
+    <h1 class="h1">PAUSE 프리미엄 클래스 1기</h1>
+    <p style="margin:0;font-size:18px;line-height:1.75;color:#CFCFCF;max-width:680px">소수 정예로 [N]주 동안 함께합니다. 매주 내 업무 하나를 AI 에이전트로 덜어내고, 매주 한 가지 차로 나만의 리듬을 만듭니다.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px"><span class="badge b-amber">모집 예정</span><span class="badge" style="background:#2A2A2A;color:#fff">정원 [N]명</span><span class="badge" style="background:#2A2A2A;color:#fff">[기간]</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;padding-top:6px"><button type="button" class="btn btn-white" data-dialog="waitlist">대기 명단 신청</button><a href="#faq" class="btn btn-ghost-w">자주 묻는 질문</a></div>
+  </div></div>
+  <div class="wrap section"><h2 class="h2" style="margin-bottom:24px">기수 운영 방식</h2>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+      <div class="card" style="padding:24px"><p style="margin:0 0 8px;font-weight:900;font-size:18px">주간 라이브</p><p style="margin:0" class="muted">AI 세션과 티 세션을 번갈아 진행</p></div>
+      <div class="card" style="padding:24px"><p style="margin:0 0 8px;font-weight:900;font-size:18px">과제와 피드백</p><p style="margin:0" class="muted">내 업무로 만든 에이전트에 직접 피드백</p></div>
+      <div class="card" style="padding:24px"><p style="margin:0 0 8px;font-weight:900;font-size:18px">티 키트</p><p style="margin:0" class="muted">기수 기간 동안 매주 차 배송</p></div>
+      <div class="card" style="padding:24px"><p style="margin:0 0 8px;font-weight:900;font-size:18px">수료 모임</p><p style="margin:0" class="muted">오프라인 PAUSE 데이 초대</p></div>
+    </div>
+    <p class="note" style="margin-top:20px">세부 커리큘럼, 기간, 정원, 가격은 확정 후 채워 넣을 자리예요.</p>
+  </div>
+</section>
+
+<!-- CORPORATE -->
+<section class="view" id="view-corporate">
+  <div class="corp"><div class="wrap" style="padding:80px 24px;display:flex;flex-direction:column;gap:22px">
+    <p class="crumb" style="color:#C8E46A"><a href="#home" style="color:#C8E46A">홈</a> › 출강</p>
+    <p class="eyebrow">기업 출강 · 공동 프로그램</p>
+    <h1 class="h1">덜어내는 팀,<br>채우는 사람</h1>
+    <p style="margin:0;font-size:18px;line-height:1.75;color:#D6D6D0;max-width:680px">AI 에이전트로 팀의 반복 업무를 덜어내고, 차 한 잔으로 집중과 쉼의 리듬을 되찾는 2시간. AI 전환 교육과 임직원 웰니스를 하나의 프로그램으로 제안합니다.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px"><button type="button" class="btn btn-white" data-scroll="corpForm">출강 문의하기</button><button type="button" class="btn btn-ghost-w" data-dialog="brochure">소개서 받기</button></div>
+  </div></div>
+  <div class="wrap section"><h2 class="h2" style="margin-bottom:24px">프로그램 구성</h2>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      <article class="card" style="border:2px solid var(--green);padding:26px;display:flex;flex-direction:column;gap:10px"><span class="badge b-green" style="align-self:flex-start">대표 프로그램</span><h3 style="margin:0;font-size:21px">표준 강연 · 2시간</h3><p style="margin:0;line-height:1.7;color:var(--ink2)">전 임직원 대상. 두 강사가 번갈아 진행하며 웰컴 티와 차 명상이 포함됩니다.</p><p style="margin:0;font-size:14px" class="muted">인원 [N~N명] · 견적 문의</p></article>
+      <article class="card" style="padding:26px;display:flex;flex-direction:column;gap:10px"><span class="badge b-soft" style="align-self:flex-start">워크숍</span><h3 style="margin:0;font-size:21px">반일 워크숍 · 4시간</h3><p style="margin:0;line-height:1.7;color:var(--ink2)">팀 단위. 팀별로 AI 적용 과제를 정의하고 첫 에이전트를 직접 만들어 봅니다.</p><p style="margin:0;font-size:14px" class="muted">인원 [N~N명] · 견적 문의</p></article>
+      <article class="card" style="padding:26px;display:flex;flex-direction:column;gap:10px"><span class="badge b-soft" style="align-self:flex-start">리더십</span><h3 style="margin:0;font-size:21px">리더 과정 · 3회</h3><p style="margin:0;line-height:1.7;color:var(--ink2)">신임 팀장·승진자 대상. 덜어내는 리더십, 성공 지표, 지속 가능한 업무 리듬.</p><p style="margin:0;font-size:14px" class="muted">인원 [N~N명] · 견적 문의</p></article>
+    </div></div>
+  <div class="band-white"><div class="wrap section" style="display:flex;flex-wrap:wrap;gap:48px">
+    <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:14px"><h2 class="h2">2시간은 이렇게 흐릅니다</h2><p style="margin:0;line-height:1.75;color:var(--ink2)">긴장과 이완이 번갈아 오도록 짰습니다. 강의 사이의 차가 다음 시간의 집중을 만듭니다.</p>
+      <ul style="margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:8px;color:var(--ink2)"><li>참석 인원만큼 티 재료 준비</li><li>워크숍 템플릿과 개인 티 루틴 카드 제공</li><li>프로젝터와 온수만 있으면 진행 가능</li></ul></div>
+    <ol class="tl" style="flex:2 1 520px;min-width:0">
+      <li><span class="tm">0:00 – 0:15</span><span class="what">웰컴 티 <span>— 첫 잔을 우리며 집중 전환</span></span><span style="font-size:13px;font-weight:700;color:var(--amber-d)">이유진</span></li>
+      <li><span class="tm">0:15 – 1:00</span><span class="what">AI로 덜어내기 <span>— 우리 팀 반복 업무 찾기, 에이전트 시연</span></span><span style="font-size:13px;font-weight:700;color:var(--green)">한성희</span></li>
+      <li><span class="tm">1:00 – 1:15</span><span class="what">티 브레이크 <span>— 차 명상 10분</span></span><span style="font-size:13px;font-weight:700;color:var(--amber-d)">이유진</span></li>
+      <li><span class="tm">1:15 – 1:50</span><span class="what">질문하는 팀 워크숍 <span>— 팀별 AI 적용 과제 1개 정의</span></span><span style="font-size:13px;font-weight:700;color:var(--green)">한성희</span></li>
+      <li><span class="tm">1:50 – 2:00</span><span class="what">클로징 티 <span>— 개인 티 루틴 카드</span></span><span style="font-size:13px;font-weight:700;color:var(--amber-d)">이유진</span></li>
+    </ol></div></div>
+  <div class="wrap section" style="display:flex;flex-wrap:wrap;gap:48px;scroll-margin-top:80px" id="corpForm">
+    <div style="flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:14px"><h2 class="h2">출강 문의</h2><p style="margin:0;line-height:1.75;color:var(--ink2)">남겨 주신 내용으로 프로그램 구성과 견적을 메일로 보내드립니다.</p><p style="margin:0" class="muted">전화 [번호] · 메일 [이메일]</p></div>
+    <div class="card" style="flex:2 1 540px;min-width:0;padding:32px;border-radius:24px" data-formwrap>
+      <form class="form" data-form="corporate" novalidate>
+        <label class="field">회사명 *<input type="text" name="company" required autocomplete="organization"><span class="err">회사명을 입력해 주세요</span></label>
+        <label class="field">담당자 이름 *<input type="text" name="name" required autocomplete="name"><span class="err">이름을 입력해 주세요</span></label>
+        <label class="field">이메일 *<input type="email" name="email" required autocomplete="email"><span class="err">올바른 이메일을 입력해 주세요</span></label>
+        <label class="field">연락처<input type="tel" name="phone" autocomplete="tel"></label>
+        <label class="field">관심 프로그램<select name="program"><option>표준 강연 · 2시간</option><option>반일 워크숍 · 4시간</option><option>리더 과정 · 3회</option><option>아직 정하지 않음</option></select></label>
+        <label class="field">예상 인원<select name="size"><option>20명 이하</option><option>21 – 50명</option><option>51 – 100명</option><option>100명 초과</option></select></label>
+        <label class="field full">희망 시기<input type="text" name="when" placeholder="예: 2027년 3월 중, 평일 오후"></label>
+        <label class="field full">문의 내용<textarea name="message" rows="5" placeholder="교육 대상, 목적, 장소 등을 자유롭게 적어 주세요"></textarea></label>
+        <div class="field full" style="font-weight:500"><label class="check"><input type="checkbox" name="agree" required> 개인정보 수집·이용에 동의합니다 (필수)</label><span class="err">동의가 필요해요</span></div>
+        <button type="submit" class="btn btn-primary full" style="min-height:56px;font-size:17px">문의 보내기</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- CHANNEL -->
+<section class="view" id="view-channel">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › 커뮤니티 › 채널</p><p class="eyebrow">CHANNEL</p><h1 class="h1">PAUSE 채널</h1><p class="lead">두 강사의 글과 소식을 각 채널에서 만나보세요.</p></div>
+  <div class="wrap" style="padding-bottom:80px"><div class="grid g-cards" id="channelGrid"></div></div>
+</section>
+
+<!-- BOARD (news / day / column / notice / event / reviews / qna) -->
+<section class="view" id="view-board">
+  <div class="wrap page-head"><p class="crumb" id="boardCrumb"></p><p class="eyebrow" id="boardEyebrow"></p><h1 class="h1" id="boardTitle"></h1><p class="lead" id="boardLead"></p></div>
+  <div class="wrap" style="padding-bottom:80px">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center">
+      <div class="bcats" role="group" aria-label="게시판 분류" id="boardCats"></div>
+      <button type="button" class="btn btn-primary btn-sm" id="boardWrite" hidden>글쓰기</button>
+    </div>
+    <div id="boardBody"></div>
+    <div class="pager" id="boardPager"></div>
+  </div>
+</section>
+
+<!-- POST DETAIL -->
+<section class="view" id="view-post"><div class="wrap" style="padding:48px 24px 80px;max-width:860px" id="postRoot"></div></section>
+
+<!-- FAQ -->
+<section class="view" id="view-faq">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › 안내 › 자주 묻는 질문</p><p class="eyebrow">FAQ</p><h1 class="h1">자주 묻는 질문</h1></div>
+  <div class="wrap" style="padding-bottom:80px;max-width:900px"><div class="bcats" role="group" aria-label="질문 분류" id="faqCats"></div><div class="faq" id="faqList" style="border-top:2px solid var(--ink)"></div>
+    <div class="card" style="margin-top:32px;padding:24px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px"><p style="margin:0;font-weight:700">원하는 답이 없나요?</p><a href="#qna" class="btn btn-outline btn-sm">문의와 답변</a></div></div>
+</section>
+
+<!-- MYPAGE -->
+<section class="view" id="view-mypage">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › 마이페이지</p><h1 class="h1">마이페이지</h1></div>
+  <div class="wrap" style="padding-bottom:80px" id="myRoot"></div>
+</section>
+
+<!-- CART -->
+<section class="view" id="view-cart">
+  <div class="wrap section" style="display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start">
+    <div style="flex:2 1 520px;min-width:0;display:flex;flex-direction:column;gap:20px">
+      <h1 class="h1" style="font-size:clamp(30px,4vw,40px)">장바구니</h1>
+      <div id="cartList"></div>
+      <div id="cartEmpty" hidden class="empty"><p style="margin:0 0 16px;font-size:17px;font-weight:700;color:var(--ink)">장바구니가 비어 있어요</p><a href="#classes" class="btn btn-primary btn-sm">클래스 둘러보기</a></div>
+    </div>
+    <aside class="card" style="flex:1 1 300px;min-width:0;padding:26px;display:flex;flex-direction:column;gap:14px;position:sticky;top:88px">
+      <p style="margin:0;font-size:18px;font-weight:700">주문 요약</p>
+      <div style="display:flex;justify-content:space-between;color:var(--ink2)"><span>상품 수</span><span id="sumCount">0개</span></div>
+      <div style="display:flex;justify-content:space-between;color:var(--ink2)"><span>정가 합계</span><span id="sumList">—</span></div>
+      <div style="display:flex;justify-content:space-between;color:var(--red)"><span>할인</span><span id="sumDisc">—</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:20px;font-weight:900;border-top:1px solid var(--line);padding-top:12px"><span>결제 금액</span><span id="sumTotal">—</span></div>
+      <button type="button" class="btn btn-primary" id="checkoutBtn" style="width:100%">결제하기</button>
+      <p class="note">가격이 정해지지 않은 상품은 합계에 포함되지 않아요.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- PARTNER / RECRUIT / BRAND / POLICY -->
+<section class="view" id="view-partner">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › 제휴 문의</p><p class="eyebrow">PARTNERSHIP</p><h1 class="h1">제휴 문의</h1><p class="lead">콘텐츠 협업, 공간·브랜드 제휴, 강의 플랫폼 입점 등 함께할 일을 알려 주세요.</p></div>
+  <div class="wrap" style="padding-bottom:80px;max-width:900px"><div class="card" style="padding:32px;border-radius:24px" data-formwrap>
+    <form class="form" data-form="partner" novalidate>
+      <label class="field">회사·단체명 *<input type="text" name="company" required><span class="err">회사·단체명을 입력해 주세요</span></label>
+      <label class="field">담당자 이름 *<input type="text" name="name" required><span class="err">이름을 입력해 주세요</span></label>
+      <label class="field">이메일 *<input type="email" name="email" required><span class="err">올바른 이메일을 입력해 주세요</span></label>
+      <label class="field">제휴 유형<select name="type"><option>콘텐츠 협업</option><option>공간·브랜드 제휴</option><option>플랫폼 입점</option><option>기타</option></select></label>
+      <label class="field full">제안 내용 *<textarea name="message" required></textarea><span class="err">제안 내용을 입력해 주세요</span></label>
+      <div class="field full" style="font-weight:500"><label class="check"><input type="checkbox" name="agree" required> 개인정보 수집·이용에 동의합니다 (필수)</label><span class="err">동의가 필요해요</span></div>
+      <button type="submit" class="btn btn-primary full">제휴 문의 보내기</button>
+    </form></div></div>
+</section>
+<section class="view" id="view-recruit">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › 채용 안내</p><p class="eyebrow">RECRUIT</p><h1 class="h1">채용 안내</h1><p class="lead">PAUSE와 함께할 동료를 찾을 때 이곳에 공고를 올립니다.</p></div>
+  <div class="wrap" style="padding-bottom:80px;max-width:900px"><div class="empty">현재 진행 중인 채용이 없어요.</div></div>
+</section>
+<section class="view" id="view-brand">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › 브랜드 에셋</p><p class="eyebrow">BRAND ASSET</p><h1 class="h1">브랜드 에셋</h1><p class="lead">PAUSE를 소개할 때 써 주세요.</p></div>
+  <div class="wrap" style="padding-bottom:80px;display:flex;flex-direction:column;gap:32px">
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+      <div class="card" style="padding:48px;display:flex;align-items:center;justify-content:center"><span class="logo" style="font-size:48px">PAUSE<span class="mark" aria-hidden="true"><i style="height:34px;width:9px"></i><i style="height:34px;width:9px"></i></span></span></div>
+      <div style="padding:48px;border-radius:var(--r);background:var(--dark);display:flex;align-items:center;justify-content:center"><span class="logo" style="font-size:48px;color:#fff">PAUSE<span class="mark" aria-hidden="true"><i style="height:34px;width:9px;background:var(--lime)"></i><i style="height:34px;width:9px;background:var(--lime)"></i></span></span></div>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))" id="swatches"></div>
+    <p class="note">서체: 영문 Space Grotesk (Medium 500 · Bold 700), 한글 Noto Sans KR (Regular 400 · Bold 700 · Black 900). 로고 파일(SVG, PNG)은 확정 후 내려받기로 제공할 자리예요.</p>
+  </div>
+</section>
+<section class="view" id="view-policy">
+  <div class="wrap page-head"><p class="crumb"><a href="#home">홈</a> › 약관 및 정책</p><p class="eyebrow">POLICY</p><h1 class="h1">약관 및 정책</h1></div>
+  <div class="wrap faq" style="padding-bottom:80px;max-width:900px;border-top:2px solid var(--ink)">
+    <details open><summary>이용약관</summary><div class="ans">[이용약관 전문 — 사업자 정보 확정 후 작성]</div></details>
+    <details><summary>개인정보처리방침</summary><div class="ans">[수집 항목, 이용 목적, 보관 기간, 위탁 업체(결제·메일·호스팅) — 확정 후 작성]</div></details>
+    <details><summary>환불정책</summary><div class="ans">[VOD 수강 진도·기간별 환불 기준, 라이브·현장 강의 일정별 환불 기준, 티 키트 배송 후 환불 기준 — 확정 후 작성]</div></details>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div><p>PAUSE</p><ul><li><a href="#about">소개</a></li><li><a href="#teachers">강사</a></li><li><a href="#channel">채널</a></li><li><a href="#brand">브랜드 에셋</a></li></ul></div>
+      <div><p>클래스 · 스토어</p><ul><li><a href="#classes">클래스</a></li><li><a href="#corporate">출강</a></li><li><a href="#package">패키지</a></li><li><a href="#pdf">전자책</a></li><li><a href="#ebook">ebook</a></li></ul></div>
+      <div><p>고객센터</p><ul><li><a href="#faq">자주 묻는 질문</a></li><li><a href="#notice">공지</a></li><li><a href="#qna">문의와 답변</a></li><li><a href="#partner">제휴 문의</a></li><li><a href="#recruit">채용</a></li></ul></div>
+      <div><p>바로가기</p><ul><li><button type="button" data-dialog="vodroom" style="background:none;border:0;padding:0;color:#E4E4DE;cursor:pointer;font-size:14px">VOD 강의실 입장</button></li><li><button type="button" data-dialog="kakao" style="background:none;border:0;padding:0;color:#E4E4DE;cursor:pointer;font-size:14px">카톡 문의</button></li><li><a href="#policy">약관 및 정책</a></li></ul></div>
+    </div>
+    <div class="fbottom">
+      <div><span style="color:#fff;font-family:var(--en);font-weight:700;font-size:20px">PAUSE</span><br>상호 [사업자명] · 대표 [이름] · 사업자등록번호 [번호] · 통신판매업 신고 [번호]<br>고객센터 [번호] · 평일 [시간] · [이메일]</div>
+      <div>© PAUSE</div>
+    </div>
+  </div>
+</footer>
+
+<div class="floats">
+  <button type="button" class="fbtn f-top" id="toTop" aria-label="맨 위로"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
+  <button type="button" class="fbtn f-kakao" data-dialog="kakao" aria-label="카카오톡 채널 채팅하기"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4C7 4 3 7.1 3 11c0 2.5 1.7 4.7 4.2 5.9l-.9 3.3c-.1.3.3.6.6.4l3.9-2.6c.4 0 .8.1 1.2.1 5 0 9-3.1 9-7.1S17 4 12 4z"/></svg></button>
+</div>
+
+<div class="panel-back" id="panelBack"></div>
+<aside class="panel" id="menuPanel" aria-label="전체 메뉴" aria-hidden="true">
+  <div class="panel-head"><h2 style="font-family:var(--en)">MENU</h2><button type="button" class="icon-btn" data-close aria-label="닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="panel-body">
+    <div id="mAuth"></div>
+    <div class="m-group"><a href="#about">About · 소개</a><a href="#teachers">강사</a></div>
+    <div class="m-group"><p>Class</p><a href="#classes">전체</a><a href="#online">온라인</a><a href="#offline">현장</a><a href="#premium">프리미엄</a></div>
+    <div class="m-group"><a href="#corporate">For Teams · 기업 출강</a></div>
+    <div class="m-group"><p>Store</p><a href="#package">패키지</a><a href="#pdf">전자책</a><a href="#ebook">ebook</a></div>
+    <div class="m-group"><p>Journal</p><a href="#news">뉴스</a><a href="#reviews">리뷰</a><a href="#column">칼럼</a><a href="#event">이벤트</a></div>
+    <div class="m-group"><p>Help</p><a href="#faq">자주 묻는 질문</a><a href="#notice">공지</a><a href="#qna">문의와 답변</a></div>
+    <button type="button" class="btn btn-outline btn-sm" data-dialog="vodroom">VOD 강의실 입장</button>
+  </div>
+</aside>
+<aside class="panel" id="alarmPanel" aria-label="알림" aria-hidden="true">
+  <div class="panel-head"><h2>알림</h2><button type="button" class="icon-btn" data-close aria-label="닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="panel-body">
+    <div class="bcats" role="group" aria-label="알림 분류" id="alarmTabs" style="margin:0"></div>
+    <div id="alarmList"></div>
+    <a href="#mypage" class="btn btn-outline btn-sm">알림 설정</a>
+  </div>
+</aside>
+
+<div class="search-layer" id="searchLayer" role="dialog" aria-modal="true" aria-label="사이트 검색">
+  <div class="wrap" style="padding-top:32px;padding-bottom:48px;max-width:900px">
+    <div class="search-box"><label for="searchInput" class="sr">검색어</label><input id="searchInput" type="search" placeholder="클래스, 공지, 뉴스 검색" autocomplete="off">
+      <button type="button" class="icon-btn" id="searchClose" aria-label="검색 닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <p class="muted" style="font-size:14px" id="searchHint">추천 검색어: <button type="button" class="chip" data-q="AI 에이전트">AI 에이전트</button> <button type="button" class="chip" data-q="차 명상">차 명상</button> <button type="button" class="chip" data-q="출강">출강</button></p>
+    <div id="searchResults" aria-live="polite"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><a href="#cart" id="toastLink">장바구니 보기</a></div>
+
+<div class="dialog-back" id="dialogBack">
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" id="dialog">
+    <h2 id="dialogTitle" style="font-size:22px"></h2>
+    <div id="dialogBody" style="font-size:15px;line-height:1.7;color:var(--ink2);display:flex;flex-direction:column;gap:14px"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px" id="dialogActions"><button type="button" class="btn btn-primary btn-sm" data-close>확인</button></div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $ = function(s, r){ return (r || document).querySelector(s); };
+var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function won(n){ return '₩' + Number(n).toLocaleString('ko-KR'); }
+
+/* ================= 데이터 =================
+   price / listPrice : 원 단위 숫자, 미정이면 null
+   badges : 'timesale' | 'hot' | 'new' | 'sale'   soldout : true 이면 매진 표시 */
+var PRODUCTS = [
+  {id:'vod-1', cat:'online', kind:'VOD', teacher:'한성희', title:'1편 문제부터 정의하기: AI에게 맡길 일과 사람이 정할 일', desc:'도구보다 먼저, 우리 일에서 무엇을 덜어낼지 고르는 질문법.', meta:'VOD · [러닝타임] · 수강 [기간]', price:null, listPrice:null, badges:['new'], rec:1, order:8,
+   curr:['AI에게 맡길 일, 사람이 정할 일','반복 업무 지도 그리기','“이게 진짜 문제인가” 질문 세트','덜어낼 일 하나 고르기']},
+  {id:'vod-2', cat:'online', kind:'VOD', teacher:'한성희', title:'2편 나만의 AI 팀 설계: 에이전트 역할 나누기', desc:'리서치, 정리, 초안 작성을 맡을 에이전트를 역할별로 구성합니다.', meta:'VOD · [러닝타임] · 수강 [기간]', price:null, listPrice:null, badges:[], rec:5, order:7,
+   curr:['에이전트와 챗봇의 차이','역할 나누기: 리서처·정리자·작성자','프롬프트 구조 만들기','나의 AI 팀 설계도']},
+  {id:'vod-3', cat:'online', kind:'VOD', teacher:'한성희', title:'3편 기획·보고·리서치 자동화 실습', desc:'실제 업무 문서를 예제로 에이전트 워크플로를 따라 만들어 봅니다.', meta:'VOD · [러닝타임] · 수강 [기간]', price:null, listPrice:null, badges:[], rec:6, order:6,
+   curr:['리서치 요약 자동화','보고서 초안 워크플로','회의록 정리와 액션 아이템','결과 검수하는 법']},
+  {id:'vod-4', cat:'online', kind:'VOD', teacher:'한성희', title:'4편 팀에 도입하기: 플렉서블 로드맵과 성공 지표', desc:'개인의 실험을 팀의 일하는 방식으로 옮기는 단계와 지표.', meta:'VOD · [러닝타임] · 수강 [기간]', price:null, listPrice:null, badges:[], rec:7, order:5,
+   curr:['팀 도입의 세 단계','플렉서블 로드맵','성공 지표 정하기','보안·윤리 체크리스트']},
+  {id:'live-monthly', cat:'online', kind:'라이브', teacher:'이유진', title:'월간 티 라이브클래스: 하루 세 잔의 리듬', desc:'아침·오후·저녁의 차를 매달 한 가지씩, 집에서 함께 우려 봅니다.', meta:'라이브 · 월 1회 · 티 키트 배송', price:null, listPrice:null, badges:['hot'], rec:2, order:4,
+   curr:['아침의 차: 하루를 여는 5분','오후의 차: 집중이 끊길 때','저녁의 차: 디카페인으로 닫기','계절의 차와 차 명상']},
+  {id:'live-meditation', cat:'online', kind:'라이브', teacher:'이유진', title:'처음 만나는 차 명상', desc:'찻잔의 온기와 향에 집중하는 10분 차 명상을 라이브로 배웁니다.', meta:'라이브 · 1회 · 티 키트 배송', price:null, listPrice:null, badges:[], rec:8, order:3,
+   curr:['차 명상이란','찻잔 하나로 하는 10분 명상','일상에서 이어가기']},
+  {id:'off-ai', cat:'offline', kind:'현장', teacher:'한성희', title:'AI 에이전트 실전 워크숍', desc:'내 업무 하나를 골라 현장에서 에이전트로 자동화해 가져갑니다.', meta:'현장 · [일정] · [장소] · 정원 [N]명', price:null, listPrice:null, badges:[], rec:3, order:2,
+   curr:['내 업무 진단','에이전트 설계','현장 실습과 피드백','팀에 가져가기']},
+  {id:'off-tea', cat:'offline', kind:'현장', teacher:'이유진', title:'티 앤 웰니스 클래스', desc:'계절 차 시음과 함께 일상에 들일 나만의 티 루틴을 만듭니다.', meta:'현장 · [일정] · [장소] · 정원 [N]명', price:null, listPrice:null, badges:[], rec:4, order:1,
+   curr:['계절 차 시음','우리는 법 실습','차 명상','나만의 티 루틴 카드 만들기']},
+  {id:'pkg-ai', cat:'package', kind:'패키지', teacher:'한성희', title:'AI 에이전트 풀패키지 (VOD 1~4편 + 전자책)', desc:'VOD 전편과 《AI 에이전트 업무 템플릿집》을 한 번에.', meta:'패키지 · 수강 [기간]', price:null, listPrice:null, badges:['timesale'], rec:9, order:0,
+   curr:['VOD 1~4편 전체','전자책 《AI 에이전트 업무 템플릿집》']},
+  {id:'pkg-tea', cat:'package', kind:'패키지', teacher:'이유진', title:'티 라이브 3개월 구독', desc:'월간 티 라이브 3회와 매달 티 키트, 워크북까지.', meta:'구독 · 3개월', price:null, listPrice:null, badges:[], rec:10, order:0,
+   curr:['월간 티 라이브클래스 3회','매달 티 키트 배송','워크북 《하루 세 잔 티 루틴》']},
+  {id:'pkg-set', cat:'package', kind:'패키지', teacher:'두 강사', title:'AI × Tea 입문 세트', desc:'VOD 1편 + 티 라이브 1회 + 티 샘플러로 두 수업을 맛보기.', meta:'패키지 · 입문', price:null, listPrice:null, badges:['new'], rec:11, order:0,
+   curr:['AI 에이전트 VOD 1편','티 라이브클래스 1회','티 샘플러 배송']},
+  {id:'pdf-ai', cat:'pdf', kind:'전자책', teacher:'한성희', title:'AI 에이전트 업무 템플릿집', desc:'리서치·보고·회의록 업무에 바로 붙여 쓰는 에이전트 설계 템플릿.', meta:'PDF · [N]쪽 · 결제 후 다운로드', price:null, listPrice:null, badges:[], rec:12, order:0, curr:[]},
+  {id:'pdf-tea', cat:'pdf', kind:'워크북', teacher:'이유진', title:'하루 세 잔 티 루틴 워크북', desc:'아침·오후·저녁에 맞는 차와 우리는 법, 일주일 기록 페이지.', meta:'PDF · [N]쪽 · 결제 후 다운로드', price:null, listPrice:null, badges:[], rec:13, order:0, curr:[]}
+];
+var THUMB = {online:'#F1F1EC', offline:'#EEF7CF', package:'#0E0E0E', pdf:'#E4E4DE'};
+var BADGE = {timesale:['TIME SALE','b-red'], hot:['HOT','b-lime'], new:['NEW','b-dark'], sale:['SALE','b-red']};
+var BOOKS = [
+  {t:'기획자의 질문법', a:'한성희', c:'#ECEAE3'}, {t:'UX의 언어들', a:'한성희', c:'#ECEAE3'}, {t:'유니콘의 리더십', a:'한성희', c:'#ECEAE3'},
+  {t:'차와 일상', a:'이유진', c:'#F3E9DD', url:'https://www.yes24.com/product/goods/103755544'}, {t:'오후 4시 홍차에 빠지다', a:'이유진', c:'#F3E9DD'},
+  {t:'홍차가 더 좋아지는 시간', a:'이유진', c:'#F3E9DD'}, {t:'차를 타고 떠나는 차 여행', a:'이유진', c:'#F3E9DD'}
+];
+/* 게시판: 실제 내용이 확정된 글만 넣고, 나머지는 [ ] 자리로 둡니다 */
+var POSTS = [
+  {id:'n1', board:'notice', cat:'사이트', title:'PAUSE 사이트 오픈 준비 중입니다', date:'[날짜]', body:'강의, 출강, 패키지, 전자책, ebook을 한곳에서 만나는 PAUSE 사이트를 준비하고 있습니다. 오픈 소식은 이 게시판과 알림으로 가장 먼저 전해 드릴게요.'},
+  {id:'n2', board:'notice', cat:'강의', title:'[공지 제목 자리] 현장 강의 일정 안내', date:'[날짜]', body:'[현장 강의 일정·장소·신청 방법]'},
+  {id:'n3', board:'notice', cat:'결제', title:'[공지 제목 자리] 결제·환불 안내', date:'[날짜]', body:'[결제 수단, 영수증, 환불 기준 안내]'},
+  {id:'w1', board:'news', cat:'출간', title:'한성희 대표 《UX의 언어들》 출간', date:'2026', body:'한성희 대표의 새 책 《UX의 언어들》이 나왔습니다. 일상에 녹아 있는 UX를 어렵지 않게 풀어낸 책입니다.', link:'https://brunch.co.kr/@simplifier/641'},
+  {id:'w2', board:'news', cat:'출간', title:'《기획자의 질문법》 교보문고 자기계발 분야 베스트셀러', date:'[날짜]', body:'한성희 대표의 《기획자의 질문법》이 교보문고 자기계발 분야 베스트셀러에 올랐습니다.'},
+  {id:'w3', board:'news', cat:'강의', title:'[뉴스 제목 자리] VOD 시리즈 오픈 소식', date:'[날짜]', body:'[VOD 오픈 일정과 구성]'},
+  {id:'d1', board:'day', cat:'행사', title:'[PAUSE 데이 1회 — 행사 사진·후기 자리]', date:'[날짜]', body:'[행사 소개와 사진]'},
+  {id:'d2', board:'day', cat:'행사', title:'[프리미엄 클래스 1기 수료 모임 자리]', date:'[날짜]', body:'[수료 모임 소개와 사진]'},
+  {id:'c1', board:'column', cat:'AI · 기획', title:'한성희의 글 — 브런치 ‘심플리파이어 한성희’', date:'브런치', body:'제품·조직·기획에 관한 한성희 대표의 글을 브런치에서 읽을 수 있어요.', link:'https://brunch.co.kr/@simplifier'},
+  {id:'c2', board:'column', cat:'차 · 웰니스', title:'이유진의 글 — 브런치 ‘티마스터 바유’', date:'브런치', body:'차와 일상, 몸과 마음을 돌보는 이야기를 브런치에서 읽을 수 있어요.', link:'https://brunch.co.kr/@@8kAR'},
+  {id:'e1', board:'event', cat:'진행 예정', title:'[베스트 리뷰 이벤트 자리]', date:'[기간]', body:'[후기를 남긴 수강생 중 선정해 선물 — 조건과 혜택 확정 후 작성]'},
+  {id:'e2', board:'event', cat:'진행 예정', title:'[커뮤니티 활동 우수자 시상 자리]', date:'[기간]', body:'[조건과 혜택 확정 후 작성]'},
+  {id:'e3', board:'event', cat:'진행 예정', title:'[오픈 기념 가입 이벤트 자리]', date:'[기간]', body:'[가입 혜택 확정 후 작성]'}
+];
+var REVIEWS = []; /* 실제 수강 후기가 생기면 {name, product, stars, text, date} 형태로 넣어요 */
+var FAQ = [
+  {c:'수강', q:'VOD는 얼마 동안 볼 수 있나요?', a:'수강 기간은 [기간]입니다. 기간 안에는 몇 번이든 다시 볼 수 있어요.'},
+  {c:'수강', q:'VOD 강의실은 어디서 들어가나요?', a:'상단의 ‘VOD 강의실 입장’ 버튼으로 들어갑니다. 결제할 때 쓴 이메일로 로그인해 주세요.'},
+  {c:'수강', q:'라이브클래스를 놓치면 다시 볼 수 있나요?', a:'[다시보기 제공 여부와 기간 — 확정 후 작성]'},
+  {c:'배송', q:'티 키트는 언제 받나요?', a:'라이브 [N]일 전까지 받을 수 있도록 발송합니다. [배송 지역·택배사 확정 후 작성]'},
+  {c:'결제', q:'어떤 결제 수단을 쓸 수 있나요?', a:'[카드·간편결제·계좌이체 등 — 결제 서비스 연결 후 작성]'},
+  {c:'결제', q:'환불은 어떻게 하나요?', a:'약관 및 정책의 환불정책을 따릅니다. [VOD 진도·기간, 라이브·현장 일정 기준 확정 후 작성]'},
+  {c:'출강', q:'기업 출강 견적은 어떻게 받나요?', a:'출강 페이지의 문의 폼에 회사명, 인원, 희망 시기를 남겨 주시면 메일로 프로그램 구성과 견적을 보내드립니다.'},
+  {c:'출강', q:'세금계산서 발행이 되나요?', a:'[발행 주체 확정 후 작성]'}
+];
+var CHANNELS = [
+  {n:'브런치 · 한성희', d:'제품·조직·기획 이야기', u:'https://brunch.co.kr/@simplifier'},
+  {n:'LinkedIn · 한성희', d:'Sunghee Han (Simplifier)', u:'https://kr.linkedin.com/in/simplifier'},
+  {n:'Threads · 한성희', d:'@simplifier_seoul', u:'https://www.threads.com/@simplifier_seoul'},
+  {n:'Simplifier', d:'스타트업 코칭·기업 강연', u:'https://simplifier.co.kr/'},
+  {n:'브런치 · 이유진', d:'티마스터 바유 — 차와 일상', u:'https://brunch.co.kr/@@8kAR'},
+  {n:'인스타그램', d:'[PAUSE 계정 자리]', u:null},
+  {n:'유튜브', d:'[PAUSE 채널 자리]', u:null},
+  {n:'카카오톡 채널', d:'[채널 주소 자리]', u:null}
+];
+var SLIDES = [
+  {cls:'s-dark', ey:'NEW BOOK', t:'《UX의 언어들》 출간', d:'일상에 녹아 있는 UX를 쉽게 풀어낸 한성희 대표의 새 책.', btn:'뉴스 보기', href:'#post-w1', art:'#2A2A2A'},
+  {cls:'s-tint', ey:'VOD SERIES', t:'AI 에이전트로 일 덜어내기', d:'문제 정의부터 팀 도입까지, 4편으로 배우는 AI 에이전트 실무.', btn:'시리즈 보기', href:'#online', art:'#CFE0D5'},
+  {cls:'s-amber', ey:'LIVE CLASS', t:'월간 티 라이브클래스', d:'매달 티 키트를 받아 집에서 함께 우리는 하루 세 잔의 리듬.', btn:'신청하기', href:'#p-live-monthly', art:'#E8D6C1'},
+  {cls:'s-green', ey:'FOR TEAMS', t:'기업 출강: 덜어내는 팀, 채우는 사람', d:'AI 전환 교육과 임직원 웰니스를 하나의 2시간 프로그램으로.', btn:'출강 문의', href:'#corporate', art:'#4F7A63'}
+];
+
+/* ================= 저장 ================= */
+var mem = {};
+function load(k, f){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : f; } catch(e){ return k in mem ? mem[k] : f; } }
+function save(k, v){ mem[k] = v; try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+var byId = {}; PRODUCTS.forEach(function(p){ byId[p.id] = p; });
+var postById = {}; POSTS.forEach(function(p){ postById[p.id] = p; });
+var cart = load('aitea-cart', {}); Object.keys(cart).forEach(function(k){ if(!byId[k]) delete cart[k]; });
+var wish = load('aitea-wish', []).filter(function(k){ return byId[k]; });
+var user = load('aitea-user', null);
+var readAlarms = load('aitea-read', []);
+var prefs = load('aitea-prefs', {post:true, notice:true, react:true, mail:false});
+var qnaLocal = load('aitea-qna', []);
+
+/* ================= 공통 렌더 ================= */
+function rate(p){ return (p.price != null && p.listPrice) ? Math.round((1 - p.price / p.listPrice) * 100) : 0; }
+function priceBlock(p){
+  if(p.price == null) return '<div class="prices"><span class="tbd">가격 미정</span></div>';
+  var r = rate(p);
+  return '<div class="prices">' + (r > 0 ? '<span class="list">' + won(p.listPrice) + '</span><span class="rate">' + r + '%</span>' : '') + '<span class="now">' + won(p.price) + '</span></div>';
+}
+function badgeHTML(p){ return (p.badges || []).map(function(b){ return '<span class="badge ' + BADGE[b][1] + '">' + BADGE[b][0] + '</span>'; }).join(''); }
+function wishBtn(id){ var on = wish.indexOf(id) > -1; return '<button type="button" class="icon-btn wish" data-wish="' + id + '" aria-pressed="' + on + '" aria-label="찜하기"><svg width="18" height="18" viewBox="0 0 24 24" fill="' + (on ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>'; }
+function pcard(p){
+  var dark = p.cat === 'package';
+  return '<div style="position:relative">' + wishBtn(p.id) + '<a class="card pcard" href="#p-' + p.id + '">' +
+    '<div class="thumb ph" style="background:' + THUMB[p.cat] + ';' + (dark ? 'color:#9A9A94' : '') + '" role="img" aria-label="썸네일 자리"><div class="badges">' + badgeHTML(p) + '</div>' + (p.soldout ? '<div class="soldout-veil">SOLD OUT</div>' : '') + '</div>' +
+    '<div class="body"><p class="cat">' + esc(p.kind) + ' · ' + esc(p.teacher) + '</p><h3>' + esc(p.title) + '</h3>' + priceBlock(p) + '</div></a></div>';
+}
+function reviewCards(n){
+  if(REVIEWS.length) return REVIEWS.slice(0, n).map(function(r){ return '<article class="card rcard"><span class="stars" aria-label="별점 ' + r.stars + '점">' + '★★★★★'.slice(0, r.stars) + '</span><p style="font-weight:700">' + esc(r.product) + '</p><p style="color:var(--ink2);line-height:1.7">' + esc(r.text) + '</p><p class="muted" style="font-size:13px;margin-top:auto">' + esc(r.name) + ' · ' + esc(r.date) + '</p></article>'; }).join('');
+  var out = ''; for(var i = 0; i < n; i++) out += '<div class="card rcard ph" style="background:#fff;border-style:dashed">수강 후기 자리<br><span style="font-size:12px">실제 후기가 생기면 이곳에 보여요</span></div>';
+  return out;
+}
+function blistHTML(list){ return list.length ? list.map(function(p){ return '<li><a href="#post-' + p.id + '"><span class="badge b-tint">' + esc(p.cat) + '</span><span class="bt">' + esc(p.title) + '</span><span class="bd">' + esc(p.date) + '</span></a></li>'; }).join('') : ''; }
+function tileHTML(p){ return '<a class="card" href="#post-' + p.id + '" style="text-decoration:none;color:var(--ink);overflow:hidden;display:flex;flex-direction:column"><div class="ph" style="aspect-ratio:16/10">사진 자리</div><div style="padding:18px;display:flex;flex-direction:column;gap:6px"><span class="badge b-tint" style="align-self:flex-start">' + esc(p.cat) + '</span><span style="font-weight:700;line-height:1.45">' + esc(p.title) + '</span><span class="muted" style="font-size:13px">' + esc(p.date) + '</span></div></a>'; }
+
+/* ================= 홈 ================= */
+function renderHome(){
+  $('#homeRecommend').innerHTML = PRODUCTS.filter(function(p){ return p.cat === 'online' || p.cat === 'offline'; }).sort(function(a, b){ return a.rec - b.rec; }).slice(0, 4).map(pcard).join('');
+  $('#homeNews').innerHTML = blistHTML(POSTS.filter(function(p){ return (p.board === 'news' || p.board === 'notice') && p.title.indexOf('[') !== 0; }).slice(0, 3));
+}
+
+/* ================= 목록 ================= */
+var LISTS = {
+  classes:{t:'클래스', ey:'CLASS', lead:'온라인과 현장에서 만나는 PAUSE 클래스.', f:function(p){ return p.cat === 'online' || p.cat === 'offline'; }},
+  online:{t:'온라인 강의', ey:'ONLINE', lead:'언제든 듣는 VOD와 함께 우리는 라이브클래스.', f:function(p){ return p.cat === 'online'; }},
+  offline:{t:'현장 강의', ey:'OFFLINE', lead:'직접 만나 함께 만들고 함께 마시는 시간.', f:function(p){ return p.cat === 'offline'; }},
+  package:{t:'패키지', ey:'PACKAGE', lead:'묶어서, 더 깊이.', f:function(p){ return p.cat === 'package'; }},
+  pdf:{t:'전자책 · 워크북', ey:'E-BOOK · WORKBOOK', lead:'결제 후 바로 내려받는 PDF.', f:function(p){ return p.cat === 'pdf'; }}
+};
+var listKey = 'classes', listSort = 'rec';
+function renderList(key){
+  listKey = key; var L = LISTS[key];
+  $('#listCrumb').innerHTML = '<a href="#home">홈</a> › ' + ((key === 'package' || key === 'pdf') ? '스토어 › ' + L.t : (key === 'classes' ? '클래스' : '<a href="#classes">클래스</a> › ' + L.t));
+  $('#listEyebrow').textContent = L.ey; $('#listTitle').textContent = L.t; $('#listLead').textContent = L.lead;
+  var tabSet = (key === 'package' || key === 'pdf') ? [['package','패키지'],['pdf','전자책'],['ebook','ebook']] : [['classes','전체'],['online','온라인'],['offline','현장'],['premium','프리미엄']];
+  $('#listTabs').innerHTML = tabSet.map(function(k){ return '<a class="chip" href="#' + k[0] + '" aria-pressed="' + (k[0] === key) + '" style="text-decoration:none;display:inline-flex;align-items:center">' + k[1] + '</a>'; }).join('');
+  var list = PRODUCTS.filter(L.f).slice();
+  var pv = function(p){ return p.price == null ? null : p.price; };
+  list.sort(function(a, b){
+    if(listSort === 'new') return b.order - a.order;
+    if(listSort === 'low' || listSort === 'high'){ var x = pv(a), y = pv(b); if(x == null && y == null) return a.rec - b.rec; if(x == null) return 1; if(y == null) return -1; return listSort === 'low' ? x - y : y - x; }
+    return a.rec - b.rec;
+  });
+  $('#listCount').textContent = '상품 ' + list.length + '개';
+  $('#listGrid').innerHTML = list.map(pcard).join('');
+}
+
+/* ================= 상세 ================= */
+function renderDetail(id){
+  var p = byId[id]; if(!p){ location.hash = 'classes'; return; }
+  var listName = {online:'온라인 강의', offline:'현장 강의', package:'패키지', pdf:'전자책 · 워크북'}[p.cat];
+  var rv = REVIEWS.filter(function(r){ return r.productId === id; });
+  $('#detailRoot').innerHTML =
+    '<p class="crumb" style="margin-bottom:20px"><a href="#home">홈</a> › <a href="#classes">클래스</a> › <a href="#' + p.cat + '">' + listName + '</a></p>' +
+    '<div class="detail"><div class="media ph" style="background:' + THUMB[p.cat] + ';' + (p.cat === 'package' ? 'color:#9A9A94' : '') + '" role="img" aria-label="대표 이미지 자리">대표 이미지</div>' +
+    '<div class="info"><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge b-soft">' + esc(p.kind) + '</span>' + badgeHTML(p) + '</div>' +
+    '<h1 class="h2" style="font-size:clamp(24px,3vw,30px)">' + esc(p.title) + '</h1><p style="margin:0;color:var(--ink2);line-height:1.7">' + esc(p.desc) + '</p>' +
+    '<dl class="spec"><dt>강사</dt><dd>' + esc(p.teacher) + '</dd><dt>구성</dt><dd>' + esc(p.meta) + '</dd></dl>' +
+    '<div style="border-top:1px solid var(--line);padding-top:14px">' + priceBlock(p).replace('class="prices"', 'class="prices" style="font-size:1.2em"') + '</div>' +
+    (p.soldout ? '<button type="button" class="btn btn-outline" disabled>매진되었어요</button>' :
+    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn btn-outline" style="flex:1 1 140px" data-add="' + p.id + '">장바구니</button><button type="button" class="btn btn-primary" style="flex:1 1 140px" data-buy="' + p.id + '">바로 구매</button><span style="position:relative;width:44px;height:48px">' + wishBtn(p.id).replace('class="icon-btn wish"', 'class="icon-btn" style="width:48px;height:48px"') + '</span></div>') +
+    '<button type="button" class="btn btn-sm" style="background:var(--soft);color:var(--ink)" data-dialog="share">공유하기</button></div></div>' +
+    '<div class="dtabs" role="tablist" aria-label="상세 정보"><button type="button" role="tab" aria-selected="true" data-dtab="intro">클래스 소개</button><button type="button" role="tab" aria-selected="false" data-dtab="teacher">강사</button><button type="button" role="tab" aria-selected="false" data-dtab="review">후기 ' + rv.length + '</button><button type="button" role="tab" aria-selected="false" data-dtab="refund">환불 안내</button></div>' +
+    '<div data-dpanel="intro"><div class="ph" style="aspect-ratio:16/7;border-radius:var(--r);margin-bottom:28px">상세 이미지 자리</div>' + (p.curr.length ? '<h2 class="h2" style="font-size:24px;margin-bottom:12px">커리큘럼</h2><ol class="curr">' + p.curr.map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('') + '</ol>' : '') + '</div>' +
+    '<div data-dpanel="teacher" hidden><p style="line-height:1.8;color:var(--ink2)">' + (p.teacher === '이유진' ? '2009년부터 차를 전해 온 티마스터 이유진. 차로 몸과 마음을 돌보는 ‘티 앤 웰니스’를 이야기합니다.' : p.teacher === '한성희' ? '네이버, 삼성전자, 요기요 CPO, 빗썸 COO를 거친 Simplifier 대표 한성희. 《기획자의 질문법》 저자.' : '한성희 대표와 이유진 티마스터가 함께합니다.') + ' <a href="#teachers">강사 소개 보기</a></p></div>' +
+    '<div data-dpanel="review" hidden>' + (rv.length ? '' : '<div class="empty">아직 후기가 없어요. 수강 후 첫 후기를 남겨 주세요.</div>') + '</div>' +
+    '<div data-dpanel="refund" hidden><p style="line-height:1.8;color:var(--ink2)">[이 상품의 환불 기준 — 약관 확정 후 작성] <a href="#policy">약관 및 정책 보기</a></p></div>';
+}
+
+/* ================= ebook / 채널 / 브랜드 ================= */
+function renderStatic(){
+  $('#bookGrid').innerHTML = BOOKS.map(function(b){ var href = b.url || ('https://search.kyobobook.co.kr/search?keyword=' + encodeURIComponent(b.t)); return '<a class="card" href="' + href + '" target="_blank" rel="noopener" style="text-decoration:none;color:var(--ink);border:0;background:none;display:flex;flex-direction:column;gap:10px"><span style="aspect-ratio:3/4;border-radius:6px;background:' + b.c + ';border:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;padding:16px;text-align:left" role="img" aria-label="' + esc(b.t) + ' 표지 자리"><span style="font-weight:900;font-size:17px;line-height:1.35;color:var(--ink)">' + esc(b.t) + '</span><span style="font-size:12px;color:var(--muted)">' + esc(b.a) + '</span></span><span style="font-weight:700;line-height:1.4">' + esc(b.t) + '</span><span class="muted" style="font-size:13px">' + esc(b.a) + ' · 서점에서 보기 →</span></a>'; }).join('');
+  $('#channelGrid').innerHTML = CHANNELS.map(function(c){ return c.u ? '<a class="card chan" href="' + c.u + '" target="_blank" rel="noopener"><span style="font-weight:900;font-size:18px">' + esc(c.n) + ' ↗</span><span class="muted">' + esc(c.d) + '</span></a>' : '<div class="card chan" style="border-style:dashed"><span style="font-weight:900;font-size:18px">' + esc(c.n) + '</span><span class="muted">' + esc(c.d) + '</span></div>'; }).join('');
+  $('#swatches').innerHTML = [['잉크','#0E0E0E'],['라임','#C8E46A'],['딥 라임','#4E7314'],['화이트','#FFFFFF'],['라임 틴트','#EEF7CF'],['스톤','#F1F1EC']].map(function(s){ return '<div style="display:flex;flex-direction:column;gap:8px"><div class="swatch" style="background:' + s[1] + '"></div><span style="font-weight:700">' + s[0] + '</span><button type="button" class="chip" data-copy="' + s[1] + '" style="align-self:flex-start">' + s[1] + ' 복사</button></div>'; }).join('');
+}
+
+/* ================= 게시판 ================= */
+var BOARDS = {
+  news:{t:'PAUSE 뉴스', ey:'NEWS', lead:'출간, 강의 오픈, 언론 소식.', crumb:'커뮤니티', view:'list'},
+  day:{t:'PAUSE 데이', ey:'PAUSE DAY', lead:'수강생과 함께한 모임과 행사의 기록.', crumb:'커뮤니티', view:'tile'},
+  column:{t:'칼럼', ey:'COLUMN', lead:'두 강사가 쓰는 글.', crumb:'커뮤니티', view:'list'},
+  notice:{t:'공지', ey:'NOTICE', lead:'강의 일정, 결제, 운영 안내.', crumb:'안내', view:'list'},
+  event:{t:'이벤트', ey:'EVENT', lead:'진행 중이거나 예정된 이벤트.', crumb:'이벤트', view:'tile'},
+  reviews:{t:'리뷰', ey:'REVIEW', lead:'수강생이 직접 남긴 후기.', crumb:'커뮤니티', view:'review'},
+  qna:{t:'문의와 답변', ey:'Q&A', lead:'궁금한 점을 남기면 답변해 드려요.', crumb:'안내', view:'qna'}
+};
+var boardCat = {}, boardPage = {};
+function renderBoard(key){
+  var B = BOARDS[key];
+  $('#boardCrumb').innerHTML = '<a href="#home">홈</a> › ' + B.crumb + ' › ' + B.t;
+  $('#boardEyebrow').textContent = B.ey; $('#boardTitle').textContent = B.t; $('#boardLead').textContent = B.lead;
+  $('#boardWrite').hidden = !(key === 'qna' || key === 'reviews');
+  $('#boardWrite').dataset.board = key;
+  var body = $('#boardBody'), pager = $('#boardPager'); pager.innerHTML = '';
+  if(B.view === 'review'){ $('#boardCats').innerHTML = ''; body.innerHTML = REVIEWS.length ? '<div class="grid g-cards">' + reviewCards(REVIEWS.length) + '</div>' : '<div class="empty">아직 등록된 후기가 없어요. 수강 후 첫 후기를 남겨 주세요.</div>'; return; }
+  if(B.view === 'qna'){
+    $('#boardCats').innerHTML = '';
+    body.innerHTML = '<p class="note" style="margin-bottom:16px">비밀글로 등록되며, 답변이 달리면 알림으로 알려 드려요.</p>' + (qnaLocal.length ? '<ul class="blist">' + qnaLocal.map(function(q){ return '<li><a href="#qna" data-qna="' + q.id + '"><span class="badge b-soft">답변 대기</span><span class="bt">🔒 ' + esc(q.title) + '</span><span class="bd">' + esc(q.date) + '</span></a></li>'; }).join('') + '</ul>' : '<div class="empty">작성한 문의가 없어요. ‘글쓰기’로 질문을 남겨 주세요.</div>');
+    return;
+  }
+  var all = POSTS.filter(function(p){ return p.board === key; });
+  var cats = ['전체'].concat(all.map(function(p){ return p.cat; }).filter(function(c, i, a){ return a.indexOf(c) === i; }));
+  var cur = boardCat[key] || '전체';
+  $('#boardCats').innerHTML = cats.length > 2 ? cats.map(function(c){ return '<button type="button" class="chip" data-bcat="' + esc(c) + '" aria-pressed="' + (c === cur) + '">' + esc(c) + '</button>'; }).join('') : '';
+  var list = all.filter(function(p){ return cur === '전체' || p.cat === cur; });
+  var per = 10, pages = Math.max(1, Math.ceil(list.length / per)), pg = Math.min(boardPage[key] || 1, pages);
+  var slice = list.slice((pg - 1) * per, pg * per);
+  body.innerHTML = !slice.length ? '<div class="empty">아직 게시물이 없어요.</div>' : B.view === 'tile' ? '<div class="grid g-cards">' + slice.map(tileHTML).join('') + '</div>' : '<ul class="blist">' + blistHTML(slice) + '</ul>';
+  if(pages > 1) for(var i = 1; i <= pages; i++) pager.innerHTML += '<button type="button" data-page="' + i + '"' + (i === pg ? ' aria-current="page"' : '') + '>' + i + '</button>';
+}
+function renderPost(id){
+  var p = postById[id]; if(!p){ location.hash = 'news'; return; }
+  var B = BOARDS[p.board];
+  var idx = POSTS.filter(function(x){ return x.board === p.board; }), i = idx.indexOf(p);
+  $('#postRoot').innerHTML = '<p class="crumb"><a href="#home">홈</a> › <a href="#' + p.board + '">' + B.t + '</a></p>' +
+    '<div style="border-bottom:2px solid var(--ink);padding:20px 0 18px;display:flex;flex-direction:column;gap:10px"><span class="badge b-tint" style="align-self:flex-start">' + esc(p.cat) + '</span><h1 class="h2">' + esc(p.title) + '</h1><span class="muted" style="font-size:14px">' + esc(p.date) + '</span></div>' +
+    '<div style="padding:32px 0;font-size:17px;line-height:1.85;color:var(--ink2)">' + esc(p.body) + (p.link ? '<p style="margin-top:20px"><a href="' + p.link + '" target="_blank" rel="noopener">원문 보기 ↗</a></p>' : '') + '</div>' +
+    '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px">' + (idx[i - 1] ? '<a href="#post-' + idx[i - 1].id + '">← 이전 글</a>' : '<span></span>') + '<a href="#' + p.board + '" class="btn btn-outline btn-sm">목록</a>' + (idx[i + 1] ? '<a href="#post-' + idx[i + 1].id + '">다음 글 →</a>' : '<span></span>') + '</div>';
+}
+
+/* ================= FAQ ================= */
+var faqCat = '전체';
+function renderFaq(){
+  var cats = ['전체'].concat(FAQ.map(function(f){ return f.c; }).filter(function(c, i, a){ return a.indexOf(c) === i; }));
+  $('#faqCats').innerHTML = cats.map(function(c){ return '<button type="button" class="chip" data-fcat="' + c + '" aria-pressed="' + (c === faqCat) + '">' + c + '</button>'; }).join('');
+  $('#faqList').innerHTML = FAQ.filter(function(f){ return faqCat === '전체' || f.c === faqCat; }).map(function(f){ return '<details><summary><span><span class="muted" style="font-weight:500;margin-right:10px">' + f.c + '</span>' + esc(f.q) + '</span></summary><div class="ans">' + esc(f.a) + '</div></details>'; }).join('');
+}
+
+/* ================= 회원 / 마이페이지 ================= */
+function renderAuth(){
+  var html = user ? '<a href="#mypage" class="auth-link">마이페이지</a><button type="button" class="auth-link" data-logout>로그아웃</button>' : '<button type="button" class="auth-link" data-auth="login">로그인</button><button type="button" class="auth-link" data-auth="join" style="color:var(--green);font-weight:700">가입하기</button>';
+  $('#authArea').innerHTML = html;
+  $('#mAuth').innerHTML = user ? '<p style="margin:0 0 8px;font-weight:700">' + esc(user.name) + '님</p><div style="display:flex;gap:8px"><a href="#mypage" class="btn btn-outline btn-sm">마이페이지</a><button type="button" class="btn btn-outline btn-sm" data-logout>로그아웃</button></div>' : '<div style="display:flex;gap:8px"><button type="button" class="btn btn-outline btn-sm" data-auth="login" style="flex:1">로그인</button><button type="button" class="btn btn-primary btn-sm" data-auth="join" style="flex:1">가입하기</button></div>';
+}
+function renderMy(){
+  var root = $('#myRoot');
+  if(!user){ root.innerHTML = '<div class="empty"><p style="margin:0 0 16px;color:var(--ink);font-weight:700">로그인이 필요해요</p><button type="button" class="btn btn-primary btn-sm" data-auth="login">로그인</button></div>'; return; }
+  var wl = wish.map(function(id){ return byId[id]; });
+  root.innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">' +
+    '<aside class="card" style="flex:1 1 260px;min-width:0;padding:26px;display:flex;flex-direction:column;gap:10px"><div class="ph" style="width:72px;height:72px;border-radius:999px;font-weight:900;font-size:24px;color:var(--ink)">' + esc(user.name.slice(0, 1)) + '</div><p style="margin:0;font-size:20px;font-weight:900">' + esc(user.name) + '님</p><p style="margin:0" class="muted">' + esc(user.email) + '</p><button type="button" class="btn btn-outline btn-sm" data-dialog="vodroom">VOD 강의실 입장</button></aside>' +
+    '<div style="flex:3 1 520px;min-width:0;display:flex;flex-direction:column;gap:40px">' +
+    '<section><h2 class="h2" style="font-size:22px;margin-bottom:14px">내 강의</h2><div class="empty">결제한 강의가 여기에 표시돼요. (결제 연동 후)</div></section>' +
+    '<section><h2 class="h2" style="font-size:22px;margin-bottom:14px">찜한 클래스 ' + wl.length + '</h2>' + (wl.length ? '<div class="grid g-cards">' + wl.map(pcard).join('') + '</div>' : '<div class="empty">하트를 눌러 관심 클래스를 모아 보세요.</div>') + '</section>' +
+    '<section><h2 class="h2" style="font-size:22px;margin-bottom:14px">주문 내역</h2><div class="empty">주문 내역이 없어요.</div></section>' +
+    '<section><h2 class="h2" style="font-size:22px;margin-bottom:6px">알림 설정</h2>' +
+      [['post','새 게시물 알림'],['notice','공지사항 알림'],['react','내 글 반응 알림'],['mail','메일로도 받기']].map(function(s){ return '<label class="switch"><span>' + s[1] + '</span><input type="checkbox" data-pref="' + s[0] + '"' + (prefs[s[0]] ? ' checked' : '') + '></label>'; }).join('') + '</section>' +
+    '</div></div>';
+}
+
+/* ================= 알림 ================= */
+var alarmTab = 'post';
+function alarmItems(){ return POSTS.filter(function(p){ return alarmTab === 'post' ? (p.board === 'news' || p.board === 'event') : p.board === 'notice'; }); }
+function renderAlarms(){
+  $('#alarmTabs').innerHTML = [['post','게시물'],['notice','공지사항']].map(function(t){ return '<button type="button" class="chip" data-atab="' + t[0] + '" aria-pressed="' + (t[0] === alarmTab) + '">' + t[1] + '</button>'; }).join('');
+  $('#alarmList').innerHTML = alarmItems().map(function(p){ var unread = readAlarms.indexOf(p.id) < 0; return '<a href="#post-' + p.id + '" data-read="' + p.id + '" class="card" style="display:flex;gap:12px;padding:16px;text-decoration:none;color:var(--ink);margin-bottom:10px' + (unread ? ';border-color:var(--green)' : '') + '">' + (unread ? '<span aria-label="안 읽음" style="width:8px;height:8px;border-radius:99px;background:var(--green);margin-top:8px;flex:0 0 auto"></span>' : '') + '<span style="display:flex;flex-direction:column;gap:4px"><span style="font-weight:700;line-height:1.45">' + esc(p.title) + '</span><span class="muted" style="font-size:13px">' + BOARDS[p.board].t + ' · ' + esc(p.date) + '</span></span></a>'; }).join('');
+  var n = POSTS.filter(function(p){ return ['news','event','notice'].indexOf(p.board) > -1 && readAlarms.indexOf(p.id) < 0; }).length;
+  var ac = $('#alarmCount'); if(ac){ ac.textContent = n; ac.hidden = n === 0; }
+}
+
+/* ================= 장바구니 ================= */
+function cartQty(){ return Object.keys(cart).reduce(function(s, k){ return s + cart[k]; }, 0); }
+function renderCartBadge(){ var n = cartQty(); $('#cartCount').textContent = n; $('#cartCount').hidden = n === 0; }
+function addToCart(id, silent){ if(byId[id].soldout) return; cart[id] = (cart[id] || 0) + 1; save('aitea-cart', cart); renderCartBadge(); if(!silent) toast('담았어요: ' + byId[id].title, true); }
+function setQty(id, q){ if(q <= 0) delete cart[id]; else cart[id] = q; save('aitea-cart', cart); renderCartBadge(); renderCart(); }
+function renderCart(){
+  var ids = Object.keys(cart);
+  $('#cartEmpty').hidden = ids.length > 0;
+  $('#cartList').innerHTML = ids.map(function(id){ var p = byId[id], q = cart[id];
+    return '<div class="cart-row"><div class="ph" style="width:96px;height:64px;border-radius:10px;background:' + THUMB[p.cat] + ';flex:0 0 auto" aria-hidden="true"></div><div class="info"><p class="muted" style="font-size:13px;font-weight:700">' + esc(p.kind) + ' · ' + esc(p.teacher) + '</p><p style="font-size:16px;font-weight:700;line-height:1.45"><a href="#p-' + id + '" style="color:inherit;text-decoration:none">' + esc(p.title) + '</a></p></div>' +
+    '<div class="qty"><button type="button" aria-label="수량 줄이기" data-dec="' + id + '">−</button><span>' + q + '</span><button type="button" aria-label="수량 늘리기" data-inc="' + id + '">+</button></div>' +
+    '<span style="min-width:96px;text-align:right;font-weight:900">' + (p.price == null ? '<span class="muted" style="font-size:14px">가격 미정</span>' : won(p.price * q)) + '</span>' +
+    '<button type="button" class="icon-btn" aria-label="삭제" data-del="' + id + '"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'; }).join('');
+  var list = 0, total = 0;
+  ids.forEach(function(id){ var p = byId[id], q = cart[id]; if(p.price != null){ total += p.price * q; list += (p.listPrice || p.price) * q; } });
+  $('#sumCount').textContent = cartQty() + '개';
+  $('#sumList').textContent = list ? won(list) : '—';
+  $('#sumDisc').textContent = list > total ? '−' + won(list - total) : '—';
+  $('#sumTotal').textContent = total ? won(total) : '—';
+  $('#checkoutBtn').disabled = ids.length === 0;
+}
+
+/* ================= 검색 ================= */
+function doSearch(q){
+  q = q.trim().toLowerCase(); var out = $('#searchResults');
+  $('#searchHint').hidden = !!q;
+  if(!q){ out.innerHTML = ''; return; }
+  var ps = PRODUCTS.filter(function(p){ return (p.title + p.desc + p.teacher + p.kind).toLowerCase().indexOf(q) > -1; });
+  var bs = POSTS.filter(function(p){ return (p.title + p.body).toLowerCase().indexOf(q) > -1; });
+  var pages = [['출강','기업 출강 프로그램','#corporate'],['자주 묻는 질문','FAQ','#faq'],['강사 소개','한성희 이유진','#teachers'],['프리미엄 클래스','기수제 소수정예','#premium']].filter(function(x){ return (x[0] + x[1]).toLowerCase().indexOf(q) > -1; });
+  out.innerHTML = (ps.length + bs.length + pages.length === 0) ? '<p class="muted" style="padding:24px 0">‘' + esc(q) + '’ 검색 결과가 없어요.</p>' :
+    (ps.length ? '<h2 style="font-size:15px;margin:28px 0 4px" class="muted">클래스 ' + ps.length + '</h2>' + ps.map(function(p){ return '<a class="sr-item" href="#p-' + p.id + '"><span class="badge b-soft">' + esc(p.kind) + '</span><span style="font-weight:700">' + esc(p.title) + '</span></a>'; }).join('') : '') +
+    (bs.length ? '<h2 style="font-size:15px;margin:28px 0 4px" class="muted">게시물 ' + bs.length + '</h2>' + bs.map(function(p){ return '<a class="sr-item" href="#post-' + p.id + '"><span class="badge b-tint">' + BOARDS[p.board].t + '</span><span style="font-weight:700">' + esc(p.title) + '</span></a>'; }).join('') : '') +
+    (pages.length ? '<h2 style="font-size:15px;margin:28px 0 4px" class="muted">페이지</h2>' + pages.map(function(x){ return '<a class="sr-item" href="' + x[2] + '"><span style="font-weight:700">' + x[0] + '</span></a>'; }).join('') : '');
+}
+function openSearch(){ $('#searchLayer').classList.add('open'); $('#searchInput').focus(); }
+function closeSearch(){ $('#searchLayer').classList.remove('open'); }
+
+/* ================= 패널 / 다이얼로그 / 토스트 ================= */
+var openPanel = null, lastFocus = null;
+function showPanel(id){ lastFocus = document.activeElement; openPanel = $('#' + id); openPanel.classList.add('open'); openPanel.setAttribute('aria-hidden', 'false'); $('#panelBack').classList.add('open'); var b = $('[data-close]', openPanel); if(b) b.focus(); if(id === 'alarmPanel') renderAlarms(); }
+function hidePanel(){ if(!openPanel) return; openPanel.classList.remove('open'); openPanel.setAttribute('aria-hidden', 'true'); $('#panelBack').classList.remove('open'); openPanel = null; if(lastFocus) lastFocus.focus(); }
+var toastTimer;
+function toast(msg, withCart){ $('#toastText').textContent = msg; $('#toastLink').hidden = !withCart; $('#toast').classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(function(){ $('#toast').classList.remove('show'); }, 2600); }
+var DLG = {
+  vodroom:['VOD 강의실', '<p>VOD 강의실(외부 강의 플랫폼)을 연결하면 이 버튼으로 바로 이동해요. 결제할 때 쓴 이메일로 로그인하는 방식이에요.</p><p class="note">연결할 강의실 서비스(예: Teachable 등)를 정하면 주소를 넣을게요.</p>'],
+  kakao:['카카오톡 문의', '<p>카카오톡 채널을 만들면 이 버튼이 채널 채팅으로 바로 연결돼요.</p><p class="note">채널 주소 자리: [pf.kakao.com/...]</p>'],
+  checkout:['결제는 준비 중이에요', '<p>결제 서비스(PG)를 연결하면 이 버튼에서 카드·간편결제 화면이 열려요. 지금은 장바구니까지 동작하는 미리보기예요.</p>'],
+  brochure:['소개서 준비 중', '<p>기업 출강 소개서(PDF)를 만들면 여기서 내려받도록 연결할게요.</p>'],
+  video:['하이라이트 영상', '<p>유튜브 채널과 대표 영상이 생기면 이 버튼으로 연결돼요.</p>'],
+  waitlist:['대기 명단 신청', '<p>프리미엄 클래스 1기 모집이 열리면 가장 먼저 알려 드릴게요.</p><p class="note">미리보기에서는 신청이 저장·전송되지 않아요. 배포 후 신청 폼을 연결합니다.</p>'],
+  share:['공유하기', '<p>이 페이지 주소를 복사해 공유할 수 있어요.</p><button type="button" class="btn btn-outline btn-sm" data-copy-url style="align-self:flex-start">주소 복사</button>']
+};
+function openDialog(title, html, actions){ lastFocus = document.activeElement; $('#dialogTitle').textContent = title; $('#dialogBody').innerHTML = html; $('#dialogActions').innerHTML = actions || '<button type="button" class="btn btn-primary btn-sm" data-close>확인</button>'; $('#dialogBack').classList.add('open'); var f = $('input,button,textarea,select', $('#dialog')); if(f) f.focus(); }
+function closeDialog(){ $('#dialogBack').classList.remove('open'); if(lastFocus && lastFocus.focus) lastFocus.focus(); }
+function authDialog(mode){
+  var join = mode === 'join';
+  openDialog(join ? '가입하기' : '로그인',
+    '<div class="atabs" role="tablist"><button type="button" role="tab" aria-selected="' + !join + '" data-auth="login">로그인</button><button type="button" role="tab" aria-selected="' + join + '" data-auth="join">가입하기</button></div>' +
+    '<form class="form" style="grid-template-columns:minmax(0,1fr)" data-form="auth" data-mode="' + mode + '" novalidate>' +
+    (join ? '<label class="field">이름 *<input type="text" name="name" required autocomplete="name"><span class="err">이름을 입력해 주세요</span></label>' : '') +
+    '<label class="field">이메일 *<input type="email" name="email" required autocomplete="email"><span class="err">올바른 이메일을 입력해 주세요</span></label>' +
+    '<label class="field">비밀번호 *<input type="password" name="pw" required autocomplete="' + (join ? 'new-password' : 'current-password') + '"><span class="err">비밀번호를 입력해 주세요</span></label>' +
+    (join ? '<div class="field" style="font-weight:500"><label class="check"><input type="checkbox" name="agree" required> 이용약관과 개인정보 수집·이용에 동의합니다 (필수)</label><span class="err">동의가 필요해요</span></div><label class="check"><input type="checkbox" name="mkt"> 강의 소식과 이벤트 알림 받기 (선택)</label>' : '') +
+    '<button type="submit" class="btn btn-primary">' + (join ? '가입하기' : '로그인') + '</button></form>' +
+    '<p class="note">미리보기용 회원 기능이에요. 비밀번호는 저장되지 않고, 이름·이메일은 이 브라우저에만 기억돼요. 배포 후 실제 회원 시스템을 연결합니다.</p>', ' ');
+}
+function qnaDialog(kind){
+  var rv = kind === 'reviews';
+  openDialog(rv ? '후기 작성' : '문의 작성',
+    rv ? '<p>후기는 결제한 수강생만 남길 수 있어요. 결제와 회원 시스템을 연결하면 이곳에서 별점과 후기를 남기게 됩니다.</p>' :
+    '<form class="form" style="grid-template-columns:minmax(0,1fr)" data-form="qna" novalidate><label class="field">제목 *<input type="text" name="title" required><span class="err">제목을 입력해 주세요</span></label><label class="field">내용 *<textarea name="message" required></textarea><span class="err">내용을 입력해 주세요</span></label><button type="submit" class="btn btn-primary">등록</button></form><p class="note">미리보기에서는 이 브라우저에만 저장되고 운영자에게 전달되지 않아요.</p>', rv ? undefined : ' ');
+}
+
+/* ================= 폼 ================= */
+function validate(form){
+  var ok = true, first = null;
+  $$('[required]', form).forEach(function(el){
+    var f = el.closest('.field'); var bad = el.type === 'checkbox' ? !el.checked : (!el.value.trim() || (el.type === 'email' && !/^\S+@\S+\.\S+$/.test(el.value.trim())));
+    if(f) f.classList.toggle('invalid', bad); if(bad){ ok = false; if(!first) first = el; }
+  });
+  if(first) first.focus();
+  return ok;
+}
+function formDone(form, title, text){
+  var wrap = form.closest('[data-formwrap]') || form.parentNode;
+  form.hidden = true;
+  var d = document.createElement('div'); d.setAttribute('role','status'); d.tabIndex = -1; d.style.cssText = 'display:flex;flex-direction:column;gap:12px;align-items:flex-start';
+  d.innerHTML = '<p style="margin:0;font-size:22px;font-weight:900">' + esc(title) + '</p><p style="margin:0;line-height:1.7;color:var(--ink2)">' + esc(text) + '</p><button type="button" class="btn btn-outline btn-sm" data-reform>다시 작성</button>';
+  wrap.appendChild(d); d.focus();
+}
+document.addEventListener('submit', function(e){
+  var form = e.target; if(!form.dataset.form) return;
+  e.preventDefault();
+  if(!validate(form)) return;
+  var fd = new FormData(form), kind = form.dataset.form;
+  if(kind === 'auth'){
+    var email = fd.get('email').trim();
+    user = {name: (fd.get('name') || email.split('@')[0]).trim(), email: email}; save('aitea-user', user);
+    closeDialog(); renderAuth(); toast(user.name + '님, 환영해요', false); if(location.hash === '#mypage') renderMy(); return;
+  }
+  if(kind === 'qna'){
+    qnaLocal.unshift({id:'q' + Date.now(), title: fd.get('title'), date: new Date().toISOString().slice(0, 10)}); save('aitea-qna', qnaLocal);
+    closeDialog(); renderBoard('qna'); toast('문의를 이 브라우저에 저장했어요 (미리보기)', false); return;
+  }
+  /* 온라인 접수처(메일 발송 서비스)를 연결하기 전까지는 전송하지 않고 안내만 보여줍니다 */
+  formDone(form, '온라인 접수 준비 중이에요', '아직 이 폼으로는 접수되지 않아요. 같은 내용을 [이메일]로 보내 주시면 답변드릴게요.');
+});
+document.addEventListener('input', function(e){ var f = e.target.closest && e.target.closest('.field'); if(f) f.classList.remove('invalid'); });
+document.addEventListener('change', function(e){ var f = e.target.closest && e.target.closest('.field'); if(f) f.classList.remove('invalid');
+  if(e.target.dataset && e.target.dataset.pref){ prefs[e.target.dataset.pref] = e.target.checked; save('aitea-prefs', prefs); toast('알림 설정을 저장했어요', false); }
+  if(e.target.id === 'listSort'){ listSort = e.target.value; renderList(listKey); } });
+
+/* ================= 라우팅 ================= */
+var VIEW = {home:'home', about:'about', teachers:'teachers', people:'people', classes:'list', online:'list', offline:'list', package:'list', pdf:'list', ebook:'ebook', premium:'premium', corporate:'corporate', channel:'channel',
+  news:'board', day:'board', column:'board', notice:'board', event:'board', reviews:'board', qna:'board', faq:'faq', mypage:'mypage', cart:'cart', partner:'partner', recruit:'recruit', brand:'brand', policy:'policy', han:'teachers', lee:'teachers'};
+var GRP = {about:'about', teachers:'about', people:'about', han:'about', lee:'about', classes:'class', online:'class', offline:'class', premium:'class', package:'store', pdf:'store', ebook:'store', corporate:'corp', channel:'comm', news:'comm', day:'comm', column:'comm', reviews:'comm', event:'comm', faq:'info', notice:'info', qna:'info'};
+var TITLES = {home:'PAUSE — AI가 일하는 동안, 당신은 잠깐 멈춤'};
+function route(){
+  var h = decodeURIComponent((location.hash || '').slice(1)) || 'home';
+  if(h === 'main') return;
+  var view, grp;
+  if(h.indexOf('p-') === 0){ view = 'detail'; var pd = byId[h.slice(2)]; grp = pd && (pd.cat === 'package' || pd.cat === 'pdf') ? 'store' : 'class'; renderDetail(h.slice(2)); }
+  else if(h.indexOf('post-') === 0){ view = 'post'; var pp = postById[h.slice(5)]; grp = pp ? GRP[pp.board] : ''; renderPost(h.slice(5)); }
+  else { view = VIEW[h] || 'home'; grp = GRP[h] || ''; if(!VIEW[h]) h = 'home';
+    if(view === 'list') renderList(h); if(view === 'board') renderBoard(h); if(view === 'cart') renderCart(); if(view === 'mypage') renderMy(); if(view === 'faq') renderFaq(); }
+  $$('.view').forEach(function(v){ v.classList.toggle('active', v.id === 'view-' + view); });
+  $$('#gnb>li').forEach(function(li){ li.classList.toggle('on', li.dataset.grp === grp); });
+  hidePanel(); closeSearch();
+  var anchor = (h === 'han' || h === 'lee') ? $('#' + h) : null;
+  if(anchor) setTimeout(function(){ anchor.scrollIntoView({behavior:'smooth'}); }, 30); else window.scrollTo(0, 0);
+  var t = $('.view.active h1'); document.title = view === 'home' ? TITLES.home : ((t ? t.textContent : '') + ' — PAUSE');
+}
+
+/* ================= 클릭 ================= */
+document.addEventListener('click', function(e){
+  var t = e.target.closest('button,a'); if(!t) { if(e.target.id === 'panelBack') hidePanel(); if(e.target.id === 'dialogBack') closeDialog(); return; }
+  var d = t.dataset;
+  if(d.wish){ e.preventDefault(); var i = wish.indexOf(d.wish); if(i > -1) wish.splice(i, 1); else wish.push(d.wish); save('aitea-wish', wish); toast(i > -1 ? '찜을 해제했어요' : '찜했어요', false); $$('[data-wish="' + d.wish + '"]').forEach(function(b){ var on = wish.indexOf(d.wish) > -1; b.setAttribute('aria-pressed', on); $('svg', b).setAttribute('fill', on ? 'currentColor' : 'none'); }); if(location.hash === '#mypage') renderMy(); return; }
+  if(d.add){ addToCart(d.add); return; }
+  if(d.buy){ addToCart(d.buy, true); location.hash = 'cart'; return; }
+  if(d.inc){ setQty(d.inc, cart[d.inc] + 1); return; }
+  if(d.dec){ setQty(d.dec, cart[d.dec] - 1); return; }
+  if(d.del){ setQty(d.del, 0); return; }
+  if(d.dialog){ var g = DLG[d.dialog]; openDialog(g[0], g[1]); return; }
+  if(d.auth){ authDialog(d.auth); return; }
+  if(t.hasAttribute('data-logout')){ user = null; save('aitea-user', null); renderAuth(); toast('로그아웃했어요', false); if(location.hash === '#mypage') renderMy(); return; }
+  if(t.hasAttribute('data-close')){ if(t.closest('.panel')) hidePanel(); else closeDialog(); return; }
+  if(d.scroll){ $('#' + d.scroll).scrollIntoView({behavior:'smooth'}); return; }
+  if(d.bcat){ var bk = location.hash.slice(1); boardCat[bk] = d.bcat; boardPage[bk] = 1; renderBoard(bk); return; }
+  if(d.page){ var pk = location.hash.slice(1); boardPage[pk] = +d.page; renderBoard(pk); window.scrollTo(0, 0); return; }
+  if(d.fcat){ faqCat = d.fcat; renderFaq(); return; }
+  if(d.atab){ alarmTab = d.atab; renderAlarms(); return; }
+  if(d.read){ if(readAlarms.indexOf(d.read) < 0){ readAlarms.push(d.read); save('aitea-read', readAlarms); } return; }
+  if(d.dtab){ $$('[data-dtab]').forEach(function(b){ b.setAttribute('aria-selected', b === t); }); $$('[data-dpanel]').forEach(function(p){ p.hidden = p.dataset.dpanel !== d.dtab; }); return; }
+  if(d.q){ $('#searchInput').value = d.q; doSearch(d.q); return; }
+  if(d.qna){ e.preventDefault(); toast('답변이 달리면 알림으로 알려 드려요', false); return; }
+  if(d.copy || t.hasAttribute('data-copy-url')){ var txt = d.copy || location.href; try { navigator.clipboard.writeText(txt).then(function(){ toast('복사했어요: ' + txt, false); }, function(){ toast('복사하지 못했어요. 직접 선택해 복사해 주세요', false); }); } catch(err){ toast('복사하지 못했어요', false); } return; }
+  if(t.hasAttribute('data-reform')){ var w = t.closest('[data-formwrap]'); var f = $('form', w); f.reset(); f.hidden = false; t.parentNode.remove(); $('input', f).focus(); return; }
+  switch(t.id){
+    case 'menuOpen': showPanel('menuPanel'); return;
+    case 'searchOpen': openSearch(); return;
+    case 'searchClose': closeSearch(); return;
+    case 'checkoutBtn': openDialog(DLG.checkout[0], DLG.checkout[1]); return;
+    case 'boardWrite': qnaDialog(t.dataset.board); return;
+    case 'toTop': window.scrollTo({top:0, behavior:'smooth'}); return;
+  }
+});
+$('#searchInput').addEventListener('input', function(e){ doSearch(e.target.value); });
+document.addEventListener('keydown', function(e){ if(e.key !== 'Escape') return; if($('#dialogBack').classList.contains('open')) closeDialog(); else if($('#searchLayer').classList.contains('open')) closeSearch(); else hidePanel(); });
+$('#panelBack').addEventListener('click', hidePanel);
+$('#dialogBack').addEventListener('click', function(e){ if(e.target.id === 'dialogBack') closeDialog(); });
+window.addEventListener('scroll', function(){ $('#toTop').classList.toggle('show', window.scrollY > 600); }, {passive:true});
+window.addEventListener('hashchange', route);
+
+renderHome(); renderStatic(); renderAuth(); renderCartBadge(); renderAlarms(); route();
+})();
+</script>
+</body>
+</html>
