@@ -408,20 +408,21 @@ function ph(k, w, cls, eager){
 /* ===== 강사 ===== */
 /* img: 강사 본인이 보내 준 사진 파일 경로 (예: 'img/han.jpg'). 비어 있으면 분위기 사진(pic)을 씁니다 */
 var T = {
+  /* 소개 순서: 이유진 → 한성희 → 이준혁. 경력은 최신순(위가 최근) */
   han: {img:'img/han.jpg', pic:'brainstorm', nm:'한성희', role:'THE AGENT', line:'Simplifier 대표 · 전 요기요 CPO, 빗썸 COO', book:'《기획자의 질문법》 《UX의 언어들》 저자',
         proof:'요기요가 50명에서 1,000명으로 커질 때 CPO를 맡았어요', job:'진단 — 무엇을 AI에게 맡기고 무엇을 사람이 정할지',
         does:'AI 에이전트로 업무를 덜어내는 법. 무엇을 맡기고 무엇을 사람이 정할지부터 묻습니다.',
-        career:['다모임 기획자','네이버 콘텐츠서비스 팀장','삼성전자 스마트TV PM','요기요 CPO','빗썸 COO','심플리파이어 대표 — 고객사에 함께 출근하는 스타트업 프로덕트 코칭'],
+        career:['심플리파이어 대표 — 고객사에 함께 출근하는 스타트업 프로덕트 코칭','빗썸 COO','요기요 CPO','삼성전자 스마트TV PM','네이버 콘텐츠서비스 팀장','다모임 기획자'],
         links:[['브런치','https://brunch.co.kr/@simplifier']]},
   jun: {img:'img/jun.jpg', pic:'manLaptop', nm:'이준혁', role:'THE BUILDER', line:'잡코리아 PO · 전 텐덤 COO·CPO', book:'《우리는 아직도 출근 중입니다》 저자',
         proof:'콘텐츠 자동화 에이전트를 직접 매일 운영하고 있어요', job:'실습 — 내 업무 에이전트를 끝까지 만들어 돌리기',
         does:'전 스테이션3 운영총괄팀장. 직접 굴리는 자동화 에이전트를 예제로, 현장에서 끝까지 만들어 보는 실습을 맡습니다.',
-        career:['잡코리아 PO','전 텐덤 COO·CPO','전 스테이션3 운영총괄팀장','브런치북 8권 · 《우리는 아직도 출근 중입니다》(좋은땅, 2025, 공저)'],
+        career:['잡코리아 PO','《우리는 아직도 출근 중입니다》(좋은땅, 2025, 공저) · 브런치북 8권','전 텐덤 COO·CPO','전 스테이션3 운영총괄팀장'],
         links:[]},
   lee: {img:'img/lee.jpg', pic:'teapot', nm:'이유진', role:'THE TEA', line:'2009년부터 활동한 티마스터 · 웰니스협회', book:'《차와 일상》 《오후 4시 홍차에 빠지다》 저자',
         proof:'2011년 첫 홍차 책을 낸 뒤 차 책을 여러 권 썼어요', job:'쉼 — 티 브레이크와 차 한 잔 사이의 1:1 질문',
         does:'실습 사이의 브레인 브레이크. 차 한 잔과 10분의 대화로 머리를 식힙니다.',
-        career:['영상 번역가 (2004~)','원광디지털대 차문화경영학과 티 마스터 과정','홍차 클래스·라이브 클래스 운영','웰니스협회 티마스터'],
+        career:['웰니스협회 티마스터','홍차 클래스·라이브 클래스 운영','원광디지털대 차문화경영학과 티 마스터 과정','영상 번역가 (2004~)'],
         links:[['브런치 · 티마스터 바유','https://brunch.co.kr/@@8kAR']]}
 };
 function blurb(t){ return t.nm + ' (' + t.role + ') — ' + t.line + '. ' + t.book + '. ' + t.proof + ' PAUSE 워크샵에서 맡는 일: ' + t.job + '.'; }
@@ -429,13 +430,13 @@ function blurb(t){ return t.nm + ' (' + t.role + ') — ' + t.line + '. ' + t.bo
 /* ===== 워크샵 ===== */
 var W = [
   {id:'outdoor', kind:'종일 · 야외', hours:'09:30~17:30 · 7시간', badge:'대표 프로그램 1', title:'숲에서 보내는 종일 워크샵', sub:'사무실을 벗어나 서울 근교·강원 숲속 교육장에서 하루. 오전엔 걷고 차를 마시고, 낮엔 팀이 쓸 에이전트를 만들고, 오후엔 숲속 티 세션으로 닫아요',
-   photos:['birch','woods','cabin'], more:['pine','teaPour','sunForest','forest'], who:['han','jun','lee'], size:'15~40명', place:'서울 근교·강원(홍천 등) 야외 교육장·숲속 숙소 — 장소 연결 가능', tools:'Claude + 팀 과제 1개',
+   photos:['birch','woods','cabin'], more:['pine','teaPour','sunForest','forest'], who:['lee','han','jun'], size:'15~40명', place:'서울 근교·강원(홍천 등) 야외 교육장·숲속 숙소 — 장소 연결 가능', tools:'Claude + 팀 과제 1개',
    fit:'연말·분기 팀 워크샵, 힐링과 교육을 한 번에 하고 싶을 때, 직무가 섞인 부서',
    make:['팀이 함께 쓰는 업무 에이전트 1개','직무별 에이전트 (보고서·데이터·CS 중 택)','다음 90일 팀 약속'],
    opt:'1박 2일로 늘리기 — 저녁 숲속 티 세션, 우리 팀 퀴즈·룰렛 게임 레크리에이션, 다음 날 아침 산책과 쇼케이스를 더해요.',
    tl:[['09:30','도착 · 숲길 산책과 아침의 차','핸드폰을 잠시 내려놓고 20분 걷기',1],['10:10','진단','무엇을 AI에게 맡기고 무엇을 사람이 정할까 (한성희)'],['10:50','문 여는 실습','팀 캐릭터·퀴즈 게임을 30분 만에'],['11:30','본 실습 ①','팀 과제 고르고 에이전트 설계 (이준혁)'],['12:30','야외 점심','—'],['13:30','본 실습 ②','완성하고 서로 써 보기, 검수하는 법'],['15:00','숲속 티 세션 · 30분','계절 차와 1:1 질문 (이유진)',1],['15:30','팀 쇼케이스','팀별 시연과 투표'],['16:40','회고와 약속','다음 90일에 해 볼 것 적기'],['17:30','끝','24시간 안에 HR 리포트 전달']]},
   {id:'office', kind:'오후 · 사무실', hours:'13:00~18:00(5시간) 또는 19:00(6시간)', badge:'대표 프로그램 2', title:'사무실에서 보내는 오후 워크샵', sub:'오전 업무를 마치고 귀사 교육장으로. 저녁 전까지 팀이 쓸 에이전트 하나를 만들고, 마무리는 차 한 잔과 시연이에요',
-   photos:['laptops','teaPour','notes'], more:['laugh','bookLaptop','teaCup','pointNotes'], who:['han','jun','lee'], size:'10~30명', place:'귀사 교육장·회의실', tools:'Claude 1개로 집중',
+   photos:['laptops','teaPour','notes'], more:['laugh','bookLaptop','teaCup','pointNotes'], who:['lee','han','jun'], size:'10~30명', place:'귀사 교육장·회의실', tools:'Claude 1개로 집중',
    fit:'한 팀이 같은 업무를 바꾸고 싶을 때, 하루를 통째로 비우기 어려울 때, 정기프로그램의 분기 회차',
    make:['팀이 매주 쓰는 보고서·회의록 정리 에이전트','고객 문의 답변 초안 봇 또는 경쟁사 조사 자동화','각자 “다음 2주에 해 볼 한 가지” 약속'],
    opt:'5시간은 18:00, 6시간은 시연을 늘려 19:00에 끝나요.',
@@ -586,7 +587,7 @@ function vHome(){
 
   '<section class="section dark"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Hosts</p><h2 class="h2">세 강사가 함께 들어가요</h2></div><a class="btn btn-line btn-sm" href="#team">강사 소개</a></div>' +
-    '<div class="trio">' + ['han','jun','lee'].map(function(k){ var t = T[k]; return '<a class="tch" href="#team">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proof) + '</p></a>'; }).join('') + '</div>' +
+    '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#team">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proof) + '</p></a>'; }).join('') + '</div>' +
   '</div></section>' +
 
   '<section class="section"><div class="wrap split">' +
@@ -821,16 +822,16 @@ function notifyDialog(c){
 /* ===== 강사 ===== */
 function vTeam(){
   return '<section class="section dark"><div class="wrap">' +
-    '<p class="eyebrow">Hosts</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">설계하는 사람, 만드는 사람,<br>쉬게 하는 사람</h1>' +
-    '<p class="lead" style="max-width:680px;margin:16px 0 48px">세 사람이 한 워크샵에 함께 들어가는 이유예요. 무엇을 맡길지 정하고, 끝까지 만들어 돌리고, 그 사이에 머리를 식혀요.</p>' +
-    '<div class="trio">' + ['han','jun','lee'].map(function(k){ var t = T[k]; return '<a class="tch" href="#t-' + k + '">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proof) + '</p><p>워크샵에서: ' + esc(t.job) + '</p></a>'; }).join('') + '</div>' +
+    '<p class="eyebrow">Hosts</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">쉬게 하는 사람, 설계하는 사람,<br>만드는 사람</h1>' +
+    '<p class="lead" style="max-width:680px;margin:16px 0 48px">세 사람이 한 워크샵에 함께 들어가는 이유예요. 차 한 잔으로 머리를 식히고, 무엇을 맡길지 정하고, 끝까지 만들어 돌려요.</p>' +
+    '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#t-' + k + '">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proof) + '</p><p>워크샵에서: ' + esc(t.job) + '</p></a>'; }).join('') + '</div>' +
   '</div></section>' +
-  ['han','jun','lee'].map(function(k, i){ var t = T[k]; return '<section class="section' + (i % 2 ? ' paper' : '') + '" id="t-' + k + '"><div class="wrap bio">' +
+  ['lee','han','jun'].map(function(k, i){ var t = T[k]; return '<section class="section' + (i % 2 ? ' paper' : '') + '" id="t-' + k + '"><div class="wrap bio">' +
     tph(t, 900, 'bio-pic') +
     '<div class="bio-body"><p class="eyebrow">' + t.role + '</p><h2 class="h2">' + t.nm + '</h2>' +
       '<p class="lead" style="margin:10px 0 0">' + esc(t.does) + '</p>' +
       '<p class="bio-proof">' + esc(t.proof) + '</p>' +
-      '<h3 class="h3" style="margin:28px 0 10px">경력</h3><ul class="career">' + t.career.map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' +
+      '<h3 class="h3" style="margin:28px 0 10px">경력 <span class="muted" style="font-size:13px;font-weight:400">최신순</span></h3><ul class="career">' + t.career.map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' +
       '<h3 class="h3" style="margin:24px 0 8px">저서</h3><p style="margin:0">' + esc(t.book.replace(/ 저자$/, '')) + '</p>' +
       '<div class="btns" style="margin-top:24px">' + t.links.map(function(l){ return '<a class="btn btn-line btn-sm" href="' + l[1] + '" target="_blank" rel="noopener">' + esc(l[0]) + ' ↗</a>'; }).join('') + '<button type="button" class="btn btn-line btn-sm" data-copybio="' + k + '">담당자용 소개 3줄 복사</button></div>' +
     '</div></div></section>'; }).join('') +
@@ -841,7 +842,7 @@ function vTeam(){
 function bindTeam(){
   $$('[data-copybio]').forEach(function(b){ b.addEventListener('click', function(){
     var k = b.getAttribute('data-copybio');
-    var txt = k === 'all' ? ['han','jun','lee'].map(function(x){ return blurb(T[x]); }).join('\n') : blurb(T[k]);
+    var txt = k === 'all' ? ['lee','han','jun'].map(function(x){ return blurb(T[x]); }).join('\n') : blurb(T[k]);
     var done = function(){ toast('복사했어요'); };
     var fallback = function(){ openDialog('<h2>아래 내용을 복사해 주세요</h2><textarea readonly style="width:100%;min-height:180px;border:1px solid var(--hair);border-radius:10px;padding:12px;font-size:14px">' + esc(txt) + '</textarea>'); };
     try { if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done, fallback); } else { fallback(); } } catch(e){ fallback(); }
