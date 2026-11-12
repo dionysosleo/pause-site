@@ -372,16 +372,18 @@ var PH = {
   manLaptop:{id:'1573183205228-df337e65dab0', alt:'테이블에서 노트북으로 일하는 사람', by:'Miguel Dominguez'}
 };
 function src(k, w){ return 'https://images.unsplash.com/photo-' + PH[k].id + '?auto=format&fit=crop&w=' + (w || 1200) + '&q=70'; }
+function tph(t, w, cls){ return t.img ? '<div class="photo' + (cls ? ' ' + cls : '') + '"><img src="' + esc(t.img) + '" alt="' + esc(t.nm) + ' 사진" loading="lazy"></div>' : ph(t.pic, w, cls); }
 function ph(k, w, cls, eager){
   var p = PH[k];
   return '<div class="photo' + (cls ? ' ' + cls : '') + '"><img src="' + src(k, w) + '" alt="' + esc(p.alt) + '"' + (eager ? '' : ' loading="lazy"') + ' decoding="async"><span class="credit">Photo: ' + (p.by ? esc(p.by) + ' / ' : '') + 'Unsplash</span></div>';
 }
 
 /* ===== 강사 ===== */
+/* img: 강사 본인이 보내 준 사진 파일 경로 (예: 'img/han.jpg'). 비어 있으면 분위기 사진(pic)을 씁니다 */
 var T = {
-  han: {pic:'brainstorm', nm:'한성희', role:'THE AGENT', line:'Simplifier 대표 · 전 요기요 CPO, 빗썸 COO', book:'《기획자의 질문법》 《UX의 언어들》 저자', does:'AI 에이전트로 업무를 덜어내는 법. 무엇을 맡기고 무엇을 사람이 정할지부터 묻습니다.'},
-  jun: {pic:'manLaptop', nm:'이준혁', role:'THE BUILDER', line:'잡코리아 PO · 전 텐덤 COO·CPO · 전 스테이션3 운영총괄팀장', book:'《우리는 아직도 출근 중입니다》 저자', does:'직접 굴리는 자동화 에이전트를 예제로, 현장에서 끝까지 만들어 보는 실습을 맡습니다.'},
-  lee: {pic:'teapot', nm:'이유진', role:'THE TEA', line:'2009년부터 활동한 티마스터 · 웰니스협회', book:'《차와 일상》 《오후 4시 홍차에 빠지다》 저자', does:'실습 사이의 브레인 브레이크. 차 한 잔과 10분의 대화로 머리를 식힙니다.'}
+  han: {img:'', pic:'brainstorm', nm:'한성희', role:'THE AGENT', line:'Simplifier 대표 · 전 요기요 CPO, 빗썸 COO', book:'《기획자의 질문법》 《UX의 언어들》 저자', does:'AI 에이전트로 업무를 덜어내는 법. 무엇을 맡기고 무엇을 사람이 정할지부터 묻습니다.'},
+  jun: {img:'', pic:'manLaptop', nm:'이준혁', role:'THE BUILDER', line:'잡코리아 PO · 전 텐덤 COO·CPO · 전 스테이션3 운영총괄팀장', book:'《우리는 아직도 출근 중입니다》 저자', does:'직접 굴리는 자동화 에이전트를 예제로, 현장에서 끝까지 만들어 보는 실습을 맡습니다.'},
+  lee: {img:'', pic:'teapot', nm:'이유진', role:'THE TEA', line:'2009년부터 활동한 티마스터 · 웰니스협회', book:'《차와 일상》 《오후 4시 홍차에 빠지다》 저자', does:'실습 사이의 브레인 브레이크. 차 한 잔과 10분의 대화로 머리를 식힙니다.'}
 };
 
 /* ===== 워크샵 ===== */
@@ -712,7 +714,7 @@ function vCourse(c){
   '</div></section>' +
   '<section class="section dark"><div class="wrap split">' +
     '<div style="display:flex;flex-direction:column;gap:14px"><p class="eyebrow">Instructor</p><h2 class="h2">' + t.nm + '</h2><p class="lead">' + esc(t.line) + '<br>' + esc(t.book) + '</p><p class="lead">' + esc(t.does) + '</p></div>' +
-    ph(t.pic, 1000, 'rounded54') +
+    tph(t, 1000, 'rounded54') +
   '</div></section>' +
   '<section class="section"><div class="wrap" style="max-width:960px">' +
     '<div class="sec-head"><div><p class="eyebrow">Reviews</p><h2 class="h2">수강 후기</h2></div></div>' +
@@ -751,7 +753,7 @@ function vTeam(){
   return '<section class="section dark"><div class="wrap">' +
     '<p class="eyebrow">Hosts</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">세 강사</h1>' +
     '<p class="lead" style="max-width:640px;margin:16px 0 48px">AI 에이전트를 설계하는 사람, 직접 만들어 굴리는 사람, 그리고 쉬는 법을 아는 사람.</p>' +
-    '<div class="trio">' + ['han','jun','lee'].map(function(k){ var t = T[k]; return '<div class="tch">' + ph(t.pic, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p>' + esc(t.book) + '</p><p style="color:#fff">' + esc(t.does) + '</p></div>'; }).join('') + '</div>' +
+    '<div class="trio">' + ['han','jun','lee'].map(function(k){ var t = T[k]; return '<div class="tch">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p>' + esc(t.book) + '</p><p style="color:#fff">' + esc(t.does) + '</p></div>'; }).join('') + '</div>' +
   '</div></section>' +
   '<section class="section"><div class="wrap split">' + ph('laugh', 1200) +
     '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">Together</p><h2 class="h2">워크샵마다 필요한 만큼만 들어가요</h2><p class="lead">2시간 워크샵은 실습 강사와 티마스터 두 명, 반나절과 리트리트는 세 명이 함께해요. 20명이 넘으면 보조 진행자가 붙어요.</p><div class="btns"><a class="btn btn-lime" href="#contact">도입 문의</a></div></div>' +
