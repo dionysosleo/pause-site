@@ -3,8 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PAUSE — 팀마다 일하는 AI 에이전트 하나, 기업 AI 워크샵</title>
-<meta name="description" content="Pause &amp; Rebuild. 팀원 모두가 실제 업무 하나를 AI 에이전트로 바꿔 가는 기업 워크샵. 워크샵 · 1년 정기프로그램 · 온라인강의. 한성희 · 이준혁 · 이유진 세 강사.">
+<title>PAUSE — 우러나는 3분, 끝나는 일 하나</title>
+<meta name="description" content="차 한 잔 우러나는 3분 동안 끝나는 일을, 팀마다 하나씩 AI 에이전트로. 종일 야외 · 오후 사무실 워크샵과 사계절 프로그램. 이유진 · 한성희 · 이준혁.">
+<meta name="theme-color" content="#0E0E0E">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PAUSE">
+<meta property="og:title" content="PAUSE — 우러나는 3분, 끝나는 일 하나">
+<meta property="og:description" content="차 한 잔 우러나는 3분 동안 끝나는 일을, 팀마다 하나씩 AI 에이전트로. 종일 야외 · 오후 사무실 워크샵과 사계절 프로그램. 이유진 · 한성희 · 이준혁.">
+<meta property="og:url" content="https://pause-site-seven.vercel.app/">
+<meta property="og:image" content="https://pause-site-seven.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pause-site-seven.vercel.app/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://images.unsplash.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -359,6 +373,18 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 .lex dd{margin:0;color:var(--ink2);font-size:14.5px;line-height:1.65}
 @media (max-width:960px){.lex{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.lex{grid-template-columns:minmax(0,1fr)}}
+.rp{border:1.5px solid var(--ink);border-radius:16px;padding:22px 24px;background:#fff;box-shadow:0 10px 28px rgba(0,0,0,.06)}
+.rp-hd{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--green)}
+.rp-tag{background:var(--soft);color:var(--muted);padding:3px 8px;border-radius:6px;letter-spacing:0}
+.rp-t{margin:10px 0 16px;font-weight:900;font-size:18px}
+.rp-k{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.rp-k div{padding:12px 0}
+.rp-k b{display:block;font-size:24px;font-family:var(--en)}
+.rp-k span{font-size:13px;color:var(--muted)}
+.rp-c{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:16px;font-size:14px}
+.rp-c ul{margin:6px 0 0;padding-left:18px;line-height:1.7}
+.rp-n{margin:16px 0 0;font-size:14px;background:var(--lime-t);padding:10px 12px;border-radius:8px}
+@media (max-width:640px){.rp-k{grid-template-columns:repeat(2,minmax(0,1fr))}.rp-c{grid-template-columns:minmax(0,1fr)}}
 /* footer */
 footer{background:var(--ink);color:#CFCFCA;padding:56px 0 40px;font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px}
@@ -404,7 +430,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
       <p style="margin:0" class="en">[상호] · [대표자] · [사업자등록번호] · [문의 이메일]</p>
     </div>
     <nav aria-label="하단 메뉴">
-      <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#contact">도입 문의</a><a href="/classic">이전 사이트(스토어·저널)</a>
+      <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#contact">도입 문의</a><a href="#privacy">개인정보처리방침</a>
     </nav>
   </div>
   <div class="wrap" style="margin-top:28px"><p style="margin:0;font-size:12px;color:#8A8A85">사진: Unsplash (Unsplash License). 실제 워크샵 사진이 생기면 교체할 자리예요.</p></div>
@@ -491,23 +517,23 @@ var FLOW = [['D-3','찻잎 고르기','사전 진단 + 사전학습 VOD. 보안�
 /* ===== 온라인강의 (셀링 페이지) ===== */
 var C = [
   {id:'agent-vod', kind:'VOD 4편', who:'han', photo:'desk', strip:['brainstorm','notes','teapot','manLaptop','pointNotes','teaCup'], title:'기획자를 위한 AI 에이전트 입문', hook:'도구보다 질문이 먼저입니다. 무엇을 AI에게 맡기고, 무엇을 사람이 정할지.',
-   promise:'4편을 다 보면 나만의 “AI 팀 설계도” 한 장이 손에 남습니다.',
+   promise:'네 번 우리고 나면, 나만의 “AI 팀 설계도” 한 장이 손에 남습니다.',
    pain:['AI 도구는 많은데 내 일에 어떻게 붙일지 모르겠다','써 보긴 했는데 결과물을 매번 다시 고친다','팀에 도입하자니 어디서부터 시작할지 막막하다'],
    after:['맡길 일과 내가 정할 일이 구분된다','리서치·보고·회의록에 쓸 에이전트가 생긴다','팀 도입 로드맵과 성공 지표를 말할 수 있다'],
    lessons:[['1편','문제부터 정의하기','notes',['AI에게 맡길 일, 사람이 정할 일','반복 업무 지도 그리기','덜어낼 일 하나 고르기']],['2편','나만의 AI 팀 설계','brainstorm',['에이전트와 챗봇의 차이','역할 나누기: 리서처·정리자·작성자']],['3편','기획·보고·리서치 자동화','desk',['리서치 요약 자동화','보고서 초안 워크플로','결과 검수하는 법']],['4편','팀에 도입하기','pointNotes',['팀 도입의 세 단계','성공 지표 정하기','보안·윤리 체크리스트']]],
    fit:['AI를 “써 보긴 했는데” 업무에 못 붙인 기획자·PM','팀에 AI 도입을 맡은 리더','보고서·리서치에 시간을 많이 쓰는 직장인']},
   {id:'builder-vod', kind:'VOD', who:'jun', photo:'desk2', strip:['manLaptop','bookLaptop','notes','teaPour','laptops','desk'], title:'퇴근 후에도 굴러가는 콘텐츠 자동화', hook:'매일 발행하는 SNS와 블로그, 에이전트에게 맡겨 둔 실제 운영 화면 그대로 보여 드립니다.',
-   promise:'수업이 끝나면 매일 아침 스스로 움직이는 발행 에이전트 1개가 생깁니다.',
+   promise:'네 번 우리고 나면, 매일 아침 스스로 움직이는 발행 에이전트 1개가 생깁니다.',
    pain:['콘텐츠를 꾸준히 올리는 게 제일 어렵다','자동화 글은 많은데 실제로 돌려 본 사람이 없다','만들어 두면 며칠 뒤 멈춘다'],
    after:['어떤 콘텐츠 업무를 맡길지 고를 수 있다','일정·검수·기록까지 돌아가는 구조를 만든다','멈췄을 때 고치는 법을 안다'],
    lessons:[['1강','어떤 업무를 맡길까','bookLaptop',['콘텐츠 업무 쪼개기','자동화하면 안 되는 일']],['2강','발행 에이전트 설계','laptops',['기획 → 초안 → 검수 흐름','도구 1개로 좁히기']],['3강','매일 돌아가게 만들기','manLaptop',['일정·검수·기록','실제 운영 화면 공개']],['4강','운영하며 고치기','laugh',['멈춤 원인 3가지','개선 루틴']]],
    fit:['혼자 브랜드·SNS를 운영하는 사람','사내 콘텐츠 담당자','자동화를 직접 만들어 보고 싶은 PO·기획자']},
-  {id:'tea-live', kind:'라이브 · 월 1회', who:'lee', photo:'teaPour', strip:['teapot','teaCup','pine','sunForest','birch','forest'], title:'일하는 사람을 위한 하루 세 잔', hook:'모니터 앞에서 굳은 어깨를 푸는 건 5분이면 됩니다. 집에서 함께 우리는 라이브 티 클래스.',
-   promise:'한 달에 한 번, 티 키트를 받아 함께 우리며 나만의 티 루틴을 만듭니다.',
-   pain:['커피만 늘고 오후엔 더 지친다','쉬는 법을 잘 모르겠다','차는 좋아하는데 우리는 법이 어렵다'],
-   after:['아침·오후·저녁에 맞는 차를 고른다','카페인 없이도 쉬는 리듬이 생긴다','10분 차 명상을 혼자 할 수 있다'],
-   lessons:[['1회','아침의 차','sunForest',['하루를 여는 5분','물 온도와 시간']],['2회','오후의 차','teapot',['집중이 끊길 때','눈과 어깨 쉬기']],['3회','저녁의 차','forest',['디카페인으로 하루 닫기','차 명상 10분']]],
-   fit:['오후만 되면 지치는 직장인','차를 제대로 배워 보고 싶은 입문자','팀 웰니스 프로그램을 찾는 HR 담당자']}
+  {id:'tea-live', kind:'라이브 · 월 1회', who:'lee', photo:'teaPour', strip:['teapot','teaCup','pine','sunForest','birch','forest'], title:'집중을 우리는 하루 세 잔', hook:'오후 3시, 집중이 끊기는 순간을 3분 우림으로 되돌려요. 티 키트를 받아 함께 우리는 월 1회 라이브 클래스.',
+   promise:'한 달에 한 번, 업무 리듬에 맞춘 나만의 3분 우림 루틴을 만듭니다.',
+   pain:['오후만 되면 집중이 끊긴다','커피만 늘고 오후엔 더 무겁다','차는 좋아하는데 우리는 법이 어렵다'],
+   after:['아침·오후·저녁 업무 리듬에 맞는 차를 고른다','카페인 없이도 집중을 되찾는 3분 루틴이 생긴다','팀 미팅 전 3분 우림을 직접 진행할 수 있다'],
+   lessons:[['1회','아침의 잔','sunForest',['하루를 여는 첫 잔','물 온도와 우림 시간']],['2회','오후의 잔','teapot',['집중이 끊길 때','3분 우림 루틴']],['3회','저녁의 잔','forest',['디카페인으로 하루 닫기','하루를 정리하는 차 10분']]],
+   fit:['오후만 되면 집중이 끊기는 직장인','차를 제대로 배워 보고 싶은 입문자','사계절 프로그램의 월간 티 세션을 미리 경험하고 싶은 HR 담당자']}
 ];
 
 /* ===== 실습 소재 ===== */
@@ -536,7 +562,7 @@ function page(name){
 function route(){
   var h = decodeURIComponent((location.hash || '#home').slice(1)) || 'home';
   var m, anchor = document.getElementById(h);
-  if(anchor && !/^(home|workshop|program|online|team|contact|brief|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView(); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
+  if(anchor && !/^(home|workshop|program|online|team|contact|brief|privacy|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView(); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
   hideSticky();
   if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
   else if(h === 'workshop'){ page('workshop'); app.innerHTML = vWorkshop(); bindWorkshop(); }
@@ -545,6 +571,7 @@ function route(){
   else if(h === 'online'){ page('online'); app.innerHTML = vOnline(); }
   else if((m = h.match(/^c-(.+)$/)) && cById(m[1])){ page('course'); app.innerHTML = vCourse(cById(m[1])); bindCourse(cById(m[1])); }
   else if(h === 'team' || /^t-(han|jun|lee)$/.test(h)){ page('team'); app.innerHTML = vTeam(); bindTeam(); if(h !== 'team'){ var el = document.getElementById(h); if(el){ setTimeout(function(){ el.scrollIntoView(); }, 0); } return; } }
+  else if(h === 'privacy'){ page('privacy'); app.innerHTML = vPrivacy(); }
   else if(h === 'brief'){ page('brief'); app.innerHTML = vBrief(); bindBrief(); }
   else if(h.indexOf('contact') === 0){ page('contact'); app.innerHTML = vContact(h.split('?')[1] || ''); bindContact(); }
   else { page(''); app.innerHTML = '<section class="section"><div class="wrap"><h1 class="h2">페이지를 찾을 수 없어요</h1><p class="lead" style="margin-top:12px"><a href="#home">홈으로 가기</a></p></div></section>'; }
@@ -553,7 +580,7 @@ function route(){
   window.scrollTo(0, 0);
   if(location.hash) app.focus({preventScroll:true});
 }
-function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'도입 문의'}[h.split('?')[0]] || ''; }
+function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'도입 문의'}[h.split('?')[0]] || ''; }
 function wById(id){ for(var i = 0; i < W.length; i++) if(W[i].id === id) return W[i]; return null; }
 function cById(id){ for(var i = 0; i < C.length; i++) if(C[i].id === id) return C[i]; return null; }
 function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · '); }
@@ -569,9 +596,9 @@ function vHome(){
       '<div class="btns"><a class="btn btn-lime" href="#contact">워크샵 문의</a><a class="btn btn-line" href="#brief">결재용 한 페이지 보기</a></div>' +
     '</div>' +
     '<div class="photo"><img src="' + src('desk', 1600) + '" alt="' + esc(PH.desk.alt) + '" fetchpriority="high"><span class="credit">Photo: ' + esc(PH.desk.by) + ' / Unsplash</span>' +
-      '<div class="steep" id="steep" role="img" aria-label="3분 타이머: 차가 우러나는 동안 에이전트가 회의록 정리를 끝내는 장면">' +
+      '<div class="steep" id="steep" role="img" aria-label="3분 타이머: 차가 우러나는 동안 팀별 에이전트가 일을 끝내는 장면">' +
         '<div class="steep-dial"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" class="trk"/><circle cx="32" cy="32" r="28" class="arc" id="steepArc"/></svg><span class="steep-t en" id="steepT">3:00</span></div>' +
-        '<div class="steep-log"><b class="en">STEEP · 3:00</b><ol id="steepLog"><li>회의록 5개 읽는 중</li><li>액션 아이템 12개 찾음</li><li>담당자별로 나눠 메일 초안 작성</li><li class="done">끝 — 차가 다 우러났어요</li></ol></div>' +
+        '<div class="steep-log"><b class="en" id="steepRole">STEEP · 3:00 · 기획팀</b><ol id="steepLog"><li>회의록 5개 읽는 중</li><li>액션 아이템 12개 찾음</li><li>담당자별로 나눠 메일 초안 작성</li><li class="done">끝 — 차가 다 우러났어요</li></ol></div>' +
       '</div></div>' +
   '</section>' +
   '<div class="wrap"><div class="proof">' +
@@ -669,7 +696,18 @@ function actPanel(k){
   var a = ACT[k];
   return '<p class="muted" style="margin:0 0 16px">' + esc(a.note) + '</p><div class="acts">' + a.items.map(function(it){ return '<div class="act"><b>' + esc(it[0]) + '</b><span>' + esc(it[1]) + '</span></div>'; }).join('') + '</div>';
 }
-var steepTimer = null;
+var steepTimer = null, steepIdx = 0;
+var STEEP = [
+  ['기획팀',['회의록 5개 읽는 중','액션 아이템 12개 찾음','담당자별로 나눠 메일 초안 작성']],
+  ['영업팀',['어제 들어온 문의 9건 분류','고객별 답변 초안 작성','견적 필요한 3건 표시']],
+  ['HR팀',['지원서 40건 읽는 중','직무 요건별로 점수 정리','면접 질문 초안 작성']],
+  ['마케팅팀',['경쟁사 페이지 6곳 확인','이번 주 바뀐 점 정리','회의용 1쪽 요약 작성']]
+];
+function setSteepScene(){
+  var sc = STEEP.at(steepIdx % STEEP.length), items = $$('#steepLog li'), r = $('#steepRole');
+  if(r) r.textContent = 'STEEP · 3:00 · ' + sc[0];
+  sc[1].forEach(function(t, i){ var li = items.at(i); if(li) li.textContent = t; });
+}
 function startSteep(){
   if(steepTimer){ clearInterval(steepTimer); steepTimer = null; }
   var T = $('#steepT'), arc = $('#steepArc'), items = $$('#steepLog li');
@@ -679,10 +717,10 @@ function startSteep(){
     items.forEach(function(li, i){ li.classList.toggle('on', sec >= [20, 70, 125, 180].at(i)); }); };
   var reduce = false; try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
   if(reduce){ show(180); return; }
-  var sec = 0, hold = 0; show(0);
+  var sec = 0, hold = 0; setSteepScene(); show(0);
   steepTimer = setInterval(function(){
     if(!document.body.contains(T)){ clearInterval(steepTimer); steepTimer = null; return; }
-    if(sec >= 180){ if(++hold > 25){ sec = 0; hold = 0; } show(sec); return; }
+    if(sec >= 180){ if(++hold > 25){ sec = 0; hold = 0; steepIdx++; setSteepScene(); } show(sec); return; }
     sec = Math.min(180, sec + 2); show(sec);
   }, 100);
 }
@@ -860,7 +898,7 @@ function vCourse(c){
   '</div></section>' +
   '<section class="section" id="curri"><div class="wrap" style="max-width:960px">' +
     '<div class="sec-head"><div><p class="eyebrow">Curriculum</p><h2 class="h2">무엇을 배우나요</h2></div></div>' +
-    c.lessons.map(function(l){ return '<div class="lesson">' + ph(l[2], 500) + '<div><span class="wk">' + esc(l[0]) + '</span><h3 class="h3">' + esc(l[1]) + '</h3><ul>' + l[3].map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div></div>'; }).join('') +
+    c.lessons.map(function(l, i){ return '<div class="lesson">' + ph(l[2], 500) + '<div><span class="wk">' + ['첫 잔','두 번째 잔','세 번째 잔','네 번째 잔','다섯 번째 잔'].at(i) + ' · ' + esc(l[0]) + '</span><h3 class="h3">' + esc(l[1]) + '</h3><ul>' + l[3].map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div></div>'; }).join('') +
   '</div></section>' +
   '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">For you</p><h2 class="h2">이런 분께 맞아요</h2></div></div>' +
@@ -932,6 +970,22 @@ function bindTeam(){
   }); });
 }
 
+/* ===== 개인정보처리방침 ===== */
+function vPrivacy(){
+  var sec = function(t, b){ return '<h2 class="bh">' + t + '</h2>' + b; };
+  return '<section class="section tight brief"><div class="wrap" style="max-width:860px">' +
+    '<p class="eyebrow">Privacy</p><h1 class="h1 one" style="font-size:clamp(26px,3vw,38px)">개인정보처리방침</h1>' +
+    '<p class="lead" style="margin:14px 0 0">[상호](이하 “PAUSE”)는 도입 문의와 알림 신청에 필요한 최소한의 개인정보만 받아요.</p>' +
+    sec('1. 수집하는 항목', '<ul class="checks"><li>도입 문의: 회사명, 담당자 성함, 이메일, 연락처(선택), 문의 내용</li><li>오픈 알림 신청: 이름, 이메일</li></ul>') +
+    sec('2. 이용 목적', '<p>문의 응대, 견적·제안서 전달, 워크샵 일정 조율, 강의 오픈 알림 발송에만 써요.</p>') +
+    sec('3. 보관 기간', '<p>상담이 끝난 날부터 1년간 보관한 뒤 지체 없이 파기해요. 법령에 따로 정한 기간이 있으면 그 기간을 따라요.</p>') +
+    sec('4. 제3자 제공과 처리 위탁', '<p>본인 동의 없이 제3자에게 제공하지 않아요. 메일·문의 접수 도구를 쓰는 경우 해당 업체와 위탁 내용을 이 페이지에 알려 드려요.</p>') +
+    sec('5. 이용자의 권리', '<p>언제든 내 정보의 열람·정정·삭제·처리 정지를 요청할 수 있어요. 아래 연락처로 요청하시면 바로 처리해요.</p>') +
+    sec('6. 개인정보 보호책임자', '<p>[책임자 성함] · [문의 이메일]</p>') +
+    '<p class="muted" style="margin-top:36px;font-size:13px">시행일: [시행일]</p>' +
+  '</div></section>';
+}
+
 /* ===== 대표·본부장용 한 페이지 ===== */
 function vBrief(){
   var row = function(k, v){ return '<tr><th scope="row">' + k + '</th><td>' + v + '</td></tr>'; };
@@ -945,6 +999,14 @@ function vBrief(){
       row('개인', '각자 “다음 2주에 해 볼 한 가지” 실행 약속') +
       row('보고', '우림 리포트 — 24시간 안에 HR 1쪽: 참여율, 만든 결과물, 만족도, 다음 90일 제안') +
     '</table></div>' +
+    '<h2 class="bh">우림 리포트는 이렇게 생겼어요</h2>' +
+    '<div class="rp" aria-label="우림 리포트 예시">' +
+      '<div class="rp-hd"><span class="en">PAUSE · STEEP REPORT</span><span class="rp-tag">예시 · 가상 회사와 가상 숫자</span></div>' +
+      '<p class="rp-t">○○주식회사 마케팅본부 · 오후 사무실 워크샵</p>' +
+      '<div class="rp-k"><div><b>24명</b><span>참가</span></div><div><b>21명</b><span>에이전트 완성</span></div><div><b>6개</b><span>팀 에이전트</span></div><div><b>4.7</b><span>만족도 / 5</span></div></div>' +
+      '<div class="rp-c"><div><b>오늘 우린 에이전트</b><ul><li>다즐링 리포터 — 주간 보고 초안</li><li>우롱 리서처 — 경쟁사 변화 요약</li><li>캐모마일 응답봇 — 고객 문의 초안</li></ul></div><div><b>첫 잔 약속 TOP 3</b><ul><li>매주 월요일 보고 초안을 에이전트로</li><li>캠페인 회고를 에이전트 요약으로</li><li>문의 답변 초안을 팀 공용으로</li></ul></div></div>' +
+      '<p class="rp-n"><b>다음 90일 제안</b> 30일 차 설문으로 사용 유지율 확인 → 숙성 90일 체크인 2회</p>' +
+    '</div>' +
     '<h2 class="bh">2. 성과는 이렇게 봐요</h2><div class="tbl-wrap"><table class="cmp bt"><thead><tr><th scope="col">시점</th><th scope="col">지표</th></tr></thead><tbody>' +
       '<tr><td>당일</td><td>에이전트를 완성한 참가자 비율</td></tr><tr><td>30일</td><td>만든 에이전트를 아직 쓰는 비율 (설문)</td></tr><tr><td>60~90일</td><td>처음 함께 정한 업무 지표 (예: 주간 보고 작성 시간)</td></tr>' +
     '</tbody></table></div>' +
@@ -991,6 +1053,7 @@ function vContact(q){
       '<label class="field full">외부 AI 서비스(Claude 등) 사내 접속<select name="access"><option value="">잘 모르겠어요</option><option>가능해요</option><option>막혀 있어요</option><option>일부만 가능해요</option></select></label>' +
       '<label class="field full">하고 싶은 이야기<textarea name="msg" placeholder="교육 목적, 예산 범위, 리트리트 희망 지역, 카페인·알레르기 제한 등"></textarea></label>' +
       '<label class="full" style="display:flex;gap:8px;align-items:center;font-size:15px"><input type="checkbox" name="proposal" style="width:18px;height:18px;accent-color:#0E0E0E"' + (type === 'proposal' ? ' checked' : '') + '> 제안서가 필요해요 (내부 검토용)</label>' +
+      '<div class="full field consent"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:14px;line-height:1.6"><input type="checkbox" name="agree" required style="width:18px;height:18px;margin-top:2px;accent-color:#0E0E0E"> <span>[필수] 문의 응대를 위해 회사명·성함·이메일·연락처를 수집하고, 상담이 끝난 뒤 1년간 보관하는 데 동의해요. <a href="#privacy">개인정보처리방침</a></span></label><span class="err">동의가 필요해요</span></div>' +
       '<div class="full"><button class="btn btn-lime" type="submit">문의 보내기</button></div>' +
     '</form>' +
   '</div></section>';
@@ -1017,7 +1080,7 @@ function bindForm(f, ok){
     e.preventDefault();
     var bad = null;
     $$('[required]', f).forEach(function(el){
-      var v = String(el.value || '').trim(), wrong = !v || (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+      var v = String(el.value || '').trim(), wrong = el.type === 'checkbox' ? !el.checked : (!v || (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)));
       el.closest('.field').classList.toggle('bad', wrong); el.setAttribute('aria-invalid', String(wrong));
       if(wrong && !bad) bad = el;
     });
@@ -1037,7 +1100,7 @@ var sb = null, user = null;
 if(AUTH_CONFIG.supabaseUrl && AUTH_CONFIG.supabaseAnonKey && window.supabase){
   try { sb = window.supabase.createClient(AUTH_CONFIG.supabaseUrl, AUTH_CONFIG.supabaseAnonKey, {auth:{flowType:'pkce', detectSessionInUrl:true, persistSession:true}}); } catch(e){ sb = null; }
 }
-function renderAuth(){ $('#authArea').innerHTML = user ? '<button type="button" class="lnk" data-logout>' + esc(user) + ' · 로그아웃</button>' : '<button type="button" class="lnk" data-login>로그인</button>'; }
+function renderAuth(){ if(!sb){ $('#authArea').innerHTML = ''; return; } $('#authArea').innerHTML = user ? '<button type="button" class="lnk" data-logout>' + esc(user) + ' · 로그아웃</button>' : '<button type="button" class="lnk" data-login>로그인</button>'; }
 function loginDialog(){
   openDialog('<h2>로그인 · 가입</h2><p class="muted" style="margin:0">온라인강의 수강과 알림 신청에 쓰여요.</p><button type="button" class="sbtn kakao" data-social="kakao">카카오로 시작하기</button><button type="button" class="sbtn" data-social="google">Google로 시작하기</button>');
 }
