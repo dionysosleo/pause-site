@@ -891,7 +891,7 @@ function vOnline(){
     '<div class="price-box" style="margin-top:28px"><div><p class="eyebrow">Package</p><div class="big" style="font-size:28px">워크샵 + 3개월 이용권</div><p class="muted" style="margin:8px 0 0">워크샵 참가자 전원에게 사후 복습 VOD와 티 라이브를 3개월 열어 드려요. 3개월 뒤 숙성 90일이나 정기프로그램으로 이어 갈지 함께 봐요.</p></div><a class="btn btn-lime" href="#contact">패키지 문의</a></div>' +
   '</div></section>' +
   '<section style="padding-bottom:88px"><div class="wrap"><div class="cgrid">' +
-    C.map(function(c){ return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span class="badge ln" style="align-self:flex-start">' + esc(c.kind) + '</span><h2 class="h3" style="font-size:22px">' + esc(c.title) + '</h2><p class="muted" style="margin:0">' + esc(c.hook) + '</p><span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
+    C.map(function(c){ return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span class="badge ln" style="align-self:flex-start">' + esc(c.kind) + '</span><h2 class="h3 one" style="font-size:clamp(17px,1.55vw,22px)">' + esc(c.title) + '</h2><p class="muted" style="margin:0">' + esc(c.hook) + '</p><span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
   '</div></div></section>';
 }
 
