@@ -466,6 +466,11 @@ function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(
 
 /* ===== 사진 (Unsplash, 무료 라이선스) — 실제 사진이 생기면 이 주소만 바꾸면 됩니다 ===== */
 var PH = {
+  fTable:   {local:'img/field/tea-table.jpg', alt:'찻잔과 자료가 놓인 출강 현장의 둥근 테이블', by:'이유진 출강 현장'},
+  fSweets:  {local:'img/field/tea-sweets.jpg', alt:'찻잔과 다과가 놓인 출강 현장의 찻자리', by:'이유진 출강 현장'},
+  fSetting: {local:'img/field/tea-setting.jpg', alt:'다구가 놓인 출강 현장의 긴 테이블', by:'이유진 출강 현장'},
+  fWorkshop:{local:'img/field/tea-workshop.jpg', alt:'테이블에서 차를 우리며 진행하는 팀 티 워크숍', by:'이유진 출강 현장'},
+  fLounge:  {local:'img/field/tea-lounge.jpg', alt:'야외 테라스에서 차를 내는 티 라운지', by:'이유진 출강 현장'},
   desk:     {id:'1742764915162-20349ae0638f', alt:'나무 테이블 위 노트북과 주전자, 찻잔', by:'Caroline Badran'},
   desk2:    {id:'1746792613213-c154e2891449', alt:'노트북과 화분이 놓인 나무 책상', by:'Andrea Stuart'},
   teaCup:   {id:'1577016029703-cc22a7c0c28c', alt:'갈색 다관 옆 찻잔', by:'Sergey N'},
@@ -486,11 +491,11 @@ var PH = {
   teapot:   {id:'1629440404898-4a527437484f', alt:'나무 테이블 위 갈색 도자기 다관', by:'jay huang'},
   manLaptop:{id:'1573183205228-df337e65dab0', alt:'테이블에서 노트북으로 일하는 사람', by:'Miguel Dominguez'}
 };
-function src(k, w){ return 'https://images.unsplash.com/photo-' + PH[k].id + '?auto=format&fit=crop&w=' + (w || 1200) + '&q=70'; }
+function src(k, w){ if(PH[k].local) return PH[k].local; return 'https://images.unsplash.com/photo-' + PH[k].id + '?auto=format&fit=crop&w=' + (w || 1200) + '&q=70'; }
 function tph(t, w, cls){ return t.img ? '<div class="photo portrait' + (cls ? ' ' + cls : '') + '"><img src="' + esc(t.img) + '" alt="' + esc(t.nm) + ' 사진" loading="lazy"></div>' : ph(t.pic, w, cls); }
 function ph(k, w, cls, eager){
   var p = PH[k];
-  return '<div class="photo' + (cls ? ' ' + cls : '') + '"><img src="' + src(k, w) + '" alt="' + esc(p.alt) + '"' + (eager ? '' : ' loading="lazy"') + ' decoding="async"><span class="credit">Photo: ' + (p.by ? esc(p.by) + ' / ' : '') + 'Unsplash</span></div>';
+  return '<div class="photo' + (cls ? ' ' + cls : '') + '"><img src="' + src(k, w) + '" alt="' + esc(p.alt) + '"' + (eager ? '' : ' loading="lazy"') + ' decoding="async"><span class="credit">' + (p.local ? esc(p.by) : 'Photo: ' + (p.by ? esc(p.by) + ' / ' : '') + 'Unsplash') + '</span></div>';
 }
 
 /* ===== 강사 ===== */
@@ -518,13 +523,13 @@ function blurb(t){ return t.nm + ' (' + t.role + ') — ' + t.line + '. ' + t.bo
 /* ===== 워크샵 ===== */
 var W = [
   {id:'outdoor', kind:'종일 · 야외', hours:'09:30~17:30 · 7시간', badge:'대표 프로그램 1', title:'숲에서 보내는 종일 워크샵', sub:'사무실을 벗어나 서울 근교·강원 숲속 교육장에서 하루. 오전엔 걷고 차를 마시고, 낮엔 팀이 쓸 에이전트를 만들고, 오후엔 숲속 티 세션으로 닫아요',
-   photos:['birch','woods','cabin'], more:['pine','teaPour','sunForest','forest'], who:['lee','han','jun'], size:'15~40명', place:'서울 근교·강원(홍천 등) 야외 교육장·숲속 숙소 — 장소 연결 가능', tools:'Claude + 팀 과제 1개',
+   photos:['birch','woods','cabin'], more:['fLounge','fTable','fSweets','fSetting'], who:['lee','han','jun'], size:'15~40명', place:'서울 근교·강원(홍천 등) 야외 교육장·숲속 숙소 — 장소 연결 가능', tools:'Claude + 팀 과제 1개',
    fit:'연말·분기 팀 워크샵을 교육 성과로 남기고 싶을 때, 하루를 통째로 집중해 팀 과제를 끝내고 싶을 때',
    make:['팀이 함께 쓰는 업무 에이전트 1개','직무별 에이전트 (보고서·데이터·CS 중 택)','다음 90일 팀 약속'],
    opt:'1박 2일로 늘리기 — 저녁 숲속 티 세션, 우리 팀 퀴즈·룰렛 게임 레크리에이션, 다음 날 아침 산책과 쇼케이스를 더해요.',
    tl:[['09:30','아침의 잔 · 숲길 산책','핸드폰을 내려놓고 20분 걷고, 오늘의 찻잎 고르기',1],['10:10','첫 잔 · 맞이','내 에이전트에게 이름과 말투를 정해 주고 첫 인사. 무엇을 맡길지 진단 (한성희)'],['10:50','3분 챌린지','차가 우러나는 3분 안에 에이전트가 끝내는 일을 눈앞에서 보기'],['11:30','연동 · 막히고 고치기','메일·캘린더·문서와 연결하다 막히는 순간을 함께 풀기 (이준혁)'],['12:30','야외 점심','—'],['13:30','에이전트에게 배우기','내 업무를 털어놓고, 묻고 배우며 다섯 번 고쳐 완성'],['15:00','숲속 찻자리 · 30분','계절 차와 1:1 이야기 (이유진)',1],['15:30','시음회 · 함께 해내기','서로의 에이전트를 소개하고 시연하기'],['16:40','마지막 잔 · 찻자리 마무리','동료들과 마지막 잔을 나누며 첫 잔 약속 적기',1],['17:30','끝','다음 날 우림 리포트 전달']]},
   {id:'office', kind:'오후 · 사무실', hours:'13:00~18:00(5시간) 또는 19:00(6시간)', badge:'대표 프로그램 2', title:'사무실에서 보내는 오후 워크샵', sub:'오전 업무를 마치고 귀사 교육장으로. 저녁 전까지 팀이 쓸 에이전트 하나를 만들고, 마무리는 차 한 잔과 시연이에요',
-   photos:['laptops','teaPour','notes'], more:['laugh','bookLaptop','teaCup','pointNotes'], who:['lee','han','jun'], size:'10~30명', place:'귀사 교육장·회의실', tools:'Claude 1개로 집중',
+   photos:['laptops','teaPour','notes'], more:['fWorkshop','fTable','fSweets','fSetting'], who:['lee','han','jun'], size:'10~30명', place:'귀사 교육장·회의실', tools:'Claude 1개로 집중',
    fit:'한 팀이 같은 업무를 바꾸고 싶을 때, 하루를 통째로 비우기 어려울 때, 정기프로그램의 분기 회차',
    make:['팀이 매주 쓰는 보고서·회의록 정리 에이전트','고객 문의 답변 초안 봇 또는 경쟁사 조사 자동화','각자 “다음 2주에 해 볼 한 가지” 약속'],
    opt:'5시간은 18:00, 6시간은 시연을 늘려 19:00에 끝나요.',
@@ -568,7 +573,7 @@ var FAQ_CORP = [
   ['우리 회사는 외부 AI 접속이 막혀 있어요.','3일 전에 보안 담당자와 접속 가능 여부를 확인해요. 막혀 있으면 교육용 실습 계정과 공개 자료로 진행해요.'],
   ['워크샵이 끝나면 에이전트는 어떻게 되나요?','설정과 사용법을 문서로 드려요. 각자 계정이나 회사 도구로 옮겨 계속 쓸 수 있고, 30일·90일에 잘 쓰고 있는지 함께 확인해요.'],
   ['차를 못 마시는 사람도 있어요.','디카페인과 허브 차를 함께 준비해요. 알레르기나 카페인 제한은 문의할 때 알려 주세요.'],
-  ['담당자는 뭘 준비하면 되나요?','공간만 준비해 주세요. 차·다구·실습 자료와 세팅, 정리, 다음 날 리포트까지 저희가 맡아요.'],
+  ['회사에서는 무엇을 준비하나요?','공간(테이블·의자·콘센트·와이파이), 스크린과 마이크, 참가자 노트북 1인 1대를 준비해 주세요. 보안 확인 담당자 연결과 참가자 공지도 부탁드려요. 차·다구와 세팅·정리, 실습 자료, 사전학습 영상, 다음 날 리포트는 저희가 맡아요.'],
   ['교육 결과는 어떻게 보고하나요?','다음 날 HR에 1쪽 우림 리포트를 드려요. 참여 인원, 만든 에이전트, 만족도, 다음 90일 제안이 담겨요.'],
   ['진행 사진을 사내에 써도 되나요?','네. 참가자 동의를 받은 사진을 골라 보내 드려요.'],
   ['강연과 워크샵을 함께 할 수 있나요?','네. 강연으로 전체의 문을 열고, 팀 대표들이 워크샵을 이어 받는 구성이 100명 이상 조직에 잘 맞아요.'],
@@ -669,7 +674,7 @@ function vHome(){
   '<section class="section" style="padding-bottom:0"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Tea ritual + AI ceremony</p><h2 class="h2 one">동반자 AI, 그리고 함께하는 찻자리</h2></div><p class="lead">일을 덜어 주는 동반자 AI를 맞이하는 하루. 그 안에서 잊지 말아야 할 가장 인간적인 것, 동료와 함께하는 찻자리. 차와 에이전트로 그걸 느끼고 만들어 가요.</p></div>' +
     '<div class="day">' +
-      dayCell('teaCup','HELLO','내 에이전트와 첫 인사') + dayCell('teapot','3:00','3분 챌린지 — 우러나는 동안 끝나는 일') + dayCell('laugh','TOGETHER','동료와 함께하는 찻자리') +
+      dayCell('teaCup','HELLO','내 에이전트와 첫 인사') + dayCell('teapot','3:00','3분 챌린지 — 우러나는 동안 끝나는 일') + dayCell('fTable','TOGETHER','동료와 함께하는 찻자리') +
       dayCell('notes','COASTER','첫 잔 약속 — 찻잔 받침 카드') + dayCell('bookLaptop','REPORT','우림 리포트 — 다음 날 HR 1쪽') +
     '</div>' +
   '</div></section>' +
@@ -841,7 +846,7 @@ function vWDetail(w){
       '<h2>만들어 가는 것</h2><ul class="checks">' + w.make.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h2>진행 순서</h2><ol class="tl">' + w.tl.map(function(r){ return '<li' + (r[3] ? ' class="tea"' : '') + '><span class="t">' + esc(r[0]) + '</span><b>' + esc(r[1]) + (r[3] ? ' ☕' : '') + '</b><span>' + esc(r[2]) + '</span></li>'; }).join('') + '</ol>' +
       (w.opt ? '<h2>더하기</h2><p>' + esc(w.opt) + '</p>' : '') +
-      '<h2>현장 사진</h2><div class="field-gal">' + (w.more || []).concat(w.photos.slice(1)).map(function(p){ return ph(p, 700); }).join('') + '</div>' +
+      '<h2>현장 사진 <span class="muted" style="font-size:14px;font-weight:500">· 이유진 강사 출강 현장</span></h2><div class="field-gal">' + (w.more || []).concat(w.photos.slice(1)).map(function(p){ return ph(p, 700); }).join('') + '</div>' +
       '<h2>담당자님께 미리 받는 것 (D-3)</h2><ul class="checks"><li>사내 보안 규정과 외부 AI 서비스 접속 가능 여부</li><li>직무별로 매주 쓰는 업무 양식 1~2개 (실습 예제로 씁니다)</li><li>참가 인원과 직무 구성, 카페인·알레르기 제한</li></ul>' +
       '<h2>끝나고 이어지는 것</h2><ul class="checks"><li>24시간 안에 우림 리포트 (HR 1쪽)</li><li>48시간 안에 첫 잔 약속 카드와 연습 과제가 각자에게</li><li>사후 복습 VOD로 같은 예제를 다시</li><li>원하면 숙성 90일으로 이어 가기 — <a href="#program">정기프로그램 보기</a></li></ul>' +
       '<h2>함께하는 강사</h2>' + w.who.map(function(k){ var t = T[k]; return '<p><b>' + t.nm + '</b> <span class="muted">· ' + esc(t.line) + '</span><br>이 워크샵에서 맡는 일: ' + esc(t.job) + '</p>'; }).join('') +
