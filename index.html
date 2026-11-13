@@ -87,6 +87,12 @@ body.sell .gnb,body.sell .burger,body.sell .lnk{display:none}
 .hero .photo{min-height:420px}
 .hero .photo>img{position:absolute;inset:0}
 .hero-tag{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:var(--muted)}
+.hero-about{margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1.5px solid var(--ink)}
+.hero-about div{padding:14px 16px 0 0}
+.hero-about div+div{padding-left:16px;border-left:1px solid var(--hair)}
+.hero-about dt{font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--green);margin-bottom:6px}
+.hero-about dd{margin:0;font-size:14px;line-height:1.55;font-weight:600;color:var(--ink)}
+@media (max-width:640px){.hero-about{grid-template-columns:minmax(0,1fr)}.hero-about div,.hero-about div+div{padding:12px 0;border-left:0;border-bottom:1px solid var(--hair)}}
 .hero-tag span{width:8px;height:8px;border-radius:50%;background:var(--green)}
 .hero-float{position:absolute;left:24px;bottom:24px;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 12px 32px rgba(0,0,0,.18);max-width:300px;font-size:14px;line-height:1.5}
 .hero-float b{display:block;font-family:var(--en);font-size:12px;letter-spacing:.06em;color:var(--green);margin-bottom:4px}
@@ -597,9 +603,14 @@ function vHome(){
   return '' +
   '<section class="hero">' +
     '<div class="hero-copy">' +
-      '<p class="hero-tag"><span aria-hidden="true"></span>기업 AI 실무 워크샵 · Pause &amp; Rebuild</p>' +
-      '<h1 class="h1 one" style="font-size:clamp(32px,3.2vw,48px)"><span class="bl">우러나는 3분,</span> <span class="bl">끝나는 일 하나.</span></h1>' +
-      '<p class="lead">차 한 잔이 우러나는 3분 동안 끝나는 일을, 팀마다 하나씩 AI 에이전트로 만들어요. 듣고 끝나는 특강이 아니라 실제 업무가 바뀌는 하루예요. 결과는 다음 날 우림 리포트로, 90일 뒤에는 실제로 쓰는지로 확인해요.</p>' +
+      '<p class="hero-tag"><span aria-hidden="true"></span>PAUSE · 우러나는 3분, 끝나는 일 하나.</p>' +
+      '<h1 class="h1" style="font-size:clamp(32px,3.4vw,52px)"><span class="bl">팀 업무 하나를,</span> <span class="bl">하루 만에 AI 에이전트로.</span></h1>' +
+      '<p class="lead">PAUSE는 기업 팀을 위한 AI 실무 워크샵이에요. 강의를 듣는 대신 팀원 모두가 실제 업무 하나를 골라 에이전트로 만들고, 차 한 잔으로 집중을 지키며 그날 안에 완성해요.</p>' +
+      '<dl class="hero-about">' +
+        '<div><dt>누구와</dt><dd>티 디렉터 · AI 코치 · 빌더, 세 사람</dd></div>' +
+        '<div><dt>어떻게</dt><dd>종일 야외 또는 오후 사무실, 툴은 하나로</dd></div>' +
+        '<div><dt>무엇이 남나</dt><dd>팀 에이전트, 다음 날 1쪽 리포트, 90일 사용 확인</dd></div>' +
+      '</dl>' +
       '<div class="btns"><a class="btn btn-lime" href="#contact">워크샵 문의</a><a class="btn btn-line" href="#proposal">제안서 받기</a><a class="btn btn-line" href="#brief">결재용 한 페이지</a></div>' +
     '</div>' +
     '<div class="photo"><img src="' + src('desk', 1600) + '" alt="' + esc(PH.desk.alt) + '" fetchpriority="high"><span class="credit">Photo: ' + esc(PH.desk.by) + ' / Unsplash</span>' +
