@@ -298,6 +298,22 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 .prog .meta{margin:0 0 8px;font-size:14px;font-weight:700;color:var(--muted)}
 .prog p{margin:0;font-size:15px;line-height:1.65;color:var(--ink2)}
 @media (max-width:900px){.progs{grid-template-columns:minmax(0,1fr)}.prog h3{white-space:normal}}
+.it-hero{position:relative;min-height:min(86vh,760px);display:flex;align-items:flex-end;color:#fff;overflow:hidden}
+.it-hero>.photo{position:absolute;inset:0;border-radius:0}
+.it-hero>.photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.it-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.72))}
+.it-hero .wrap{position:relative;z-index:1;padding-top:120px;padding-bottom:72px;display:flex;flex-direction:column;gap:20px}
+.it-grid{margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1.5px solid var(--ink)}
+.it-grid div{padding:22px 20px 24px 0}
+.it-grid div+div{padding-left:20px;border-left:1px solid var(--hair)}
+.it-grid dt{font-size:13px;font-weight:800;color:var(--green);margin-bottom:8px}
+.it-grid dd{margin:0;font-size:17px;font-weight:600;line-height:1.6}
+.it-flow{grid-template-columns:repeat(6,minmax(0,1fr))}
+.it-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.it-photos .photo{aspect-ratio:4/3;border-radius:12px}
+.it-photos .photo>img{position:absolute;inset:0}
+@media (max-width:900px){.it-grid{grid-template-columns:1fr 1fr}.it-grid div:nth-child(3){padding-left:0;border-left:0}.it-flow{grid-template-columns:1fr 1fr}.it-photos{grid-template-columns:1fr}}
+@media (max-width:560px){.it-grid{grid-template-columns:1fr}.it-grid div,.it-grid div+div{padding:16px 0;border-left:0;border-bottom:1px solid var(--hair)}}
 .day{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .dc{margin:0;display:flex;flex-direction:column;gap:10px}
 .dc .photo{aspect-ratio:3/4;border-radius:14px}
@@ -419,7 +435,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 <div class="pv-note" id="pvNote" hidden>이 미리보기 화면에서는 사진이 보이지 않아요. 사진이 들어간 실제 사이트: <a href="https://pause-site-seven.vercel.app/" target="_blank" rel="noopener">pause-site-seven.vercel.app</a></div>
 <header class="hd">
   <div class="hbar">
-    <a class="logo" href="#home" aria-label="PAUSE 홈"><i aria-hidden="true"></i><b>PAUSE</b></a>
+    <a class="logo" href="#intro" aria-label="PAUSE 소개"><i aria-hidden="true"></i><b>PAUSE</b></a>
     <ul class="gnb" id="gnb">
       <li><a href="#workshop" data-nav="workshop">워크샵</a></li>
       <li><a href="#program" data-nav="program">정기프로그램</a></li>
@@ -444,7 +460,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 <footer>
   <div class="wrap">
     <div style="display:flex;flex-direction:column;gap:12px;max-width:420px">
-      <a class="logo" href="#home"><i aria-hidden="true"></i><b>PAUSE</b></a>
+      <a class="logo" href="#intro"><i aria-hidden="true"></i><b>PAUSE</b></a>
       <p style="margin:0"><b class="en" style="color:#fff">Pause &amp; Rebuild.</b> 우러날수록 깊어지는 일. 잠깐 멈추고, AI와 함께 다시 설계하는 기업 워크샵.</p>
       <p style="margin:0" class="en">[상호] · [대표자] · [사업자등록번호] · [문의 이메일]</p>
     </div>
@@ -614,11 +630,12 @@ function page(name){
   $$('#gnb a').forEach(function(a){ var on = a.getAttribute('data-nav') === name || (name === 'wdetail' && a.getAttribute('data-nav') === 'workshop'); if(on) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
 }
 function route(){
-  var h = decodeURIComponent((location.hash || '#home').slice(1)) || 'home';
+  var h = decodeURIComponent((location.hash || '#intro').slice(1)) || 'intro';
   var m, anchor = document.getElementById(h);
-  if(anchor && !/^(home|workshop|program|online|team|contact|proposal|brief|privacy|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView(); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
+  if(anchor && !/^(intro|home|workshop|program|online|team|contact|proposal|brief|privacy|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView(); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
   hideSticky();
-  if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
+  if(h === 'intro'){ page(''); app.innerHTML = vIntro(); }
+  else if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
   else if(h === 'workshop'){ page('workshop'); app.innerHTML = vWorkshop(); bindWorkshop(); }
   else if((m = h.match(/^w-(.+)$/)) && wById(m[1])){ page('wdetail'); app.innerHTML = vWDetail(wById(m[1])); }
   else if(h === 'program'){ page('program'); app.innerHTML = vProgram(); }
@@ -641,6 +658,48 @@ function cById(id){ for(var i = 0; i < C.length; i++) if(C[i].id === id) return 
 function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · '); }
 
 /* ===== 홈: 기업 교육 담당자 ===== */
+function vIntro(){
+  var step = function(n, t, d){ return '<li><span class="en">' + n + '</span><b>' + t + '</b><p>' + d + '</p></li>'; };
+  return '' +
+  '<section class="it-hero">' + ph('fTable', 1800, '', true) +
+    '<div class="wrap">' +
+      '<p class="eyebrow" style="color:var(--lime)">동반자 AI, 그리고 함께하는 찻자리</p>' +
+      '<h1 class="h1 one" style="color:#fff;font-size:clamp(30px,4.4vw,60px)">업무 하나를, 하루 만에 AI 에이전트로.</h1>' +
+      '<p class="lead" style="color:#EDEDE8;max-width:640px">PAUSE는 기업 팀을 위한 AI 실무 워크샵이에요. 동료와 찻자리에 앉아 각자의 에이전트를 맞이하고, 실제 업무 하나를 맡겨 그날 안에 완성해요.</p>' +
+      '<div class="btns"><a class="btn btn-lime" href="#home">PAUSE 둘러보기 →</a><a class="btn btn-line" style="color:#fff;border-color:#fff" href="#proposal">제안서 받기</a></div>' +
+    '</div></section>' +
+  '<section class="section"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">At a glance</p><h2 class="h2 one">PAUSE를 한 장으로</h2></div></div>' +
+    '<dl class="it-grid">' +
+      '<div><dt>무엇을</dt><dd>팀원 모두가 실제 업무 하나를 골라 AI 에이전트로 만드는 실무 워크샵</dd></div>' +
+      '<div><dt>어떻게</dt><dd>숲에서 보내는 종일 워크샵(7시간) 또는 귀사에서 하는 오후 워크샵(5~6시간)</dd></div>' +
+      '<div><dt>누구와</dt><dd>티 디렉터 이유진 · AI 코치 한성희 · 에이전트 빌더 이준혁</dd></div>' +
+      '<div><dt>무엇이 남나</dt><dd>팀 에이전트, 2주 약속 카드, 다음 날 1쪽 결과 리포트, 90일 사용 확인</dd></div>' +
+    '</dl>' +
+  '</div></section>' +
+  '<section class="section dark"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">The day</p><h2 class="h2 one">하루는 이렇게 흘러가요</h2></div><p class="lead">차 한 잔으로 시작해 찻자리로 마무리해요. 듣는 시간보다 손을 쓰는 시간이 길어요.</p></div>' +
+    '<ol class="flow it-flow">' + step('01','맞이','내 에이전트에게 이름과 말투를 정해 주고 첫 인사') + step('02','3분 챌린지','차가 우러나는 동안 에이전트가 일 하나를 끝내는 걸 눈앞에서') + step('03','연동하고 고치기','우리 팀 업무와 도구를 연결하고, 막히면 함께 풀기') + step('04','티 브레이크','차 한 잔과 1:1 이야기') + step('05','시연','서로의 에이전트를 소개하고 시연') + step('06','찻자리 마무리','하루를 돌아보고 2주 약속 적기') + '</ol>' +
+  '</div></section>' +
+  '<section class="section"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">8명부터 400명까지</h2></div></div>' +
+    '<div class="tbl-wrap"><table class="cmp"><thead><tr><th scope="col">인원</th><th scope="col">추천</th><th scope="col">시간</th></tr></thead><tbody>' +
+      SIZES.map(function(r){ return '<tr><td><b>' + r[0] + '</b></td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>'; }).join('') +
+    '</tbody></table></div>' +
+  '</div></section>' +
+  '<section class="section dark"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">Hosts</p><h2 class="h2 one">강의만 하는 사람이 아니라, 매일 직접 하는 세 사람</h2></div></div>' +
+    '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#t-' + k + '">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p></a>'; }).join('') + '</div>' +
+  '</div></section>' +
+  '<section class="section"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">In the field</p><h2 class="h2 one">실제 출강 현장</h2></div><p class="lead">카카오, SK, 신한 VIP, 충북대학교, 아산상회, GS 52g 등 세 강사가 다녀온 곳이에요.</p></div>' +
+    '<div class="it-photos">' + ph('fLounge', 900) + ph('fWorkshop', 900) + ph('fSweets', 900) + '</div>' +
+  '</div></section>' +
+  '<section class="section paper"><div class="wrap" style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px">' +
+    '<h2 class="h2 one">더 자세히 볼까요?</h2>' +
+    '<div class="btns" style="justify-content:center"><a class="btn btn-lime" href="#home">PAUSE 둘러보기 →</a><a class="btn btn-line" href="#proposal">제안서 받기</a><a class="btn btn-line" href="#contact">도입 문의</a></div>' +
+  '</div></section>';
+}
 function vHome(){
   return '' +
   '<section class="hero">' +
