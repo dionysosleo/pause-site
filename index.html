@@ -268,6 +268,11 @@ body.sell{padding-bottom:72px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;font-weight:400}
 .chips label{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--hair);border-radius:999px;padding:8px 14px;cursor:pointer}
 .chips input{accent-color:var(--ink)}
+.field input[type=checkbox],.field input[type=radio],.check input{padding:0;min-height:0;border:0;border-radius:0;margin:0;width:18px;height:18px;flex:0 0 18px;accent-color:var(--ink);background:none}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:15px;line-height:24px;cursor:pointer}
+.check input{margin-top:3px}
+.check a{text-decoration:underline;text-underline-offset:3px}
+.consent{gap:6px}
 @media (max-width:700px){.form{grid-template-columns:minmax(0,1fr)}}
 
 /* dialog */
@@ -1060,7 +1065,7 @@ function copyDialog(title, txt, extra){
     else { try { document.execCommand('copy'); done(); } catch(e){} }
   });
 }
-var CONSENT = '<div class="full field consent"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:14px;line-height:1.6"><input type="checkbox" name="agree" required style="width:18px;height:18px;margin-top:2px;accent-color:#0E0E0E"> <span>[필수] 문의 응대와 제안서 전달을 위해 회사명·성함·이메일·연락처를 수집하고, 상담이 끝난 뒤 1년간 보관하는 데 동의해요. <a href="#privacy">개인정보처리방침</a></span></label><span class="err">동의가 필요해요</span></div>';
+var CONSENT = '<div class="full field consent"><label class="check"><input type="checkbox" name="agree" required><span>[필수] 문의 응대와 제안서 전달을 위해 회사명·성함·이메일·연락처를 수집하고, 상담이 끝난 뒤 1년간 보관하는 데 동의해요. <a href="#privacy">개인정보처리방침</a></span></label><span class="err">동의가 필요해요</span></div>';
 
 /* ===== 제안서 받기 (짧은 폼) ===== */
 function vProposal(){
@@ -1118,7 +1123,7 @@ function vContact(q){
       '<fieldset class="field full" style="border:0;padding:0;margin:0"><legend style="margin-bottom:8px">참가자 직무 (여러 개 선택)</legend><div class="chips">' + ['기획·PM','마케팅','영업·CS','HR','재무·총무','개발','경영진'].map(function(x){ return '<label><input type="checkbox" name="role" value="' + x + '">' + x + '</label>'; }).join('') + '</div></fieldset>' +
       '<label class="field full">외부 AI 서비스(Claude 등) 사내 접속<select name="access"><option value="">잘 모르겠어요</option><option>가능해요</option><option>막혀 있어요</option><option>일부만 가능해요</option></select></label>' +
       '<label class="field full">하고 싶은 이야기<textarea name="msg" placeholder="교육 목적, 예산 범위, 리트리트 희망 지역, 카페인·알레르기 제한 등"></textarea></label>' +
-      '<label class="full" style="display:flex;gap:8px;align-items:center;font-size:15px"><input type="checkbox" name="proposal" checked style="width:18px;height:18px;accent-color:#0E0E0E"> 제안서도 함께 받을게요 (내부 검토용)</label>' +
+      '<label class="full check"><input type="checkbox" name="proposal" checked><span>제안서도 함께 받을게요 (내부 검토용)</span></label>' +
       CONSENT +
       '<div class="full"><button class="btn btn-lime" type="submit">문의 보내기</button></div>' +
     '</form>' +
