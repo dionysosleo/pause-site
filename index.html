@@ -551,7 +551,7 @@ var FAQ_CORP = [
   ['우리 회사에 딱 맞게 바꿔 주나요?','표준 구성 70%에 귀사 맞춤 30%로 갑니다. 직무별 업무 양식을 미리 받아 실습 예제로 씁니다.'],
   ['차를 못 마시는 분이 있어요.','무카페인 라인업을 늘 함께 준비해요. 알레르기는 사전 진단 폼에서 미리 받아요.'],
   ['교육이 끝나면 무엇을 받나요?','24시간 안에 HR용 1쪽 성과 리포트를 PDF로 드려요. 참여율, 만든 결과물, 만족도와 다음 단계 제안이 담깁니다.'],
-  ['제안서를 받아 볼 수 있나요?','커리큘럼, 강사 소개, 예상 비용을 담은 제안서를 보내 드려요. 문의 폼에서 “제안서가 필요해요”를 체크해 주세요.']
+  ['제안서를 받아 볼 수 있나요?','커리큘럼, 강사 소개, 예상 비용을 담은 제안서를 보내 드려요. ‘제안서 받기’에서 담당자 정보를 남기면 바로 받아 보실 수 있어요. 문의 폼에서도 함께 신청할 수 있어요.']
 ];
 
 /* ===== 라우팅 ===== */
@@ -563,7 +563,7 @@ function page(name){
 function route(){
   var h = decodeURIComponent((location.hash || '#home').slice(1)) || 'home';
   var m, anchor = document.getElementById(h);
-  if(anchor && !/^(home|workshop|program|online|team|contact|brief|privacy|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView(); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
+  if(anchor && !/^(home|workshop|program|online|team|contact|proposal|brief|privacy|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView(); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
   hideSticky();
   if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
   else if(h === 'workshop'){ page('workshop'); app.innerHTML = vWorkshop(); bindWorkshop(); }
@@ -574,6 +574,7 @@ function route(){
   else if(h === 'team' || /^t-(han|jun|lee)$/.test(h)){ page('team'); app.innerHTML = vTeam(); bindTeam(); if(h !== 'team'){ var el = document.getElementById(h); if(el){ setTimeout(function(){ el.scrollIntoView(); }, 0); } return; } }
   else if(h === 'privacy'){ page('privacy'); app.innerHTML = vPrivacy(); }
   else if(h === 'brief'){ page('brief'); app.innerHTML = vBrief(); bindBrief(); }
+  else if(h === 'proposal'){ page('contact'); app.innerHTML = vProposal(); bindProposal(); }
   else if(h.indexOf('contact') === 0){ page('contact'); app.innerHTML = vContact(h.split('?')[1] || ''); bindContact(); }
   else { page(''); app.innerHTML = '<section class="section"><div class="wrap"><h1 class="h2">페이지를 찾을 수 없어요</h1><p class="lead" style="margin-top:12px"><a href="#home">홈으로 가기</a></p></div></section>'; }
   document.title = (titleFor(h) ? titleFor(h) + ' — ' : '') + 'PAUSE';
@@ -581,7 +582,7 @@ function route(){
   window.scrollTo(0, 0);
   if(location.hash) app.focus({preventScroll:true});
 }
-function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'도입 문의'}[h.split('?')[0]] || ''; }
+function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'도입 문의', proposal:'제안서 받기'}[h.split('?')[0]] || ''; }
 function wById(id){ for(var i = 0; i < W.length; i++) if(W[i].id === id) return W[i]; return null; }
 function cById(id){ for(var i = 0; i < C.length; i++) if(C[i].id === id) return C[i]; return null; }
 function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · '); }
@@ -594,7 +595,7 @@ function vHome(){
       '<p class="hero-tag"><span aria-hidden="true"></span>기업 AI 실무 워크샵 · Pause &amp; Rebuild</p>' +
       '<h1 class="h1 one" style="font-size:clamp(32px,3.2vw,48px)"><span class="bl">우러나는 3분,</span> <span class="bl">끝나는 일 하나.</span></h1>' +
       '<p class="lead">차 한 잔이 우러나는 3분 동안 끝나는 일을, 팀마다 하나씩 AI 에이전트로 만들어요. 듣고 끝나는 특강이 아니라 실제 업무가 바뀌는 하루예요. 결과는 다음 날 우림 리포트로, 90일 뒤에는 실제로 쓰는지로 확인해요.</p>' +
-      '<div class="btns"><a class="btn btn-lime" href="#contact">워크샵 문의</a><a class="btn btn-line" href="#brief">결재용 한 페이지 보기</a></div>' +
+      '<div class="btns"><a class="btn btn-lime" href="#contact">워크샵 문의</a><a class="btn btn-line" href="#proposal">제안서 받기</a><a class="btn btn-line" href="#brief">결재용 한 페이지</a></div>' +
     '</div>' +
     '<div class="photo"><img src="' + src('desk', 1600) + '" alt="' + esc(PH.desk.alt) + '" fetchpriority="high"><span class="credit">Photo: ' + esc(PH.desk.by) + ' / Unsplash</span>' +
       '<div class="steep" id="steep" role="img" aria-label="3분 타이머: 차가 우러나는 동안 팀별 에이전트가 일을 끝내는 장면">' +
@@ -800,7 +801,7 @@ function vWDetail(w){
       '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>구성에 따라 견적</dd></dl>' +
       '<a class="btn btn-lime" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>' +
       '<a class="btn btn-line btn-sm" href="#program">1년 프로그램으로 이어 가기</a>' +
-      '<p class="muted" style="margin:0;font-size:13px">제안서가 필요하면 문의 폼에 체크해 주세요.</p>' +
+      '<p class="muted" style="margin:0;font-size:13px">제안서가 먼저 필요하면 <a href="#proposal">제안서 받기</a>에서 바로 받아 보세요.</p>' +
     '</aside>' +
   '</div></section>';
 }
@@ -816,7 +817,7 @@ function vProgram(){
   return '<section class="hero" style="min-height:min(70vh,640px)">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">한 회사를 1년 동안 맡아요</h1>' +
     '<p class="lead">한 번의 특강은 그날로 끝나요. 정기프로그램은 분기마다 진단하고, 만들고, 시연하고, 성과를 보면서 AI를 팀의 일하는 방식으로 자리 잡게 합니다.</p>' +
-    '<div class="btns"><a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a><a class="btn btn-line" href="#contact?type=proposal">제안서 요청</a></div></div>' +
+    '<div class="btns"><a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
     ph('team', 1600, '', true) +
   '</section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -852,7 +853,7 @@ function vProgram(){
     '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">Proposal</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">내부 검토용 제안서를 보내 드려요</h2>' +
     '<p class="lead">도입을 검토 중이라면 제안서 한 부로 먼저 살펴보세요.</p>' +
     '<ul class="checks" style="color:#fff"><li>1년 커리큘럼과 회차별 구성</li><li>세 강사 소개</li><li>예상 비용</li></ul>' +
-    '<div class="btns"><a class="btn btn-lime" href="#contact?type=proposal">제안서 요청하기</a></div></div>' +
+    '<div class="btns"><a class="btn btn-lime" href="#proposal">제안서 받기</a></div></div>' +
     ph('teapot', 1100) +
   '</div></section>';
 }
@@ -958,7 +959,7 @@ function vTeam(){
       '<div class="btns" style="margin-top:24px">' + t.links.map(function(l){ return '<a class="btn btn-line btn-sm" href="' + l[1] + '" target="_blank" rel="noopener">' + esc(l[0]) + ' ↗</a>'; }).join('') + '<button type="button" class="btn btn-line btn-sm" data-copybio="' + k + '">담당자용 소개 3줄 복사</button></div>' +
     '</div></div></section>'; }).join('') +
   '<section class="section dark"><div class="wrap split">' + ph('laugh', 1200) +
-    '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">For HR</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">결재에 붙일 강사 소개가 필요하면</h2><p class="lead">세 강사 소개를 한 번에 복사해 결재 문서에 붙여 넣으세요. 출강 사례와 프로필 PDF는 문의 주시면 보내 드려요.</p><div class="btns"><button type="button" class="btn btn-lime" data-copybio="all">세 강사 소개 복사</button><a class="btn btn-line" href="#contact?type=proposal">제안서 요청</a></div></div>' +
+    '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">For HR</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">결재에 붙일 강사 소개가 필요하면</h2><p class="lead">세 강사 소개를 한 번에 복사해 결재 문서에 붙여 넣으세요. 출강 사례와 프로필 PDF는 문의 주시면 보내 드려요.</p><div class="btns"><button type="button" class="btn btn-lime" data-copybio="all">세 강사 소개 복사</button><a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
   '</div></section>';
 }
 function bindTeam(){
@@ -994,7 +995,7 @@ function vBrief(){
     '<p class="eyebrow">For decision makers · 결재용 요약</p>' +
     '<h1 class="h1 one" style="font-size:clamp(26px,3vw,40px)">PAUSE 워크샵 한 잔 요약</h1>' +
     '<p class="lead" style="margin:14px 0 0">팀원 모두가 실제 업무 하나를 AI 에이전트로 바꾸고, 그 결과를 숫자로 확인하는 실무 워크샵이에요.</p>' +
-    '<div class="btns" style="margin:20px 0 8px"><button type="button" class="btn btn-lime btn-sm" data-copylink>이 페이지 링크 복사</button><button type="button" class="btn btn-line btn-sm" data-copybrief>요약 텍스트 복사</button></div>' +
+    '<div class="btns" style="margin:20px 0 8px"><button type="button" class="btn btn-lime btn-sm" data-copylink>이 페이지 링크 복사</button><button type="button" class="btn btn-line btn-sm" data-copybrief>요약 텍스트 복사</button><a class="btn btn-line btn-sm" href="#proposal">제안서 PDF 받기</a></div>' +
     '<h2 class="bh">1. 무엇이 남나요</h2><div class="tbl-wrap"><table class="cmp bt">' +
       row('결과물', '팀마다 실제 업무에 쓰는 AI 에이전트 1개 이상 (보고서·회의록 정리, 고객 문의 답변 초안, 경쟁사 조사 등)') +
       row('개인', '각자 “다음 2주에 해 볼 한 가지” 실행 약속') +
@@ -1019,7 +1020,7 @@ function vBrief(){
     '<h2 class="bh">4. 리스크는 이렇게 줄여요</h2><ul class="checks"><li>출강 3일 전 보안 규정·외부 AI 접속 여부 확인. 막혀 있으면 공개 자료와 별도 실습 계정으로 진행</li><li>실제 회사 자료는 보안 점검 후에만 사용</li><li>툴은 하나로 좁혀 현장 혼란을 줄임</li></ul>' +
     '<h2 class="bh">5. 누가 진행하나요</h2><ul class="checks">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<li><b>' + t.nm + '</b> — ' + esc(t.line) + '. ' + esc(t.proof) + '</li>'; }).join('') + '</ul>' +
     '<h2 class="bh">6. 다음 단계</h2><p style="margin:0;line-height:1.8">워크샵 → <b>숙성 90일</b>(월 체크인 2~3회) → <b>사계절 프로그램</b>(연간 · 분기 대면 + 연말 성과 리포트). 각 단계의 결과를 보고 다음 단계를 결정하시면 돼요.</p>' +
-    '<div class="btns" style="margin-top:32px"><a class="btn btn-lime" href="#contact?type=proposal">제안서 요청</a><a class="btn btn-line" href="#workshop">워크샵 자세히 보기</a></div>' +
+    '<div class="btns" style="margin-top:32px"><a class="btn btn-lime" href="#proposal">제안서 받기</a><a class="btn btn-line" href="#workshop">워크샵 자세히 보기</a></div>' +
   '</div></section>';
 }
 function briefText(){
@@ -1034,27 +1035,91 @@ function bindBrief(){
   $('[data-copybrief]').addEventListener('click', function(){ copyText(briefText()); });
 }
 
+/* ===== 문의·제안서 접수 설정 =====
+   endpoint: 문의를 받을 주소 (구글 시트 Apps Script 웹앱 URL 등, 설정법은 SETUP-LEADS.md). 비어 있으면 메일 복사 방식으로 대체
+   proposalUrl: 제안서 PDF 주소 (예: '/PAUSE-proposal.pdf'). 비어 있으면 "메일로 보내 드려요"로 안내 */
+var LEAD_CONFIG = { endpoint: '', proposalUrl: '' };
+function sendLead(data){
+  data.at = new Date().toISOString(); data.page = location.href;
+  try { localStorage.setItem('pause_lead', JSON.stringify({company:data.company, name:data.name, email:data.email})); } catch(e){}
+  if(!LEAD_CONFIG.endpoint) return Promise.resolve(false);
+  return fetch(LEAD_CONFIG.endpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).then(function(r){ return r.ok || r.type === 'opaque'; }, function(){ return false; });
+}
+function savedLead(){ try { return JSON.parse(localStorage.getItem('pause_lead') || 'null'); } catch(e){ return null; } }
+function proposalBox(){
+  return LEAD_CONFIG.proposalUrl
+    ? '<a class="btn btn-lime" href="' + esc(LEAD_CONFIG.proposalUrl) + '" target="_blank" rel="noopener" download>제안서 PDF 받기</a>'
+    : '<p style="margin:0">제안서는 남겨 주신 이메일로 영업일 [N]일 안에 보내 드려요.</p>';
+}
+function copyDialog(title, txt, extra){
+  openDialog('<h2>' + title + '</h2>' + (extra || '') + '<p style="margin:0">온라인 접수를 붙이는 중이에요. 아래 내용을 복사해 <b>[문의 이메일]</b>로 보내 주시면 바로 연락드릴게요.</p><textarea readonly style="width:100%;min-height:180px;border:1px solid var(--hair);border-radius:10px;padding:12px;font-size:14px" id="copyTxt">' + esc(txt) + '</textarea><button type="button" class="btn btn-line" id="copyBtn">내용 복사하기</button>');
+  $('#copyBtn').addEventListener('click', function(){
+    var ta = $('#copyTxt'); ta.select();
+    var done = function(){ toast('복사했어요'); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(done, function(){ try { document.execCommand('copy'); done(); } catch(e){} }); }
+    else { try { document.execCommand('copy'); done(); } catch(e){} }
+  });
+}
+var CONSENT = '<div class="full field consent"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:14px;line-height:1.6"><input type="checkbox" name="agree" required style="width:18px;height:18px;margin-top:2px;accent-color:#0E0E0E"> <span>[필수] 문의 응대와 제안서 전달을 위해 회사명·성함·이메일·연락처를 수집하고, 상담이 끝난 뒤 1년간 보관하는 데 동의해요. <a href="#privacy">개인정보처리방침</a></span></label><span class="err">동의가 필요해요</span></div>';
+
+/* ===== 제안서 받기 (짧은 폼) ===== */
+function vProposal(){
+  var L = savedLead() || {};
+  var v = function(k){ return L[k] ? ' value="' + esc(L[k]) + '"' : ''; };
+  return '<section class="ct-hero">' + ph('teapot', 1800, '', true) + '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Proposal</p><p class="h2 one" style="color:#fff">제안서 한 부, 먼저 받아 보세요.</p></div></section>' +
+  '<section class="section tight"><div class="wrap" style="max-width:880px">' +
+    '<p class="eyebrow">For HR</p><h1 class="h1 one" style="font-size:clamp(30px,4vw,46px)">PAUSE 기업 제안서 받기</h1>' +
+    '<p class="lead" style="margin:16px 0 12px">워크샵 두 가지와 시간표, 강사, 우림 리포트 예시, 성과 측정, 비용 구조까지 15장에 담았어요. 담당자 정보만 남기면 바로 받아요.</p>' +
+    '<ul class="checks" style="margin:0 0 32px"><li>내부 검토와 결재에 그대로 첨부할 수 있어요</li><li>받은 뒤 궁금한 점은 남겨 주신 메일로 답해 드려요</li></ul>' +
+    '<form class="form" data-form="proposal" novalidate>' +
+      '<label class="field">회사명 *<input name="company" required autocomplete="organization"' + v('company') + '><span class="err">회사명을 입력해 주세요</span></label>' +
+      '<label class="field">담당자 성함 *<input name="name" required autocomplete="name"' + v('name') + '><span class="err">성함을 입력해 주세요</span></label>' +
+      '<label class="field">이메일 *<input name="email" type="email" required autocomplete="email"' + v('email') + '><span class="err">이메일을 확인해 주세요</span></label>' +
+      '<label class="field">부서·직책<input name="role" autocomplete="organization-title" placeholder="예: 인사팀 매니저"></label>' +
+      '<label class="field">연락처<input name="phone" type="tel" autocomplete="tel"></label>' +
+      '<label class="field">예상 인원<input name="size" inputmode="numeric" placeholder="예: 25명"></label>' +
+      CONSENT +
+      '<div class="full btns"><button class="btn btn-lime" type="submit">제안서 받기</button><a class="btn btn-line" href="#contact">자세한 도입 문의로</a></div>' +
+    '</form>' +
+  '</div></section>';
+}
+function bindProposal(){
+  var f = $('form[data-form="proposal"]');
+  bindForm(f, function(){
+    var d = new FormData(f), data = {kind:'제안서 요청'};
+    ['company','name','email','role','phone','size'].forEach(function(k){ data[k] = String(d.get(k) || '').trim(); });
+    sendLead(data).then(function(sent){
+      var txt = '[PAUSE 제안서 요청]\n회사: ' + data.company + '\n담당자: ' + data.name + (data.role ? ' (' + data.role + ')' : '') + '\n이메일: ' + data.email + '\n연락처: ' + (data.phone || '-') + '\n인원: ' + (data.size || '-');
+      if(sent){ openDialog('<h2>' + esc(data.name) + '님, 고마워요</h2>' + proposalBox() + '<p class="muted" style="margin:0">검토하다 궁금한 점은 ' + esc(data.email) + '로 먼저 연락드릴게요.</p><a class="btn btn-line" href="#contact" data-close>자세한 도입 문의 남기기</a>'); }
+      else { copyDialog('제안서 요청이 준비됐어요', txt, LEAD_CONFIG.proposalUrl ? '<div>' + proposalBox() + '</div>' : ''); }
+    });
+  });
+}
+
 /* ===== 도입 문의 (사전 진단 겸용) ===== */
 function vContact(q){
   var type = (q.match(/type=([^&]+)/) || [])[1] || '';
-  var opts = [['','선택해 주세요']].concat(W.map(function(w){ return [w.id, w.title + ' (' + w.kind + ')']; }), [['annual','1년 정기프로그램'],['proposal','제안서 요청'],['online','온라인강의 단체 수강'],['etc','아직 모르겠어요']]);
+  var L = savedLead() || {};
+  var v = function(k){ return L[k] ? ' value="' + esc(L[k]) + '"' : ''; };
+  var opts = [['','선택해 주세요']].concat(W.map(function(w){ return [w.id, w.title + ' (' + w.kind + ')']; }), [['annual','1년 정기프로그램'],['online','온라인강의 단체 수강'],['etc','아직 모르겠어요']]);
   return '<section class="ct-hero">' + ph('teapot', 1800, '', true) + '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Let&#39;s pause</p><p class="h2 one" style="color:#fff">차 한 잔 하면서 이야기 나눠요.</p></div></section>' +
   '<section class="section tight"><div class="wrap" style="max-width:880px">' +
     '<p class="eyebrow">Contact</p><h1 class="h1" style="font-size:clamp(32px,4.6vw,52px)">도입 문의</h1>' +
-    '<p class="lead" style="margin:16px 0 36px">아는 만큼만 적어 주세요. 영업일 기준 [N]일 안에 연락드리고, 확정되면 출강 3일 전에 사전 진단 폼을 따로 보내 드려요.</p>' +
+    '<p class="lead" style="margin:16px 0 12px">아는 만큼만 적어 주세요. 영업일 기준 [N]일 안에 연락드리고, 확정되면 출강 3일 전에 사전 진단 폼을 따로 보내 드려요.</p>' +
+    '<p style="margin:0 0 32px"><a class="lnk" href="#proposal">제안서만 먼저 받고 싶다면 → 제안서 받기</a></p>' +
     '<form class="form" data-form="contact" novalidate>' +
-      '<label class="field">회사명 *<input name="company" required autocomplete="organization"><span class="err">회사명을 입력해 주세요</span></label>' +
-      '<label class="field">담당자 성함 *<input name="name" required autocomplete="name"><span class="err">성함을 입력해 주세요</span></label>' +
-      '<label class="field">이메일 *<input name="email" type="email" required autocomplete="email"><span class="err">이메일을 확인해 주세요</span></label>' +
+      '<label class="field">회사명 *<input name="company" required autocomplete="organization"' + v('company') + '><span class="err">회사명을 입력해 주세요</span></label>' +
+      '<label class="field">담당자 성함 *<input name="name" required autocomplete="name"' + v('name') + '><span class="err">성함을 입력해 주세요</span></label>' +
+      '<label class="field">이메일 *<input name="email" type="email" required autocomplete="email"' + v('email') + '><span class="err">이메일을 확인해 주세요</span></label>' +
       '<label class="field">연락처<input name="phone" type="tel" autocomplete="tel"></label>' +
-      '<label class="field full">관심 있는 프로그램 *<select name="type" required>' + opts.map(function(o){ return '<option value="' + o[0] + '"' + (o[0] === type || (type === 'pilot' && o[0] === 'pilot') ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select><span class="err">하나를 골라 주세요</span></label>' +
+      '<label class="field full">관심 있는 프로그램 *<select name="type" required>' + opts.map(function(o){ return '<option value="' + o[0] + '"' + (o[0] === type ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select><span class="err">하나를 골라 주세요</span></label>' +
       '<label class="field">예상 인원<input name="size" inputmode="numeric" placeholder="예: 25명"></label>' +
       '<label class="field">희망 시기<input name="when" placeholder="예: 2027년 1월 중"></label>' +
       '<fieldset class="field full" style="border:0;padding:0;margin:0"><legend style="margin-bottom:8px">참가자 직무 (여러 개 선택)</legend><div class="chips">' + ['기획·PM','마케팅','영업·CS','HR','재무·총무','개발','경영진'].map(function(x){ return '<label><input type="checkbox" name="role" value="' + x + '">' + x + '</label>'; }).join('') + '</div></fieldset>' +
       '<label class="field full">외부 AI 서비스(Claude 등) 사내 접속<select name="access"><option value="">잘 모르겠어요</option><option>가능해요</option><option>막혀 있어요</option><option>일부만 가능해요</option></select></label>' +
       '<label class="field full">하고 싶은 이야기<textarea name="msg" placeholder="교육 목적, 예산 범위, 리트리트 희망 지역, 카페인·알레르기 제한 등"></textarea></label>' +
-      '<label class="full" style="display:flex;gap:8px;align-items:center;font-size:15px"><input type="checkbox" name="proposal" style="width:18px;height:18px;accent-color:#0E0E0E"' + (type === 'proposal' ? ' checked' : '') + '> 제안서가 필요해요 (내부 검토용)</label>' +
-      '<div class="full field consent"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:14px;line-height:1.6"><input type="checkbox" name="agree" required style="width:18px;height:18px;margin-top:2px;accent-color:#0E0E0E"> <span>[필수] 문의 응대를 위해 회사명·성함·이메일·연락처를 수집하고, 상담이 끝난 뒤 1년간 보관하는 데 동의해요. <a href="#privacy">개인정보처리방침</a></span></label><span class="err">동의가 필요해요</span></div>' +
+      '<label class="full" style="display:flex;gap:8px;align-items:center;font-size:15px"><input type="checkbox" name="proposal" checked style="width:18px;height:18px;accent-color:#0E0E0E"> 제안서도 함께 받을게요 (내부 검토용)</label>' +
+      CONSENT +
       '<div class="full"><button class="btn btn-lime" type="submit">문의 보내기</button></div>' +
     '</form>' +
   '</div></section>';
@@ -1062,15 +1127,13 @@ function vContact(q){
 function bindContact(){
   var f = $('form[data-form="contact"]');
   bindForm(f, function(){
-    var d = new FormData(f), roles = d.getAll('role').join(', ');
-    var ts = f.elements.type, sel = ts.options[ts.selectedIndex].text;
-    var txt = '[PAUSE 도입 문의]\n회사: ' + d.get('company') + '\n담당자: ' + d.get('name') + '\n이메일: ' + d.get('email') + '\n연락처: ' + (d.get('phone') || '-') + '\n프로그램: ' + sel + '\n인원: ' + (d.get('size') || '-') + '\n시기: ' + (d.get('when') || '-') + '\n직무: ' + (roles || '-') + '\nAI 접속: ' + (d.get('access') || '모름') + '\n제안서 필요: ' + (d.get('proposal') ? '예' : '아니요') + '\n내용: ' + (d.get('msg') || '-');
-    openDialog('<h2>온라인 접수는 준비 중이에요</h2><p style="margin:0">아래 내용을 복사해 <b>[문의 이메일]</b>로 보내 주시면 바로 연락드릴게요.</p><textarea readonly style="width:100%;min-height:200px;border:1px solid var(--hair);border-radius:10px;padding:12px;font-size:14px" id="copyTxt">' + esc(txt) + '</textarea><button type="button" class="btn btn-lime" id="copyBtn">내용 복사하기</button>');
-    $('#copyBtn').addEventListener('click', function(){
-      var ta = $('#copyTxt'); ta.select();
-      var done = function(){ toast('복사했어요'); };
-      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(ta.value).then(done, function(){ try { document.execCommand('copy'); done(); } catch(e){} }); }
-      else { try { document.execCommand('copy'); done(); } catch(e){} }
+    var d = new FormData(f), ts = f.elements.type;
+    var data = {kind:'도입 문의', company:d.get('company'), name:d.get('name'), email:d.get('email'), phone:d.get('phone') || '', program:ts.options[ts.selectedIndex].text, size:d.get('size') || '', when:d.get('when') || '', roles:d.getAll('role').join(', '), access:d.get('access') || '모름', proposal:d.get('proposal') ? '예' : '아니요', msg:d.get('msg') || ''};
+    sendLead(data).then(function(sent){
+      var withP = data.proposal === '예';
+      if(sent){ openDialog('<h2>문의를 받았어요</h2><p style="margin:0">영업일 기준 [N]일 안에 ' + esc(data.email) + '로 연락드릴게요.</p>' + (withP ? proposalBox() : '') + '<button type="button" class="btn btn-line" data-close>닫기</button>'); return; }
+      var txt = '[PAUSE 도입 문의]\n회사: ' + data.company + '\n담당자: ' + data.name + '\n이메일: ' + data.email + '\n연락처: ' + (data.phone || '-') + '\n프로그램: ' + data.program + '\n인원: ' + (data.size || '-') + '\n시기: ' + (data.when || '-') + '\n직무: ' + (data.roles || '-') + '\nAI 접속: ' + data.access + '\n제안서 필요: ' + data.proposal + '\n내용: ' + (data.msg || '-');
+      copyDialog('문의 내용이 준비됐어요', txt, withP && LEAD_CONFIG.proposalUrl ? '<div>' + proposalBox() + '</div>' : '');
     });
   });
 }
