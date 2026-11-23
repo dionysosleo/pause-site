@@ -64,6 +64,12 @@ button,input,select,textarea{font:inherit}
 /* header */
 .hd{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
 .hbar{max-width:var(--max);margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:20px}
+.brand-hero{position:relative;overflow:hidden;background:var(--bg);padding:clamp(64px,10vw,130px) 20px clamp(56px,8vw,100px);text-align:center}
+.brand-hero .bg-amp{position:absolute;left:50%;top:50%;transform:translate(-8%,-58%);font-family:var(--en);font-style:italic;font-size:clamp(300px,42vw,620px);line-height:1;color:var(--lime);pointer-events:none;user-select:none}
+.brand-hero .wm{position:relative;margin:0;font-family:var(--en);font-weight:400;font-size:clamp(54px,10vw,132px);letter-spacing:.22em;color:var(--ink);line-height:1;padding-left:.22em}
+.brand-hero .wm em{font-style:italic;color:var(--green);letter-spacing:0;font-size:.74em;margin:0 .2em 0 0}
+.brand-hero .tg1{position:relative;margin:clamp(28px,4vw,48px) 0 0;font-family:var(--en);font-size:clamp(15px,1.6vw,21px);letter-spacing:.55em;color:var(--muted);padding-left:.55em}
+.brand-hero .tg2{position:relative;margin:12px 0 0;font-family:'Noto Serif KR',serif;font-size:clamp(15px,1.5vw,20px);letter-spacing:.35em;color:var(--taupe);padding-left:.35em}
 .logo{font-family:var(--en);font-weight:500;font-size:25px;letter-spacing:.2em;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .logo i{display:none}
 .logo b{font-weight:500}
@@ -662,10 +668,11 @@ function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · ')
 function vIntro(){
   var step = function(n, t, d){ return '<li><span class="en">' + n + '</span><b>' + t + '</b><p>' + d + '</p></li>'; };
   return '' +
+  '<section class="brand-hero" aria-label="CHA&amp;I 차와 AI, 삶에 스미다"><span class="bg-amp" aria-hidden="true">&amp;</span><h1 class="wm">CHA<em>&amp;</em>I</h1><p class="tg1">TEA · AI · LIFE</p><p class="tg2">차와 AI, 삶에 스미다</p></section>' +
   '<section class="it-hero">' + ph('fTable', 1800, '', true) +
     '<div class="wrap">' +
       '<p class="eyebrow" style="color:var(--lime)">동반자 AI, 그리고 함께하는 찻자리</p>' +
-      '<h1 class="h1 one" style="color:#fff;font-size:clamp(30px,4.4vw,60px)">업무 하나를, 하루 만에 AI 에이전트로.</h1>' +
+      '<h2 class="h1 one" style="color:#fff;font-size:clamp(30px,4.4vw,60px)">업무 하나를, 하루 만에 AI 에이전트로.</h2>' +
       '<p class="lead" style="color:#EDEDE8;max-width:640px">CHA&amp;I는 기업 팀을 위한 AI 실무 워크샵이에요. 동료와 찻자리에 앉아 각자의 에이전트를 맞이하고, 실제 업무 하나를 맡겨 그날 안에 완성해요.</p>' +
       '<div class="btns"><a class="btn btn-lime" href="#home">CHA&amp;I 둘러보기 →</a><a class="btn btn-line" style="color:#fff;border-color:#fff" href="#proposal">제안서 받기</a></div>' +
     '</div></section>' +
