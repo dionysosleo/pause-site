@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CHA&amp;I — 차와 AI, 그리고 나</title>
+<title>CHA&amp;I — 차와 AI, 삶에 스미다</title>
 <meta name="description" content="차 한 잔 우러나는 3분 동안 끝나는 일을, 팀마다 하나씩 AI 에이전트로. 종일 야외 · 오후 사무실 워크샵과 사계절 프로그램. 이유진 · 한성희 · 이준혁.">
-<meta name="theme-color" content="#0E0E0E">
+<meta name="theme-color" content="#F5F3EE">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CHA&amp;I">
-<meta property="og:title" content="CHA&amp;I — 차와 AI, 그리고 나">
+<meta property="og:title" content="CHA&amp;I — 차와 AI, 삶에 스미다">
 <meta property="og:description" content="차 한 잔 우러나는 3분 동안 끝나는 일을, 팀마다 하나씩 AI 에이전트로. 종일 야외 · 오후 사무실 워크샵과 사계절 프로그램. 이유진 · 한성희 · 이준혁.">
 <meta property="og:url" content="https://www.chaand.ai/">
 <meta property="og:image" content="https://www.chaand.ai/og.png">
@@ -21,13 +21,13 @@
 <meta name="twitter:image" content="https://www.chaand.ai/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://images.unsplash.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Noto+Serif+KR:wght@400;500&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
-:root{--ink:#0E0E0E;--ink2:#2E2E2E;--muted:#5A5A5A;--hair:#DADAD3;--soft:#F3F2EC;--paper:#FAF9F5;--lime:#C8E46A;--lime-t:#EEF7CF;--green:#4E7314;--red:#B42318;--max:1240px;--en:'Space Grotesk',sans-serif}
+:root{--ink:#1D1D1B;--ink2:#3A3A36;--muted:#6F6A63;--taupe:#8A847C;--hair:#DEDBD3;--soft:#ECE9E2;--paper:#F0EDE6;--bg:#F5F3EE;--lime:#DBDED8;--lime-t:#E6EAE3;--green:#546C5D;--red:#B42318;--max:1240px;--en:'Cormorant Garamond',Georgia,serif}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;color:var(--ink);background:#fff;word-break:keep-all;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;color:var(--ink);background:var(--bg);word-break:keep-all;line-height:1.6;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
 a{color:inherit;text-underline-offset:3px}
 button,input,select,textarea{font:inherit}
@@ -48,8 +48,8 @@ button,input,select,textarea{font:inherit}
 .dark{background:var(--ink);color:#fff}
 .paper{background:var(--paper)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:13px 26px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;cursor:pointer;border:1.5px solid transparent;line-height:1.2;transition:background .15s,color .15s}
-.btn-lime{background:var(--lime);color:var(--ink)}.btn-lime:hover{background:var(--ink);color:var(--lime)}
-.dark .btn-lime:hover{background:#fff;color:var(--ink)}
+.btn-lime{background:var(--green);color:#fff}.btn-lime:hover{background:var(--ink);color:#fff}
+.dark .btn-lime{background:var(--lime);color:var(--ink)}.dark .btn-lime:hover{background:#fff;color:var(--ink)}
 .btn-line{background:transparent;color:var(--ink);border-color:var(--ink)}.btn-line:hover{background:var(--ink);color:#fff}
 .dark .btn-line{color:#fff;border-color:#fff}.dark .btn-line:hover{background:#fff;color:var(--ink)}
 .btn-sm{min-height:42px;padding:9px 18px;font-size:15px}
@@ -64,11 +64,10 @@ button,input,select,textarea{font:inherit}
 /* header */
 .hd{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
 .hbar{max-width:var(--max);margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:20px}
-.logo{font-family:var(--en);font-weight:700;font-size:24px;letter-spacing:-.04em;text-decoration:none;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
-.logo i{display:inline-block;width:18px;height:18px;border:3px solid var(--ink);border-radius:50%;position:relative;flex:none}
-.logo i::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--lime)}
-.logo b{margin-left:2px}
-.logo .amp{color:var(--green)}
+.logo{font-family:var(--en);font-weight:500;font-size:25px;letter-spacing:.2em;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.logo i{display:none}
+.logo b{font-weight:500}
+.logo .amp{font-style:italic;color:var(--green);letter-spacing:0;margin:0 .22em 0 .02em;font-size:1.08em}
 .gnb{display:flex;gap:4px;margin:0 0 0 12px;padding:0;list-style:none;flex:1}
 .gnb a{display:block;padding:12px 14px;text-decoration:none;font-weight:700;font-size:16px;border-bottom:2px solid transparent}
 .gnb a[aria-current="page"]{border-bottom-color:var(--ink)}
@@ -427,7 +426,6 @@ footer{background:var(--ink);color:#CFCFCA;padding:56px 0 40px;font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:28px}
 footer a{color:#fff;text-decoration:none}
 footer .logo{color:#fff}
-footer .logo i{border-color:#fff}
 footer .logo .amp{color:var(--lime)}
 footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:14px 20px;border-radius:12px;z-index:90;font-size:15px;max-width:calc(100% - 32px)}
@@ -464,7 +462,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
   <div class="wrap">
     <div style="display:flex;flex-direction:column;gap:12px;max-width:420px">
       <a class="logo" href="#intro"><i aria-hidden="true"></i><b>CHA<span class="amp">&amp;</span>I</b></a>
-      <p style="margin:0"><b class="en" style="color:#fff">Cha &amp; AI &amp; I.</b> 차 한 잔, AI 동료, 그리고 나. 시간을 들인 만큼 내 것이 되는 기업 워크샵.</p>
+      <p style="margin:0"><b class="en" style="color:#fff;letter-spacing:.2em">TEA · AI · LIFE</b><br>차와 AI, 삶에 스미다. 시간을 들인 만큼 내 것이 되는 기업 워크샵.</p>
       <p style="margin:0" class="en">[상호] · [대표자] · [사업자등록번호] · [문의 이메일]</p>
     </div>
     <nav aria-label="하단 메뉴">
@@ -707,7 +705,7 @@ function vHome(){
   return '' +
   '<section class="hero">' +
     '<div class="hero-copy">' +
-      '<p class="hero-tag"><span aria-hidden="true"></span>CHA&amp;I · 차와 AI, 그리고 나.</p>' +
+      '<p class="hero-tag"><span aria-hidden="true"></span>CHA&amp;I · 차와 AI, 삶에 스미다.</p>' +
       '<h1 class="h1 one" style="font-size:clamp(26px,2.6vw,42px)">업무 하나를, 하루 만에 AI 에이전트로.</h1>' +
       '<p class="lead">CHA&amp;I는 기업 팀을 위한 AI 실무 워크샵이에요. 강의를 듣는 대신 팀원 모두가 실제 업무 하나를 골라 에이전트로 만들고, 차 한 잔으로 집중을 지키며 그날 안에 완성해요.</p>' +
       '<dl class="hero-about">' +
@@ -730,8 +728,8 @@ function vHome(){
     '<div><strong>24시간</strong><span>다음 날 HR에 1쪽 결과 리포트</span></div>' +
   '</div></div>' +
   '<section class="section tight" style="padding-bottom:0"><div class="wrap"><div class="pr">' +
-    '<p class="pr-word en">Cha <span>&amp;</span> I</p>' +
-    '<p class="lead" style="margin:0">CHA&amp;I는 <b>차(Cha)</b>와 <b>AI</b>, 그리고 <b>나(I)</b>예요. 차 한 잔으로 나를 돌아보고, AI를 도구가 아닌 동료로 맞이해 일을 다시 설계해요. 차도 에이전트도 시간을 들인 만큼 내 것이 돼요. 그 하루가 끝나면 팀마다 실제로 일하는 에이전트가 하나씩 남아요.</p>' +
+    '<p class="pr-word en">Tea · AI · Life</p>' +
+    '<p class="lead" style="margin:0">CHA&amp;I는 <b>차(Cha)</b>와 <b>AI</b>, 그리고 <b>나(I)</b>예요. 차와 AI가 삶에 스미듯, 차 한 잔으로 나를 돌아보고 AI를 도구가 아닌 동료로 맞이해 일을 다시 설계해요. 차도 에이전트도 시간을 들인 만큼 내 것이 돼요. 그 하루가 끝나면 팀마다 실제로 일하는 에이전트가 하나씩 남아요.</p>' +
   '</div></div></section>' +
   '<section class="section" style="padding-bottom:0"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Tea ritual + AI ceremony</p><h2 class="h2 one">동반자 AI, 그리고 함께하는 찻자리</h2></div><p class="lead">일을 덜어 주는 동반자 AI를 맞이하는 하루. 그 안에서 잊지 말아야 할 가장 인간적인 것, 동료와 함께하는 찻자리. 차와 에이전트로 그걸 느끼고 만들어 가요.</p></div>' +
