@@ -12,13 +12,13 @@
 <meta property="og:site_name" content="PAUSE">
 <meta property="og:title" content="PAUSE — 우러나는 3분, 끝나는 일 하나">
 <meta property="og:description" content="차 한 잔 우러나는 3분 동안 끝나는 일을, 팀마다 하나씩 AI 에이전트로. 종일 야외 · 오후 사무실 워크샵과 사계절 프로그램. 이유진 · 한성희 · 이준혁.">
-<meta property="og:url" content="https://pause-site-seven.vercel.app/">
-<meta property="og:image" content="https://pause-site-seven.vercel.app/og.png">
+<meta property="og:url" content="https://www.chaand.ai/">
+<meta property="og:image" content="https://www.chaand.ai/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://pause-site-seven.vercel.app/og.png">
+<meta name="twitter:image" content="https://www.chaand.ai/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://images.unsplash.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -432,7 +432,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 </head>
 <body>
 <a class="sr" href="#app">본문으로 건너뛰기</a>
-<div class="pv-note" id="pvNote" hidden>이 미리보기 화면에서는 사진이 보이지 않아요. 사진이 들어간 실제 사이트: <a href="https://pause-site-seven.vercel.app/" target="_blank" rel="noopener">pause-site-seven.vercel.app</a></div>
+<div class="pv-note" id="pvNote" hidden>이 미리보기 화면에서는 사진이 보이지 않아요. 사진이 들어간 실제 사이트: <a href="https://www.chaand.ai/" target="_blank" rel="noopener">chaand.ai</a></div>
 <header class="hd">
   <div class="hbar">
     <a class="logo" href="#intro" aria-label="PAUSE 소개"><i aria-hidden="true"></i><b>PAUSE</b></a>
@@ -1296,7 +1296,7 @@ document.addEventListener('click', function(e){
 $('#burger').addEventListener('click', function(){ var o = $('#mnav').classList.toggle('open'); this.setAttribute('aria-expanded', String(o)); });
 window.addEventListener('hashchange', route);
 renderAuth();
-if(!/vercel\.app$|^localhost$|^127\.|\.test$|^x\.test$/.test(location.hostname)) $('#pvNote').hidden = false;
+if(!/vercel\.app$|(^|\.)chaand\.ai$|^localhost$|^127\.|\.test$|^x\.test$/.test(location.hostname)) $('#pvNote').hidden = false;
 route();
 })();
 </script>
