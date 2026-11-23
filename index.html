@@ -510,6 +510,23 @@ body{padding-bottom:96px}
 footer{background:rgba(244,234,223,.75);backdrop-filter:blur(14px);color:#5C6672;margin:24px clamp(12px,2vw,28px) 16px;border-radius:36px 36px 28px 28px;border:1px solid rgba(255,255,255,.9)}
 footer a,footer b,footer .logo{color:var(--navy)!important}footer .logo .amp{color:var(--green)!important}
 .h1.one,.h2.one{font-weight:400;letter-spacing:-.035em}
+/* atmospheric scene */
+#app:focus,#app:focus-visible{outline:none}
+.brand-hero{background:url(img/scene.svg) center/cover no-repeat!important;margin:16px clamp(12px,2vw,28px) 0;border-radius:36px;min-height:min(88vh,820px);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 24px 60px rgba(60,50,50,.18);color:#fff}
+.brand-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 40%,rgba(40,36,44,.28) 100%);pointer-events:none}
+.brand-hero>*{z-index:1}
+.brand-hero .bg-amp{color:rgba(255,255,255,.22);z-index:0}
+.brand-hero .wm{color:#fff;text-shadow:0 2px 24px rgba(120,80,60,.25)}
+.brand-hero .wm em{color:#FFF1DE}
+.brand-hero .tg1{color:rgba(255,255,255,.92)}
+.brand-hero .tg2{color:rgba(255,255,255,.85)}
+.brand-hero .orb{position:absolute;width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(255,255,255,.75);background:rgba(255,255,255,.14);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center}
+.brand-hero .orb svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.5}
+.brand-hero .cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:.3em;color:rgba(255,255,255,.85);text-decoration:none}
+body{background:linear-gradient(180deg,#E3E7EC 0%,#F2ECE8 30%,#F8EEE4 70%,#F3E9E2 100%) fixed}
+body::before{background:radial-gradient(60vw 50vh at 85% 0%,rgba(249,207,164,.35),transparent 70%),radial-gradient(50vw 45vh at 0% 100%,rgba(201,211,222,.45),transparent 70%)!important}
+.it-hero::after,.ct-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(249,207,164,.18),rgba(43,40,50,.15) 45%,rgba(43,40,50,.55));pointer-events:none;z-index:0}
+.it-hero>*,.ct-hero>*{position:relative;z-index:1}
 </style>
 </head>
 <body>
@@ -744,7 +761,7 @@ function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · ')
 function vIntro(){
   var step = function(n, t, d){ return '<li><span class="en">' + n + '</span><b>' + t + '</b><p>' + d + '</p></li>'; };
   return '' +
-  '<section class="brand-hero" aria-label="CHA&amp;I 차와 AI, 삶에 스미다"><span class="bg-amp" aria-hidden="true">&amp;</span><h1 class="wm">CHA<em>&amp;</em>I</h1><p class="tg1">TEA · AI · LIFE</p><p class="tg2">차와 AI, 삶에 스미다</p></section>' +
+  '<section class="brand-hero" aria-label="CHA&amp;I 차와 AI, 삶에 스미다"><span class="bg-amp" aria-hidden="true">&amp;</span><h1 class="wm">CHA<em>&amp;</em>I</h1><p class="tg1">TEA · AI · LIFE</p><p class="tg2">차와 AI, 삶에 스미다</p><span class="orb" style="left:7%;top:42%" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10h14v5a6 6 0 0 1-6 6h-2a6 6 0 0 1-6-6z"/><path d="M16.7 16.7a3 3 0 1 0 .3-5.5"/></svg></span><span class="orb" style="right:7%;top:58%" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg></span><a class="cue" href="#home">SCROLL ↓</a></section>' +
   '<section class="it-hero">' + ph('fTable', 1800, '', true) +
     '<div class="wrap">' +
       '<p class="eyebrow" style="color:var(--lime)">동반자 AI, 그리고 함께하는 찻자리</p>' +
