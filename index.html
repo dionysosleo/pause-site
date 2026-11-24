@@ -860,7 +860,7 @@ html.veil body{filter:blur(18px)!important;transition:none}
 html:not(.owner) body{-webkit-user-select:none;user-select:none}
 html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit-user-select:text;user-select:text}
 /* CHA&I 데이: 현장 기록 */
-.dstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.dstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:26px}
 .dstats div{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;padding:18px 10px;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(30,42,54,.06)}
 .dstats b{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:28px;font-weight:800;color:#26313D;line-height:1.2}
 .dstats span{font-size:13px;color:#6B727A}
@@ -1222,7 +1222,6 @@ function vDay(){
   return '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">CHA&amp;I Day</p><h1 class="h2 one">현장 기록</h1></div><p class="lead">출강, 살롱, 찻자리 클럽이 열린 날을 사진으로 쌓아요.</p></div>' +
     '<div class="dstats"><div><b>' + VISITED.length + '곳</b><span>다녀온 기업·기관</span></div><div><b>' + DAYS.length + '건</b><span>쌓인 현장 기록</span></div><div><b>' + DAYS.reduce(function(n, d){ return n + d.photos.length; }, 0) + '장</b><span>현장 사진</span></div></div>' +
-    '<div class="dvisit" aria-label="다녀온 곳">' + VISITED.map(function(v){ return '<span>' + esc(v) + '</span>'; }).join('') + '</div>' +
     '<div class="psz dtabs" role="tablist" aria-label="기록 종류" style="--k:0;--n:' + tags.length + '"><span class="psz-ind" aria-hidden="true"></span>' + tags.map(function(t, i){ return '<button type="button" role="tab" class="' + (i ? '' : 'on') + '" aria-selected="' + (i ? 'false' : 'true') + '" data-dtab="' + i + '" data-t="' + esc(t) + '"><b>' + esc(t) + '</b></button>'; }).join('') + '</div>' +
     '<div class="days">' + DAYS.map(function(d, i){ return '<article class="dcard" data-t="' + esc(d.tag) + '"><button type="button" class="dph" data-day="' + i + '" aria-label="' + esc(d.title) + ' 사진 ' + d.photos.length + '장 보기">' + ph(d.photos[0], 900) + (d.photos.length > 1 ? '<span class="dcount">' + d.photos.length + '장</span>' : '') + '</button><div class="dmeta"><span class="dtag">' + esc(d.tag) + '</span>' + (d.date ? '<span class="ddate">' + esc(d.date) + '</span>' : '') + '</div><h3 class="ol">' + esc(d.title) + '</h3><p class="ol">' + esc(d.line) + '</p><p class="dwho ol">' + esc(d.place) + ' · ' + who(d.who) + '</p></article>'; }).join('') +
       '<article class="dcard dnext" data-t="' + esc(NEXT_DAY.tag) + '"><div class="dph dempty"><span>다음 기록</span></div><div class="dmeta"><span class="dtag">' + esc(NEXT_DAY.tag) + '</span></div><h3 class="ol">' + esc(NEXT_DAY.title) + '</h3><p class="ol">' + esc(NEXT_DAY.line) + '</p><p class="dwho ol">곧 올라와요</p></article>' +
