@@ -86,7 +86,7 @@ button,input,select,textarea{font:inherit}
 .mnav a{display:block;padding:12px 0;font-weight:700;text-decoration:none;font-size:18px;border-bottom:1px solid var(--hair)}
 .mnav.open{display:block}
 @media (max-width:900px){.gnb{display:none}.burger{display:inline-flex}.hd .btn-sm{display:none}}
-body.sell .gnb,body.sell .burger,body.sell .lnk{display:none}
+/* 상세 페이지에서도 상단 메뉴는 유지 (R14) */
 
 /* hero */
 .hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);min-height:min(78vh,760px)}
@@ -860,7 +860,7 @@ html.veil body{filter:blur(18px)!important;transition:none}
 html:not(.owner) body{-webkit-user-select:none;user-select:none}
 html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit-user-select:text;user-select:text}
 /* CHA&I 데이: 현장 기록 */
-.dstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:26px}
+.dstats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:760px;margin-left:auto;margin-right:auto;gap:12px;margin-bottom:26px}
 .dstats div{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;padding:18px 10px;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(30,42,54,.06)}
 .dstats b{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:28px;font-weight:800;color:#26313D;line-height:1.2}
 .dstats span{font-size:13px;color:#6B727A}
@@ -913,6 +913,21 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
 .fit div::before{flex:none;margin:0!important;width:26px;height:26px;display:flex;align-items:center;justify-content:center}
 .checks li{padding-left:32px}
 .checks li::before{top:calc(.8em - 9px)}
+/* R14 상세 페이지 길찾기: 위치 + 뒤로 + 구역 목차 (헤더 바로 아래 고정) */
+.dnav{position:sticky;top:var(--hdh,72px);z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(38,49,61,.07)}
+.dnav-in{display:flex;align-items:center;gap:10px;height:52px}
+.dn-back{flex:none;display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:#5E6F5E;text-decoration:none;padding:6px 10px;border-radius:999px;background:#F1F4F1}
+.dn-back:hover{background:#E6ECE6}
+.dn-sep{flex:none;color:#C5CCC5}
+.dn-here{flex:0 1 auto;min-width:0;max-width:30%;font-size:14px;font-weight:700;color:#26313D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dn-toc{position:relative;flex:1 1 auto;min-width:0;display:flex;justify-content:flex-end;gap:2px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+.dn-toc::-webkit-scrollbar{display:none}
+.dn-toc a{position:relative;z-index:1;flex:none;padding:8px 12px;border-radius:999px;font-size:13.5px;font-weight:600;color:#6B727A;text-decoration:none;white-space:nowrap;transition:color .3s}
+.dn-toc a.on{color:#fff}
+.dn-ind{position:absolute;left:0;top:50%;height:34px;margin-top:-17px;border-radius:999px;background:#667866;opacity:0;transition:transform .4s cubic-bezier(.3,.7,.2,1),width .4s cubic-bezier(.3,.7,.2,1),opacity .2s}
+.dn-sec{scroll-margin-top:calc(var(--hdh,72px) + 60px)}
+@media (max-width:760px){.dn-here,.dn-sep{display:none}.dn-toc{justify-content:flex-start}.dnav-in{gap:8px}}
+@media (prefers-reduced-motion: reduce){.dn-ind{transition:none}}
 </style>
 </head>
 <body>
@@ -1196,7 +1211,7 @@ var PSIZE = [['8~20명','1인 1에이전트, 가장 깊게',[0,3,4,7,1]],['20~40
 function sizeSection(full){
   var on = PSIZE[0][2];
   return '<section class="section paper" id="sizes"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">인원에 맞춰 고르세요</h2></div><p class="lead">인원을 누르면 맞는 프로그램이 켜져요.</p></div>' +
+    '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">8명부터 400명까지</h2></div><p class="lead">인원을 누르면 맞는 프로그램이 켜져요.</p></div>' +
     '<div class="psz" role="tablist" aria-label="인원 선택" style="--k:0"><span class="psz-ind" aria-hidden="true"></span>' + PSIZE.map(function(z, i){ return '<button type="button" role="tab" class="' + (i ? '' : 'on') + '" aria-selected="' + (i ? 'false' : 'true') + '" data-size="' + i + '"><b>' + esc(z[0]) + '</b><span class="ol">' + esc(z[1]) + '</span></button>'; }).join('') + '</div>' +
     '<div class="pcards">' + PCARD.map(function(c, i){ return '<a class="pcard' + (on.indexOf(i) < 0 ? ' dim' : '') + '" data-pi="' + i + '" href="' + c[4] + '"><span class="pc-chip">' + esc(c[2]) + '</span><h3 class="ol">' + esc(c[0]) + '</h3><b class="pc-big">' + esc(c[1]) + '</b><p class="ol">' + esc(c[3]) + '</p><span class="pc-go" aria-hidden="true">→</span></a>'; }).join('') + '</div>' +
   '</div></section>';
@@ -1231,7 +1246,7 @@ function vDay(){
   var tags = ['전체','출강','파일럿','살롱','클럽'];
   return '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">CHA&amp;I Day</p><h1 class="h2 one">현장 기록</h1></div><p class="lead">출강, 살롱, 찻자리 클럽이 열린 날을 사진으로 쌓아요.</p></div>' +
-    '<div class="dstats"><div><b>' + VISITED.length + '곳</b><span>다녀온 기업·기관</span></div><div><b>' + DAYS.length + '건</b><span>쌓인 현장 기록</span></div><div><b>' + DAYS.reduce(function(n, d){ return n + d.photos.length; }, 0) + '장</b><span>현장 사진</span></div></div>' +
+    '<div class="dstats"><div><b>' + VISITED.length + '곳</b><span>다녀온 기업·기관</span></div><div><b>' + DAYS.length + '건</b><span>쌓인 현장 기록</span></div></div>' +
     '<div class="psz dtabs" role="tablist" aria-label="기록 종류" style="--k:0;--n:' + tags.length + '"><span class="psz-ind" aria-hidden="true"></span>' + tags.map(function(t, i){ return '<button type="button" role="tab" class="' + (i ? '' : 'on') + '" aria-selected="' + (i ? 'false' : 'true') + '" data-dtab="' + i + '" data-t="' + esc(t) + '"><b>' + esc(t) + '</b></button>'; }).join('') + '</div>' +
     '<div class="days">' + DAYS.map(function(d, i){ return '<article class="dcard" data-t="' + esc(d.tag) + '"><button type="button" class="dph" data-day="' + i + '" aria-label="' + esc(d.title) + ' 사진 ' + d.photos.length + '장 보기">' + ph(d.photos[0], 900) + (d.photos.length > 1 ? '<span class="dcount">' + d.photos.length + '장</span>' : '') + '</button><div class="dmeta"><span class="dtag">' + esc(d.tag) + '</span>' + (d.date ? '<span class="ddate">' + esc(d.date) + '</span>' : '') + '</div><h3 class="ol">' + esc(d.title) + '</h3><p class="ol">' + esc(d.line) + '</p><p class="dwho ol">' + esc(d.place) + ' · ' + who(d.who) + '</p></article>'; }).join('') +
       '<article class="dcard dnext" data-t="' + esc(NEXT_DAY.tag) + '"><div class="dph dempty"><span>다음 기록</span></div><div class="dmeta"><span class="dtag">' + esc(NEXT_DAY.tag) + '</span></div><h3 class="ol">' + esc(NEXT_DAY.title) + '</h3><p class="ol">' + esc(NEXT_DAY.line) + '</p><p class="dwho ol">곧 올라와요</p></article>' +
@@ -1251,6 +1266,23 @@ function bindDay(){
   document.addEventListener('keydown', function(e){ if(lb.hidden) return; if(e.key === 'Escape') lb.hidden = true; if(e.key === 'ArrowRight'){ k = (k + 1) % cur.photos.length; show(); } if(e.key === 'ArrowLeft'){ k = (k + cur.photos.length - 1) % cur.photos.length; show(); } });
 }
 
+/* ===== 상세 페이지 길찾기 (R14): 위치 표시 + 뒤로 + 구역 목차(스크롤에 따라 강조 이동) ===== */
+function detailNav(backHref, backLabel, title){
+  var secs = Array.prototype.filter.call(app.querySelectorAll('section'), function(sec){ return sec.querySelector('.eyebrow') && sec.querySelector('h2'); });
+  if(!secs.length) return;
+  secs = secs.slice(0, 6);
+  var LBL = {Instructor:'강사', Instructors:'강사', Hosts:'진행자', Reviews:'후기', Curriculum:'커리큘럼', 'Before · After':'전과 후', 'For you':'대상', Included:'포함', Timeline:'진행 순서', FAQ:'자주 묻는 질문', 'The day':'진행 순서', 'What you make':'결과물', 'Why tea':'왜 차', Compare:'비교'};
+  var items = secs.map(function(sec, i){ if(!sec.id) sec.id = 'sec-' + i; sec.classList.add('dn-sec'); var eb = sec.querySelector('.eyebrow').textContent.trim(); var key = Object.keys(LBL).filter(function(k){ return eb.toLowerCase() === k.toLowerCase(); })[0]; return {id:sec.id, t: key ? LBL[key] : sec.querySelector('h2').textContent.trim()}; });
+  var bar = document.createElement('nav'); bar.className = 'dnav'; bar.setAttribute('aria-label', '이 페이지 안내');
+  bar.innerHTML = '<div class="wrap dnav-in"><a class="dn-back" href="' + backHref + '"><span aria-hidden="true">←</span> ' + esc(backLabel) + '</a><span class="dn-sep" aria-hidden="true">/</span><span class="dn-here ol">' + esc(title) + '</span>' +
+    '<div class="dn-toc" role="list"><span class="dn-ind" aria-hidden="true"></span>' + items.map(function(it){ return '<a role="listitem" href="#' + it.id + '" data-sec="' + it.id + '">' + esc(it.t) + '</a>'; }).join('') + '</div></div>';
+  var first = app.querySelector('section'); first.parentNode.insertBefore(bar, first.nextSibling);
+  var hd = document.querySelector('.hd'); document.documentElement.style.setProperty('--hdh', (hd ? hd.offsetHeight : 72) + 'px');
+  var toc = bar.querySelector('.dn-toc'), ind = bar.querySelector('.dn-ind');
+  var mark = function(id){ var a = toc.querySelector('[data-sec="' + id + '"]'); toc.querySelectorAll('a').forEach(function(x){ x.classList.toggle('on', x === a); if(x === a) x.setAttribute('aria-current', 'true'); else x.removeAttribute('aria-current'); }); if(a){ ind.style.width = a.offsetWidth + 'px'; ind.style.transform = 'translateX(' + a.offsetLeft + 'px)'; ind.style.opacity = 1; if(toc.scrollWidth > toc.clientWidth) toc.scrollTo({left: a.offsetLeft - 24, behavior: 'smooth'}); } };
+  toc.addEventListener('click', function(e){ var a = e.target.closest('[data-sec]'); if(!a) return; e.preventDefault(); var t = document.getElementById(a.getAttribute('data-sec')); if(t){ t.scrollIntoView({behavior:'smooth', block:'start'}); mark(t.id); } });
+  if('IntersectionObserver' in window){ var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) mark(e.target.id); }); }, {rootMargin:'-30% 0px -60% 0px'}); secs.forEach(function(sec){ io.observe(sec); }); }
+}
 function route(){
   var h = decodeURIComponent((location.hash || '#intro').slice(1)) || 'intro';
   var m, anchor = document.getElementById(h);
@@ -1259,10 +1291,10 @@ function route(){
   if(h === 'intro'){ page(''); app.innerHTML = vIntro(); }
   else if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
   else if(h === 'workshop'){ page('workshop'); app.innerHTML = vWorkshop(); bindWorkshop(); }
-  else if((m = h.match(/^w-(.+)$/)) && wById(m[1])){ page('wdetail'); app.innerHTML = vWDetail(wById(m[1])); }
+  else if((m = h.match(/^w-(.+)$/)) && wById(m[1])){ page('wdetail'); app.innerHTML = vWDetail(wById(m[1])); detailNav('#workshop', '워크샵', wById(m[1]).title); }
   else if(h === 'program'){ page('program'); app.innerHTML = vProgram(); }
   else if(h === 'online'){ page('online'); app.innerHTML = vOnline(); }
-  else if((m = h.match(/^c-(.+)$/)) && cById(m[1])){ page('course'); app.innerHTML = vCourse(cById(m[1])); bindCourse(cById(m[1])); }
+  else if((m = h.match(/^c-(.+)$/)) && cById(m[1])){ page('course'); app.innerHTML = vCourse(cById(m[1])); bindCourse(cById(m[1])); detailNav('#online', '온라인강의', cById(m[1]).title); }
   else if(h === 'team' || /^t-(han|jun|lee)$/.test(h)){ page('team'); app.innerHTML = vTeam(); bindTeam(); if(h !== 'team'){ var el = document.getElementById(h); if(el){ setTimeout(function(){ el.scrollIntoView({behavior:'instant', block:'start'}); }, 0); } return; } }
   else if(h === 'day'){ page('day'); app.innerHTML = vDay(); bindDay(); }
   else if(h === 'privacy'){ page('privacy'); app.innerHTML = vPrivacy(); }
@@ -1331,12 +1363,7 @@ function vIntro(){
     '<div class="sec-head"><div><p class="eyebrow">The day</p><h2 class="h2 one">하루는 이렇게 흘러가요</h2></div><p class="lead">차 한 잔으로 시작해 찻자리로 마무리해요. 듣는 시간보다 손을 쓰는 시간이 길어요.</p></div>' +
     '<ol class="flow it-flow">' + step('01','맞이','내 에이전트에게 이름과 말투를 정해 주고 첫 인사') + step('02','3분 챌린지','차가 우러나는 동안 에이전트가 일 하나를 끝내는 걸 눈앞에서') + step('03','연동하고 고치기','우리 팀 업무와 도구를 연결하고, 막히면 함께 풀기') + step('04','티 브레이크','차 한 잔과 1:1 이야기') + step('05','시연','서로의 에이전트를 소개하고 시연') + step('06','찻자리 마무리','하루를 돌아보고 2주 약속 적기') + '</ol>' +
   '</div></section>' +
-  '<section class="section"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">8명부터 400명까지</h2></div></div>' +
-    '<div class="tbl-wrap"><table class="cmp"><thead><tr><th scope="col">인원</th><th scope="col">추천</th><th scope="col">시간</th></tr></thead><tbody>' +
-      SIZES.map(function(r){ return '<tr><td><b>' + r[0] + '</b></td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>'; }).join('') +
-    '</tbody></table></div>' +
-  '</div></section>' +
+  sizeSection(false) +
   '<section class="section dark"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Hosts</p><h2 class="h2 one">강의만 하는 사람이 아니라, 매일 직접 하는 세 사람</h2></div></div>' +
     '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#t-' + k + '">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p></a>'; }).join('') + '</div>' +
