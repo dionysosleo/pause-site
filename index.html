@@ -1939,19 +1939,19 @@ function bindTeam(){
 
 /* ===== 개인정보처리방침 ===== */
 /* ===== 약관·정책 (원문은 policies.js) =====
-   사업자 정보는 BIZ에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
-var BIZ = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'', phone:'', cpo:'', cpoDept:'' };
+   사업자 정보는 OPERATOR에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
+var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'', cpoDept:'' };
 var VENDORS = []; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
-function bizName(){ return BIZ.name || 'CHA&I'; }
-function contactMail(){ return BIZ.email ? '<a href="mailto:' + esc(BIZ.email) + '">' + esc(BIZ.email) + '</a>' : ''; }
+function bizName(){ return OPERATOR.name || 'CHA&I'; }
+function contactMail(){ return OPERATOR.email ? '<a href="mailto:' + esc(OPERATOR.email) + '">' + esc(OPERATOR.email) + '</a>' : ''; }
 function bizRows(){
-  return [['상호', BIZ.name], ['대표자', BIZ.ceo], ['사업자등록번호', BIZ.regNo], ['통신판매업 신고번호', BIZ.mailOrder], ['주소', BIZ.address], ['이메일', BIZ.email], ['전화', BIZ.phone]].filter(function(r){ return r[1]; });
+  return [['상호', OPERATOR.name], ['대표자', OPERATOR.ceo], ['사업자등록번호', OPERATOR.regNo], ['통신판매업 신고번호', OPERATOR.mailOrder], ['주소', OPERATOR.address], ['이메일', OPERATOR.email], ['전화', OPERATOR.phone]].filter(function(r){ return r[1]; });
 }
 function policyTokens(html){
   var rows = bizRows();
   var biz = rows.length ? '<table class="ptbl kv"><tbody>' + rows.map(function(r){ return '<tr><th scope="row">' + r[0] + '</th><td>' + esc(r[1]) + '</td></tr>'; }).join('') + '</tbody></table>' : '<p>사업자 정보는 웹사이트 하단에서 확인할 수 있어요.</p>';
-  var contact = BIZ.email || BIZ.phone ? '<p class="pcontact">' + [contactMail(), BIZ.phone ? esc(BIZ.phone) : ''].filter(Boolean).join(' · ') + '</p>' : '<p class="pcontact"><a href="#contact">워크샵 문의</a> 페이지로 연락해 주세요.</p>';
-  var cpo = (BIZ.cpo ? '<p>개인정보 보호책임자: ' + esc(BIZ.cpo) + (BIZ.cpoDept ? ' (' + esc(BIZ.cpoDept) + ')' : '') + '</p>' : '') + contact;
+  var contact = OPERATOR.email || OPERATOR.phone ? '<p class="pcontact">' + [contactMail(), OPERATOR.phone ? esc(OPERATOR.phone) : ''].filter(Boolean).join(' · ') + '</p>' : '<p class="pcontact"><a href="#contact">워크샵 문의</a> 페이지로 연락해 주세요.</p>';
+  var cpo = (OPERATOR.cpo ? '<p>개인정보 보호책임자: ' + esc(OPERATOR.cpo) + (OPERATOR.cpoDept ? ' (' + esc(OPERATOR.cpoDept) + ')' : '') + '</p>' : '') + contact;
   var vendors = VENDORS.length
     ? '<p>원활한 업무를 위해 아래와 같이 처리를 맡기고 있어요. 국외 이전은 개인정보 보호법 제28조의8제1항제3호(계약 이행을 위한 처리위탁·보관)에 따르며, 원치 않으면 아래 연락처로 이전 거부를 요청할 수 있어요. 다만 이 경우 해당 서비스 이용이 어려울 수 있어요.</p><table class="ptbl"><thead><tr><th scope="col">받는 곳</th><th scope="col">맡기는 일</th><th scope="col">항목</th><th scope="col">국가·시기·방법</th><th scope="col">보유 기간</th></tr></thead><tbody>' + VENDORS.map(function(v){ return '<tr><td>' + esc(v.name) + '</td><td>' + esc(v.task) + '</td><td>' + esc(v.items) + '</td><td>' + esc([v.country, v.when, v.how].filter(Boolean).join(' · ')) + '</td><td>' + esc(v.period) + '</td></tr>'; }).join('') + '</tbody></table>'
     : '<p>현재 웹사이트로 받은 개인정보를 다른 회사에 맡겨 처리하거나 국외로 이전하지 않아요. 문의 접수 도구나 메일 서비스를 쓰게 되면 받는 곳, 맡기는 일, 국가, 이전 시기와 방법을 이 항목에 미리 공개해요.</p>';
@@ -2043,7 +2043,7 @@ function sendLead(data){
 }
 function savedLead(){ return null; }
 try { localStorage.removeItem('pause_lead'); } catch(e){} /* 예전 버전이 남긴 문의 정보 정리 */
-function mailTarget(){ return BIZ.email ? '<b>' + contactMail() + '</b>' : '<b>CHA&amp;I 문의 메일</b>'; }
+function mailTarget(){ return OPERATOR.email ? '<b>' + contactMail() + '</b>' : '<b>CHA&amp;I 문의 메일</b>'; }
 function proposalBox(){
   return LEAD_CONFIG.proposalUrl
     ? '<a class="btn btn-lime" href="' + esc(LEAD_CONFIG.proposalUrl) + '" target="_blank" rel="noopener" download>제안서 PDF 받기</a>'
