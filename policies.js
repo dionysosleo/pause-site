@@ -1,10 +1,10 @@
-/* CHA&I 정책 문서 (공개본 원문). 버전·시행일은 POLICY_META, 사업자 정보는 index.html의 BIZ에서 채움.
-   내용을 바꾸면 version을 올리고 POLICY_CHANGES에 한 줄 추가. 법적 검토와 운영사 확인 목록은 운영 폴더 docs/legal/
-   art:true 인 문서는 "제N조(제목)" 조문식으로 표시 */
-var POLICY_META = { version: '1.1', announced: '', effective: '' };
+/* CHA&I 정책 문서 (공개본 원문). 사업자 정보는 index.html의 BIZ에서 채움.
+   사이트 정식 오픈 전(2026-11-25 주인 지시): 버전 1.0·최초 게시일 고정. 오픈 전 수정은 버전을 올리지 않고 이력도 추가하지 않음.
+   오픈 뒤부터는 회원 공지와 함께 version을 올리고 POLICY_CHANGES에 한 줄 추가 (주인 요청 시).
+   art:true 인 문서는 "제N조 제목" 조문식으로 표시 */
+var POLICY_META = { version: '1.0', announced: '', effective: '2026. 11. 25.' };
 var POLICY_CHANGES = [
-  { v: '1.1', d: '', t: '조문 체계로 재작성, 상품 유형별 취소·환불 기준과 프로그램 참가 시 개인정보 처리 추가' },
-  { v: '1.0', d: '', t: '최초 제정' }
+  { v: '1.0', d: '2026. 11. 25.', t: '최초 제정' }
 ];
 var POLICY_ORDER = ['terms', 'privacy', 'ai-policy', 'refund', 'copyright'];
 var POLICIES = {
