@@ -987,6 +987,29 @@ a.pchip:hover{border-color:#667866;box-shadow:0 8px 20px rgba(94,111,94,.14)}
 .wl-head h2 span{color:#667866;font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;margin-left:4px}
 .wl-head p{margin:0;font-size:14px;color:#8A9098}
 @media (max-width:620px){.wl-head{flex-direction:column;gap:2px}}
+/* ===== R18 레이아웃 시스템 v1 (docs/ui-guide.md R18): 여백·폭·리듬·글자 크기를 토큰으로 ===== */
+:root{--max:1120px;--gutter:clamp(20px,5vw,56px);--sec:clamp(64px,8vw,112px);--sec-t:clamp(44px,5vw,72px);--radius-l:clamp(20px,2.4vw,32px)}
+.wrap{max-width:calc(var(--max) + 2 * var(--gutter));padding-left:var(--gutter);padding-right:var(--gutter)}
+.section{padding:var(--sec) 0}
+.section.tight{padding:var(--sec-t) 0}
+.h1{font-size:clamp(30px,4.4vw,52px);line-height:1.18}
+.h2{font-size:clamp(24px,3.1vw,38px);line-height:1.28}
+.lead{font-size:clamp(15px,1.35vw,18px);line-height:1.7}
+/* 와이드 띠(band): 본문 폭 안에 들어오는 액자. 데스크톱 21:8, 모바일 4:5 */
+.band,.band[style]{width:min(calc(100% - 2 * var(--gutter)),var(--max));margin:var(--sec-t) auto 0!important;min-height:0!important;aspect-ratio:21/8;border-radius:var(--radius-l)!important}
+.band .wrap{max-width:none;padding:clamp(24px,4vw,56px)!important}
+.band .h2{font-size:clamp(22px,2.6vw,34px)!important;max-width:24ch}
+.band .lead{max-width:44ch}
+.band .photo::after{background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(0,0,0,.62))}
+@media (max-width:760px){.band,.band[style]{aspect-ratio:4/5;max-height:560px}.band .h2{max-width:none}}
+/* 큰 이미지 머리(it-hero·ct-hero)도 같은 폭 규칙 */
+.it-hero,.ct-hero{width:min(calc(100% - 2 * var(--gutter)),var(--max));margin:16px auto 0!important;border-radius:var(--radius-l)!important}
+.it-hero{min-height:clamp(420px,62vh,640px)!important}
+@media (max-width:760px){.it-hero{min-height:0!important}.it-hero .wrap{padding-top:40px!important;padding-bottom:40px!important}}
+/* lite 머리: 같은 토큰 */
+.hero.lite{max-width:calc(var(--max) + 2 * var(--gutter));padding:clamp(24px,4vw,48px) var(--gutter) 0;gap:clamp(24px,5vw,64px)}
+/* 모바일 본문 여백·버튼 */
+@media (max-width:760px){.btns{gap:8px}.btns .btn{flex:1 1 auto;justify-content:center}.sec-head{margin-bottom:24px}}
 </style>
 </head>
 <body>
@@ -1413,8 +1436,8 @@ function vIntro(){
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">At a glance</p><h2 class="h2 one">CHA&amp;I를 한 장으로</h2></div></div>' +
     '<dl class="it-grid">' +
-      '<div><dt>무엇을</dt><dd><ul class="ddl"><li class="ol">팀원 모두가 실제 업무 고르기</li><li class="ol">AI 에이전트로 만드는 실무 워크샵</li></ul></dd></div>' +
-      '<div><dt>어떻게</dt><dd><ul class="ddl"><li class="ol">숲에서 종일 워크샵 · 7시간</li><li class="ol">귀사에서 오후 워크샵 · 5~6시간</li></ul></dd></div>' +
+      '<div><dt>무엇을</dt><dd><ul class="ddl"><li class="ol">팀원 모두가 실제 업무 고르기</li><li class="ol">AI 에이전트 실무 워크샵</li></ul></dd></div>' +
+      '<div><dt>어떻게</dt><dd><ul class="ddl"><li class="ol">숲속 하루 워크샵 · 7시간</li><li class="ol">오후 워크샵 · 5~6시간</li></ul></dd></div>' +
       '<div><dt>누구와</dt><dd><ul class="ddl"><li class="ol">티 디렉터 이유진</li><li class="ol">AI 코치 한성희</li><li class="ol">에이전트 빌더 이준혁</li></ul></dd></div>' +
       '<div><dt>무엇이 남나</dt><dd><ul class="ddl"><li class="ol">팀 에이전트</li><li class="ol">2주 약속 카드</li><li class="ol">다음 날 1쪽 결과 리포트</li><li class="ol">90일 사용 확인</li></ul></dd></div>' +
     '</dl>' +
@@ -1625,7 +1648,7 @@ function salonSection(){
     season:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01"/></svg>'
   };
   var F = [['ticket','월 1회','오픈 살롱','개인 티켓으로 누구나'],['invite','초청형','프라이빗 살롱','고객·파트너·임원 행사'],['season','4개월','살롱 시즌','같은 멤버, 매달 한 주제']];
-  var Q = [['기다림','차','3분을 기다려 우러나요','AI','3초 만에 답해요','빨리 아는 것과 천천히 아는 것'],
+  var Q = [['기다림','차','3분을 기다려요','AI','3초 만에 답해요','빨리 아는 것과 천천히 아는 것'],
            ['숙성','술','몇 달을 익어요','AI','수많은 글로 배워요','시간이 만드는 사람이 있을까'],
            ['관계','차','마주 앉아 따라 줘요','AI','언제든 대답해요','AI와의 대화도 관계일까'],
            ['기억','차','향은 곧 사라져요','AI','모두 기록해요','다 기록되는 시대, 잊는다는 것'],
