@@ -959,6 +959,34 @@ a.pchip:hover{border-color:#667866;box-shadow:0 8px 20px rgba(94,111,94,.14)}
 .sq-legend .lg-tea::before{background:#FBF3EA;box-shadow:inset 0 0 0 1px #E8D6C1}
 .sq-legend .lg-ai::before{background:#EEF2F6;box-shadow:inset 0 0 0 1px #CFD9E3}
 .sq-legend .lg-q::before{background:#26313D}
+/* R17 페이지 머리(lite): 화면 밖으로 넘치지 않는 정돈된 2단, 사진은 4:3 둥근 액자 */
+.hero.lite{max-width:var(--max);margin:0 auto;padding:40px 24px 8px;min-height:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+.hero.lite .hero-copy{padding:24px 0}
+.hero.lite .photo{position:relative;min-height:0;aspect-ratio:4/3;border-radius:24px;overflow:hidden;box-shadow:0 18px 40px rgba(30,42,54,.10)}
+.hero.lite .photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media (max-width:900px){.hero.lite{grid-template-columns:minmax(0,1fr);gap:20px;padding-top:20px}.hero.lite .photo{order:-1;height:auto}}
+/* R17 워크샵 목록: 세로 카드 그리드 */
+.wlist{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;flex-direction:initial}
+.wcard2{display:flex;flex-direction:column;text-decoration:none;color:#26313D;border-radius:22px;transition:transform .35s}
+.wc-ph{position:relative;aspect-ratio:4/3;border-radius:20px;overflow:hidden;background:#F1F3F1}
+.wc-ph .photo,.wc-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.25,.7,.2,1)}
+.wcard2:hover .wc-ph img{transform:scale(1.04)}
+.wc-badge{position:absolute;left:14px;top:14px;font-size:12.5px;font-weight:700;color:#26313D;background:rgba(255,255,255,.94);border-radius:999px;padding:5px 11px;box-shadow:0 4px 12px rgba(0,0,0,.10)}
+.wcard2.hi .wc-badge{background:#667866;color:#fff}
+.wc-body{padding:14px 4px 0;display:flex;flex-direction:column;gap:4px}
+.wc-body h2{margin:0;font-size:18px;font-weight:700;line-height:1.4;color:#26313D}
+.wc-hook{margin:0;font-size:14.5px;color:#4A5460}
+.wc-meta{margin:4px 0 0;font-size:14px;color:#6B727A;display:flex;align-items:center;gap:6px;font-variant-numeric:lining-nums}
+.wc-meta b{color:#26313D;font-weight:800;font-family:'Pretendard','Noto Sans KR',sans-serif}
+.wc-meta i{font-style:normal;color:#C5CCC5}
+.wc-who{margin:0;font-size:13px;color:#8A9098}
+@media (max-width:1000px){.wlist{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.wlist{grid-template-columns:minmax(0,1fr)}}
+.wl-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 18px;padding-top:24px;border-top:1px solid rgba(38,49,61,.10)}
+.wl-head h2{margin:0;font-size:22px;font-weight:800;color:#26313D}
+.wl-head h2 span{color:#667866;font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;margin-left:4px}
+.wl-head p{margin:0;font-size:14px;color:#8A9098}
+@media (max-width:620px){.wl-head{flex-direction:column;gap:2px}}
 </style>
 </head>
 <body>
@@ -1273,11 +1301,13 @@ var DAYS = [
 ];
 var NEXT_DAY = {tag:'파일럿', title:'차를 우리고, AI를 키우다 · 첫 회', line:'아산나눔재단 파일럿 뒤에 이 자리에 올라와요'};
 var VISITED = ['카카오','SK','신한 VIP','충북대학교','아산상회','GS 52g','넥슨','HD현대','현대백화점','경기도청','분당 서울대병원','힐리언스 선마을'];
+/* 다녀온 곳 수: VISITED 목록 + 기록(DAYS)의 org를 합쳐 중복 없이 셈 */
+function visitedCount(){ var seen = {}; VISITED.concat(DAYS.map(function(d){ return d.org || ''; })).forEach(function(n){ if(n) seen[n] = 1; }); return Object.keys(seen).length; }
 function vDay(){
   var tags = ['전체','출강','파일럿','살롱','클럽'];
   return '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">CHA&amp;I Day</p><h1 class="h2 one">현장 기록</h1></div><p class="lead">출강, 살롱, 찻자리 클럽이 열린 날을 사진으로 쌓아요.</p></div>' +
-    '<div class="dstats"><div><b>' + VISITED.length + '곳</b><span>다녀온 기업·기관</span></div><div><b>' + DAYS.length + '건</b><span>쌓인 현장 기록</span></div></div>' +
+    '<div class="dstats"><div><b>' + visitedCount() + '곳</b><span>다녀온 기업·기관</span></div><div><b>' + DAYS.length + '건</b><span>쌓인 현장 기록</span></div></div>' +
     '<div class="psz dtabs" role="tablist" aria-label="기록 종류" style="--k:0;--n:' + tags.length + '"><span class="psz-ind" aria-hidden="true"></span>' + tags.map(function(t, i){ return '<button type="button" role="tab" class="' + (i ? '' : 'on') + '" aria-selected="' + (i ? 'false' : 'true') + '" data-dtab="' + i + '" data-t="' + esc(t) + '"><b>' + esc(t) + '</b></button>'; }).join('') + '</div>' +
     '<div class="days">' + DAYS.map(function(d, i){ return '<article class="dcard" data-t="' + esc(d.tag) + '"><button type="button" class="dph" data-day="' + i + '" aria-label="' + esc(d.title) + ' 사진 ' + d.photos.length + '장 보기">' + ph(d.photos[0], 900) + (d.photos.length > 1 ? '<span class="dcount">' + d.photos.length + '장</span>' : '') + '</button><div class="dmeta"><span class="dtag">' + esc(d.tag) + '</span>' + (d.date ? '<span class="ddate">' + esc(d.date) + '</span>' : '') + '</div><h3 class="ol">' + esc(d.title) + '</h3><p class="ol">' + esc(d.line) + '</p><p class="dwho ol">' + esc(d.place) + ' · ' + who(d.who) + '</p></article>'; }).join('') +
       '<article class="dcard dnext" data-t="' + esc(NEXT_DAY.tag) + '"><div class="dph dempty"><span>다음 기록</span></div><div class="dmeta"><span class="dtag">' + esc(NEXT_DAY.tag) + '</span></div><h3 class="ol">' + esc(NEXT_DAY.title) + '</h3><p class="ol">' + esc(NEXT_DAY.line) + '</p><p class="dwho ol">곧 올라와요</p></article>' +
@@ -1557,14 +1587,15 @@ function pathChips(steps, extra){
 }
 /* ===== 워크샵 목록 (사진 중심 카드) ===== */
 function vWorkshop(){
-  return '<section class="hero" style="min-height:min(70vh,640px)">' +
+  return '<section class="hero lite">' +
     '<div class="hero-copy"><p class="eyebrow">Workshops</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">차 한 잔에 에이전트 하나</h1>' +
     '<p class="lead ol">듣고 끝나는 강의가 아니라, 각자 파트너 에이전트를 만들어 돌아가요.</p>' +
     pathChips([['1','저녁 찻자리','시작','#w-evening'],['2','반나절 · 하루','넓히기','#w-office'],['3','찻자리 클럽','이어 가기','#w-club']], ['+','살롱','저녁 모임','#w-salon']) +
     '<div class="btns"><a class="btn btn-lime" href="#contact">워크샵 문의</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
     ph('fWorkshop', 1600, '', true) +
   '</section>' +
-  '<section style="padding-bottom:56px"><div class="wrap">' +
+  '<section style="padding:56px 0"><div class="wrap">' +
+    '<div class="wl-head"><h2 class="ol">모든 워크샵 <span>' + W.length + '</span></h2><p class="ol">카드를 누르면 진행 순서와 강사를 볼 수 있어요</p></div>' +
     '<div class="wlist" id="wlist">' + W.map(wCard).join('') + '</div>' +
   '</div></section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -1624,12 +1655,17 @@ function flowSection(){
     '<div class="vz sflow aflow" role="img" aria-label="워크샵 앞뒤 흐름: ' + FLOWS.map(function(f){ return f[0] + ' ' + f[1]; }).join(', ') + '"><ol>' + FLOWS.map(function(f, i){ return '<li style="--i:' + i + '"' + (i === 1 ? ' class="day"' : '') + '><span class="sf-dot"></span><b>' + esc(f[0]) + '</b><span class="ol">' + esc(f[1]) + '</span><small class="ol">' + esc(f[2]) + '</small></li>'; }).join('') + '</ol><div class="sf-ends"><span>워크샵 전</span><span>워크샵 뒤 90일</span></div></div>' +
   '</div></section>';
 }
+/* 워크샵 카드: 사진 위 · 제목 한 줄 · 한 줄 소개 · 핵심 정보 한 줄 (Airbnb·Maven식 세로 카드, R17) */
+var WHOOK = {evening:'네 잔의 차와 파트너 에이전트', office:'오후 한나절, 팀이 쓸 에이전트 하나', outdoor:'숲에서 보내는 팀의 하루', club:'같은 멤버, 4개월 동안 매달 한 잔', salon:'AI × 차 × 우리 술의 저녁'};
+var WLEN = {evening:'4시간', office:'5~6시간', outdoor:'7시간', club:'4개월', salon:'3시간'};
+var WWHEN = {evening:'저녁', office:'오후', outdoor:'하루', club:'월 1회', salon:'저녁 · 월 1회'};
 function wCard(w){
-  return '<a class="wcard" href="#w-' + w.id + '" data-kind="' + esc(w.kind) + '">' + ph(w.photos[0], 1100) +
-    '<div class="wcard-body"><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge">' + esc(w.badge) + '</span><span class="badge ln">' + esc(w.kind) + '</span></div>' +
-    '<h2 class="h2" style="font-size:28px">' + esc(w.title) + '</h2><p class="muted" style="margin:0">' + esc(w.sub) + '</p>' +
-    '<div class="wmeta"><span><b>시간</b>' + esc(w.hours) + '</span><span><b>강사</b>' + who(w.who) + '</span><span><b>인원</b>' + esc(w.size) + '</span><span><b>장소</b>' + esc(w.place) + '</span></div>' +
-    '<span style="font-weight:700">자세히 보기 →</span></div></a>';
+  var hi = w.id === 'evening';
+  return '<a class="wcard2' + (hi ? ' hi' : '') + '" href="#w-' + w.id + '" data-kind="' + esc(w.kind) + '">' +
+    '<div class="wc-ph">' + ph(w.photos[0], 900) + '<span class="wc-badge">' + esc(hi ? '대표 · 추천' : w.badge.split(' · ')[0]) + '</span></div>' +
+    '<div class="wc-body"><h2 class="ol">' + esc(w.title) + '</h2><p class="wc-hook ol">' + esc(WHOOK[w.id] || w.sub) + '</p>' +
+    '<p class="wc-meta ol"><b>' + esc(WLEN[w.id] || w.hours) + '</b><i aria-hidden="true">·</i>' + esc(WWHEN[w.id] || '') + '<i aria-hidden="true">·</i>' + esc(w.size.split(' · ')[0]) + '</p>' +
+    '<p class="wc-who ol">' + who(w.who) + '</p></div></a>';
 }
 function bindWorkshop(){
   $$('[data-f]').forEach(function(b){ b.addEventListener('click', function(){
@@ -1680,7 +1716,7 @@ function vProgram(){
     ['Q3 · 가을','시음회 · 쇼케이스','laugh',['부서별 에이전트 시연회','잘 쓰는 사례 사내 공유','다음 확장 업무 선정']],
     ['Q4 · 겨울','숲에서 회고','cabin',['종일 야외 워크샵 (1박 2일 선택)','1년 성과 리포트','다음 해 계획 제안']]
   ];
-  return '<section class="hero" style="min-height:min(70vh,640px)">' +
+  return '<section class="hero lite">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">한 회사를 1년 동안 맡아요</h1>' +
     '<p class="lead ol">한 번의 특강이 아니라, AI가 팀의 일하는 방식이 될 때까지.</p>' + pathChips([['1','진단','분기 시작'],['2','만들기','팀 에이전트'],['3','시연','사내 공유'],['4','성과','분기 리포트']]) + '' +
     '<div class="btns"><a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
