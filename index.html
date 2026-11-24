@@ -1017,6 +1017,42 @@ a.pchip:hover{border-color:#667866;box-shadow:0 8px 20px rgba(94,111,94,.14)}
 .hero-about dd .ddl li{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
 .hero-about dd .ddl li::before{content:'';flex:none;width:5px;height:5px;border-radius:50%;background:#667866}
 .hero.lite .hero-copy{gap:22px}
+
+/* ===== 약관·정책 (R19) ===== */
+.policy .ptabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 0 clamp(28px,4vw,48px);padding-bottom:2px}
+.policy .ptabs a{flex:none;padding:8px 14px;border-radius:999px;border:1px solid var(--hair);font-size:14px;font-weight:700;text-decoration:none;color:inherit;white-space:nowrap}
+.policy .ptabs a[aria-current]{background:var(--ink,#111);color:#fff;border-color:transparent}
+.policy .pgrid{display:grid;grid-template-columns:220px minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:start}
+.policy .pbody{max-width:880px;min-width:0}
+.policy .ptoc{position:sticky;top:96px}
+.policy .ptoc summary{cursor:pointer;list-style:none}.policy .ptoc summary::-webkit-details-marker{display:none}@media (min-width:861px){.policy .ptoc summary{pointer-events:none}}@media (max-width:860px){.policy .ptoc summary::after{content:' ＋';font-weight:400}.policy .ptoc details[open] summary::after{content:' －'}}
+.policy .ptoc ol{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:2px}
+.policy .ptoc button{all:unset;cursor:pointer;display:block;padding:5px 0;font-size:14px;line-height:20px;color:#5C6672}
+.policy .ptoc button:hover,.policy .ptoc button:focus-visible{color:inherit;text-decoration:underline}
+.policy .h1{font-size:clamp(26px,3vw,38px)}
+.policy .lead{margin:14px 0 0}
+.policy .pmeta{margin:10px 0 0;font-size:13px;color:#5C6672}
+.policy .psec{scroll-margin-top:96px}
+.policy .psec p,.policy .psec li{font-size:16px;line-height:1.75}
+.policy .psec ul,.policy .psec ol{padding-left:1.3em;display:grid;gap:4px}
+.policy .pnote{font-size:14px;color:#5C6672}
+.ptbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;line-height:1.6}
+.ptbl th,.ptbl td{border-bottom:1px solid var(--hair);padding:10px 12px;text-align:left;vertical-align:top}
+.ptbl thead th{font-weight:800;background:rgba(0,0,0,.03)}
+.ptbl.kv th{width:160px;font-weight:700}
+.policy .pback{margin-top:48px}
+.pnotice{border:1px solid var(--hair);border-radius:14px;padding:14px 16px;font-size:13px;line-height:1.6}
+.pnotice table{width:100%;border-collapse:collapse;margin:8px 0}
+.pnotice th{width:44px;text-align:left;font-weight:700;padding:3px 8px 3px 0;vertical-align:top}
+.pnotice td{padding:3px 0}
+.pnotice p{margin:0;color:#5C6672}
+.field .hint{display:block;margin-top:6px;font-size:12.5px;line-height:1.5;color:#5C6672;font-weight:400}
+footer .legal{flex-basis:100%;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-top:20px;border-top:1px solid rgba(0,0,0,.08);font-size:13px}
+footer .legal nav{gap:16px}
+footer .legal a{font-weight:400}
+footer .legal p{margin:0}
+footer .biz{font-size:13px}
+@media (max-width:860px){.policy .pgrid{grid-template-columns:minmax(0,1fr)}.policy .ptoc{position:static;border:1px solid var(--hair);border-radius:14px;padding:14px 16px}.ptbl{display:block;overflow-x:auto}}
 </style>
 </head>
 <body>
@@ -1053,16 +1089,18 @@ a.pchip:hover{border-color:#667866;box-shadow:0 8px 20px rgba(94,111,94,.14)}
     <div style="display:flex;flex-direction:column;gap:12px;max-width:420px">
       <a class="logo" href="#intro"><i aria-hidden="true"></i><b>CHA<span class="amp">&amp;</span>I</b></a>
       <p style="margin:0"><b class="en" style="color:#fff;letter-spacing:.2em">TEA · AI · LIFE</b><br>차와 AI, 삶에 스미다. 시간을 들인 만큼 내 것이 되는 기업 워크샵.</p>
-      <p style="margin:0" class="en">[상호] · [대표자] · [사업자등록번호] · [문의 이메일]</p>
+      <p style="margin:0" class="biz" id="bizLine" hidden></p>
     </div>
     <nav aria-label="하단 메뉴">
-      <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#day">현장 기록</a><a href="#contact">워크샵 문의</a><a href="#privacy">개인정보처리방침</a>
+      <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#day">현장 기록</a><a href="#contact">워크샵 문의</a>
     </nav>
+    <div class="legal"><nav aria-label="약관과 정책"><a href="#terms">이용약관</a><a href="#privacy"><b>개인정보처리방침</b></a><a href="#ai-policy">AI 이용정책</a><a href="#refund">취소·환불정책</a><a href="#copyright">저작권정책</a></nav><p>© <span id="fyear"></span> CHA&amp;I</p></div>
   </div>
 </footer>
 
 <dialog id="dlg"><div style="position:relative"><button type="button" class="x" data-close aria-label="닫기">×</button><div class="dlg" id="dlgBody"></div></div></dialog>
 
+<script src="policies.js"></script>
 <script>
 (function(){
 'use strict';
@@ -1377,7 +1415,7 @@ function detailNav(backHref, backLabel, title){
 function route(){
   var h = decodeURIComponent((location.hash || '#intro').slice(1)) || 'intro';
   var m, anchor = document.getElementById(h);
-  if(anchor && !/^(intro|home|workshop|program|online|team|contact|proposal|brief|privacy|day|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView({behavior:'smooth', block:'start'}); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
+  if(anchor && !/^(intro|home|workshop|program|online|team|contact|proposal|brief|privacy|terms|ai-policy|refund|copyright|day|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView({behavior:'smooth', block:'start'}); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
   hideSticky();
   if(h === 'intro'){ page(''); app.innerHTML = vIntro(); }
   else if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
@@ -1388,7 +1426,7 @@ function route(){
   else if((m = h.match(/^c-(.+)$/)) && cById(m[1])){ page('course'); app.innerHTML = vCourse(cById(m[1])); bindCourse(cById(m[1])); detailNav('#online', '온라인강의', cById(m[1]).title); }
   else if(h === 'team' || /^t-(han|jun|lee)$/.test(h)){ page('team'); app.innerHTML = vTeam(); bindTeam(); if(h !== 'team'){ var el = document.getElementById(h); if(el){ setTimeout(function(){ el.scrollIntoView({behavior:'instant', block:'start'}); }, 0); } return; } }
   else if(h === 'day'){ page('day'); app.innerHTML = vDay(); bindDay(); }
-  else if(h === 'privacy'){ page('privacy'); app.innerHTML = vPrivacy(); }
+  else if(POLICIES[h]){ page('policy'); app.innerHTML = vPolicy(h); bindPolicy(); }
   else if(h === 'brief'){ page('brief'); app.innerHTML = vBrief(); bindBrief(); }
   else if(h === 'proposal'){ page('contact'); app.innerHTML = vProposal(); bindProposal(); }
   else if(h.indexOf('contact') === 0){ page('contact'); app.innerHTML = vContact(h.split('?')[1] || ''); bindContact(); }
@@ -1860,8 +1898,9 @@ function notifyDialog(c){
     '<form class="form" style="grid-template-columns:minmax(0,1fr)" data-form="notify" novalidate>' +
     '<label class="field">이름<input name="name" required autocomplete="name"><span class="err">이름을 입력해 주세요</span></label>' +
     '<label class="field">이메일<input name="email" type="email" required autocomplete="email"><span class="err">이메일을 확인해 주세요</span></label>' +
+    '<div class="field consent"><label class="check"><input type="checkbox" name="agree" required><span>(필수) 오픈 알림을 받기 위해 이름·이메일을 수집하고, 알림을 보낸 뒤 파기하는 데 동의해요. 동의하지 않으면 알림을 받을 수 없어요. <a href="#privacy">개인정보처리방침</a></span></label><span class="err">동의가 필요해요</span></div>' +
     '<button class="btn btn-lime" type="submit">신청하기</button></form>');
-  bindForm($('#dlgBody form'), function(){ openDialog('<h2>온라인 신청은 준비 중이에요</h2><p style="margin:0">신청 접수 기능을 붙이는 중이에요. 그전까지는 <b>[문의 이메일]</b>로 “' + esc(c.title) + ' 오픈 알림”이라고 보내 주시면 챙겨 둘게요.</p><button type="button" class="btn btn-line" data-close>닫기</button>'); });
+  bindForm($('#dlgBody form'), function(){ openDialog('<h2>온라인 신청은 준비 중이에요</h2><p style="margin:0">신청 접수 기능을 붙이는 중이에요. 그전까지는 ' + mailTarget() + '로 “' + esc(c.title) + ' 오픈 알림”이라고 보내 주시면 챙겨 둘게요.</p><button type="button" class="btn btn-line" data-close>닫기</button>'); });
 }
 
 /* ===== 강사 ===== */
@@ -1895,19 +1934,49 @@ function bindTeam(){
 }
 
 /* ===== 개인정보처리방침 ===== */
-function vPrivacy(){
-  var sec = function(t, b){ return '<h2 class="bh">' + t + '</h2>' + b; };
-  return '<section class="section tight brief"><div class="wrap" style="max-width:860px">' +
-    '<p class="eyebrow">Privacy</p><h1 class="h1 one" style="font-size:clamp(26px,3vw,38px)">개인정보처리방침</h1>' +
-    '<p class="lead" style="margin:14px 0 0">[상호](이하 “CHA&amp;I”)는 워크샵 문의와 알림 신청에 필요한 최소한의 개인정보만 받아요.</p>' +
-    sec('1. 수집하는 항목', '<ul class="checks"><li>워크샵 문의: 회사명, 담당자 성함, 이메일, 연락처(선택), 문의 내용</li><li>오픈 알림 신청: 이름, 이메일</li></ul>') +
-    sec('2. 이용 목적', '<p>문의 응대, 견적·제안서 전달, 워크샵 일정 조율, 강의 오픈 알림 발송에만 써요.</p>') +
-    sec('3. 보관 기간', '<p>상담이 끝난 날부터 1년간 보관한 뒤 지체 없이 파기해요. 법령에 따로 정한 기간이 있으면 그 기간을 따라요.</p>') +
-    sec('4. 제3자 제공과 처리 위탁', '<p>본인 동의 없이 제3자에게 제공하지 않아요. 메일·문의 접수 도구를 쓰는 경우 해당 업체와 위탁 내용을 이 페이지에 알려 드려요.</p>') +
-    sec('5. 이용자의 권리', '<p>언제든 내 정보의 열람·정정·삭제·처리 정지를 요청할 수 있어요. 아래 연락처로 요청하시면 바로 처리해요.</p>') +
-    sec('6. 개인정보 보호책임자', '<p>[책임자 성함] · [문의 이메일]</p>') +
-    '<p class="muted" style="margin-top:36px;font-size:13px">시행일: [시행일]</p>' +
+/* ===== 약관·정책 (원문은 policies.js) =====
+   사업자 정보는 BIZ에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
+var BIZ = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'', phone:'', cpo:'', cpoDept:'' };
+var VENDORS = []; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
+function bizName(){ return BIZ.name || 'CHA&I'; }
+function contactMail(){ return BIZ.email ? '<a href="mailto:' + esc(BIZ.email) + '">' + esc(BIZ.email) + '</a>' : ''; }
+function bizRows(){
+  return [['상호', BIZ.name], ['대표자', BIZ.ceo], ['사업자등록번호', BIZ.regNo], ['통신판매업 신고번호', BIZ.mailOrder], ['주소', BIZ.address], ['이메일', BIZ.email], ['전화', BIZ.phone]].filter(function(r){ return r[1]; });
+}
+function policyTokens(html){
+  var rows = bizRows();
+  var biz = rows.length ? '<table class="ptbl kv"><tbody>' + rows.map(function(r){ return '<tr><th scope="row">' + r[0] + '</th><td>' + esc(r[1]) + '</td></tr>'; }).join('') + '</tbody></table>' : '<p>사업자 정보는 웹사이트 하단에서 확인할 수 있어요.</p>';
+  var contact = BIZ.email || BIZ.phone ? '<p class="pcontact">' + [contactMail(), BIZ.phone ? esc(BIZ.phone) : ''].filter(Boolean).join(' · ') + '</p>' : '<p class="pcontact"><a href="#contact">워크샵 문의</a> 페이지로 연락해 주세요.</p>';
+  var cpo = (BIZ.cpo ? '<p>개인정보 보호책임자: ' + esc(BIZ.cpo) + (BIZ.cpoDept ? ' (' + esc(BIZ.cpoDept) + ')' : '') + '</p>' : '') + contact;
+  var vendors = VENDORS.length
+    ? '<p>원활한 업무를 위해 아래와 같이 처리를 맡기고 있어요. 국외 이전은 개인정보 보호법 제28조의8제1항제3호(계약 이행을 위한 처리위탁·보관)에 따르며, 원치 않으면 아래 연락처로 이전 거부를 요청할 수 있어요. 다만 이 경우 해당 서비스 이용이 어려울 수 있어요.</p><table class="ptbl"><thead><tr><th scope="col">받는 곳</th><th scope="col">맡기는 일</th><th scope="col">항목</th><th scope="col">국가·시기·방법</th><th scope="col">보유 기간</th></tr></thead><tbody>' + VENDORS.map(function(v){ return '<tr><td>' + esc(v.name) + '</td><td>' + esc(v.task) + '</td><td>' + esc(v.items) + '</td><td>' + esc([v.country, v.when, v.how].filter(Boolean).join(' · ')) + '</td><td>' + esc(v.period) + '</td></tr>'; }).join('') + '</tbody></table>'
+    : '<p>현재 웹사이트로 받은 개인정보를 다른 회사에 맡겨 처리하거나 국외로 이전하지 않아요. 문의 접수 도구나 메일 서비스를 쓰게 되면 받는 곳, 맡기는 일, 국가, 이전 시기와 방법을 이 항목에 미리 공개해요.</p>';
+  var changes = '<table class="ptbl"><thead><tr><th scope="col">버전</th><th scope="col">시행일</th><th scope="col">내용</th></tr></thead><tbody>' + POLICY_CHANGES.map(function(c){ return '<tr><td>' + esc(c.v) + '</td><td>' + esc(c.d || POLICY_META.effective || '게시일') + '</td><td>' + esc(c.t) + '</td></tr>'; }).join('') + '</tbody></table>';
+  return html.replace(/\{\{BIZNAME\}\}/g, esc(bizName())).replace('{{BIZBLOCK}}', biz).replace(/\{\{CONTACT\}\}/g, contact).replace('{{CPO}}', cpo).replace('{{VENDORS}}', vendors).replace('{{CHANGES}}', changes);
+}
+function vPolicy(key){
+  var P = POLICIES[key];
+  var tabs = POLICY_ORDER.map(function(k){ return '<a href="#' + k + '"' + (k === key ? ' aria-current="page"' : '') + '>' + POLICIES[k].short + '</a>'; }).join('');
+  var toc = P.sections.map(function(x, i){ return '<li><button type="button" data-goto="pol-' + (i + 1) + '">' + (i + 1) + '. ' + x[0] + '</button></li>'; }).join('');
+  var body = P.sections.map(function(x, i){ return '<section class="psec" id="pol-' + (i + 1) + '"><h2 class="bh">' + (i + 1) + '. ' + x[0] + '</h2>' + policyTokens(x[1]) + '</section>'; }).join('');
+  var meta = ['버전 ' + POLICY_META.version, POLICY_META.effective ? '시행일 ' + POLICY_META.effective : '', POLICY_META.announced ? '공고일 ' + POLICY_META.announced : ''].filter(Boolean).join(' · ');
+  return '<section class="section tight brief policy"><div class="wrap">' +
+    '<nav class="ptabs" aria-label="약관과 정책">' + tabs + '</nav>' +
+    '<div class="pgrid"><aside class="ptoc" aria-label="목차"><details' + (window.innerWidth > 860 ? ' open' : '') + '><summary class="eyebrow">목차</summary><ol>' + toc + '</ol></details></aside>' +
+    '<article class="pbody"><p class="eyebrow">Policy</p><h1 class="h1 one">' + P.title + '</h1><p class="lead">' + P.lead + '</p><p class="pmeta">' + meta + '</p>' + body +
+    '<p class="pback"><a href="#home">← 홈으로</a></p></article></div>' +
   '</div></section>';
+}
+function bindPolicy(){
+  $$('.ptoc [data-goto]').forEach(function(b){ b.addEventListener('click', function(){ var el = document.getElementById(b.getAttribute('data-goto')); if(el) el.scrollIntoView({block:'start'}); }); });
+}
+function renderBiz(){
+  var el = document.getElementById('bizLine'), y = document.getElementById('fyear');
+  if(y) y.textContent = new Date().getFullYear();
+  if(!el) return;
+  var r = bizRows().filter(function(x){ return x[0] !== '주소'; });
+  el.hidden = !r.length;
+  el.innerHTML = r.map(function(x){ return x[0] === '상호' || x[0] === '이메일' || x[0] === '전화' ? esc(x[1]) : x[0] + ' ' + esc(x[1]); }).join(' · ');
 }
 
 /* ===== 대표·본부장용 한 페이지 ===== */
@@ -1964,18 +2033,19 @@ function bindBrief(){
 var LEAD_CONFIG = { endpoint: '', proposalUrl: '' };
 function sendLead(data){
   data.at = new Date().toISOString(); data.page = location.href;
-  try { localStorage.setItem('pause_lead', JSON.stringify({company:data.company, name:data.name, email:data.email})); } catch(e){}
   if(!LEAD_CONFIG.endpoint) return Promise.resolve(false);
   return fetch(LEAD_CONFIG.endpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).then(function(r){ return r.ok || r.type === 'opaque'; }, function(){ return false; });
 }
-function savedLead(){ try { return JSON.parse(localStorage.getItem('pause_lead') || 'null'); } catch(e){ return null; } }
+function savedLead(){ return null; }
+try { localStorage.removeItem('pause_lead'); } catch(e){} /* 예전 버전이 남긴 문의 정보 정리 */
+function mailTarget(){ return BIZ.email ? '<b>' + contactMail() + '</b>' : '<b>CHA&amp;I 문의 메일</b>'; }
 function proposalBox(){
   return LEAD_CONFIG.proposalUrl
     ? '<a class="btn btn-lime" href="' + esc(LEAD_CONFIG.proposalUrl) + '" target="_blank" rel="noopener" download>제안서 PDF 받기</a>'
-    : '<p style="margin:0">제안서는 남겨 주신 이메일로 영업일 [N]일 안에 보내 드려요.</p>';
+    : '<p style="margin:0">제안서는 남겨 주신 이메일로 확인하는 대로 보내 드려요.</p>';
 }
 function copyDialog(title, txt, extra){
-  openDialog('<h2>' + title + '</h2>' + (extra || '') + '<p style="margin:0">온라인 접수를 붙이는 중이에요. 아래 내용을 복사해 <b>[문의 이메일]</b>로 보내 주시면 바로 연락드릴게요.</p><textarea readonly style="width:100%;min-height:180px;border:1px solid var(--hair);border-radius:10px;padding:12px;font-size:14px" id="copyTxt">' + esc(txt) + '</textarea><button type="button" class="btn btn-line" id="copyBtn">내용 복사하기</button>');
+  openDialog('<h2>' + title + '</h2>' + (extra || '') + '<p style="margin:0">온라인 접수를 붙이는 중이에요. 아래 내용을 복사해 ' + mailTarget() + '로 보내 주시면 바로 연락드릴게요.</p><textarea readonly style="width:100%;min-height:180px;border:1px solid var(--hair);border-radius:10px;padding:12px;font-size:14px" id="copyTxt">' + esc(txt) + '</textarea><button type="button" class="btn btn-line" id="copyBtn">내용 복사하기</button>');
   $('#copyBtn').addEventListener('click', function(){
     var ta = $('#copyTxt'); ta.select();
     var done = function(){ toast('복사했어요'); };
@@ -1983,7 +2053,7 @@ function copyDialog(title, txt, extra){
     else { try { document.execCommand('copy'); done(); } catch(e){} }
   });
 }
-var CONSENT = '<div class="full field consent"><label class="check"><input type="checkbox" name="agree" required><span>[필수] 문의 응대와 제안서 전달을 위해 회사명·성함·이메일·연락처를 수집하고, 상담이 끝난 뒤 1년간 보관하는 데 동의해요. <a href="#privacy">개인정보처리방침</a></span></label><span class="err">동의가 필요해요</span></div>';
+var CONSENT = '<div class="full pnotice" role="note"><b>개인정보 수집·이용 안내</b><table><tbody><tr><th scope="row">목적</th><td>문의 상담, 견적·제안서 전달, 일정 조율</td></tr><tr><th scope="row">항목</th><td>필수: 회사·기관명, 성함, 이메일 · 선택: 직함, 연락처, 인원, 희망 시기, 문의 내용</td></tr><tr><th scope="row">보유</th><td>상담이 끝난 뒤 1년</td></tr></tbody></table><p>보내 주신 요청에 답하기 위한 처리라 별도 동의 없이 진행돼요. 선택 항목은 비워 두셔도 돼요. <a href="#privacy">개인정보처리방침</a></p></div>';
 
 /* ===== 제안서 받기 (짧은 폼) ===== */
 function vProposal(){
@@ -2028,7 +2098,7 @@ function vContact(q){
   return '<section class="ct-hero">' + ph('teapot', 1800, '', true) + '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Let&#39;s have tea</p><p class="h2 one" style="color:#fff">차 한 잔 하면서 이야기 나눠요.</p></div></section>' +
   '<section class="section tight"><div class="wrap" style="max-width:880px">' +
     '<p class="eyebrow">Contact</p><h1 class="h1" style="font-size:clamp(32px,4.6vw,52px)">워크샵 문의</h1>' +
-    '<p class="lead" style="margin:16px 0 12px">아는 만큼만 적어 주세요. 영업일 기준 [N]일 안에 연락드리고, 확정되면 출강 3일 전에 사전 진단 폼을 따로 보내 드려요.</p>' +
+    '<p class="lead" style="margin:16px 0 12px">아는 만큼만 적어 주세요. 확인하는 대로 연락드리고, 확정되면 출강 3일 전에 사전 진단 폼을 따로 보내 드려요.</p>' +
     '<p style="margin:0 0 32px"><a class="lnk" href="#proposal">제안서만 먼저 받고 싶다면 → 제안서 받기</a></p>' +
     '<form class="form" data-form="contact" novalidate>' +
       '<label class="field">회사명 *<input name="company" required autocomplete="organization"' + v('company') + '><span class="err">회사명을 입력해 주세요</span></label>' +
@@ -2040,7 +2110,7 @@ function vContact(q){
       '<label class="field">희망 시기<input name="when" placeholder="예: 2027년 1월 중"></label>' +
       '<fieldset class="field full" style="border:0;padding:0;margin:0"><legend style="margin-bottom:8px">참가자 직무 (여러 개 선택)</legend><div class="chips">' + ['기획·PM','마케팅','영업·CS','HR','재무·총무','개발','경영진'].map(function(x){ return '<label><input type="checkbox" name="role" value="' + x + '">' + x + '</label>'; }).join('') + '</div></fieldset>' +
       '<label class="field full">외부 AI 서비스(Claude 등) 사내 접속<select name="access"><option value="">잘 모르겠어요</option><option>가능해요</option><option>막혀 있어요</option><option>일부만 가능해요</option></select></label>' +
-      '<label class="field full">하고 싶은 이야기<textarea name="msg" placeholder="교육 목적, 예산 범위, 리트리트 희망 지역, 카페인·알레르기 제한 등"></textarea></label>' +
+      '<label class="field full">하고 싶은 이야기<textarea name="msg" placeholder="교육 목적, 예산 범위, 리트리트 희망 지역 등"></textarea><small class="hint">건강 정보, 주민등록번호 같은 민감한 정보는 적지 말아 주세요. 차·다과 관련 유의 사항은 일정이 확정된 뒤 따로 여쭤볼게요.</small></label>' +
       '<label class="full check"><input type="checkbox" name="proposal" checked><span>제안서도 함께 받을게요 (내부 검토용)</span></label>' +
       CONSENT +
       '<div class="full"><button class="btn btn-lime" type="submit">문의 보내기</button></div>' +
@@ -2054,7 +2124,7 @@ function bindContact(){
     var data = {kind:'워크샵 문의', company:d.get('company'), name:d.get('name'), email:d.get('email'), phone:d.get('phone') || '', program:ts.options[ts.selectedIndex].text, size:d.get('size') || '', when:d.get('when') || '', roles:d.getAll('role').join(', '), access:d.get('access') || '모름', proposal:d.get('proposal') ? '예' : '아니요', msg:d.get('msg') || ''};
     sendLead(data).then(function(sent){
       var withP = data.proposal === '예';
-      if(sent){ openDialog('<h2>문의를 받았어요</h2><p style="margin:0">영업일 기준 [N]일 안에 ' + esc(data.email) + '로 연락드릴게요.</p>' + (withP ? proposalBox() : '') + '<button type="button" class="btn btn-line" data-close>닫기</button>'); return; }
+      if(sent){ openDialog('<h2>문의를 받았어요</h2><p style="margin:0">' + esc(data.email) + '로 확인하는 대로 연락드릴게요.</p>' + (withP ? proposalBox() : '') + '<button type="button" class="btn btn-line" data-close>닫기</button>'); return; }
       var txt = '[CHA&I 워크샵 문의]\n회사: ' + data.company + '\n담당자: ' + data.name + '\n이메일: ' + data.email + '\n연락처: ' + (data.phone || '-') + '\n프로그램: ' + data.program + '\n인원: ' + (data.size || '-') + '\n시기: ' + (data.when || '-') + '\n직무: ' + (data.roles || '-') + '\nAI 접속: ' + data.access + '\n제안서 필요: ' + data.proposal + '\n내용: ' + (data.msg || '-');
       copyDialog('문의 내용이 준비됐어요', txt, withP && LEAD_CONFIG.proposalUrl ? '<div>' + proposalBox() + '</div>' : '');
     });
@@ -2177,6 +2247,7 @@ function animViz(){
   els.forEach(function(v){ v.setAttribute('data-obs','1'); io.observe(v); });
 }
 new MutationObserver(function(){ koFix(); animViz(); revealGrids(); }).observe(document.getElementById('app'), {childList:true});
+renderBiz();
 window.addEventListener('hashchange', route);
 renderAuth();
 if(!/vercel\.app$|(^|\.)chaand\.ai$|^localhost$|^127\.|\.test$|^x\.test$/.test(location.hostname)) $('#pvNote').hidden = false;
