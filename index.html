@@ -635,6 +635,19 @@ html{font-variant-numeric:lining-nums}
 .career li{line-height:var(--row)}
 /* 정렬 규칙 R3: 한글이 들어간 영문 세리프 요소는 자동으로 한글 고딕으로 (스크립트가 .ko 부여) */
 .ko{font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif!important;font-style:normal!important;letter-spacing:0!important;font-variant-numeric:lining-nums tabular-nums}
+/* === 설계 노트 (근거 → 결정) === */
+.notes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.note{background:#fff;border-radius:20px;box-shadow:0 8px 24px rgba(30,42,54,.06);padding:26px 26px 22px;display:flex;flex-direction:column}
+.note:last-child{grid-column:1 / -1}
+.note .nn{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums tabular-nums;font-size:13px;font-weight:700;color:var(--pt,#667866);letter-spacing:.08em}
+.note h3{margin:8px 0 0;font-size:20px;line-height:1.4;color:#26313D!important;font-weight:700}
+.note h3::after{content:'';display:block;width:28px;height:2px;background:#26313D;margin-top:12px}
+.note .nf{margin:14px 0 0;font-size:15px;line-height:1.75;color:#3A4450}
+.note .ns{margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px}
+.note .ns a{color:#6B727A;text-decoration:underline;text-underline-offset:3px}
+.note .nd{margin:16px 0 0;padding:14px 16px;border-radius:12px;background:#F4F6F3;font-size:15px;line-height:1.7;color:#26313D}
+.note .nd b{display:block;font-size:12.5px;color:var(--pt,#667866);margin-bottom:4px;letter-spacing:.02em}
+@media (max-width:860px){.notes{grid-template-columns:minmax(0,1fr)}.note:last-child{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -938,6 +951,23 @@ function cById(id){ for(var i = 0; i < C.length; i++) if(C[i].id === id) return 
 function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · '); }
 
 /* ===== 홈: 기업 교육 담당자 ===== */
+/* ===== 설계 노트: 근거 → 결정 (출처는 docs 참고, 숫자는 원문 그대로) ===== */
+var NOTES = [
+  {n:'01', h:'도구는 들였는데, 일은 그대로예요', f:'생성형 AI를 업무에 쓰는 직장인은 56%지만, 상황과 목적에 맞게 능숙하게 쓰는 사람은 13.6%였어요. 해외 조사에서도 기업 AI 시도의 95%가 측정할 만한 성과로 이어지지 않았고, 원인은 모델이 아니라 ‘배우는 방식’으로 꼽혔어요.', src:[['대한상공회의소 SGI 조사','https://inews24.com/view/2008075'],['MIT NANDA, The GenAI Divide (2025)','https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/']], d:'사용법부터 가르치지 않아요. “무엇을 맡기고 무엇을 내가 정할지”를 먼저 묻고, 툴은 하나로 좁혀요.'},
+  {n:'02', h:'중요한 일일수록 AI를 덜 써요', f:'지난주 업무 중 핵심 업무 비중이 10%p 낮을수록 AI 활용률은 4.2%p 높았어요. AI가 잡무에는 퍼졌지만 일의 본질까지는 닿지 못했다는 뜻이에요.', src:[['한국은행 분석 (2026. 11 보도)','https://www.hankyung.com/article/202611171638i']], d:'쉬운 잡무 말고, 내 진짜 일 하나를 골라요. 나와 내 일을 설명하는 문서 5종으로 곁에서 같이 생각하는 ‘파트너 에이전트’를 세워요.'},
+  {n:'03', h:'교육은 현장에 30%도 남지 않아요', f:'연구마다 숫자는 달라도, 배운 것 가운데 실제 업무에 쓰이는 건 30%가 안 된다는 결과가 반복돼요. 끝난 뒤의 후속 장치가 이 차이를 만든다고 해요.', src:[['ATD, Learning Transfer','https://www.td.org/insights/practical-learning-transfer-techniques-to-bridge-learning-to-performance']], d:'끝난 뒤가 프로그램의 절반이에요. 24시간 결과 리포트, 48시간 2주 약속, 30일·90일 점검으로 이어 가요.'},
+  {n:'04', h:'직접 해 본 시간과 리더의 지지가 사용을 바꿔요', f:'제대로 교육받았다고 느끼는 직원은 36%뿐이었어요. 리더가 AI를 강하게 지지하면 긍정적으로 받아들이는 직원이 15%에서 55%로 늘었어요.', src:[['BCG, AI at Work 2025','https://www.bcg.com/publications/2025/ai-at-work-momentum-builds-but-gaps-remain']], d:'노트북 1인 1대로 손으로 만드는 시간을 한가운데 둬요. 리더가 같은 테이블에 앉는 회차를 권하고, 실습을 더 원하면 반나절·하루 과정으로 늘려요.'},
+  {n:'05', h:'AI가 빨라질수록 사람은 지쳐요', f:'직장인 64%가 AI를 쓰다 일이 더 복잡해진 경험을 했고, 70%는 AI 공부를 멈추면 뒤처질 것 같다고 답했어요. 일 자체보다 AI를 관리하고 지시하는 데 더 많은 시간을 쓴다는 응답도 절반 가까이 됐어요.', src:[['직장인 AI 인식 조사 (2026. 5 보도)','https://v.daum.net/v/20260511093757012'],['BCG, AI at Work 2026','https://www.bcg.com/press/3june2026-ai-reshaping-jobs-faster-than-companies-reshaping-work']], d:'차를 넣은 이유예요. 한 시간에 한 잔으로 속도를 늦추고, 6인 1조로 사람 사이의 대화를 되살려요.'}
+];
+var LEARNED = [['트레바리','4개월 시즌, 월 1회','찻자리 클럽 시즌'],['The School of Life','질문이 적힌 대화 메뉴','철학 질문 카드'],['Nerd Nite','20분짜리 짧은 이야기','살롱의 이야기 두 편'],['Section AI Academy','월간 오피스아워, 팀 단독 기수','온라인 오픈 Q&A, 기업 단독 기수'],['클래스101 비즈니스','복지형과 교육형을 나눈 기업 상품','기업 라이트 / 프로'],['Headspace for Work','사내 챔피언 제도','1년 웰니스의 사내 챔피언'],['기수제 강의 데이터','정원 11~25명 기수의 완주율','프리미엄 4주 기수, 정원 12명']];
+function designNotes(){
+  return '<section class="section"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">Design notes</p><h2 class="h2 one">이렇게 만든 데는 이유가 있어요</h2></div><p class="lead">순서 하나, 장치 하나마다 근거가 있어요. 국내외 조사와 먼저 해 본 곳들을 살펴보고 정했어요.</p></div>' +
+    '<div class="notes">' + NOTES.map(function(x){ return '<article class="note"><span class="nn">' + x.n + '</span><h3>' + esc(x.h) + '</h3><p class="nf">' + esc(x.f) + '</p><p class="ns">' + x.src.map(function(s){ return '<a href="' + s[1] + '" target="_blank" rel="noopener">' + esc(s[0]) + ' ↗</a>'; }).join('') + '</p><p class="nd"><b>그래서 CHA&amp;I는</b>' + esc(x.d) + '</p></article>'; }).join('') + '</div>' +
+    '<h3 class="h3" style="text-align:center;margin:44px 0 6px">프로그램 구조는 이런 곳에서 배웠어요</h3><p class="muted" style="text-align:center;margin:0 0 16px;font-size:14px">잘된 곳의 방식을 살펴보고, 차와 AI에 맞게 바꿨어요</p>' +
+    '<div class="tbl-wrap"><table class="cmp"><thead><tr><th scope="col">살펴본 곳</th><th scope="col">잘된 점</th><th scope="col">CHA&amp;I에서는</th></tr></thead><tbody>' + LEARNED.map(function(r){ return '<tr><td><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+  '</div></section>';
+}
 function vIntro(){
   var step = function(n, t, d){ return '<li><span class="en">' + n + '</span><b>' + t + '</b><p>' + d + '</p></li>'; };
   return '' +
@@ -958,6 +988,7 @@ function vIntro(){
       '<div><dt>무엇이 남나</dt><dd>팀 에이전트, 2주 약속 카드, 다음 날 1쪽 결과 리포트, 90일 사용 확인</dd></div>' +
     '</dl>' +
   '</div></section>' +
+  designNotes() +
   '<section class="section dark"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">The day</p><h2 class="h2 one">하루는 이렇게 흘러가요</h2></div><p class="lead">차 한 잔으로 시작해 찻자리로 마무리해요. 듣는 시간보다 손을 쓰는 시간이 길어요.</p></div>' +
     '<ol class="flow it-flow">' + step('01','맞이','내 에이전트에게 이름과 말투를 정해 주고 첫 인사') + step('02','3분 챌린지','차가 우러나는 동안 에이전트가 일 하나를 끝내는 걸 눈앞에서') + step('03','연동하고 고치기','우리 팀 업무와 도구를 연결하고, 막히면 함께 풀기') + step('04','티 브레이크','차 한 잔과 1:1 이야기') + step('05','시연','서로의 에이전트를 소개하고 시연') + step('06','찻자리 마무리','하루를 돌아보고 2주 약속 적기') + '</ol>' +
@@ -1390,6 +1421,7 @@ function vBrief(){
     '<h1 class="h1 one" style="font-size:clamp(26px,3vw,40px)">CHA&amp;I 워크샵 한 잔 요약</h1>' +
     '<p class="lead" style="margin:14px 0 0">팀원 모두가 실제 업무 하나를 AI 에이전트로 바꾸고, 그 결과를 숫자로 확인하는 실무 워크샵이에요.</p>' +
     '<div class="btns" style="margin:20px 0 8px"><button type="button" class="btn btn-lime btn-sm" data-copylink>이 페이지 링크 복사</button><button type="button" class="btn btn-line btn-sm" data-copybrief>요약 텍스트 복사</button><a class="btn btn-line btn-sm" href="#proposal">제안서 PDF 받기</a></div>' +
+    '<h2 class="bh">0. 왜 지금, 왜 이 방식인가요</h2><ul class="checks">' + NOTES.map(function(x){ return '<li><b>' + esc(x.h) + '</b> — ' + esc(x.d) + ' <span class="muted" style="font-size:13px">(' + x.src.map(function(s){ return esc(s[0]); }).join(', ') + ')</span></li>'; }).join('') + '</ul>' +
     '<h2 class="bh">1. 무엇이 남나요</h2><div class="tbl-wrap"><table class="cmp bt">' +
       row('결과물', '팀마다 실제 업무에 쓰는 AI 에이전트 1개 이상 (보고서·회의록 정리, 고객 문의 답변 초안, 경쟁사 조사 등)') +
       row('개인', '각자 “다음 2주에 해 볼 한 가지” 실행 약속') +
