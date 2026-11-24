@@ -616,7 +616,7 @@ footer{background:#FAF7F3!important;border:0!important}
 .tier h3::after,.pkg h3::after{content:'';display:block;width:44px;height:1.5px;background:#26313D;margin-top:10px}
 .tier ul{margin:8px 0 0;padding-left:18px;color:#3E4853;line-height:1.9}
 .tfit{margin:auto 0 0;padding-top:12px;font-size:14px;color:#6B727A}
-.pkgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.pkgs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:1000px;margin:0 auto}
 .pkg{background:#fff;border-radius:26px;padding:28px 24px;box-shadow:0 12px 30px rgba(40,50,64,.07);border:1px solid rgba(38,49,61,.04);display:flex;flex-direction:column;gap:12px}
 .pkg.on{border:1.5px solid rgba(102,120,102,.45)}
 .pkg p{margin:0;color:#3E4853;line-height:1.7}
@@ -752,7 +752,13 @@ var W = [
    fit:'연말·분기 팀 워크샵을 교육 성과로 남기고 싶을 때, 하루를 통째로 집중해 팀 과제를 끝내고 싶을 때',
    make:['팀이 함께 쓰는 업무 에이전트 1개','직무별 에이전트 (보고서·데이터·CS 중 택)','다음 90일 팀 약속'],
    opt:'1박 2일로 늘리기 — 저녁 숲속 티 세션, 우리 팀 퀴즈·룰렛 게임 레크리에이션, 다음 날 아침 산책과 쇼케이스를 더해요.',
-   tl:[['09:30','숲길 산책','핸드폰을 내려놓고 20분 걷고, 오늘 마실 차 고르기',1],['10:10','맞이','내 에이전트에게 이름과 말투를 정해 주고 첫 인사. 무엇을 맡길지 진단 (한성희)'],['10:50','3분 챌린지','차가 우러나는 3분 안에 에이전트가 끝내는 일을 눈앞에서 보기'],['11:30','연동 · 막히고 고치기','메일·캘린더·문서와 연결하다 막히는 순간을 함께 풀기 (이준혁)'],['12:30','야외 점심','—'],['13:30','에이전트에게 배우기','내 업무를 털어놓고, 묻고 배우며 다섯 번 고쳐 완성'],['15:00','숲속 찻자리 · 30분','계절 차와 1:1 이야기 (이유진)',1],['15:30','시음회 · 함께 해내기','서로의 에이전트를 소개하고 시연하기'],['16:40','찻자리 마무리','동료들과 마지막 잔을 나누며 2주 약속 적기',1],['17:30','끝','다음 날 결과 리포트 전달']]}
+   tl:[['09:30','숲길 산책','핸드폰을 내려놓고 20분 걷고, 오늘 마실 차 고르기',1],['10:10','맞이','내 에이전트에게 이름과 말투를 정해 주고 첫 인사. 무엇을 맡길지 진단 (한성희)'],['10:50','3분 챌린지','차가 우러나는 3분 안에 에이전트가 끝내는 일을 눈앞에서 보기'],['11:30','연동 · 막히고 고치기','메일·캘린더·문서와 연결하다 막히는 순간을 함께 풀기 (이준혁)'],['12:30','야외 점심','—'],['13:30','에이전트에게 배우기','내 업무를 털어놓고, 묻고 배우며 다섯 번 고쳐 완성'],['15:00','숲속 찻자리 · 30분','계절 차와 1:1 이야기 (이유진)',1],['15:30','시음회 · 함께 해내기','서로의 에이전트를 소개하고 시연하기'],['16:40','찻자리 마무리','동료들과 마지막 잔을 나누며 2주 약속 적기',1],['17:30','끝','다음 날 결과 리포트 전달']]},
+  {id:'club', kind:'시즌 · 4개월', hours:'월 1회 저녁 3시간 × 4회', badge:'정기 모임', title:'찻자리 클럽 · 한 시즌', sub:'같은 사람들이 4개월 동안 한 달에 한 번 모여요. 매달 계절 차 한 잔과 함께 각자의 에이전트를 한 단계씩 키우고, 사이 기간은 온라인으로 이어요',
+   photos:['fLounge','teaPour','notes'], more:['fTable','fSweets','fSetting','fWorkshop'], who:['lee','han'], size:'10~20명 고정 멤버', place:'귀사 라운지 또는 협력 공간', tools:'파트너 에이전트 1개를 4개월 동안 키워요',
+   fit:'리더·대표 모임, 입주사 정기 프로그램, 사내 동호회처럼 꾸준히 모이고 싶을 때',
+   make:['4개월 동안 키운 파트너 에이전트','매달 한 가지씩 맡긴 업무 기록','같은 테이블의 동료'],
+   opt:'시즌 멤버 전원에게 온라인 일반 이용권을 드려요. 시즌 사이에는 오픈 Q&A로 이어져요.',
+   tl:[['1개월','첫 잔 · 맞이','저녁 찻자리와 같은 흐름으로 파트너 에이전트를 세워요',1],['2개월','둘째 잔 · 맡기기','한 달 동안 맡길 업무 하나를 정하고 연결해요'],['3개월','셋째 잔 · 고치기','막힌 부분을 함께 풀고, 서로의 에이전트를 써 봐요',1],['4개월','넷째 잔 · 나누기','한 시즌 동안 달라진 것을 나누고 다음 시즌을 정해요',1]]}
 ];
 /* 모든 워크샵에 공통으로 붙는 앞뒤 흐름 */
 var FLOW = [['D-3','사전 진단','사전 진단 + 사전학습 VOD. 보안·접속 확인, 기본 용어와 계정 점검'],['당일','다섯 번 고치기','만들고, 써 보고, 고치기를 다섯 번. 툴은 하나로'],['24시간','결과 리포트','HR 1쪽 — 참여율, 만든 결과물, 만족도, 다음 90일 제안'],['48시간','2주 약속 돌려받기','당일 적은 2주 약속 카드와 연습 과제가 각자에게'],['30일','30일 점검','짧은 설문 — 만든 에이전트를 아직 쓰는지'],['60~90일','90일 점검','처음 정한 업무 지표를 같이 봐요']];
@@ -777,35 +783,55 @@ var C = [
    after:['아침·오후·저녁 업무 리듬에 맞는 차를 고른다','카페인 없이도 집중을 되찾는 3분 루틴이 생긴다','팀 미팅 전 3분 우림을 직접 진행할 수 있다'],
    lessons:[['1회','아침의 잔','sunForest',['하루를 여는 첫 잔','물 온도와 우림 시간']],['2회','오후의 잔','teapot',['집중이 끊길 때','3분 우림 루틴']],['3회','저녁의 잔','forest',['디카페인으로 하루 닫기','하루를 정리하는 차 10분']]],
    fit:['오후만 되면 집중이 끊기는 직장인','차를 제대로 배워 보고 싶은 입문자','사계절 프로그램의 월간 티 세션을 미리 경험하고 싶은 HR 담당자']},
-  {id:'partner-4w', tier:'프리미엄', kind:'라이브 4주 · 티 키트', who:'han', photo:'teaPour', strip:['teapot','laptops','teaCup','notes','fSetting','fTable'], title:'네 잔으로 키우는 파트너 에이전트 · 4주', hook:'저녁 찻자리의 네 잔을 4주로 나눠 집에서, 사무실에서 이어 가요. 매주 티 키트로 한 잔을 우리고, 소그룹 라이브에서 내 파트너 에이전트를 한 단계씩 키웁니다.',
+  {id:'partner-4w', tier:'프리미엄', kind:'4주 기수 · 정원 12명', who:'han', photo:'teaPour', strip:['teapot','laptops','teaCup','notes','fSetting','fTable'], title:'네 잔으로 키우는 파트너 에이전트 · 4주', hook:'저녁 찻자리의 네 잔을 4주로 나눠 집에서, 사무실에서 이어 가요. 매주 티 키트로 한 잔을 우리고, 소그룹 라이브에서 내 파트너 에이전트를 한 단계씩 키웁니다.',
    promise:'4주가 끝나면, 내 일을 아는 파트너 에이전트 하나와 매일 쓰는 나만의 루틴이 남습니다.',
    pain:['워크샵에서 만든 에이전트를 일상 업무에 못 붙였다','혼자 해 보다 막히면 물어볼 곳이 없다','배운 것을 습관으로 만들기 어렵다'],
    after:['매주 한 가지 업무를 파트너 에이전트에게 맡긴다','막힌 부분을 1:1 피드백으로 바로 푼다','차 한 잔과 함께 하는 일주일 리듬이 생긴다'],
    lessons:[['1주','백차 · 잘 안다는 것','teaCup',['나를 설명하는 낱말 다시 쓰기','에이전트에게 맡길 일 지도']],['2주','대홍포 · 관계','teapot',['에이전트와 일하는 방식 정하기','동료와 나눌 것, 혼자 할 것']],['3주','티백 · 아는 만큼 달라지는 맛','laptops',['문서 5종 다듬기','메일·일정·문서 연결해 보기']],['4주','한국차 · 나를 잘 아는 것','notes',['한 달 돌아보기','다음 한 달 약속']]],
    fit:['저녁 찻자리·반나절 워크샵에 참여한 분','혼자보다 함께 꾸준히 해 보고 싶은 리더·대표','차를 매주 집과 사무실에서 즐기고 싶은 분'],
-   incl:['주 1회 소그룹 라이브 90분 (최대 12명)','티 키트 4종 배송 — 백차·대홍포·티백·한국차','1:1 피드백 1회 (한성희)','일반 강의 전체 열람','오프라인 찻자리 우선 초대']}
+   incl:['4주 기수제 · 정원 12명','주 1회 라이브 90분 (다시보기 제공)','매주 과제와 피드백','1:1 피드백 1회 (한성희)','티 키트 4종 배송 — 백차·대홍포·티백·한국차','일반 강의 전체 열람','수료 후 동문 찻자리 초대']}
 ];
 
 /* ===== 온라인 일반 / 프리미엄, 온·오프 연계 패키지 ===== */
 var TIERS = [
-  {nm:'일반', en:'Basic', line:'혼자, 내 속도로', items:['강의 VOD 전편과 실습 템플릿','현장과 같은 예제로 복습','수강 기간 [확인 필요]'], fit:'먼저 혼자 해 보고 싶은 분, 워크샵 전 예습·워크샵 뒤 복습'},
-  {nm:'프리미엄', en:'Premium', line:'함께, 끝까지', items:['일반의 모든 것','월 1회 소그룹 라이브 Q&A (최대 12명)','1:1 피드백 1회','티 키트 배송','오프라인 찻자리 우선 초대'], fit:'만든 에이전트를 실제 업무와 일상에 붙이고 싶은 분'}
+  {nm:'일반', en:'Self-paced', line:'혼자, 내 속도로 우리기', items:['10~15분 단위 VOD와 실습 템플릿','문서 5종 양식과 예시','월 1회 오픈 Q&A 라이브 (다시보기 제공)','질문 게시판'], fit:'먼저 혼자 해 보고 싶은 분, 워크샵 전 예습·워크샵 뒤 복습'},
+  {nm:'프리미엄', en:'Cohort', line:'함께, 4주 동안 끝까지', items:['일반의 모든 것','4주 기수제 — 정원 12명','주 1회 라이브 90분 + 매주 과제 피드백','1:1 피드백 1회','티 키트 4종 배송','수료 후 동문 찻자리 초대'], fit:'만든 에이전트를 실제 업무와 일상에 붙이고 싶은 분'}
+];
+var TIER_ROWS = [
+  ['형태','혼자 언제든','정해진 날짜에 함께 (4주 기수)'],
+  ['정원','제한 없음','12명'],
+  ['라이브','월 1회 오픈 Q&A','주 1회 90분'],
+  ['피드백','질문 게시판','매주 과제 피드백 + 1:1 1회'],
+  ['차','—','티 키트 4종 (백차·대홍포·티백·한국차)'],
+  ['끝나고','다시보기','동문 찻자리 초대'],
+  ['추가','—','1:1 코칭 추가 가능']
+];
+var BIZ = [
+  {nm:'기업 라이트', en:'Welfare', line:'복지형 — 원하는 직원이 골라 듣기', items:['일반 이용권을 인원수만큼 발급','신규 입사·승진 선물로도 좋아요','월간 이용 현황 공유'], fit:'임직원 복지, 자기계발 지원'},
+  {nm:'기업 프로', en:'Learning', line:'교육형 — 우리 회사만의 기수', items:['프리미엄 기수를 단독으로 개설','우리 업무 예제로 과제 구성','출석·과제·만족도 리포트를 HR에','오프라인 찻자리와 묶어 진행'], fit:'팀 단위 교육 성과가 필요할 때'}
 ];
 var PKGS = [
   {no:'01', nm:'미리 우리고 오기', en:'Before', flow:['일반 VOD 1~2편','저녁 찻자리 4시간'], desc:'기본 용어와 접속은 미리 맞추고, 현장 시간은 차와 관계, 실습에 써요.', fit:'처음 도입하는 팀 · 파일럿'},
-  {no:'02', nm:'현장 뒤 4주', en:'After', flow:['저녁 찻자리 또는 반나절 워크샵','프리미엄 4주 라이브 + 티 키트'], desc:'워크샵에서 세운 파트너 에이전트를 4주 동안 실제 업무에 붙여요. 매주 한 잔, 한 단계.', fit:'만든 것을 정착시키고 싶은 팀', on:1},
-  {no:'03', nm:'1년 웰니스', en:'All year', flow:['사계절 정기 프로그램','전원 일반 VOD + 리더 프리미엄'], desc:'분기마다 대면으로 만나고, 그 사이는 온라인으로 이어요. 리더는 프리미엄으로 한 걸음 앞서요.', fit:'1년 동안 함께할 회사'}
+  {no:'02', nm:'현장 뒤 4주', en:'After', flow:['저녁 찻자리 또는 반나절','같은 참가자로 프리미엄 4주 기수'], desc:'현장에서 세운 파트너 에이전트를 4주 동안 실제 업무에 붙여요. 매주 한 잔, 한 단계.', fit:'만든 것을 정착시키고 싶은 팀', on:1},
+  {no:'03', nm:'찻자리 클럽 시즌', en:'Season', flow:['월 1회 저녁 찻자리 × 4개월','전원 일반 이용권'], desc:'같은 사람들이 한 달에 한 번 모여 차 한 잔과 에이전트를 한 단계씩 키워요. 사이 기간은 온라인으로.', fit:'리더 모임 · 입주사 · 커뮤니티'},
+  {no:'04', nm:'1년 웰니스', en:'All year', flow:['사계절 정기 프로그램','리더 프리미엄 + 사내 챔피언'], desc:'분기마다 대면으로 만나고, 사내 챔피언이 그 사이를 이어요. 리더는 프리미엄으로 한 걸음 앞서요.', fit:'1년 동안 함께할 회사'}
 ];
 function tierSection(){
   return '<section class="section paper"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">Plans</p><h2 class="h2 one">일반과 프리미엄</h2></div><p class="lead">같은 강의를 혼자 들을지, 함께 끝까지 갈지 고르세요.</p></div>' +
+    '<div class="sec-head"><div><p class="eyebrow">Plans</p><h2 class="h2 one">일반과 프리미엄</h2></div><p class="lead">혼자 내 속도로 우릴지, 4주 동안 함께 끝까지 우릴지 고르세요.</p></div>' +
     '<div class="tiers">' + TIERS.map(function(t, i){ return '<div class="tier' + (i ? ' on' : '') + '"><p class="en">' + t.en + '</p><h3>' + esc(t.nm) + '</h3><p class="muted">' + esc(t.line) + '</p><ul>' + t.items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul><p class="tfit">' + esc(t.fit) + '</p></div>'; }).join('') + '</div>' +
-    '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">가격과 오픈 일정은 확정되는 대로 알려 드려요. 단체 수강은 도입 문의로 연락 주세요.</p>' +
+    '<div class="tbl-wrap" style="max-width:900px;margin:22px auto 0"><table class="cmp"><thead><tr><th scope="col"></th><th scope="col">일반</th><th scope="col">프리미엄</th></tr></thead><tbody>' + TIER_ROWS.map(function(r){ return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+    '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">가격, 수강 기간, 기수 일정은 확정되는 대로 알려 드려요.</p>' +
+  '</div></section>' +
+  '<section class="section"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">For teams</p><h2 class="h2 one">회사로 도입할 때</h2></div><p class="lead">복지로 열어 둘지, 교육으로 함께 갈지에 따라 두 가지로 나눠요.</p></div>' +
+    '<div class="tiers">' + BIZ.map(function(t, i){ return '<div class="tier' + (i ? ' on' : '') + '"><p class="en">' + t.en + '</p><h3>' + esc(t.nm) + '</h3><p class="muted">' + esc(t.line) + '</p><ul>' + t.items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul><p class="tfit">' + esc(t.fit) + '</p></div>'; }).join('') + '</div>' +
+    '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#contact?type=online">단체 수강 상담</a></div>' +
   '</div></section>';
 }
 function pkgSection(){
-  return '<section class="section"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">Online × Offline</p><h2 class="h2 one">온·오프 연계 패키지</h2></div><p class="lead">온라인은 현장의 앞과 뒤를 채워요. 같은 강사, 같은 네 잔으로 이어집니다.</p></div>' +
+  return '<section class="section paper"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">Online × Offline</p><h2 class="h2 one">온·오프 연계 패키지</h2></div><p class="lead">온라인은 현장의 앞과 뒤, 그리고 사이를 채워요. 같은 강사, 같은 네 잔으로 이어집니다.</p></div>' +
     '<div class="pkgs">' + PKGS.map(function(k){ return '<div class="pkg' + (k.on ? ' on' : '') + '"><span class="en">' + k.no + ' · ' + k.en + '</span><h3>' + esc(k.nm) + '</h3><div class="pflow">' + k.flow.map(function(f){ return '<span>' + esc(f) + '</span>'; }).join('<i aria-hidden="true">→</i>') + '</div><p>' + esc(k.desc) + '</p><p class="tfit">' + esc(k.fit) + '</p></div>'; }).join('') + '</div>' +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#contact?type=package">패키지 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div>' +
   '</div></section>';
@@ -831,7 +857,7 @@ var FAQ_CORP = [
   ['제안서를 받아 볼 수 있나요?','‘제안서 받기’에서 담당자 정보를 남기면 바로 받아 보실 수 있어요. 문의 폼에서도 함께 신청할 수 있어요.']
 ];
 var SIZES = [
-  ['8~20명','저녁 찻자리 4시간 · 오후 반나절 워크샵','4시간 / 5~6시간','1인 1에이전트, 가장 깊게'],
+  ['8~20명','저녁 찻자리 4시간 · 찻자리 클럽 시즌 · 오후 반나절','4시간 / 월 1회 × 4 / 5~6시간','1인 1에이전트, 가장 깊게'],
   ['20~40명','종일 워크샵 · 오후 워크샵','7시간 / 5~6시간','1인 1에이전트 + 팀 공용 1개'],
   ['40~100명','오후 워크샵 + 보조 진행자 · AI 티 라운지','5~6시간 / 2시간','팀 단위 에이전트 / 5분 체험'],
   ['100~400명','동반자 AI × 찻자리 강연 + 대표 워크샵','60~90분','시연 관람, 대표 20~30명 실습']
@@ -840,7 +866,7 @@ var PROGS = [
   ['저녁 찻자리 4시간','10~20명 · 18~22시','처음 만나는 CHA&I. 네 잔의 차와 함께 나만의 파트너 에이전트를 세워요'],
   ['오후 반나절 워크샵','10~30명 · 5~6시간','하루를 비우기 어려운 팀. 보조 진행자를 더하면 80명까지'],
   ['하루 워크샵','15~40명 · 7시간','연말·분기 팀 워크샵. 숲에서 에이전트를 맞이하는 하루. 1박 2일 선택'],
-  ['찻자리 클럽','8~20명 · 90분 × 4회','퇴근 후 동호회·리더 모임. 매회 차 한 잔과 에이전트를 한 단계씩 키워요'],
+  ['찻자리 클럽 · 시즌','10~20명 · 월 1회 × 4개월','리더 모임·입주사 정기 프로그램. 같은 멤버가 매달 한 잔과 에이전트를 한 단계씩 키워요'],
   ['AI 티 라운지','20~100명 · 2시간','컨퍼런스·타운홀. 티 바와 내 에이전트 이름 짓기 5분 체험'],
   ['동반자 AI × 찻자리 강연','30~400명 · 60~90분','전사 행사. 차 이야기와 동반자 AI 토크'],
   ['사계절 프로그램','10~30명 · 분기 1회','연간 정기. 계절마다 에이전트를 점검하고 업무 하나를 더해요']
@@ -1082,7 +1108,7 @@ function bindHome(){
 function vWorkshop(){
   return '<section class="section tight"><div class="wrap">' +
     '<p class="eyebrow">Workshops</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">워크샵</h1>' +
-    '<p class="lead" style="max-width:680px;margin-top:16px">워크샵은 세 가지예요. 처음 만나는 <b>저녁 4시간 찻자리</b>가 기본이고, 반응을 보고 <b>오후 반나절</b>과 <b>하루</b> 프로그램으로 넓혀요. 듣고 끝나는 강의가 아니라 각자 파트너 에이전트를 만들어 돌아가요.</p>' +
+    '<p class="lead" style="max-width:680px;margin-top:16px">처음 만나는 <b>저녁 4시간 찻자리</b>가 기본이에요. 반응을 보고 <b>오후 반나절</b>·<b>하루</b>로 넓히거나, 같은 멤버가 4개월 동안 매달 모이는 <b>찻자리 클럽 시즌</b>으로 이어가요. 듣고 끝나는 강의가 아니라 각자 파트너 에이전트를 만들어 돌아가요.</p>' +
   '</div></section>' +
   '<section style="padding-bottom:56px"><div class="wrap">' +
     '<div class="wlist" id="wlist">' + W.map(wCard).join('') + '</div>' +
@@ -1091,7 +1117,7 @@ function vWorkshop(){
     '<div class="sec-head"><div><p class="eyebrow">Compare</p><h2 class="h2">어떤 걸 고를까요</h2></div></div>' +
     '<div class="tbl-wrap"><table class="cmp"><thead><tr><th scope="col"></th>' + W.map(function(w){ return '<th scope="col">' + esc(w.title) + '</th>'; }).join('') + '</tr></thead><tbody>' +
       [['시간','hours'],['장소','place'],['인원','size'],['이럴 때','fit'],['더하기','opt']].map(function(r){ return '<tr><td>' + r[0] + '</td>' + W.map(function(w){ return '<td>' + esc(w[r[1]]) + '</td>'; }).join('') + '</tr>'; }).join('') +
-      '<tr><td>차</td><td>네 잔 — 백차·대홍포·티백·한국차, 한 시간에 한 잔</td><td>티 브레이크 20분 + 마무리 차 한 잔</td><td>아침의 차 + 숲속 티 세션 30분</td></tr>' +
+      '<tr><td>차</td><td>네 잔 — 백차·대홍포·티백·한국차, 한 시간에 한 잔</td><td>티 브레이크 20분 + 마무리 차 한 잔</td><td>아침의 차 + 숲속 티 세션 30분</td><td>매달 계절 차 한 잔</td></tr>' +
     '</tbody></table></div>' +
   '</div></section>' + sizeSection(true) + flowSection() + faqSection();
 }
@@ -1168,7 +1194,7 @@ function vProgram(){
     '<ol class="stages">' +
       '<li><span class="en">STEP 1</span><b>워크샵</b><p>저녁 찻자리 4시간, 오후 반나절, 하루 중 하나로 시작해요. 끝날 때 각자 “다음 2주에 해 볼 한 가지”를 적어요.</p><small>24시간 리포트 끝에 90일 제안</small></li>' +
       '<li><span class="en">STEP 2</span><b>90일 후속</b><p>만든 에이전트가 실제로 쓰이는지 지켜봐요. 월 1회 온라인 체크인 2~3번, 사내 챔피언 1~2명, 점심 티 세션 1회. 내부 결재가 가벼운 크기예요.</p><small>체크인 성과로 연장 제안</small></li>' +
-      '<li class="on"><span class="en">STEP 3</span><b>사계절 프로그램 (연간)</b><p>분기마다 대면 1회와 매달 체크인·티 세션, 회차별 리포트와 연말 성과 리포트.</p><small>아래 1년 흐름</small></li>' +
+      '<li class="on"><span class="en">STEP 3</span><b>사계절 프로그램 (연간)</b><p>분기마다 대면 1회와 매달 체크인·티 세션, 사내 챔피언 운영, 회차별 리포트와 연말 성과 리포트.</p><small>아래 1년 흐름</small></li>' +
     '</ol>' +
   '</div></section>' +
   '<section class="section"><div class="wrap">' +
@@ -1206,7 +1232,7 @@ function vOnline(){
   return '<section class="section tight"><div class="wrap">' +
     '<p class="eyebrow">Online</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">온라인강의</h1>' +
     '<div class="ol-hero">' + ph('bookLaptop', 1000) + ph('teaCup', 700) + ph('manLaptop', 700) + '</div>' +
-    '<p class="lead" style="max-width:680px;margin-top:16px">온라인강의는 <b>일반</b>과 <b>프리미엄</b> 두 가지예요. 혼자 내 속도로 듣는 일반, 소그룹 라이브와 1:1 피드백, 티 키트로 끝까지 함께 가는 프리미엄. 오프라인 찻자리와 묶은 <b>연계 패키지</b>도 있어요.</p>' +
+    '<p class="lead" style="max-width:680px;margin-top:16px">온라인강의는 <b>일반</b>과 <b>프리미엄</b> 두 가지예요. 일반은 혼자 내 속도로 듣는 VOD, 프리미엄은 정원 12명이 정해진 날짜에 함께 가는 4주 기수예요. 회사로 들일 때는 <b>복지형·교육형</b>으로, 오프라인과는 <b>연계 패키지</b>로 묶어요.</p>' +
   '</div></section>' +
   '<section style="padding-bottom:88px"><div class="wrap"><div class="cgrid">' +
     C.map(function(c){ return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge' + (c.tier === '프리미엄' ? '' : ' ln') + '">' + esc(c.tier) + '</span><span class="badge ln">' + esc(c.kind) + '</span></span><h2 class="h3 one" style="font-size:clamp(17px,1.55vw,22px)">' + esc(c.title) + '</h2><p class="muted" style="margin:0">' + esc(c.hook) + '</p><span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
