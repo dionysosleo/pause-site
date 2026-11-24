@@ -654,7 +654,7 @@ footer{background:#FAF7F3!important;border:0!important}
 'use strict';
 var $ = function(s, r){ return (r || document).querySelector(s); };
 var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function esc(s){ return String(s == null ? '' : s).replace(/&(?!(amp|lt|gt|quot|#39);)/g, '&amp;').replace(/[<>"']/g, function(c){ return {'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
 /* ===== 사진 (Unsplash, 무료 라이선스) — 실제 사진이 생기면 이 주소만 바꾸면 됩니다 ===== */
 var PH = {
@@ -706,11 +706,11 @@ var T = {
         links:[['링크드인','https://www.linkedin.com/in/junhyuck-l-7707081aa/'],['브런치','https://brunch.co.kr/@5e7ac6b8a3314c9']]},
   lee: {img:'img/lee.jpg?v=2', pic:'teapot', nm:'이유진', role:'TEA DIRECTOR', line:'18년차 티 디렉터 · TAWA 티앤웰니스협회장', book:'《매일 아침 차를 마십니다》 《차와 일상》 《차를 타고 떠나는 차 여행》 《홍차가 더 좋아지는 시간》 《오후 4시, 홍차에 빠지다》 《인도에 빠지다》 《여자의 시간》(공저) 《차(tea)로 창업하기》 저자',
         proof:'100여 개 기업·기관에서 4,000회 넘게 강의', job:'집중 — 실습 사이 티 브레이크와 1:1 질문', jobS:'집중: 티 브레이크와 1:1 질문',
-        does:'넥슨·HD현대·현대백화점 등에서 사내 티클래스와 웰니스 티타임을 진행해 왔어요. CHA&amp;I에서는 실습이 길어질 때 차 한 잔과 1:1 질문으로 집중이 무너지지 않게 지킵니다.',
+        does:'18년 동안 차를 가르쳐 온 티 디렉터예요. 인도에서 요가와 아유르베다를 수련하고 중국차·티블렌딩·명상을 공부하며, 차를 몸과 마음을 돌보는 시간으로 다뤄 왔어요. 넥슨·HD현대·현대백화점 등에서 사내 티클래스와 웰니스 티타임을 진행했어요.',
         career:['TAWA 티앤웰니스협회장 · 판교 일상찻집 대표','2025 TAWA 중국차 전문가 · 티마스터 · 티블렌딩마스터','2023 명상지도사 · 아로마테라피스트','2017 국제 비니요가 요가지도사','2015~2019 인도 거주, 요가·아유르베다 수련 · 중국 평차사·다예사','2010 국제차문화재단 티마스터','2009 차 교육·강연 시작 · 네이버 차 분야 파워블로거(~2012)'],
         links:[['링크드인','https://www.linkedin.com/in/teadirectorvayu/'],['브런치','https://brunch.co.kr/@@8kAR'],['홈페이지','https://vayutea.vercel.app/']]}
 };
-function blurb(t){ return t.nm + ' (' + t.role + ') — ' + t.line + '. ' + t.book + '. ' + t.proof + ' CHA&I 워크샵에서 맡는 일: ' + t.job + '.'; }
+function blurb(t){ return (t.nm + ' (' + t.role + ') — ' + t.line + '. ' + t.book + '. ' + t.proof + ' CHA&I 워크샵에서 맡는 일: ' + t.job + '.').replace(/&amp;/g, '&'); }
 
 /* ===== 워크샵 ===== */
 var W = [
