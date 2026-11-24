@@ -859,6 +859,43 @@ html.veil body{filter:blur(18px)!important;transition:none}
 /* 글자 선택: 운영자만 */
 html:not(.owner) body{-webkit-user-select:none;user-select:none}
 html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit-user-select:text;user-select:text}
+/* CHA&I 데이: 현장 기록 */
+.dstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.dstats div{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;padding:18px 10px;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(30,42,54,.06)}
+.dstats b{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:28px;font-weight:800;color:#26313D;line-height:1.2}
+.dstats span{font-size:13px;color:#6B727A}
+.dvisit{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:6px 0 26px}
+.dvisit span{font-size:13px;font-weight:600;color:#4A5460;background:#F4F6F4;border-radius:999px;padding:6px 12px}
+.dtabs{grid-template-columns:repeat(var(--n),minmax(0,1fr));max-width:640px;margin:0 auto 20px}
+.dtabs .psz-ind{width:calc((100% - (var(--n) - 1) * 10px) / var(--n))}
+.dtabs button{padding:11px 8px}.dtabs button b{font-size:15px}
+.days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.dcard{display:grid;grid-row:span 5;grid-template-rows:subgrid;row-gap:8px;background:#fff;border-radius:20px;box-shadow:0 8px 24px rgba(30,42,54,.06);padding:12px 12px 18px}
+.dcard[hidden]{display:none}
+.dcard.pop{animation:pcPop .5s cubic-bezier(.3,.7,.2,1) backwards}
+.dph{position:relative;display:block;padding:0;border:0;border-radius:14px;overflow:hidden;cursor:zoom-in;aspect-ratio:4/3;background:#F1F3F1}
+.dph .photo,.dph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.25,.7,.2,1)}
+.dph:hover img{transform:scale(1.04)}
+.dph .credit{display:none}
+.dcount{position:absolute;right:10px;bottom:10px;font-size:12px;font-weight:700;color:#fff;background:rgba(38,49,61,.7);border-radius:999px;padding:3px 9px;font-variant-numeric:lining-nums}
+.dempty{display:flex;align-items:center;justify-content:center;cursor:default;border:1.5px dashed #CBD3CB;background:#FAFBFA}
+.dempty span{font-size:14px;font-weight:700;color:#8A9098}
+.dmeta{display:flex;align-items:center;gap:8px;padding:4px 6px 0}
+.dtag{font-size:12px;font-weight:700;color:#5E6F5E;background:#F1F4F1;border-radius:999px;padding:3px 9px}
+.ddate{font-size:12.5px;color:#8A9098;font-variant-numeric:lining-nums}
+.dcard h3{margin:0;padding:0 6px;font-size:17px;font-weight:700;color:#26313D}
+.dcard p{margin:0;padding:0 6px;font-size:13.5px;color:#4A5460}
+.dcard .dwho{color:#8A9098;font-size:12.5px}
+.dnext{box-shadow:none;border:1.5px solid #EEF0EE}
+.lbox{position:fixed;inset:0;z-index:200;background:rgba(20,26,32,.88);display:flex;align-items:center;justify-content:center;gap:14px;padding:24px}
+.lbox[hidden]{display:none}
+.lbox figure{margin:0;max-width:min(1100px,86vw);display:flex;flex-direction:column;align-items:center;gap:10px}
+.lbox img{max-width:100%;max-height:78vh;border-radius:12px;display:block}
+.lbox figcaption{color:#E9EDF0;font-size:14px;font-variant-numeric:lining-nums}
+.lbox button{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:24px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.lb-x{position:absolute;top:18px;right:18px}
+@media (max-width:1000px){.days{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.days{grid-template-columns:minmax(0,1fr)}.dtabs .psz-ind{display:none}.dtabs button.on{background:#667866;border-color:#667866}.dtabs{grid-template-columns:repeat(3,minmax(0,1fr))}.lbox .lb-p,.lbox .lb-n{position:absolute;bottom:20px}.lb-p{left:30%}.lb-n{right:30%}}
 </style>
 </head>
 <body>
@@ -871,7 +908,7 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
       <li><a href="#workshop" data-nav="workshop">워크샵</a></li>
       <li><a href="#program" data-nav="program">정기프로그램</a></li>
       <li><a href="#online" data-nav="online">온라인강의</a></li>
-      <li><a href="#team" data-nav="team">강사</a></li>
+      <li><a href="#team" data-nav="team">강사</a><a href="#day" data-nav="day">현장</a></li>
     </ul>
     <div class="hutil">
       <span id="authArea"></span>
@@ -880,7 +917,7 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
     </div>
   </div>
   <nav class="mnav" id="mnav" aria-label="모바일 메뉴">
-    <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#contact">도입 문의</a>
+    <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#day">현장 기록</a><a href="#contact">도입 문의</a>
   </nav>
 </header>
 
@@ -897,7 +934,7 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
       <p style="margin:0" class="en">[상호] · [대표자] · [사업자등록번호] · [문의 이메일]</p>
     </div>
     <nav aria-label="하단 메뉴">
-      <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#contact">도입 문의</a><a href="#privacy">개인정보처리방침</a>
+      <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#day">현장 기록</a><a href="#contact">도입 문의</a><a href="#privacy">개인정보처리방침</a>
     </nav>
   </div>
   <div class="wrap" style="margin-top:28px"><p style="margin:0;font-size:12px;color:#8A8A85">사진: Unsplash (Unsplash License). 실제 워크샵 사진이 생기면 교체할 자리예요.</p></div>
@@ -1162,10 +1199,42 @@ function page(name){
   document.body.classList.toggle('sell', name === 'course');
   $$('#gnb a').forEach(function(a){ var on = a.getAttribute('data-nav') === name || (name === 'wdetail' && a.getAttribute('data-nav') === 'workshop'); if(on) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
 }
+/* ===== CHA&I 데이: 현장 기록 아카이브 =====
+   새 기록은 DAYS 맨 앞에 한 줄 추가. date는 'YYYY. MM. DD'(모르면 ''), tag: 출강·파일럿·살롱·클럽, who: T의 키, photos: PH 키(첫 장이 대표) */
+var DAYS = [
+  {date:'', tag:'출강', title:'바유의 기업·기관 찻자리', place:'기업·기관 출강', who:['lee'], photos:['fLounge','fWorkshop','fSweets','fTable','fSetting'], line:'야외 티 라운지부터 테이블 티 워크숍까지'}
+];
+var NEXT_DAY = {tag:'파일럿', title:'차를 우리고, AI를 키우다 · 첫 회', line:'아산나눔재단 파일럿 뒤에 이 자리에 올라와요'};
+var VISITED = ['카카오','SK','신한 VIP','충북대학교','아산상회','GS 52g','넥슨','HD현대','현대백화점','경기도청','분당 서울대병원','힐리언스 선마을'];
+function vDay(){
+  var tags = ['전체','출강','파일럿','살롱','클럽'];
+  return '<section class="section"><div class="wrap">' +
+    '<div class="sec-head"><div><p class="eyebrow">CHA&amp;I Day</p><h1 class="h2 one">현장 기록</h1></div><p class="lead">출강, 살롱, 찻자리 클럽이 열린 날을 사진으로 쌓아요.</p></div>' +
+    '<div class="dstats"><div><b>' + VISITED.length + '곳</b><span>다녀온 기업·기관</span></div><div><b>' + DAYS.length + '건</b><span>쌓인 현장 기록</span></div><div><b>' + DAYS.reduce(function(n, d){ return n + d.photos.length; }, 0) + '장</b><span>현장 사진</span></div></div>' +
+    '<div class="dvisit" aria-label="다녀온 곳">' + VISITED.map(function(v){ return '<span>' + esc(v) + '</span>'; }).join('') + '</div>' +
+    '<div class="psz dtabs" role="tablist" aria-label="기록 종류" style="--k:0;--n:' + tags.length + '"><span class="psz-ind" aria-hidden="true"></span>' + tags.map(function(t, i){ return '<button type="button" role="tab" class="' + (i ? '' : 'on') + '" aria-selected="' + (i ? 'false' : 'true') + '" data-dtab="' + i + '" data-t="' + esc(t) + '"><b>' + esc(t) + '</b></button>'; }).join('') + '</div>' +
+    '<div class="days">' + DAYS.map(function(d, i){ return '<article class="dcard" data-t="' + esc(d.tag) + '"><button type="button" class="dph" data-day="' + i + '" aria-label="' + esc(d.title) + ' 사진 ' + d.photos.length + '장 보기">' + ph(d.photos[0], 900) + '<span class="dcount">' + d.photos.length + '장</span></button><div class="dmeta"><span class="dtag">' + esc(d.tag) + '</span>' + (d.date ? '<span class="ddate">' + esc(d.date) + '</span>' : '') + '</div><h3 class="ol">' + esc(d.title) + '</h3><p class="ol">' + esc(d.line) + '</p><p class="dwho ol">' + esc(d.place) + ' · ' + who(d.who) + '</p></article>'; }).join('') +
+      '<article class="dcard dnext" data-t="' + esc(NEXT_DAY.tag) + '"><div class="dph dempty"><span>다음 기록</span></div><div class="dmeta"><span class="dtag">' + esc(NEXT_DAY.tag) + '</span></div><h3 class="ol">' + esc(NEXT_DAY.title) + '</h3><p class="ol">' + esc(NEXT_DAY.line) + '</p><p class="dwho ol">곧 올라와요</p></article>' +
+    '</div>' +
+    '<p class="dnone muted" hidden>아직 이 종류의 기록이 없어요. 곧 채워 갈게요.</p>' +
+    '<div class="btns" style="justify-content:center;margin-top:30px"><a class="btn btn-lime" href="#contact">우리 회사에도 열기</a><a class="btn btn-line" href="#workshop">프로그램 보기</a></div>' +
+  '</div></section>' +
+  '<div class="lbox" hidden role="dialog" aria-modal="true" aria-label="현장 사진"><button type="button" class="lb-x" aria-label="닫기">×</button><button type="button" class="lb-p" aria-label="이전 사진">‹</button><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-n" aria-label="다음 사진">›</button></div>';
+}
+function bindDay(){
+  var box = app.querySelector('.dtabs'), lb = app.querySelector('.lbox'), cur = null, k = 0;
+  box.addEventListener('click', function(e){ var b = e.target.closest('[data-dtab]'); if(!b) return; box.querySelectorAll('[data-dtab]').forEach(function(x){ var me = x === b; x.classList.toggle('on', me); x.setAttribute('aria-selected', me ? 'true' : 'false'); }); box.style.setProperty('--k', b.getAttribute('data-dtab'));
+    var t = b.getAttribute('data-t'), n = 0; app.querySelectorAll('.dcard').forEach(function(c){ var on = t === '전체' || c.getAttribute('data-t') === t; c.hidden = !on; if(on){ n++; c.classList.remove('pop'); void c.offsetWidth; c.style.animationDelay = (n * 60) + 'ms'; c.classList.add('pop'); } }); app.querySelector('.dnone').hidden = n > 0; });
+  var show = function(){ var p = PH[cur.photos[k]]; lb.querySelector('img').src = src(cur.photos[k], 1600); lb.querySelector('img').alt = p.alt; lb.querySelector('figcaption').textContent = cur.title + ' · ' + (k + 1) + ' / ' + cur.photos.length; };
+  app.addEventListener('click', function(e){ var b = e.target.closest('[data-day]'); if(b){ cur = DAYS[+b.getAttribute('data-day')]; k = 0; show(); lb.hidden = false; lb.querySelector('.lb-x').focus(); } });
+  lb.addEventListener('click', function(e){ if(e.target.closest('.lb-x') || e.target === lb){ lb.hidden = true; } else if(e.target.closest('.lb-n')){ k = (k + 1) % cur.photos.length; show(); } else if(e.target.closest('.lb-p')){ k = (k + cur.photos.length - 1) % cur.photos.length; show(); } });
+  document.addEventListener('keydown', function(e){ if(lb.hidden) return; if(e.key === 'Escape') lb.hidden = true; if(e.key === 'ArrowRight'){ k = (k + 1) % cur.photos.length; show(); } if(e.key === 'ArrowLeft'){ k = (k + cur.photos.length - 1) % cur.photos.length; show(); } });
+}
+
 function route(){
   var h = decodeURIComponent((location.hash || '#intro').slice(1)) || 'intro';
   var m, anchor = document.getElementById(h);
-  if(anchor && !/^(intro|home|workshop|program|online|team|contact|proposal|brief|privacy|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView(); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
+  if(anchor && !/^(intro|home|workshop|program|online|team|contact|proposal|brief|privacy|day|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView(); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
   hideSticky();
   if(h === 'intro'){ page(''); app.innerHTML = vIntro(); }
   else if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
@@ -1175,6 +1244,7 @@ function route(){
   else if(h === 'online'){ page('online'); app.innerHTML = vOnline(); }
   else if((m = h.match(/^c-(.+)$/)) && cById(m[1])){ page('course'); app.innerHTML = vCourse(cById(m[1])); bindCourse(cById(m[1])); }
   else if(h === 'team' || /^t-(han|jun|lee)$/.test(h)){ page('team'); app.innerHTML = vTeam(); bindTeam(); if(h !== 'team'){ var el = document.getElementById(h); if(el){ setTimeout(function(){ el.scrollIntoView(); }, 0); } return; } }
+  else if(h === 'day'){ page('day'); app.innerHTML = vDay(); bindDay(); }
   else if(h === 'privacy'){ page('privacy'); app.innerHTML = vPrivacy(); }
   else if(h === 'brief'){ page('brief'); app.innerHTML = vBrief(); bindBrief(); }
   else if(h === 'proposal'){ page('contact'); app.innerHTML = vProposal(); bindProposal(); }
@@ -1185,7 +1255,7 @@ function route(){
   window.scrollTo(0, 0);
   if(location.hash) app.focus({preventScroll:true});
 }
-function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'도입 문의', proposal:'제안서 받기'}[h.split('?')[0]] || ''; }
+function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {day:'현장 기록', privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'도입 문의', proposal:'제안서 받기'}[h.split('?')[0]] || ''; }
 function wById(id){ for(var i = 0; i < W.length; i++) if(W[i].id === id) return W[i]; return null; }
 function cById(id){ for(var i = 0; i < C.length; i++) if(C[i].id === id) return C[i]; return null; }
 function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · '); }
@@ -1251,6 +1321,7 @@ function vIntro(){
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">In the field</p><h2 class="h2 one">실제 출강 현장</h2></div><p class="lead">카카오, SK, 신한 VIP, 충북대학교, 아산상회, GS 52g 등 세 강사가 다녀온 곳이에요.</p></div>' +
     '<div class="it-photos">' + ph('fLounge', 900) + ph('fWorkshop', 900) + ph('fSweets', 900) + '</div>' +
+    '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-line" href="#day">현장 기록 전체 보기 →</a></div>' +
   '</div></section>' +
   '<section class="section paper wash-end"><div class="wrap" style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px">' +
     '<h2 class="h2 one">더 자세히 볼까요?</h2>' +
