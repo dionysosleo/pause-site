@@ -75,7 +75,7 @@ button,input,select,textarea{font:inherit}
 .logo b{font-weight:500}
 .logo .amp{font-style:italic;color:var(--green);letter-spacing:0;margin:0 .22em 0 .02em;font-size:1.08em}
 .gnb{display:flex;gap:4px;margin:0 0 0 12px;padding:0;list-style:none;flex:1}
-.gnb a{display:block;padding:12px 14px;text-decoration:none;font-weight:700;font-size:16px;border-bottom:2px solid transparent}
+.gnb a{display:block;white-space:nowrap;padding:12px 14px;text-decoration:none;font-weight:700;font-size:16px;border-bottom:2px solid transparent}
 .gnb a[aria-current="page"]{border-bottom-color:var(--ink)}
 .gnb a:hover{color:var(--green)}
 .hutil{display:flex;align-items:center;gap:6px;margin-left:auto}
@@ -908,7 +908,8 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
       <li><a href="#workshop" data-nav="workshop">워크샵</a></li>
       <li><a href="#program" data-nav="program">정기프로그램</a></li>
       <li><a href="#online" data-nav="online">온라인강의</a></li>
-      <li><a href="#team" data-nav="team">강사</a><a href="#day" data-nav="day">현장</a></li>
+      <li><a href="#team" data-nav="team">강사</a></li>
+      <li><a href="#day" data-nav="day">현장</a></li>
     </ul>
     <div class="hutil">
       <span id="authArea"></span>
