@@ -1350,10 +1350,10 @@ function vTeam(){
       '<p class="bio-proof">' + esc(t.proof) + '</p>' +
       '<h3 class="h3" style="margin:28px 0 10px">경력 <span class="muted" style="font-size:13px;font-weight:400">최신순</span></h3><ul class="career">' + t.career.map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' +
       '<h3 class="h3" style="margin:24px 0 8px">저서</h3><p style="margin:0">' + esc(t.book.replace(/ 저자$/, '')) + '</p>' +
-      '<div class="btns" style="margin-top:24px">' + t.links.map(function(l){ return '<a class="btn btn-line btn-sm" href="' + l[1] + '" target="_blank" rel="noopener">' + esc(l[0]) + ' ↗</a>'; }).join('') + '<button type="button" class="btn btn-line btn-sm" data-copybio="' + k + '">담당자용 소개 3줄 복사</button></div>' +
+      '<div class="btns" style="margin-top:24px">' + t.links.map(function(l){ return '<a class="btn btn-line btn-sm" href="' + l[1] + '" target="_blank" rel="noopener">' + esc(l[0]) + ' ↗</a>'; }).join('') + '</div>' +
     '</div></div></section>'; }).join('') +
   '<section class="section dark"><div class="wrap split">' + ph('laugh', 1200) +
-    '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">For HR</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">결재에 붙일 강사 소개가 필요하면</h2><p class="lead">세 강사 소개를 한 번에 복사해 결재 문서에 붙여 넣으세요. 출강 사례와 프로필 PDF는 문의 주시면 보내 드려요.</p><div class="btns"><button type="button" class="btn btn-lime" data-copybio="all">세 강사 소개 복사</button><a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
+    '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">For HR</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">품의서에 붙일 강사·과정 소개가 필요하면</h2><p class="lead">프로그램 소개서 PDF에 강사 프로필과 과정 개요를 품의서 양식처럼 항목별로 정리해 두었어요. 그대로 옮겨 쓰시면 돼요.</p><div class="btns"><a class="btn btn-lime" href="docs/chai-program-intro.pdf" target="_blank" rel="noopener" download>소개서 PDF 받기</a><a class="btn btn-line" href="#contact">맞춤 제안 문의</a></div></div>' +
   '</div></section>';
 }
 function bindTeam(){
