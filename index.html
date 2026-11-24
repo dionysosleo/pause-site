@@ -25,7 +25,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root{--ink:#1D1D1B;--ink2:#3A3A36;--muted:#6F6A63;--taupe:#8A847C;--hair:#DEDBD3;--soft:#ECE9E2;--paper:#F0EDE6;--bg:#F5F3EE;--lime:#DBDED8;--lime-t:#E6EAE3;--green:#546C5D;--red:#B42318;--max:1240px;--en:'Cormorant Garamond',Georgia,serif}
-*{box-sizing:border-box}
+*,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;color:var(--ink);background:var(--bg);word-break:keep-all;line-height:1.6;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
@@ -626,6 +626,15 @@ footer{background:#FAF7F3!important;border:0!important}
 @media (max-width:860px){.tiers,.pkgs{grid-template-columns:minmax(0,1fr)!important}}
 /* badge: 한글·숫자 기준선 맞춤 (세리프 올드스타일 숫자 제거) */
 .badge{font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;font-variant-numeric:lining-nums tabular-nums;letter-spacing:0;line-height:1.2;vertical-align:middle}
+/* === 정렬 규칙 v1: 레일(세로선)·점·시간 라벨은 계산으로 중앙을 맞춘다 (docs/ui-guide.md) === */
+html{font-variant-numeric:lining-nums}
+.tl,.career{--rail:2px;--dot:14px;--row:22px;border-left:var(--rail) solid var(--ink)}
+.career{--dot:12px;--row:24px}
+.tl li::before,.career li::before{box-sizing:border-box;width:var(--dot);height:var(--dot);left:calc(var(--rail) / -2 - var(--dot) / 2);top:calc((var(--row) - var(--dot)) / 2);margin:0}
+.tl .t{display:block;height:var(--row);line-height:var(--row);font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:0;font-variant-numeric:lining-nums tabular-nums}
+.career li{line-height:var(--row)}
+/* 정렬 규칙 R3: 한글이 들어간 영문 세리프 요소는 자동으로 한글 고딕으로 (스크립트가 .ko 부여) */
+.ko{font-family:'Pretendard','Noto Sans KR',system-ui,sans-serif!important;font-style:normal!important;letter-spacing:0!important;font-variant-numeric:lining-nums tabular-nums}
 </style>
 </head>
 <body>
@@ -1573,6 +1582,9 @@ document.addEventListener('click', function(e){
 });
 
 $('#burger').addEventListener('click', function(){ var o = $('#mnav').classList.toggle('open'); this.setAttribute('aria-expanded', String(o)); });
+/* 정렬 규칙 R3: 영문 세리프(Cormorant) 글꼴이 걸린 요소에 한글이 있으면 .ko 부여 */
+function koFix(root){ (root || document).querySelectorAll('#app *, header *, footer *').forEach(function(el){ if(el.children.length > 3) return; var ff = getComputedStyle(el).fontFamily; if(/Cormorant/i.test(ff.split(',')[0]) && /[\uAC00-\uD7A3]/.test(el.textContent)) el.classList.add('ko'); }); }
+new MutationObserver(function(){ koFix(); }).observe(document.getElementById('app'), {childList:true});
 window.addEventListener('hashchange', route);
 renderAuth();
 if(!/vercel\.app$|(^|\.)chaand\.ai$|^localhost$|^127\.|\.test$|^x\.test$/.test(location.hostname)) $('#pvNote').hidden = false;
