@@ -1075,6 +1075,16 @@ footer .biz{font-size:13px}
   .tabbar a.on{color:var(--navy)!important}
   body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 }
+
+/* ===== 온라인 강의 문의 유형 (R21) ===== */
+.ltypes{scroll-margin-top:96px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:24px 0 36px}
+.ltypes a{display:flex;flex-direction:column;gap:4px;padding:16px;border:1px solid var(--hair);border-radius:16px;text-decoration:none;color:inherit;background:#fff;transition:border-color .2s,box-shadow .2s}
+.ltypes a small{font-size:12px;color:#5C6672;font-weight:700}
+.ltypes a b{font-size:17px;line-height:1.3}
+.ltypes a span{font-size:13px;line-height:1.45;color:#5C6672}
+.ltypes a[aria-current]{border:2px solid var(--pt);padding:15px;box-shadow:0 10px 24px rgba(102,120,102,.16)}
+.ltypes a[aria-current] small{color:var(--pt)}
+@media (max-width:760px){.ltypes{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -1288,8 +1298,8 @@ function tierSection(){
   return '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Plans</p><h2 class="h2 one">일반과 프리미엄</h2></div><p class="lead">혼자 내 속도로 우릴지, 4주 동안 함께 끝까지 우릴지 고르세요.</p></div>' +
     planGrid([
-      {tag:'일반', name:'혼자, 내 속도로', big:'언제든', sub:'VOD + 월 1회 오픈 Q&A', best:'워크샵 전 예습·뒤 복습', f:['10~15분 VOD + 실습 템플릿','문서 5종 양식과 예시','월 1회 오픈 Q&A 라이브','질문 게시판'], href:'#contact?type=online', btn:'수강 문의'},
-      {tag:'프리미엄', hi:1, name:'함께, 4주 동안 끝까지', big:'4주 · 12명', sub:'주 1회 라이브 90분', best:'업무에 정착시키고 싶을 때', f:['일반의 모든 것','매주 과제 피드백 + 1:1','티 키트 4종 배송','수료 후 동문 찻자리'], href:'#contact?type=online', btn:'기수 문의'}
+      {tag:'일반', name:'혼자, 내 속도로', big:'언제든', sub:'VOD + 월 1회 오픈 Q&A', best:'워크샵 전 예습·뒤 복습', f:['10~15분 VOD + 실습 템플릿','문서 5종 양식과 예시','월 1회 오픈 Q&A 라이브','질문 게시판'], href:'#learn?t=course', btn:'수강 문의'},
+      {tag:'프리미엄', hi:1, name:'함께, 4주 동안 끝까지', big:'4주 · 12명', sub:'주 1회 라이브 90분', best:'업무에 정착시키고 싶을 때', f:['일반의 모든 것','매주 과제 피드백 + 1:1','티 키트 4종 배송','수료 후 동문 찻자리'], href:'#learn?t=cohort', btn:'기수 문의'}
     ], 2) +
     '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">가격, 수강 기간, 기수 일정은 확정되는 대로 알려 드려요.</p>' +
   '</div></section>' +
@@ -1299,7 +1309,7 @@ function tierSection(){
       {tag:'복지형', name:'기업 라이트', big:'이용권', sub:'원하는 직원이 골라 듣기', best:'임직원 복지·자기계발', f:['일반 이용권을 인원수만큼','입사·승진 선물로도','월간 이용 현황 공유']},
       {tag:'교육형', hi:1, name:'기업 프로', big:'단독 기수', sub:'우리 회사만의 4주', best:'팀 단위 교육 성과가 필요할 때', f:['우리 업무 예제로 과제','출석·과제 리포트를 HR에','오프라인 찻자리와 묶기']}
     ], 2) +
-    '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#contact?type=online">단체 수강 상담</a></div>' +
+    '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=group">단체 수강 상담</a></div>' +
   '</div></section>';
 }
 function pkgSection(){
@@ -1311,7 +1321,7 @@ function pkgSection(){
       {tag:'03 · 시즌', name:'찻자리 클럽 시즌', big:'4개월', sub:'월 1회 저녁 + 온라인', best:'리더 모임·입주사', f:['전원 일반 이용권','사이 기간은 온라인으로']},
       {tag:'04 · 1년', name:'1년 웰니스', big:'1년', sub:'사계절 + 사내 챔피언', best:'1년 함께할 회사', f:['분기마다 대면','리더는 프리미엄으로']}
     ], 4) +
-    '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#contact?type=package">패키지 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div>' +
+    '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=package">패키지 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div>' +
   '</div></section>';
 }
 
@@ -1378,6 +1388,8 @@ document.addEventListener('click', function(e){
 var app = $('#app');
 function page(name){
   document.body.classList.toggle('sell', name === 'course');
+  var hc = $('#hdCta'), onl = ['online','course','learn'].indexOf(name) >= 0; if(hc){ hc.textContent = onl ? '수강 문의' : '워크샵 문의'; hc.setAttribute('href', onl ? '#learn' : '#contact'); }
+  if(name === 'learn') name = 'online';
   $$('#gnb a').forEach(function(a){ var on = a.getAttribute('data-nav') === name || (name === 'wdetail' && a.getAttribute('data-nav') === 'workshop'); if(on) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
 }
 /* ===== CHA&I 데이: 현장 기록 아카이브 =====
@@ -1437,7 +1449,7 @@ function detailNav(backHref, backLabel, title){
 function route(){
   var h = decodeURIComponent((location.hash || '#intro').slice(1)) || 'intro';
   var m, anchor = document.getElementById(h);
-  if(anchor && !/^(intro|home|workshop|program|online|team|contact|proposal|brief|privacy|terms|ai-policy|refund|copyright|day|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView({behavior:'smooth', block:'start'}); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
+  if(anchor && !/^(intro|home|workshop|program|online|team|contact|proposal|brief|learn|privacy|terms|ai-policy|refund|copyright|day|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView({behavior:'smooth', block:'start'}); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
   hideSticky();
   if(h === 'intro'){ page(''); app.innerHTML = vIntro(); }
   else if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
@@ -1451,17 +1463,22 @@ function route(){
   else if(POLICIES[h]){ page('policy'); app.innerHTML = vPolicy(h); bindPolicy(); }
   else if(h === 'brief'){ page('brief'); app.innerHTML = vBrief(); bindBrief(); }
   else if(h === 'proposal'){ page('contact'); app.innerHTML = vProposal(); bindProposal(); }
+  else if(h.indexOf('learn') === 0){ page('learn'); app.innerHTML = vLearn(h.split('?')[1] || ''); bindLearn(); }
+  else if(/^contact\?type=(online|package)/.test(h)){ location.replace('#learn?t=' + (h.indexOf('package') > 0 ? 'package' : 'group')); return; }
   else if(h.indexOf('contact') === 0){ page('contact'); app.innerHTML = vContact(h.split('?')[1] || ''); bindContact(); }
   else { page(''); app.innerHTML = '<section class="section"><div class="wrap"><h1 class="h2">페이지를 찾을 수 없어요</h1><p class="lead" style="margin-top:12px"><a href="#home">홈으로 가기</a></p></div></section>'; }
   document.title = (titleFor(h) ? titleFor(h) + ' — ' : '') + 'CHA&I';
   $('#mnav').classList.remove('open'); $('#burger').setAttribute('aria-expanded','false');
   /* 페이지 이동: 부드러운 스크롤 없이 바로 맨 위에 놓고, 내용은 제자리에서 옅게 나타남 */
   window.scrollTo({top:0, left:0, behavior:'instant'});
+  /* 온라인 문의 유형만 바꿀 때는 유형 카드 위치를 그대로 유지 */
+  if(h.indexOf('learn') === 0 && (window.__lastH || '').indexOf('learn') === 0){ var lt = $('.ltypes'); if(lt) lt.scrollIntoView({block:'start', behavior:'instant'}); }
+  window.__lastH = h;
   window.__pgT = Date.now();
   app.classList.remove('pg-in'); void app.offsetWidth; app.classList.add('pg-in');
   if(location.hash) app.focus({preventScroll:true});
 }
-function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {day:'현장 기록', privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'워크샵 문의', proposal:'제안서 받기'}[h.split('?')[0]] || ''; }
+function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {learn:'온라인 강의 문의', day:'현장 기록', privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'워크샵 문의', proposal:'제안서 받기'}[h.split('?')[0]] || ''; }
 function wById(id){ for(var i = 0; i < W.length; i++) if(W[i].id === id) return W[i]; return null; }
 function cById(id){ for(var i = 0; i < C.length; i++) if(C[i].id === id) return C[i]; return null; }
 function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · '); }
@@ -1869,7 +1886,7 @@ function vCourse(c){
       '<h1 class="h1 one" style="font-size:clamp(28px,2.7vw,40px)">' + esc(c.title) + '</h1>' +
       '<p class="lead">' + esc(c.hook) + '</p>' +
       '<p style="margin:0;font-weight:700;font-size:18px">' + esc(c.promise) + '</p>' +
-      '<div class="btns"><button type="button" class="btn btn-lime" data-notify>오픈 알림 받기</button><a class="btn btn-line" href="#curri">커리큘럼 보기</a></div>' +
+      '<div class="btns"><button type="button" class="btn btn-lime" data-notify>오픈 알림 받기</button><a class="btn btn-line" href="#learn?t=' + (c.tier === '프리미엄' ? 'cohort' : 'course&c=' + c.id) + '">' + (c.tier === '프리미엄' ? '기수 문의' : '수강 문의') + '</a></div>' +
       '<p class="muted" style="margin:0;font-size:14px">오픈 일정과 가격은 확정되는 대로 알려 드려요.</p>' +
     '</div>' + ph(c.photo, 1300, '', true) +
   '</div></section>' +
@@ -1900,7 +1917,7 @@ function vCourse(c){
   '</div></section>' +
   tierSection() + pkgSection() +
   '<section class="section"><div class="wrap faq" style="max-width:860px"><h2 class="h2" style="margin-bottom:12px">자주 묻는 질문</h2>' +
-    [['수강 기간은 얼마나 되나요?','[수강 기간 확정 후 작성]'],['회사 교육비로 결제할 수 있나요?','세금계산서 발행과 단체 수강을 지원할 예정이에요. 단체라면 워크샵 문의로 연락 주세요.'],['워크샵과 어떻게 다른가요?','워크샵은 팀이 함께 현장에서 만드는 수업이고, 온라인강의는 혼자 언제든 보는 수업이에요. 같은 예제로 만들어서 워크샵의 사전학습·사후 복습으로 그대로 쓸 수 있어요.']].map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') +
+    [['수강 기간은 얼마나 되나요?','강의마다 정해서 오픈할 때 상세 페이지와 결제 화면에 함께 적어 드려요. 궁금하면 수강 문의로 물어봐 주세요.'],['회사 교육비로 결제할 수 있나요?','세금계산서 발행과 단체 수강을 지원할 예정이에요. 여러 명이 함께 들으면 단체 수강 상담으로 연락 주세요.'],['워크샵과 어떻게 다른가요?','워크샵은 팀이 함께 현장에서 만드는 수업이고, 온라인강의는 혼자 언제든 보는 수업이에요. 같은 예제로 만들어서 워크샵의 사전학습·사후 복습으로 그대로 쓸 수 있어요.']].map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') +
   '</div></section>';
 }
 function bindCourse(c){
@@ -2117,7 +2134,7 @@ function vContact(q){
   var type = (q.match(/type=([^&]+)/) || [])[1] || '';
   var L = savedLead() || {};
   var v = function(k){ return L[k] ? ' value="' + esc(L[k]) + '"' : ''; };
-  var opts = [['','선택해 주세요']].concat(W.map(function(w){ return [w.id, w.title + ' (' + w.kind + ')']; }), [['salon','차와 술 사이 · 살롱 (프라이빗)'],['package','온·오프 연계 패키지'],['annual','1년 정기프로그램'],['online','온라인강의 단체 수강 (일반·프리미엄)'],['etc','아직 모르겠어요']]);
+  var opts = [['','선택해 주세요']].concat(W.map(function(w){ return [w.id, w.title + ' (' + w.kind + ')']; }), [['salon','차와 술 사이 · 살롱 (프라이빗)'],['annual','1년 정기프로그램'],['etc','아직 모르겠어요']]);
   return '<section class="ct-hero">' + ph('teapot', 1800, '', true) + '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Let&#39;s have tea</p><p class="h2 one" style="color:#fff">차 한 잔 하면서 이야기 나눠요.</p></div></section>' +
   '<section class="section tight"><div class="wrap" style="max-width:880px">' +
     '<p class="eyebrow">Contact</p><h1 class="h1" style="font-size:clamp(32px,4.6vw,52px)">워크샵 문의</h1>' +
@@ -2150,6 +2167,106 @@ function bindContact(){
       if(sent){ openDialog('<h2>문의를 받았어요</h2><p style="margin:0">' + esc(data.email) + '로 확인하는 대로 연락드릴게요.</p>' + (withP ? proposalBox() : '') + '<button type="button" class="btn btn-line" data-close>닫기</button>'); return; }
       var txt = '[CHA&I 워크샵 문의]\n회사: ' + data.company + '\n담당자: ' + data.name + '\n이메일: ' + data.email + '\n연락처: ' + (data.phone || '-') + '\n프로그램: ' + data.program + '\n인원: ' + (data.size || '-') + '\n시기: ' + (data.when || '-') + '\n직무: ' + (data.roles || '-') + '\nAI 접속: ' + data.access + '\n제안서 필요: ' + data.proposal + '\n내용: ' + (data.msg || '-');
       copyDialog('문의 내용이 준비됐어요', txt, withP && LEAD_CONFIG.proposalUrl ? '<div>' + proposalBox() + '</div>' : '');
+    });
+  });
+}
+
+/* ===== 온라인 강의 문의: 수강·기수·단체·패키지 (R21) =====
+   워크샵 문의와 따로 받아요. 유형마다 묻는 것과 메일 제목이 달라요. #learn?t=course|cohort|group|package[&c=강의id] */
+var LEARN_ORDER = ['course','cohort','group','package'];
+var LEARN = {
+  course: {nm:'수강 문의', who:'개인', line:'혼자 듣는 VOD·라이브 강의', h:'온라인 강의 수강 문의', lead:'듣고 싶은 강의와 궁금한 점을 남겨 주세요. 가격과 오픈 일정이 정해지면 가장 먼저 답해 드려요.', btn:'수강 문의 보내기',
+    purpose:'수강 상담, 강의 안내', items:'필수: 성함, 이메일, 관심 강의 · 선택: 궁금한 점, 질문 내용'},
+  cohort: {nm:'기수 문의', who:'개인', line:'4주 함께 가는 프리미엄 기수', h:'프리미엄 기수 문의', lead:'정원 12명으로 4주 동안 함께 가요. 지금 하시는 일과 바라는 것을 알려 주시면 맞는 기수를 안내해 드려요.', btn:'기수 문의 보내기',
+    purpose:'기수 상담, 기수 일정 안내', items:'필수: 성함, 이메일, 희망 시기 · 선택: 연락처, 하는 일, AI 경험, 가능한 시간대, 바라는 것'},
+  group: {nm:'단체 수강 상담', who:'회사', line:'구성원 이용권·우리 회사 단독 기수', h:'단체 수강 상담', lead:'복지형 이용권으로 열지, 우리 회사만의 기수로 갈지 함께 정해요. 인원과 결제 방식만 알려 주셔도 견적을 드려요.', btn:'단체 수강 상담 보내기',
+    purpose:'단체 수강 상담, 견적 전달', items:'필수: 회사·기관명, 담당자 성함, 이메일, 형태, 예상 인원 · 선택: 연락처, 부서·직책, 시작 시기, 결제·증빙, 사내 접속 여건, 문의 내용'},
+  'package': {nm:'패키지 상담', who:'회사', line:'현장 찻자리 + 온라인 연계', h:'온·오프 연계 패키지 상담', lead:'현장 워크샵의 앞과 뒤를 온라인으로 잇는 구성이에요. 고르신 패키지를 기준으로 일정과 구성을 맞춰 제안해 드려요.', btn:'패키지 상담 보내기',
+    purpose:'패키지 상담, 견적·제안서 전달', items:'필수: 회사·기관명, 담당자 성함, 이메일, 관심 패키지 · 선택: 연락처, 인원, 현장 희망 시기, 장소, 문의 내용'}
+};
+function lfield(label, name, opt){
+  opt = opt || {};
+  var req = opt.req ? ' required' : '', star = opt.req ? ' *' : '';
+  var cls = 'field' + (opt.full ? ' full' : '');
+  var err = opt.req ? '<span class="err">' + (opt.err || label + '을(를) 확인해 주세요') + '</span>' : '';
+  if(opt.select) return '<label class="' + cls + '">' + label + star + '<select name="' + name + '"' + req + '>' + opt.select.map(function(o){ var v = Array.isArray(o) ? o[0] : o, t = Array.isArray(o) ? o[1] : o; return '<option value="' + esc(v) + '"' + (opt.sel === v ? ' selected' : '') + '>' + esc(t) + '</option>'; }).join('') + '</select>' + err + '</label>';
+  if(opt.chips) return '<fieldset class="' + cls + '" style="border:0;padding:0;margin:0"><legend style="margin-bottom:8px">' + label + '</legend><div class="chips">' + opt.chips.map(function(x){ return '<label><input type="checkbox" name="' + name + '" value="' + esc(x) + '">' + esc(x) + '</label>'; }).join('') + '</div></fieldset>';
+  if(opt.area) return '<label class="' + cls + '">' + label + '<textarea name="' + name + '" placeholder="' + esc(opt.ph || '') + '"></textarea><small class="hint">건강 정보, 주민등록번호 같은 민감한 정보는 적지 말아 주세요.</small></label>';
+  return '<label class="' + cls + '">' + label + star + '<input name="' + name + '"' + (opt.type ? ' type="' + opt.type + '"' : '') + (opt.ac ? ' autocomplete="' + opt.ac + '"' : '') + (opt.ph ? ' placeholder="' + esc(opt.ph) + '"' : '') + (opt.num ? ' inputmode="numeric"' : '') + req + '>' + err + '</label>';
+}
+function learnFields(t, cid){
+  var person = [lfield('성함', 'name', {req:1, ac:'name', err:'성함을 입력해 주세요'}), lfield('이메일', 'email', {req:1, type:'email', ac:'email', err:'이메일을 확인해 주세요'})];
+  var corp = [lfield('회사·기관명', 'company', {req:1, ac:'organization', err:'회사명을 입력해 주세요'}), lfield('담당자 성함', 'name', {req:1, ac:'name', err:'성함을 입력해 주세요'}), lfield('이메일', 'email', {req:1, type:'email', ac:'email', err:'이메일을 확인해 주세요'}), lfield('연락처', 'phone', {type:'tel', ac:'tel'})];
+  var vod = C.filter(function(c){ return c.tier === '일반'; });
+  if(t === 'course') return person.concat([
+    lfield('관심 강의', 'course', {req:1, full:1, err:'강의를 골라 주세요', sel:cid || '', select:[['','선택해 주세요']].concat(vod.map(function(c){ return [c.id, c.title + ' (' + c.kind + ')']; }), [['all','일반 강의 전체'],['unsure','아직 모르겠어요']])}),
+    lfield('궁금한 점 (여러 개 선택)', 'ask', {full:1, chips:['가격·결제','수강 기간','환불','커리큘럼','수강 환경','워크샵과 차이']}),
+    lfield('질문 내용', 'msg', {full:1, area:1, ph:'예: 회사 노트북에서도 들을 수 있나요?'})
+  ]).join('');
+  if(t === 'cohort') return person.concat([
+    lfield('연락처', 'phone', {type:'tel', ac:'tel'}),
+    lfield('희망 기수 시기', 'when', {req:1, err:'희망 시기를 골라 주세요', select:[['','선택해 주세요'],'가장 빠른 기수','2~3개월 안','시기는 아직 몰라요']}),
+    lfield('지금 하는 일', 'job', {ph:'예: 스타트업 마케터 5년차'}),
+    lfield('AI 경험', 'level', {select:[['','선택해 주세요'],'거의 처음이에요','가끔 써 봤어요','업무에 쓰고 있어요','직접 만들어 봤어요']}),
+    lfield('라이브 가능한 시간 (여러 개 선택)', 'slot', {full:1, chips:['평일 오전','평일 오후','평일 저녁','주말']}),
+    lfield('4주 동안 이루고 싶은 것', 'msg', {full:1, area:1, ph:'예: 매주 쓰는 보고서를 에이전트에게 맡기고 싶어요'}),
+    '<p class="full muted" style="margin:0;font-size:13px">티 키트 배송 주소는 등록이 확정된 뒤에 따로 받아요.</p>'
+  ]).join('');
+  if(t === 'group') return corp.concat([
+    lfield('부서·직책', 'role', {ac:'organization-title', ph:'예: 인사팀 매니저'}),
+    lfield('예상 인원', 'size', {req:1, num:1, ph:'예: 30명', err:'예상 인원을 적어 주세요'}),
+    lfield('원하는 형태', 'plan', {req:1, full:1, err:'형태를 골라 주세요', select:[['','선택해 주세요'],['lite','기업 라이트 · 복지형 이용권 (원하는 직원이 골라 듣기)'],['pro','기업 프로 · 우리 회사 단독 기수 (교육형)'],['unsure','아직 모르겠어요']]}),
+    lfield('시작 희망 시기', 'when', {ph:'예: 2027년 1분기'}),
+    lfield('사내 외부 AI 접속', 'access', {select:[['','잘 모르겠어요'],'가능해요','막혀 있어요','일부만 가능해요']}),
+    lfield('결제·증빙 (여러 개 선택)', 'pay', {full:1, chips:['세금계산서','법인카드','교육비 지원 제도 문의','견적서 먼저']}),
+    lfield('하고 싶은 이야기', 'msg', {full:1, area:1, ph:'예: 신규 입사자 온보딩 과정으로 쓰고 싶어요'})
+  ]).join('');
+  return corp.concat([
+    lfield('관심 패키지', 'pkg', {req:1, full:1, err:'패키지를 골라 주세요', select:[['','선택해 주세요']].concat(PKGS.map(function(p){ return [p.en, p.no + ' ' + p.nm + ' — ' + p.flow.join(' + ')]; }), [['unsure','아직 모르겠어요']])}),
+    lfield('예상 인원', 'size', {num:1, ph:'예: 20명'}),
+    lfield('현장 희망 시기', 'when', {ph:'예: 2027년 3월'}),
+    lfield('현장 장소', 'place', {full:1, select:[['','아직 몰라요'],'사내 공간에서','외부 공간 추천이 필요해요']}),
+    lfield('하고 싶은 이야기', 'msg', {full:1, area:1, ph:'예: 리더 모임을 분기마다 이어 가고 싶어요'}),
+    '<label class="full check"><input type="checkbox" name="proposal"><span>제안서도 함께 받을게요 (내부 검토용)</span></label>'
+  ]).join('');
+}
+function learnNotice(L){
+  return '<div class="full pnotice" role="note"><b>개인정보 수집·이용 안내</b><table><tbody><tr><th scope="row">목적</th><td>' + L.purpose + '</td></tr><tr><th scope="row">항목</th><td>' + L.items + '</td></tr><tr><th scope="row">보유</th><td>상담이 끝난 뒤 1년</td></tr></tbody></table><p>보내 주신 요청에 답하기 위한 처리라 별도 동의 없이 진행돼요. 선택 항목은 비워 두셔도 돼요. <a href="#privacy">개인정보처리방침</a></p></div>';
+}
+function vLearn(q){
+  var t = (q.match(/(?:^|&)t=([a-z]+)/) || [])[1], cid = (q.match(/(?:^|&)c=([a-z0-9-]+)/) || [])[1] || '';
+  if(!LEARN[t]) t = 'course';
+  var L = LEARN[t];
+  return '<section class="ct-hero">' + ph('desk2', 1800, '', true) + '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Online</p><p class="h2 one" style="color:#fff">어떤 방식으로 함께할지 골라 주세요.</p></div></section>' +
+  '<section class="section tight"><div class="wrap" style="max-width:880px">' +
+    '<p class="eyebrow">Online contact</p><h1 class="h1 one" style="font-size:clamp(30px,4.4vw,50px)">온라인 강의 문의</h1>' +
+    '<nav class="ltypes" aria-label="문의 유형">' + LEARN_ORDER.map(function(k){ var x = LEARN[k]; return '<a href="#learn?t=' + k + (cid && k === 'course' ? '&c=' + cid : '') + '"' + (k === t ? ' aria-current="page"' : '') + '><small>' + x.who + '</small><b>' + x.nm + '</b><span>' + x.line + '</span></a>'; }).join('') + '</nav>' +
+    '<h2 class="h2 one" style="font-size:clamp(22px,2.6vw,30px);margin:0">' + L.h + '</h2>' +
+    '<p class="lead" style="margin:12px 0 28px">' + L.lead + '</p>' +
+    '<form class="form" data-form="learn" data-t="' + t + '" novalidate>' + learnFields(t, cid) + learnNotice(L) +
+      '<div class="full"><button class="btn btn-lime" type="submit">' + L.btn + '</button></div>' +
+    '</form>' +
+    '<p class="muted" style="margin:28px 0 0;font-size:14px">현장 워크샵을 찾으신다면 <a class="lnk" href="#contact">워크샵 문의</a>로 남겨 주세요.</p>' +
+  '</div></section>';
+}
+function bindLearn(){
+  var f = $('form[data-form="learn"]'); if(!f) return;
+  var t = f.getAttribute('data-t'), L = LEARN[t];
+  bindForm(f, function(){
+    var d = new FormData(f), data = {kind:'온라인 · ' + L.nm, channel:'online', type:t}, lines = [];
+    var label = {company:'회사', name:(t === 'course' || t === 'cohort') ? '성함' : '담당자', email:'이메일', phone:'연락처', role:'부서·직책', course:'관심 강의', ask:'궁금한 점', when:'희망 시기', job:'하는 일', level:'AI 경험', slot:'가능한 시간', size:'인원', plan:'형태', access:'AI 접속', pay:'결제·증빙', pkg:'패키지', place:'장소', proposal:'제안서 필요', msg:'내용'};
+    $$('input,select,textarea', f).forEach(function(el){
+      var k = el.name; if(!k || data.hasOwnProperty(k)) return;
+      var v;
+      if(el.type === 'checkbox' && k !== 'proposal') v = d.getAll(k).join(', ');
+      else if(k === 'proposal') v = el.checked ? '예' : '아니요';
+      else if(el.tagName === 'SELECT') v = el.value ? el.options[el.selectedIndex].text : '';
+      else v = String(el.value || '').trim();
+      data[k] = v; lines.push((label[k] || k) + ': ' + (v || '-'));
+    });
+    sendLead(data).then(function(sent){
+      if(sent){ openDialog('<h2>' + esc(L.nm) + '를 받았어요</h2><p style="margin:0">' + esc(data.email) + '로 확인하는 대로 연락드릴게요.</p>' + (data.proposal === '예' ? proposalBox() : '') + '<button type="button" class="btn btn-line" data-close>닫기</button>'); return; }
+      copyDialog(esc(L.nm) + ' 내용이 준비됐어요', '[CHA&I 온라인 · ' + L.nm + ']\n' + lines.join('\n'));
     });
   });
 }
@@ -2277,6 +2394,6 @@ if(!/vercel\.app$|(^|\.)chaand\.ai$|^localhost$|^127\.|\.test$|^x\.test$/.test(l
 route();
 })();
 </script>
-<script>(function(){function up(){var h=(location.hash||'#intro').slice(1).split(/[-?]/)[0];h=({t:'team',w:'workshop',c:'program',online:'program',proposal:'contact',brief:'contact'})[h]||h;document.querySelectorAll('#tabbar a').forEach(function(a){a.classList.toggle('on',a.dataset.h===h||(h==='home'&&a.dataset.h==='intro'));});}window.addEventListener('hashchange',up);up();})();</script>
+<script>(function(){function up(){var h=(location.hash||'#intro').slice(1).split(/[-?]/)[0];h=({t:'team',w:'workshop',c:'program',online:'program',learn:'program',proposal:'contact',brief:'contact'})[h]||h;document.querySelectorAll('#tabbar a').forEach(function(a){a.classList.toggle('on',a.dataset.h===h||(h==='home'&&a.dataset.h==='intro'));});}window.addEventListener('hashchange',up);up();})();</script>
 </body>
 </html>
