@@ -844,7 +844,7 @@ html{font-variant-numeric:lining-nums}
 @media (prefers-reduced-motion: reduce){.psz-ind{transition:none!important}.pcard.pop{animation:none!important}}
 /* 카드 묶음 등장 모션 + 강의 카드 강조 이동 */
 .shown > *{animation:cardIn .6s cubic-bezier(.25,.7,.2,1) backwards}
-@keyframes cardIn{0%{opacity:0;transform:translateY(18px)}100%{opacity:1;transform:none}}
+@keyframes cardIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:none}}
 .cgrid .ccard{border:1.5px solid transparent!important;transition:border-color .35s,box-shadow .35s,transform .35s}
 .cgrid .ccard:hover{transform:none}
 .cgrid .ccard.is-on{border-color:#667866!important;box-shadow:0 14px 34px rgba(94,111,94,.20)!important}
@@ -896,6 +896,11 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
 .lb-x{position:absolute;top:18px;right:18px}
 @media (max-width:1000px){.days{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.days{grid-template-columns:minmax(0,1fr)}.dtabs .psz-ind{display:none}.dtabs button.on{background:#667866;border-color:#667866}.dtabs{grid-template-columns:repeat(3,minmax(0,1fr))}.lbox .lb-p,.lbox .lb-n{position:absolute;bottom:20px}.lb-p{left:30%}.lb-n{right:30%}}
+/* 페이지 이동: 위치 이동 없이 투명도만, 앵커는 헤더 아래 정확히 */
+#app.pg-in{animation:pgIn .32s ease-out}
+@keyframes pgIn{from{opacity:0}to{opacity:1}}
+#app [id]{scroll-margin-top:88px}
+@media (prefers-reduced-motion: reduce){#app.pg-in{animation:none}}
 </style>
 </head>
 <body>
@@ -1239,7 +1244,7 @@ function bindDay(){
 function route(){
   var h = decodeURIComponent((location.hash || '#intro').slice(1)) || 'intro';
   var m, anchor = document.getElementById(h);
-  if(anchor && !/^(intro|home|workshop|program|online|team|contact|proposal|brief|privacy|day|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView(); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
+  if(anchor && !/^(intro|home|workshop|program|online|team|contact|proposal|brief|privacy|day|t-)/.test(h) && !/^[wc]-/.test(h)){ anchor.scrollIntoView({behavior:'smooth', block:'start'}); if(anchor.focus) anchor.focus({preventScroll:true}); return; }
   hideSticky();
   if(h === 'intro'){ page(''); app.innerHTML = vIntro(); }
   else if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
@@ -1248,7 +1253,7 @@ function route(){
   else if(h === 'program'){ page('program'); app.innerHTML = vProgram(); }
   else if(h === 'online'){ page('online'); app.innerHTML = vOnline(); }
   else if((m = h.match(/^c-(.+)$/)) && cById(m[1])){ page('course'); app.innerHTML = vCourse(cById(m[1])); bindCourse(cById(m[1])); }
-  else if(h === 'team' || /^t-(han|jun|lee)$/.test(h)){ page('team'); app.innerHTML = vTeam(); bindTeam(); if(h !== 'team'){ var el = document.getElementById(h); if(el){ setTimeout(function(){ el.scrollIntoView(); }, 0); } return; } }
+  else if(h === 'team' || /^t-(han|jun|lee)$/.test(h)){ page('team'); app.innerHTML = vTeam(); bindTeam(); if(h !== 'team'){ var el = document.getElementById(h); if(el){ setTimeout(function(){ el.scrollIntoView({behavior:'instant', block:'start'}); }, 0); } return; } }
   else if(h === 'day'){ page('day'); app.innerHTML = vDay(); bindDay(); }
   else if(h === 'privacy'){ page('privacy'); app.innerHTML = vPrivacy(); }
   else if(h === 'brief'){ page('brief'); app.innerHTML = vBrief(); bindBrief(); }
@@ -1257,7 +1262,10 @@ function route(){
   else { page(''); app.innerHTML = '<section class="section"><div class="wrap"><h1 class="h2">페이지를 찾을 수 없어요</h1><p class="lead" style="margin-top:12px"><a href="#home">홈으로 가기</a></p></div></section>'; }
   document.title = (titleFor(h) ? titleFor(h) + ' — ' : '') + 'CHA&I';
   $('#mnav').classList.remove('open'); $('#burger').setAttribute('aria-expanded','false');
-  window.scrollTo(0, 0);
+  /* 페이지 이동: 부드러운 스크롤 없이 바로 맨 위에 놓고, 내용은 제자리에서 옅게 나타남 */
+  window.scrollTo({top:0, left:0, behavior:'instant'});
+  window.__pgT = Date.now();
+  app.classList.remove('pg-in'); void app.offsetWidth; app.classList.add('pg-in');
   if(location.hash) app.focus({preventScroll:true});
 }
 function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {day:'현장 기록', privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'도입 문의', proposal:'제안서 받기'}[h.split('?')[0]] || ''; }
@@ -1998,7 +2006,7 @@ function revealGrids(){
   var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var gs = document.querySelectorAll('.plans:not([data-rv]),.cgrid:not([data-rv]),.mtiles:not([data-rv]),.sqs:not([data-rv]),.sfmt:not([data-rv]),.pcards:not([data-rv]),.notes:not([data-rv])');
   if(still || !('IntersectionObserver' in window)) return;
-  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ io.unobserve(e.target); Array.prototype.forEach.call(e.target.children, function(c, i){ c.style.animationDelay = (i * 80) + 'ms'; }); e.target.classList.add('shown'); } }); }, {threshold:.15});
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ io.unobserve(e.target); if(Date.now() - (window.__pgT || 0) < 600) return; Array.prototype.forEach.call(e.target.children, function(c, i){ c.style.animationDelay = (i * 80) + 'ms'; }); e.target.classList.add('shown'); } }); }, {threshold:.15});
   gs.forEach(function(g){ g.setAttribute('data-rv','1'); io.observe(g); });
 }
 document.addEventListener('mouseover', function(e){ var c = e.target.closest && e.target.closest('.cgrid > .ccard'); if(!c) return; c.parentNode.querySelectorAll('.ccard').forEach(function(x){ x.classList.toggle('is-on', x === c); }); });
