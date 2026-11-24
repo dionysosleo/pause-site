@@ -777,7 +777,7 @@ html{font-variant-numeric:lining-nums}
 @media (max-width:560px){.pcards{grid-template-columns:minmax(0,1fr)}}
 /* R9 행 맞춤: 나란한 카드의 같은 칸은 같은 높이에서 시작 (subgrid) */
 .notes{grid-auto-rows:auto;row-gap:0}
-.note{display:grid;grid-row:span 6;grid-template-rows:subgrid;row-gap:0;margin-bottom:18px;align-content:start}
+.note{display:grid;grid-row:span 5;grid-template-rows:subgrid;row-gap:0;margin-bottom:18px;align-content:start}
 .note>.vz{align-self:stretch;display:flex;flex-direction:column;justify-content:center}
 .note>.vz.vz-swing,.note>.vz.vz-dots,.note>.vz.vz-donuts{flex-direction:row}
 .vz-row{grid-template-columns:minmax(0,9em) minmax(0,1fr) 5.2em}
@@ -901,6 +901,8 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
 @keyframes pgIn{from{opacity:0}to{opacity:1}}
 #app [id]{scroll-margin-top:88px}
 @media (prefers-reduced-motion: reduce){#app.pg-in{animation:none}}
+/* 출처·크레딧 표시 없음 (라이선스 기록은 운영 문서에) */
+.credit,.ns{display:none!important}
 </style>
 </head>
 <body>
@@ -943,7 +945,6 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
       <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#day">현장 기록</a><a href="#contact">도입 문의</a><a href="#privacy">개인정보처리방침</a>
     </nav>
   </div>
-  <div class="wrap" style="margin-top:28px"><p style="margin:0;font-size:12px;color:#8A8A85">사진: Unsplash (Unsplash License). 실제 워크샵 사진이 생기면 교체할 자리예요.</p></div>
 </footer>
 
 <dialog id="dlg"><div style="position:relative"><button type="button" class="x" data-close aria-label="닫기">×</button><div class="dlg" id="dlgBody"></div></div></dialog>
@@ -986,7 +987,7 @@ function src(k, w){ if(PH[k].local) return PH[k].local; return 'https://images.u
 function tph(t, w, cls){ return t.img ? '<div class="photo portrait' + (cls ? ' ' + cls : '') + '"><img src="' + esc(t.img) + '" alt="' + esc(t.nm) + ' 사진" loading="lazy"></div>' : ph(t.pic, w, cls); }
 function ph(k, w, cls, eager){
   var p = PH[k];
-  return '<div class="photo' + (cls ? ' ' + cls : '') + '"><img src="' + src(k, w) + '" alt="' + esc(p.alt) + '"' + (eager ? '' : ' loading="lazy"') + ' decoding="async"><span class="credit">' + (p.local ? esc(p.by) : 'Photo: ' + (p.by ? esc(p.by) + ' / ' : '') + 'Unsplash') + '</span></div>';
+  return '<div class="photo' + (cls ? ' ' + cls : '') + '"><img src="' + src(k, w) + '" alt="' + esc(p.alt) + '"' + (eager ? '' : ' loading="lazy"') + ' decoding="async"></div>';
 }
 
 /* ===== 강사 ===== */
@@ -1293,7 +1294,7 @@ function viz(v){
 function designNotes(){
   return '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Design notes</p><h2 class="h2 one">이렇게 만든 데는 이유가 있어요</h2></div><p class="lead">순서 하나, 장치 하나마다 근거가 있어요. 국내외 조사를 살펴보고 정했어요.</p></div>' +
-    '<div class="notes">' + NOTES.map(function(x){ return '<article class="note"><span class="nn">' + x.n + '</span><h3 class="ol">' + esc(x.h) + '</h3>' + viz(x.v) + '<p class="nf ol">' + esc(x.c) + '</p><p class="ns ol">출처 · ' + esc(x.src) + '</p><p class="nd"><span class="ol">' + esc(x.d) + '</span></p></article>'; }).join('') + '</div>' +
+    '<div class="notes">' + NOTES.map(function(x){ return '<article class="note"><span class="nn">' + x.n + '</span><h3 class="ol">' + esc(x.h) + '</h3>' + viz(x.v) + '<p class="nf ol">' + esc(x.c) + '</p><p class="nd"><span class="ol">' + esc(x.d) + '</span></p></article>'; }).join('') + '</div>' +
   '</div></section>';
 }
 function vIntro(){
@@ -1355,7 +1356,7 @@ function vHome(){
       '</dl>' +
       '<div class="btns"><a class="btn btn-lime" href="#contact">워크샵 문의</a><a class="btn btn-line" href="#proposal">제안서 받기</a><a class="btn btn-line" href="#brief">결재용 한 페이지</a></div>' +
     '</div>' +
-    '<div class="photo"><img src="' + src('desk', 1600) + '" alt="' + esc(PH.desk.alt) + '" fetchpriority="high"><span class="credit">Photo: ' + esc(PH.desk.by) + ' / Unsplash</span>' +
+    '<div class="photo"><img src="' + src('desk', 1600) + '" alt="' + esc(PH.desk.alt) + '" fetchpriority="high">' +
       '<div class="steep" id="steep" role="img" aria-label="3분 타이머: 차가 우러나는 동안 팀별 에이전트가 일을 끝내는 장면">' +
         '<div class="steep-dial"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" class="trk"/><circle cx="32" cy="32" r="28" class="arc" id="steepArc"/></svg><span class="steep-t en" id="steepT">3:00</span></div>' +
         '<div class="steep-log"><b class="en" id="steepRole">3분 · 기획팀</b><ol id="steepLog"><li>회의록 5개 읽는 중</li><li>액션 아이템 12개 찾음</li><li>담당자별로 나눠 메일 초안 작성</li><li class="done">끝 — 차가 다 우러났어요</li></ol></div>' +
@@ -1772,7 +1773,7 @@ function vBrief(){
     '<h1 class="h1 one" style="font-size:clamp(26px,3vw,40px)">CHA&amp;I 워크샵 한 잔 요약</h1>' +
     '<p class="lead" style="margin:14px 0 0">팀원 모두가 실제 업무 하나를 AI 에이전트로 바꾸고, 그 결과를 숫자로 확인하는 실무 워크샵이에요.</p>' +
     '<div class="btns" style="margin:20px 0 8px"><button type="button" class="btn btn-lime btn-sm" data-copylink>이 페이지 링크 복사</button><button type="button" class="btn btn-line btn-sm" data-copybrief>요약 텍스트 복사</button><a class="btn btn-line btn-sm" href="#proposal">제안서 PDF 받기</a></div>' +
-    '<h2 class="bh">0. 왜 지금, 왜 이 방식인가요</h2><ul class="checks">' + NOTES.map(function(x){ return '<li><b>' + esc(x.h) + '</b> — ' + esc(x.d) + ' <span class="muted" style="font-size:13px">(' + esc(x.src) + ')</span></li>'; }).join('') + '</ul>' +
+    '<h2 class="bh">0. 왜 지금, 왜 이 방식인가요</h2><ul class="checks">' + NOTES.map(function(x){ return '<li><b>' + esc(x.h) + '</b> — ' + esc(x.d) + '</li>'; }).join('') + '</ul>' +
     '<h2 class="bh">1. 무엇이 남나요</h2><div class="tbl-wrap"><table class="cmp bt">' +
       row('결과물', '팀마다 실제 업무에 쓰는 AI 에이전트 1개 이상 (보고서·회의록 정리, 고객 문의 답변 초안, 경쟁사 조사 등)') +
       row('개인', '각자 “다음 2주에 해 볼 한 가지” 실행 약속') +
