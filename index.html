@@ -903,6 +903,11 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
 @media (prefers-reduced-motion: reduce){#app.pg-in{animation:none}}
 /* 출처·크레딧 표시 없음 (라이선스 기록은 운영 문서에) */
 .credit,.ns{display:none!important}
+/* 요약 카드 내용은 글 대신 짧은 목록 (R6) */
+.it-grid dd .ddl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.it-grid dd .ddl li{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;line-height:1.45;color:#26313D}
+.it-grid dd .ddl li::before{content:'';flex:none;width:6px;height:6px;border-radius:50%;background:#667866}
+@media (max-width:560px){.it-grid{grid-template-columns:minmax(0,1fr)!important}}
 </style>
 </head>
 <body>
@@ -1310,10 +1315,10 @@ function vIntro(){
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">At a glance</p><h2 class="h2 one">CHA&amp;I를 한 장으로</h2></div></div>' +
     '<dl class="it-grid">' +
-      '<div><dt>무엇을</dt><dd>팀원 모두가 실제 업무 하나를 골라 AI 에이전트로 만드는 실무 워크샵</dd></div>' +
-      '<div><dt>어떻게</dt><dd>숲에서 보내는 종일 워크샵(7시간) 또는 귀사에서 하는 오후 워크샵(5~6시간)</dd></div>' +
-      '<div><dt>누구와</dt><dd>티 디렉터 이유진 · AI 코치 한성희 · 에이전트 빌더 이준혁</dd></div>' +
-      '<div><dt>무엇이 남나</dt><dd>팀 에이전트, 2주 약속 카드, 다음 날 1쪽 결과 리포트, 90일 사용 확인</dd></div>' +
+      '<div><dt>무엇을</dt><dd><ul class="ddl"><li class="ol">팀원 모두가 실제 업무 고르기</li><li class="ol">AI 에이전트로 만드는 실무 워크샵</li></ul></dd></div>' +
+      '<div><dt>어떻게</dt><dd><ul class="ddl"><li class="ol">숲에서 종일 워크샵 · 7시간</li><li class="ol">귀사에서 오후 워크샵 · 5~6시간</li></ul></dd></div>' +
+      '<div><dt>누구와</dt><dd><ul class="ddl"><li class="ol">티 디렉터 이유진</li><li class="ol">AI 코치 한성희</li><li class="ol">에이전트 빌더 이준혁</li></ul></dd></div>' +
+      '<div><dt>무엇이 남나</dt><dd><ul class="ddl"><li class="ol">팀 에이전트</li><li class="ol">2주 약속 카드</li><li class="ol">다음 날 1쪽 결과 리포트</li><li class="ol">90일 사용 확인</li></ul></dd></div>' +
     '</dl>' +
   '</div></section>' +
   designNotes() +
@@ -1349,9 +1354,9 @@ function vHome(){
       '<h1 class="h1 one" style="font-size:clamp(26px,2.6vw,42px)">업무 하나를, 하루 만에 AI 에이전트로.</h1>' +
       '<p class="lead">CHA&amp;I는 기업 팀을 위한 AI 실무 워크샵이에요. 강의를 듣는 대신 팀원 모두가 실제 업무 하나를 골라 에이전트로 만들고, 차 한 잔으로 집중을 지키며 그날 안에 완성해요.</p>' +
       '<dl class="hero-about">' +
-        '<div><dt>누구와</dt><dd>티 디렉터 · AI 코치 · 빌더, 세 사람</dd></div>' +
-        '<div><dt>어떻게</dt><dd>종일 야외 또는 오후 사무실, 툴은 하나로</dd></div>' +
-        '<div><dt>무엇이 남나</dt><dd>팀 에이전트, 다음 날 1쪽 리포트, 90일 사용 확인</dd></div>' +
+        '<div><dt>누구와</dt><dd><ul class="ddl"><li class="ol">티 디렉터 · AI 코치 · 빌더</li></ul></dd></div>' +
+        '<div><dt>어떻게</dt><dd><ul class="ddl"><li class="ol">종일 야외 또는 오후 사무실</li><li class="ol">툴은 하나로</li></ul></dd></div>' +
+        '<div><dt>무엇이 남나</dt><dd><ul class="ddl"><li class="ol">팀 에이전트</li><li class="ol">다음 날 1쪽 리포트</li><li class="ol">90일 사용 확인</li></ul></dd></div>' +
       '</dl>' +
       '<div class="btns"><a class="btn btn-lime" href="#contact">워크샵 문의</a><a class="btn btn-line" href="#proposal">제안서 받기</a><a class="btn btn-line" href="#brief">결재용 한 페이지</a></div>' +
     '</div>' +
