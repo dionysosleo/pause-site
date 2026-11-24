@@ -1036,6 +1036,7 @@ a.pchip:hover{border-color:#667866;box-shadow:0 8px 20px rgba(94,111,94,.14)}
 .policy .psec p,.policy .psec li{font-size:16px;line-height:1.75}
 .policy .psec ul,.policy .psec ol{padding-left:1.3em;display:grid;gap:4px}
 .policy .pnote{font-size:14px;color:#5C6672}
+.policy .psec ol ul{margin-top:4px;list-style:disc}
 .ptbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;line-height:1.6}
 .ptbl th,.ptbl td{border-bottom:1px solid var(--hair);padding:10px 12px;text-align:left;vertical-align:top}
 .ptbl thead th{font-weight:800;background:rgba(0,0,0,.03)}
@@ -1053,6 +1054,9 @@ footer .legal a{font-weight:400}
 footer .legal p{margin:0}
 footer .biz{font-size:13px}
 @media (max-width:860px){.policy .pgrid{grid-template-columns:minmax(0,1fr)}.policy .ptoc{position:static;border:1px solid var(--hair);border-radius:14px;padding:14px 16px}.ptbl{display:block;overflow-x:auto}}
+.band .photo::after{background:linear-gradient(90deg,rgba(12,18,14,.72) 0%,rgba(12,18,14,.5) 45%,rgba(12,18,14,.12) 80%),linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.45))!important}
+.band .h1,.band .h2,.band .lead,.band .eyebrow{text-shadow:0 1px 12px rgba(0,0,0,.35)}
+.band .eyebrow{color:#DCE8C6!important}
 </style>
 </head>
 <body>
@@ -1584,7 +1588,7 @@ function vHome(){
     '</ol>' +
   '</div></section>' +
 
-  '<section class="band">' + ph('woods', 1800) +
+  '<section class="band">' + ph('pine', 1800) +
     '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Outdoor · 종일</p><h2 class="h1 one" style="font-size:clamp(32px,5vw,60px)">팀 워크샵, 이번엔 숲으로.</h2>' +
     '<p class="lead">홍천처럼 서울에서 두 시간 안팎의 숲속 교육장에서 하루. 메신저와 회의에서 벗어나 팀 과제 하나를 끝까지 만들고, 쇼케이스와 다음 90일 약속으로 닫아요. 1박 2일로 늘릴 수도 있어요. 장소 연결부터 일정표까지 짜 드려요.</p>' +
     '<div class="btns" style="margin-top:22px"><a class="btn btn-lime" href="#w-outdoor">종일 야외 일정 보기</a></div></div>' +
@@ -1952,13 +1956,14 @@ function policyTokens(html){
     ? '<p>원활한 업무를 위해 아래와 같이 처리를 맡기고 있어요. 국외 이전은 개인정보 보호법 제28조의8제1항제3호(계약 이행을 위한 처리위탁·보관)에 따르며, 원치 않으면 아래 연락처로 이전 거부를 요청할 수 있어요. 다만 이 경우 해당 서비스 이용이 어려울 수 있어요.</p><table class="ptbl"><thead><tr><th scope="col">받는 곳</th><th scope="col">맡기는 일</th><th scope="col">항목</th><th scope="col">국가·시기·방법</th><th scope="col">보유 기간</th></tr></thead><tbody>' + VENDORS.map(function(v){ return '<tr><td>' + esc(v.name) + '</td><td>' + esc(v.task) + '</td><td>' + esc(v.items) + '</td><td>' + esc([v.country, v.when, v.how].filter(Boolean).join(' · ')) + '</td><td>' + esc(v.period) + '</td></tr>'; }).join('') + '</tbody></table>'
     : '<p>현재 웹사이트로 받은 개인정보를 다른 회사에 맡겨 처리하거나 국외로 이전하지 않아요. 문의 접수 도구나 메일 서비스를 쓰게 되면 받는 곳, 맡기는 일, 국가, 이전 시기와 방법을 이 항목에 미리 공개해요.</p>';
   var changes = '<table class="ptbl"><thead><tr><th scope="col">버전</th><th scope="col">시행일</th><th scope="col">내용</th></tr></thead><tbody>' + POLICY_CHANGES.map(function(c){ return '<tr><td>' + esc(c.v) + '</td><td>' + esc(c.d || POLICY_META.effective || '게시일') + '</td><td>' + esc(c.t) + '</td></tr>'; }).join('') + '</tbody></table>';
-  return html.replace(/\{\{BIZNAME\}\}/g, esc(bizName())).replace('{{BIZBLOCK}}', biz).replace(/\{\{CONTACT\}\}/g, contact).replace('{{CPO}}', cpo).replace('{{VENDORS}}', vendors).replace('{{CHANGES}}', changes);
+  return html.replace(/\{\{BIZNAME\}\}/g, esc(bizName())).replace('{{BIZBLOCK}}', biz).replace(/\{\{CONTACT\}\}/g, contact).replace('{{CPO}}', cpo).replace('{{VENDORS}}', vendors).replace('{{CHANGES}}', changes).replace(/\{\{EFFECTIVE\}\}/g, POLICY_META.effective ? esc(POLICY_META.effective) : '게시한 날');
 }
 function vPolicy(key){
   var P = POLICIES[key];
   var tabs = POLICY_ORDER.map(function(k){ return '<a href="#' + k + '"' + (k === key ? ' aria-current="page"' : '') + '>' + POLICIES[k].short + '</a>'; }).join('');
-  var toc = P.sections.map(function(x, i){ return '<li><button type="button" data-goto="pol-' + (i + 1) + '">' + (i + 1) + '. ' + x[0] + '</button></li>'; }).join('');
-  var body = P.sections.map(function(x, i){ return '<section class="psec" id="pol-' + (i + 1) + '"><h2 class="bh">' + (i + 1) + '. ' + x[0] + '</h2>' + policyTokens(x[1]) + '</section>'; }).join('');
+  var toc = P.sections.map(function(x, i){ return '<li><button type="button" data-goto="pol-' + (i + 1) + '">' + (P.art ? '제' + (i + 1) + '조 ' : (i + 1) + '. ') + x[0] + '</button></li>'; }).join('');
+  var num = function(i, t){ return P.art ? '제' + (i + 1) + '조 ' + t : (i + 1) + '. ' + t; };
+  var body = P.sections.map(function(x, i){ return '<section class="psec" id="pol-' + (i + 1) + '"><h2 class="bh">' + num(i, x[0]) + '</h2>' + policyTokens(x[1]) + '</section>'; }).join('');
   var meta = ['버전 ' + POLICY_META.version, POLICY_META.effective ? '시행일 ' + POLICY_META.effective : '', POLICY_META.announced ? '공고일 ' + POLICY_META.announced : ''].filter(Boolean).join(' · ');
   return '<section class="section tight brief policy"><div class="wrap">' +
     '<nav class="ptabs" aria-label="약관과 정책">' + tabs + '</nav>' +
