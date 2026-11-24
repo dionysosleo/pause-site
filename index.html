@@ -1202,7 +1202,11 @@ function page(name){
 /* ===== CHA&I 데이: 현장 기록 아카이브 =====
    새 기록은 DAYS 맨 앞에 한 줄 추가. date는 'YYYY. MM. DD'(모르면 ''), tag: 출강·파일럿·살롱·클럽, who: T의 키, photos: PH 키(첫 장이 대표) */
 var DAYS = [
-  {date:'', tag:'출강', title:'바유의 기업·기관 찻자리', place:'기업·기관 출강', who:['lee'], photos:['fLounge','fWorkshop','fSweets','fTable','fSetting'], line:'야외 티 라운지부터 테이블 티 워크숍까지'}
+  {date:'', tag:'출강', title:'야외 티 라운지', place:'기업·기관 출강', who:['lee'], photos:['fLounge'], line:'야외 테라스에서 차를 내는 자리'},
+  {date:'', tag:'출강', title:'테이블 티 워크숍', place:'기업·기관 출강', who:['lee'], photos:['fWorkshop'], line:'테이블에서 함께 차를 우리는 시간'},
+  {date:'', tag:'출강', title:'다과가 있는 찻자리', place:'기업·기관 출강', who:['lee'], photos:['fSweets'], line:'찻잔과 다과를 차린 자리'},
+  {date:'', tag:'출강', title:'둥근 테이블 찻자리', place:'기업·기관 출강', who:['lee'], photos:['fTable'], line:'찻잔과 자료가 놓인 둥근 테이블'},
+  {date:'', tag:'출강', title:'긴 테이블 다구 세팅', place:'기업·기관 출강', who:['lee'], photos:['fSetting'], line:'다구를 펼친 긴 테이블'}
 ];
 var NEXT_DAY = {tag:'파일럿', title:'차를 우리고, AI를 키우다 · 첫 회', line:'아산나눔재단 파일럿 뒤에 이 자리에 올라와요'};
 var VISITED = ['카카오','SK','신한 VIP','충북대학교','아산상회','GS 52g','넥슨','HD현대','현대백화점','경기도청','분당 서울대병원','힐리언스 선마을'];
@@ -1213,7 +1217,7 @@ function vDay(){
     '<div class="dstats"><div><b>' + VISITED.length + '곳</b><span>다녀온 기업·기관</span></div><div><b>' + DAYS.length + '건</b><span>쌓인 현장 기록</span></div><div><b>' + DAYS.reduce(function(n, d){ return n + d.photos.length; }, 0) + '장</b><span>현장 사진</span></div></div>' +
     '<div class="dvisit" aria-label="다녀온 곳">' + VISITED.map(function(v){ return '<span>' + esc(v) + '</span>'; }).join('') + '</div>' +
     '<div class="psz dtabs" role="tablist" aria-label="기록 종류" style="--k:0;--n:' + tags.length + '"><span class="psz-ind" aria-hidden="true"></span>' + tags.map(function(t, i){ return '<button type="button" role="tab" class="' + (i ? '' : 'on') + '" aria-selected="' + (i ? 'false' : 'true') + '" data-dtab="' + i + '" data-t="' + esc(t) + '"><b>' + esc(t) + '</b></button>'; }).join('') + '</div>' +
-    '<div class="days">' + DAYS.map(function(d, i){ return '<article class="dcard" data-t="' + esc(d.tag) + '"><button type="button" class="dph" data-day="' + i + '" aria-label="' + esc(d.title) + ' 사진 ' + d.photos.length + '장 보기">' + ph(d.photos[0], 900) + '<span class="dcount">' + d.photos.length + '장</span></button><div class="dmeta"><span class="dtag">' + esc(d.tag) + '</span>' + (d.date ? '<span class="ddate">' + esc(d.date) + '</span>' : '') + '</div><h3 class="ol">' + esc(d.title) + '</h3><p class="ol">' + esc(d.line) + '</p><p class="dwho ol">' + esc(d.place) + ' · ' + who(d.who) + '</p></article>'; }).join('') +
+    '<div class="days">' + DAYS.map(function(d, i){ return '<article class="dcard" data-t="' + esc(d.tag) + '"><button type="button" class="dph" data-day="' + i + '" aria-label="' + esc(d.title) + ' 사진 ' + d.photos.length + '장 보기">' + ph(d.photos[0], 900) + (d.photos.length > 1 ? '<span class="dcount">' + d.photos.length + '장</span>' : '') + '</button><div class="dmeta"><span class="dtag">' + esc(d.tag) + '</span>' + (d.date ? '<span class="ddate">' + esc(d.date) + '</span>' : '') + '</div><h3 class="ol">' + esc(d.title) + '</h3><p class="ol">' + esc(d.line) + '</p><p class="dwho ol">' + esc(d.place) + ' · ' + who(d.who) + '</p></article>'; }).join('') +
       '<article class="dcard dnext" data-t="' + esc(NEXT_DAY.tag) + '"><div class="dph dempty"><span>다음 기록</span></div><div class="dmeta"><span class="dtag">' + esc(NEXT_DAY.tag) + '</span></div><h3 class="ol">' + esc(NEXT_DAY.title) + '</h3><p class="ol">' + esc(NEXT_DAY.line) + '</p><p class="dwho ol">곧 올라와요</p></article>' +
     '</div>' +
     '<p class="dnone muted" hidden>아직 이 종류의 기록이 없어요. 곧 채워 갈게요.</p>' +
