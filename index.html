@@ -794,6 +794,20 @@ html{font-variant-numeric:lining-nums}
 .sq{display:grid;grid-row:span 3;grid-template-rows:subgrid;row-gap:14px}
 @media (max-width:860px){.vz-row{grid-template-columns:minmax(0,1fr) 5.2em}}
 .plan .ptag,.pc-chip{justify-self:start}
+/* 상품 카드 열 수 · 라벨형 목록 · 매달 타일 */
+.plans.c2{grid-template-columns:repeat(2,minmax(0,1fr));max-width:860px;margin:0 auto}
+.plans.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.plans.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.plan .pf li.lv{display:grid;grid-template-columns:4.2em minmax(0,1fr);align-items:center;gap:8px}
+.plan .pf li.lv small{font-size:12px;font-weight:700;color:#667866;background:#F1F4F1;border-radius:999px;padding:3px 0;text-align:center}
+.btn-ph{display:block}
+.mtiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mt{display:flex;align-items:center;gap:14px;background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(30,42,54,.06);padding:18px 20px}
+.mt-n{flex:none;width:34px;height:34px;border-radius:50%;background:#667866;color:#fff;font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+.mt b{display:block;font-size:15.5px;color:#26313D}
+.mt p{margin:2px 0 0;font-size:13.5px;color:#6B727A}
+@media (max-width:1100px){.plans.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){.plans.c2,.plans.c3,.plans.c4,.mtiles{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -969,6 +983,7 @@ var C = [
 ];
 
 /* ===== 온라인 일반 / 프리미엄, 온·오프 연계 패키지 ===== */
+var SHORT = {'agent-vod':'맡길 일과 내가 정할 일부터','builder-vod':'매일 아침 스스로 도는 발행 에이전트','tea-live':'오후 3시, 3분 우림 루틴','partner-4w':'4주 동안 함께, 업무에 붙이기'};
 var TIERS = [
   {nm:'일반', en:'Self-paced', line:'혼자, 내 속도로 우리기', items:['10~15분 단위 VOD와 실습 템플릿','문서 5종 양식과 예시','월 1회 오픈 Q&A 라이브 (다시보기 제공)','질문 게시판'], fit:'먼저 혼자 해 보고 싶은 분, 워크샵 전 예습·워크샵 뒤 복습'},
   {nm:'프리미엄', en:'Cohort', line:'함께, 4주 동안 끝까지', items:['일반의 모든 것','4주 기수제 — 정원 12명','주 1회 라이브 90분 + 매주 과제 피드백','1:1 피드백 1회','티 키트 4종 배송','수료 후 동문 찻자리 초대'], fit:'만든 에이전트를 실제 업무와 일상에 붙이고 싶은 분'}
@@ -992,23 +1007,41 @@ var PKGS = [
   {no:'03', nm:'찻자리 클럽 시즌', en:'Season', flow:['월 1회 저녁 찻자리 × 4개월','전원 일반 이용권'], desc:'같은 사람들이 한 달에 한 번 모여 차 한 잔과 에이전트를 한 단계씩 키워요. 사이 기간은 온라인으로.', fit:'리더 모임 · 입주사 · 커뮤니티'},
   {no:'04', nm:'1년 웰니스', en:'All year', flow:['사계절 정기 프로그램','리더 프리미엄 + 사내 챔피언'], desc:'분기마다 대면으로 만나고, 사내 챔피언이 그 사이를 이어요. 리더는 프리미엄으로 한 걸음 앞서요.', fit:'1년 동안 함께할 회사'}
 ];
+/* 상품 카드 공통 (R8): {tag, name, big, sub, best, f:[문자열 또는 [라벨,값]], href, btn, hi} */
+function planGrid(list, cols){
+  return '<div class="plans c' + cols + '">' + list.map(function(p){
+    return '<article class="plan' + (p.hi ? ' hi' : '') + '"><span class="ptag">' + esc(p.tag) + (p.hi ? ' · 추천' : '') + '</span><h3 class="ol">' + esc(p.name) + '</h3>' +
+      '<p class="pbig"><b>' + esc(p.big) + '</b></p><p class="psub ol">' + esc(p.sub) + '</p><p class="pbest ol">' + esc(p.best) + '</p>' +
+      '<ul class="pf">' + p.f.map(function(x){ return Array.isArray(x) ? '<li class="lv"><small>' + esc(x[0]) + '</small><span class="ol">' + esc(x[1]) + '</span></li>' : '<li><span class="ck" aria-hidden="true"></span><span class="ol">' + esc(x) + '</span></li>'; }).join('') + '</ul>' +
+      (p.href ? '<a class="btn ' + (p.hi ? 'btn-lime' : 'btn-line') + ' btn-sm" href="' + p.href + '">' + esc(p.btn || '자세히 보기') + '</a>' : '<span class="btn-ph"></span>') + '</article>'; }).join('') + '</div>';
+}
 function tierSection(){
   return '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Plans</p><h2 class="h2 one">일반과 프리미엄</h2></div><p class="lead">혼자 내 속도로 우릴지, 4주 동안 함께 끝까지 우릴지 고르세요.</p></div>' +
-    '<div class="tiers">' + TIERS.map(function(t, i){ return '<div class="tier' + (i ? ' on' : '') + '"><p class="en">' + t.en + '</p><h3>' + esc(t.nm) + '</h3><p class="muted">' + esc(t.line) + '</p><ul>' + t.items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul><p class="tfit">' + esc(t.fit) + '</p></div>'; }).join('') + '</div>' +
-    '<div class="tbl-wrap" style="max-width:900px;margin:22px auto 0"><table class="cmp"><thead><tr><th scope="col"></th><th scope="col">일반</th><th scope="col">프리미엄</th></tr></thead><tbody>' + TIER_ROWS.map(function(r){ return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+    planGrid([
+      {tag:'일반', name:'혼자, 내 속도로', big:'언제든', sub:'VOD + 월 1회 오픈 Q&A', best:'워크샵 전 예습·뒤 복습', f:['10~15분 VOD + 실습 템플릿','문서 5종 양식과 예시','월 1회 오픈 Q&A 라이브','질문 게시판'], href:'#contact?type=online', btn:'수강 문의'},
+      {tag:'프리미엄', hi:1, name:'함께, 4주 동안 끝까지', big:'4주 · 12명', sub:'주 1회 라이브 90분', best:'업무에 정착시키고 싶을 때', f:['일반의 모든 것','매주 과제 피드백 + 1:1','티 키트 4종 배송','수료 후 동문 찻자리'], href:'#contact?type=online', btn:'기수 문의'}
+    ], 2) +
     '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">가격, 수강 기간, 기수 일정은 확정되는 대로 알려 드려요.</p>' +
   '</div></section>' +
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">For teams</p><h2 class="h2 one">회사로 도입할 때</h2></div><p class="lead">복지로 열어 둘지, 교육으로 함께 갈지에 따라 두 가지로 나눠요.</p></div>' +
-    '<div class="tiers">' + BIZ.map(function(t, i){ return '<div class="tier' + (i ? ' on' : '') + '"><p class="en">' + t.en + '</p><h3>' + esc(t.nm) + '</h3><p class="muted">' + esc(t.line) + '</p><ul>' + t.items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul><p class="tfit">' + esc(t.fit) + '</p></div>'; }).join('') + '</div>' +
+    planGrid([
+      {tag:'복지형', name:'기업 라이트', big:'이용권', sub:'원하는 직원이 골라 듣기', best:'임직원 복지·자기계발', f:['일반 이용권을 인원수만큼','입사·승진 선물로도','월간 이용 현황 공유']},
+      {tag:'교육형', hi:1, name:'기업 프로', big:'단독 기수', sub:'우리 회사만의 4주', best:'팀 단위 교육 성과가 필요할 때', f:['우리 업무 예제로 과제','출석·과제 리포트를 HR에','오프라인 찻자리와 묶기']}
+    ], 2) +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#contact?type=online">단체 수강 상담</a></div>' +
   '</div></section>';
 }
 function pkgSection(){
   return '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Online × Offline</p><h2 class="h2 one">온·오프 연계 패키지</h2></div><p class="lead">온라인은 현장의 앞과 뒤, 그리고 사이를 채워요. 같은 강사, 같은 네 잔으로 이어집니다.</p></div>' +
-    '<div class="pkgs">' + PKGS.map(function(k){ return '<div class="pkg' + (k.on ? ' on' : '') + '"><span class="en">' + k.no + ' · ' + k.en + '</span><h3>' + esc(k.nm) + '</h3><div class="pflow">' + k.flow.map(function(f){ return '<span>' + esc(f) + '</span>'; }).join('<i aria-hidden="true">→</i>') + '</div><p>' + esc(k.desc) + '</p><p class="tfit">' + esc(k.fit) + '</p></div>'; }).join('') + '</div>' +
+    planGrid([
+      {tag:'01 · 앞', name:'미리 우리고 오기', big:'VOD + 4시간', sub:'온라인으로 미리, 현장은 깊게', best:'처음 도입하는 팀', f:['기본 용어·접속은 미리','현장은 차·관계·실습에']},
+      {tag:'02 · 뒤', hi:1, name:'현장 뒤 4주', big:'4시간 + 4주', sub:'현장 다음 날부터 4주 기수', best:'만든 것을 정착시킬 때', f:['같은 참가자로 프리미엄 기수','매주 한 잔, 한 단계']},
+      {tag:'03 · 시즌', name:'찻자리 클럽 시즌', big:'4개월', sub:'월 1회 저녁 + 온라인', best:'리더 모임·입주사', f:['전원 일반 이용권','사이 기간은 온라인으로']},
+      {tag:'04 · 1년', name:'1년 웰니스', big:'1년', sub:'사계절 + 사내 챔피언', best:'1년 함께할 회사', f:['분기마다 대면','리더는 프리미엄으로']}
+    ], 4) +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#contact?type=package">패키지 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div>' +
   '</div></section>';
 }
@@ -1437,11 +1470,11 @@ function vProgram(){
   '</section>' +
   '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">How it starts</p><h2 class="h2">워크샵 한 번에서 1년까지, 세 단계</h2></div><p class="lead">처음부터 연간 계약을 권하지 않아요. 각 단계의 결과가 다음 단계를 제안할 근거가 돼요.</p></div>' +
-    '<ol class="stages">' +
-      '<li><span class="en">STEP 1</span><b>워크샵</b><p>저녁 찻자리 4시간, 오후 반나절, 하루 중 하나로 시작해요. 끝날 때 각자 “다음 2주에 해 볼 한 가지”를 적어요.</p><small>24시간 리포트 끝에 90일 제안</small></li>' +
-      '<li><span class="en">STEP 2</span><b>90일 후속</b><p>만든 에이전트가 실제로 쓰이는지 지켜봐요. 월 1회 온라인 체크인 2~3번, 사내 챔피언 1~2명, 점심 티 세션 1회. 내부 결재가 가벼운 크기예요.</p><small>체크인 성과로 연장 제안</small></li>' +
-      '<li class="on"><span class="en">STEP 3</span><b>사계절 프로그램 (연간)</b><p>분기마다 대면 1회와 매달 체크인·티 세션, 사내 챔피언 운영, 회차별 리포트와 연말 성과 리포트.</p><small>아래 1년 흐름</small></li>' +
-    '</ol>' +
+    planGrid([
+      {tag:'STEP 1', name:'워크샵', big:'하루', sub:'저녁·반나절·하루 중 하나', best:'끝에 90일 제안', f:['2주 약속 한 가지','24시간 결과 리포트']},
+      {tag:'STEP 2', name:'90일 후속', big:'90일', sub:'내부 결재가 가벼운 크기', best:'성과로 연장 제안', f:['월 1회 체크인 2~3번','사내 챔피언 1~2명','점심 티 세션 1회']},
+      {tag:'STEP 3', hi:1, name:'사계절 프로그램', big:'1년', sub:'분기 대면 + 매달 이어짐', best:'연말 성과 리포트', f:['분기마다 대면 1회','매달 체크인·티 세션','사내 챔피언 운영'], href:'#contact?type=annual', btn:'1년 프로그램 상담'}
+    ], 3) +
   '</div></section>' +
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">One year</p><h2 class="h2">사계절 프로그램: 1년을 네 번 우려요</h2></div><p class="lead">분기별 대면 프로그램 4회에 매달 온라인 티 세션과 담당자 체크인이 더해져요.</p></div>' +
@@ -1449,20 +1482,17 @@ function vProgram(){
   '</div></section>' +
   '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Every month</p><h2 class="h2">매달 이어지는 것</h2></div></div>' +
-    '<div class="fit"><div><b>분기마다 다시 설계</b><br>대면 회차 전에 짧은 설문으로 “지난 분기에 만든 에이전트 중 아직 쓰는 것”을 세요. 이 숫자가 연말 리포트의 핵심 지표예요.</div><div><b>우리 회사 사례로 가르치기</b><br>잘 쓰는 팀의 사례를 다음 회차 예제로 써요. 회차가 쌓일수록 귀사만의 교재가 돼요.</div><div><b>사내 챔피언</b><br>부서마다 1~2명이 체크인 사이 동료의 질문을 받아요. 리더도 두 번째 회차부터 참가자로 들어와요.</div><div><b>월간 티 세션</b><br>점심시간 30분, 온라인으로 함께 차를 우려요. 티 키트는 미리 보내 드려요.</div><div><b>담당자 체크인</b><br>매달 30분, 교육 담당자님과 진행 상황과 다음 분기 준비를 맞춰요.</div><div><b>온라인강의 이용권</b><br>참가자는 VOD로 복습할 수 있어요. 워크샵과 어떻게 연결할지는 함께 정해요.</div></div>' +
+    '<div class="mtiles">' + [['분기마다 다시 설계','아직 쓰는 에이전트 수를 세요'],['우리 회사 사례로','잘 쓰는 팀 사례가 교재로'],['사내 챔피언','부서마다 1~2명이 동료를 도와요'],['월간 티 세션','점심 30분, 온라인으로 함께'],['담당자 체크인','매달 30분, 진행 상황 맞추기'],['온라인강의 이용권','VOD로 언제든 복습']].map(function(m, i){ return '<div class="mt"><span class="mt-n">' + (i + 1) + '</span><div><b class="ol">' + esc(m[0]) + '</b><p class="ol">' + esc(m[1]) + '</p></div></div>'; }).join('') + '</div>' +
   '</div></section>' +
   '<section class="band" style="min-height:440px">' + ph('birch', 1800) +
     '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Q4 · Retreat</p><h2 class="h2 one" style="font-size:clamp(26px,3.6vw,46px)">1년의 마지막은 자작나무 숲에서 회고로.</h2></div>' +
   '</section>' +
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Compare</p><h2 class="h2">단발 워크샵과 무엇이 다른가요</h2></div></div>' +
-    '<div class="tbl-wrap"><table class="cmp"><thead><tr><th scope="col"></th><th scope="col">단발 워크샵</th><th scope="col">1년 정기프로그램</th></tr></thead><tbody>' +
-      '<tr><td>목표</td><td>AI 실습을 한 번 경험</td><td>부서마다 쓰는 에이전트가 생기고 자리 잡음</td></tr>' +
-      '<tr><td>맞춤</td><td>표준 70% + 맞춤 30%</td><td>분기마다 진단 결과로 다음 회차를 다시 설계</td></tr>' +
-      '<tr><td>성과 보고</td><td>회차별 1쪽 리포트</td><td>회차별 리포트 + 연간 성과 리포트</td></tr>' +
-      '<tr><td>쉼</td><td>현장 티 브레이크</td><td>현장 티 브레이크 + 월간 티 세션 + 리트리트</td></tr>' +
-      '<tr><td>이어짐</td><td>48시간 연락 · 30일 설문</td><td>매달 체크인 + 분기 진단 + 사후 복습 VOD</td></tr><tr><td>계약</td><td>회차별 견적</td><td>90일 후속 후 연간 계약</td></tr>' +
-    '</tbody></table></div>' +
+    planGrid([
+      {tag:'단발', name:'워크샵 한 번', big:'1회', sub:'회차별 견적', best:'AI 실습을 한 번 경험', f:[['맞춤','표준 70% + 맞춤 30%'],['보고','회차별 1쪽 리포트'],['쉼','현장 티 브레이크'],['이어짐','48시간 연락 · 30일 설문']]},
+      {tag:'정기', hi:1, name:'1년 정기프로그램', big:'1년', sub:'90일 후속 뒤 연간 계약', best:'부서마다 에이전트가 자리 잡음', f:[['맞춤','분기 진단으로 다시 설계'],['보고','회차 리포트 + 연간 리포트'],['쉼','월간 티 세션 + 리트리트'],['이어짐','매달 체크인 + 분기 진단']], href:'#contact?type=annual', btn:'1년 프로그램 상담'}
+    ], 2) +
   '</div></section>' +
   '<section class="section dark"><div class="wrap split">' +
     '<div style="display:flex;flex-direction:column;gap:16px"><p class="eyebrow">Proposal</p><h2 class="h2 one" style="font-size:clamp(24px,2.4vw,32px)">내부 검토용 제안서를 보내 드려요</h2>' +
@@ -1478,10 +1508,10 @@ function vOnline(){
   return '<section class="section tight"><div class="wrap">' +
     '<p class="eyebrow">Online</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">온라인강의</h1>' +
     '<div class="ol-hero">' + ph('bookLaptop', 1000) + ph('teaCup', 700) + ph('manLaptop', 700) + '</div>' +
-    '<p class="lead" style="max-width:680px;margin-top:16px">온라인강의는 <b>일반</b>과 <b>프리미엄</b> 두 가지예요. 일반은 혼자 내 속도로 듣는 VOD, 프리미엄은 정원 12명이 정해진 날짜에 함께 가는 4주 기수예요. 회사로 들일 때는 <b>복지형·교육형</b>으로, 오프라인과는 <b>연계 패키지</b>로 묶어요.</p>' +
+    '<p class="lead ol" style="margin-top:16px">혼자 듣는 <b>일반</b>, 4주 함께 가는 <b>프리미엄</b>. 회사는 <b>복지형·교육형</b>으로 들여요.</p>' +
   '</div></section>' +
   '<section style="padding-bottom:88px"><div class="wrap"><div class="cgrid">' +
-    C.map(function(c){ return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge' + (c.tier === '프리미엄' ? '' : ' ln') + '">' + esc(c.tier) + '</span><span class="badge ln">' + esc(c.kind) + '</span></span><h2 class="h3 one" style="font-size:clamp(17px,1.55vw,22px)">' + esc(c.title) + '</h2><p class="muted" style="margin:0">' + esc(c.hook) + '</p><span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
+    C.map(function(c){ return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge' + (c.tier === '프리미엄' ? '' : ' ln') + '">' + esc(c.tier) + '</span><span class="badge ln">' + esc(c.kind) + '</span></span><h2 class="h3 one" style="font-size:clamp(17px,1.55vw,22px)">' + esc(c.title) + '</h2><p class="muted ol" style="margin:0">' + esc(SHORT[c.id] || c.hook) + '</p><span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
   '</div></div></section>' + tierSection() + pkgSection();
 }
 
