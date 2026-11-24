@@ -768,7 +768,7 @@ html{font-variant-numeric:lining-nums}
 .pcards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .pcard{position:relative;display:flex;flex-direction:column;gap:4px;padding:18px 18px 16px;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(30,42,54,.06);text-decoration:none;color:#26313D;border:1.5px solid transparent;transition:opacity .35s,transform .35s,border-color .35s}
 .pcard:not(.dim){border-color:#CBD5CB}
-.pcard.dim{opacity:.38;transform:scale(.97);box-shadow:none}
+.pcard.dim{opacity:.38;box-shadow:none}
 .pcard:hover{opacity:1;transform:translateY(-2px)}
 .pc-chip{align-self:flex-start;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:#F1F4F1;color:#5E6F5E;font-variant-numeric:lining-nums}
 .pcard h3{margin:10px 0 0;font-size:16px;font-weight:700}
@@ -777,6 +777,23 @@ html{font-variant-numeric:lining-nums}
 .pc-go{position:absolute;right:16px;top:16px;width:28px;height:28px;border-radius:50%;background:#F1F4F1;color:#667866;display:flex;align-items:center;justify-content:center;font-size:14px}
 @media (max-width:1000px){.pcards{grid-template-columns:repeat(2,minmax(0,1fr))}.psz{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.pcards{grid-template-columns:minmax(0,1fr)}}
+/* R9 행 맞춤: 나란한 카드의 같은 칸은 같은 높이에서 시작 (subgrid) */
+.notes{grid-auto-rows:auto;row-gap:0}
+.note{display:grid;grid-row:span 6;grid-template-rows:subgrid;row-gap:0;margin-bottom:18px;align-content:start}
+.note>.vz{align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+.note>.vz.vz-swing,.note>.vz.vz-dots,.note>.vz.vz-donuts{flex-direction:row}
+.vz-row{grid-template-columns:minmax(0,9em) minmax(0,1fr) 5.2em}
+.vz-n{white-space:nowrap}
+.note .nd{position:relative;border-left:0;padding-left:24px}
+.note .nd::before{content:'';position:absolute;left:12px;top:14px;bottom:14px;width:3px;border-radius:2px;background:#667866}
+.plans{grid-auto-rows:auto}
+.plan{display:grid;grid-row:span 7;grid-template-rows:subgrid;row-gap:0}
+.plan .btn{align-self:end;justify-self:stretch}
+.pcards{grid-auto-rows:auto}
+.sqs{grid-auto-rows:auto}
+.sq{display:grid;grid-row:span 3;grid-template-rows:subgrid;row-gap:14px}
+@media (max-width:860px){.vz-row{grid-template-columns:minmax(0,1fr) 5.2em}}
+.plan .ptag,.pc-chip{justify-self:start}
 </style>
 </head>
 <body>
