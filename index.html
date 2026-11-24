@@ -681,6 +681,25 @@ html{font-variant-numeric:lining-nums}
 .vz-dn b{position:relative;font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:24px;font-weight:800;color:#26313D}
 .vz-dn span{font-size:13.5px;color:#4A5460;line-height:1.5}
 @media (max-width:860px){.vz-row{grid-template-columns:minmax(0,1fr) 3.6em}.vz-row .vz-l{grid-column:1 / -1}.vz-grid{grid-template-columns:repeat(10,10px)}.vz-donuts{gap:20px}.vz-swing{gap:8px}}
+/* R6 한 줄 원칙 · R7 움직이는 인포그래픽 */
+.ol{}
+.note .nd span.ol{display:block}
+.vz-tr i{width:0;transition:width 1.3s cubic-bezier(.2,.7,.2,1)}
+.vz.in .vz-tr i{width:var(--w)}
+.vz-row+.vz-row .vz-tr i{transition-delay:.25s}
+.vz-grid i.on{background:#E3E7E3;transform:scale(.6);transition:background .3s,transform .3s;transition-delay:calc(var(--i) * 28ms)}
+.vz.in .vz-grid i.on{background:#667866;transform:scale(1)}
+.vz-dn .fl{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);transition:stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1)}
+.vz.in .vz-dn .fl{stroke-dashoffset:var(--to)}
+.vz-dn+.vz-dn .fl{transition-delay:.25s}
+.vz-sw{opacity:.25;transform:translateY(8px);transition:opacity .6s,transform .6s}
+.vz.in .vz-sw{opacity:1;transform:none}.vz.in .vz-sw+.vz-then+.vz-sw{transition-delay:.45s}
+.vz-sw .ar{display:inline-block}
+.vz.in .vz-sw.up .ar{animation:nudgeUp 1.6s ease-in-out .8s 2}
+.vz.in .vz-sw.down .ar{animation:nudgeDn 1.6s ease-in-out .8s 2}
+@keyframes nudgeUp{0%,100%{transform:none}50%{transform:translateY(-5px)}}
+@keyframes nudgeDn{0%,100%{transform:none}50%{transform:translateY(5px)}}
+@media (prefers-reduced-motion: reduce){.vz *{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
@@ -986,24 +1005,24 @@ function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · ')
 /* ===== 홈: 기업 교육 담당자 ===== */
 /* ===== 설계 노트: 근거 → 결정 (출처는 docs 참고, 숫자는 원문 그대로) ===== */
 var NOTES = [
-  {n:'01', h:'도구는 들였는데, 일은 그대로예요', v:{t:'bars', unit:'국내 직장인 중', rows:[['업무에 AI를 써요',56,0],['능숙하게 써요',13.6,1]]}, c:'해외에서도 기업 AI 시도의 95%가 성과로 이어지지 못했어요. 원인은 모델이 아니라 배우는 방식이었어요.', src:'대한상공회의소 SGI · MIT NANDA (2025)', d:'사용법부터 가르치지 않아요. “무엇을 맡기고 무엇을 내가 정할지”를 먼저 묻고, 툴은 하나로 좁혀요.'},
-  {n:'02', h:'중요한 일일수록 AI를 덜 써요', v:{t:'swing', a:['핵심 업무 비중','−10%p','down'], b:['AI 활용률','+4.2%p','up']}, c:'AI가 잡무에는 퍼졌지만, 일의 본질까지는 닿지 못했어요.', src:'한국은행 분석 (2026. 11)', d:'쉬운 잡무 말고, 내 진짜 일 하나를 골라요. 나와 내 일을 설명하는 문서 5종으로 곁에서 같이 생각하는 ‘파트너 에이전트’를 세워요.'},
-  {n:'03', h:'교육은 현장에 30%도 남지 않아요', v:{t:'dots', on:30, label:'배운 것 100 중 업무에 쓰이는 것', big:'30 미만'}, c:'연구마다 숫자는 달라도 결과는 반복돼요. 차이를 만드는 건 끝난 뒤의 후속 장치예요.', src:'ATD, Learning Transfer', d:'끝난 뒤가 프로그램의 절반이에요. 24시간 결과 리포트, 48시간 2주 약속, 30일·90일 점검으로 이어 가요.'},
-  {n:'04', h:'직접 해 본 시간과 리더의 지지가 사용을 바꿔요', v:{t:'bars', unit:'AI를 긍정적으로 받아들이는 직원', rows:[['리더 지지가 약할 때',15,1],['리더 지지가 강할 때',55,0]]}, c:'제대로 교육받았다고 느끼는 직원은 36%뿐이었어요.', src:'BCG, AI at Work 2025', d:'노트북 1인 1대로 손으로 만드는 시간을 한가운데 둬요. 리더가 같은 테이블에 앉는 회차를 권하고, 실습을 더 원하면 반나절·하루 과정으로 늘려요.'},
-  {n:'05', h:'AI가 빨라질수록 사람은 지쳐요', v:{t:'donuts', items:[[64,'AI를 쓰다 일이 더 복잡해진 경험'],[70,'AI 공부를 멈추면 뒤처질 것 같다']]}, c:'일 자체보다 AI를 관리하고 지시하는 데 더 많은 시간을 쓴다는 응답도 절반 가까이 됐어요.', src:'직장인 AI 인식 조사 (2026. 5 보도) · BCG, AI at Work 2026', d:'차를 넣은 이유예요. 한 시간에 한 잔으로 속도를 늦추고, 6인 1조로 사람 사이의 대화를 되살려요.'}
+  {n:'01', h:'도구는 들였는데, 일은 그대로예요', v:{t:'bars', unit:'국내 직장인 중', rows:[['업무에 AI를 써요',56,0],['능숙하게 써요',13.6,1]]}, c:'해외에서도 기업 AI 시도의 95%는 성과가 없었어요', src:'대한상공회의소 SGI · MIT NANDA (2025)', d:'“무엇을 맡길지”부터 묻고, 툴은 하나로 좁혀요'},
+  {n:'02', h:'중요한 일일수록 AI를 덜 써요', v:{t:'swing', a:['핵심 업무 비중','−10%p','down'], b:['AI 활용률','+4.2%p','up']}, c:'AI는 잡무에만 퍼지고, 일의 본질엔 닿지 못했어요', src:'한국은행 분석 (2026. 11)', d:'잡무가 아닌 내 진짜 일 하나로 에이전트를 세워요'},
+  {n:'03', h:'교육은 현장에 30%도 남지 않아요', v:{t:'dots', on:30, label:'배운 것 100 중 업무에 쓰이는 것', big:'30 미만'}, c:'차이는 끝난 뒤의 후속 장치에서 생겨요', src:'ATD, Learning Transfer', d:'24시간 리포트 · 2주 약속 · 30일·90일 점검'},
+  {n:'04', h:'실습과 리더의 지지가 사용을 바꿔요', v:{t:'bars', unit:'AI를 긍정적으로 받아들이는 직원', rows:[['리더 지지가 약할 때',15,1],['리더 지지가 강할 때',55,0]]}, c:'제대로 교육받았다는 직원은 36%뿐이에요', src:'BCG, AI at Work 2025', d:'1인 1대 실습을 가운데, 리더도 같은 테이블에'},
+  {n:'05', h:'AI가 빨라질수록 사람은 지쳐요', v:{t:'donuts', items:[[64,'AI를 쓰다 일이 더 복잡해진 경험'],[70,'AI 공부를 멈추면 뒤처질 것 같다']]}, c:'절반 가까이는 일보다 AI 관리에 시간을 더 써요', src:'직장인 AI 인식 조사 (2026. 5 보도) · BCG, AI at Work 2026', d:'한 시간에 한 잔, 속도를 늦추고 대화를 되살려요'}
 ];
 function viz(v){
   var pct = function(x){ return String(x).replace(/\.0$/,'') + '%'; };
-  if(v.t === 'bars') return '<div class="vz vz-bars"><p class="vz-u">' + esc(v.unit) + '</p>' + v.rows.map(function(r){ return '<div class="vz-row' + (r[2] ? ' dim' : '') + '"><span class="vz-l">' + esc(r[0]) + '</span><span class="vz-tr"><i style="width:' + r[1] + '%"></i></span><b class="vz-n">' + pct(r[1]) + '</b></div>'; }).join('') + '</div>';
-  if(v.t === 'swing') { var cell = function(x){ return '<div class="vz-sw ' + x[2] + '"><span class="ar" aria-hidden="true">' + (x[2] === 'up' ? '↑' : '↓') + '</span><b>' + esc(x[1]) + '</b><span>' + esc(x[0]) + '</span></div>'; }; return '<div class="vz vz-swing">' + cell(v.a) + '<span class="vz-then" aria-hidden="true">→</span>' + cell(v.b) + '</div>'; }
-  if(v.t === 'dots') { var d = ''; for(var i = 0; i < 100; i++){ d += '<i' + (i < v.on ? ' class="on"' : '') + '></i>'; } return '<div class="vz vz-dots"><div class="vz-grid" role="img" aria-label="' + esc(v.label + ' ' + v.big) + '">' + d + '</div><div class="vz-dl"><b>' + esc(v.big) + '</b><span>' + esc(v.label) + '</span></div></div>'; }
-  if(v.t === 'donuts') return '<div class="vz vz-donuts">' + v.items.map(function(x){ var C = 2 * Math.PI * 42; return '<div class="vz-dn"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" class="tk"/><circle cx="50" cy="50" r="42" class="fl" style="stroke-dasharray:' + (C * x[0] / 100).toFixed(1) + ' ' + C.toFixed(1) + '"/></svg><b>' + x[0] + '%</b></div><span>' + esc(x[1]) + '</span></div>'; }).join('') + '</div>';
+  if(v.t === 'bars') return '<div class="vz vz-bars"><p class="vz-u">' + esc(v.unit) + '</p>' + v.rows.map(function(r){ return '<div class="vz-row' + (r[2] ? ' dim' : '') + '"><span class="vz-l ol">' + esc(r[0]) + '</span><span class="vz-tr"><i style="--w:' + r[1] + '%"></i></span><b class="vz-n cu" data-v="' + pct(r[1]) + '">' + pct(r[1]) + '</b></div>'; }).join('') + '</div>';
+  if(v.t === 'swing') { var cell = function(x){ return '<div class="vz-sw ' + x[2] + '"><span class="ar" aria-hidden="true">' + (x[2] === 'up' ? '↑' : '↓') + '</span><b class="cu" data-v="' + esc(x[1]) + '">' + esc(x[1]) + '</b><span>' + esc(x[0]) + '</span></div>'; }; return '<div class="vz vz-swing">' + cell(v.a) + '<span class="vz-then" aria-hidden="true">→</span>' + cell(v.b) + '</div>'; }
+  if(v.t === 'dots') { var d = ''; for(var i = 0; i < 100; i++){ d += '<i' + (i < v.on ? ' class="on" style="--i:' + i + '"' : '') + '></i>'; } return '<div class="vz vz-dots"><div class="vz-grid" role="img" aria-label="' + esc(v.label + ' ' + v.big) + '">' + d + '</div><div class="vz-dl"><b class="cu" data-v="' + esc(v.big) + '">' + esc(v.big) + '</b><span>' + esc(v.label) + '</span></div></div>'; }
+  if(v.t === 'donuts') return '<div class="vz vz-donuts">' + v.items.map(function(x){ var C = 2 * Math.PI * 42; return '<div class="vz-dn"><div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" class="tk"/><circle cx="50" cy="50" r="42" class="fl" style="--len:' + C.toFixed(1) + ';--to:' + (C * (1 - x[0] / 100)).toFixed(1) + '"/></svg><b class="cu" data-v="' + x[0] + '%">' + x[0] + '%</b></div><span>' + esc(x[1]) + '</span></div>'; }).join('') + '</div>';
   return '';
 }
 function designNotes(){
   return '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Design notes</p><h2 class="h2 one">이렇게 만든 데는 이유가 있어요</h2></div><p class="lead">순서 하나, 장치 하나마다 근거가 있어요. 국내외 조사를 살펴보고 정했어요.</p></div>' +
-    '<div class="notes">' + NOTES.map(function(x){ return '<article class="note"><span class="nn">' + x.n + '</span><h3>' + esc(x.h) + '</h3>' + viz(x.v) + '<p class="nf">' + esc(x.c) + '</p><p class="ns">출처 · ' + esc(x.src) + '</p><p class="nd"><b>그래서 CHA&amp;I는</b>' + esc(x.d) + '</p></article>'; }).join('') + '</div>' +
+    '<div class="notes">' + NOTES.map(function(x){ return '<article class="note"><span class="nn">' + x.n + '</span><h3 class="ol">' + esc(x.h) + '</h3>' + viz(x.v) + '<p class="nf ol">' + esc(x.c) + '</p><p class="ns ol">출처 · ' + esc(x.src) + '</p><p class="nd"><b>그래서 CHA&amp;I는</b><span class="ol">' + esc(x.d) + '</span></p></article>'; }).join('') + '</div>' +
   '</div></section>';
 }
 function vIntro(){
@@ -1654,7 +1673,26 @@ document.addEventListener('click', function(e){
 $('#burger').addEventListener('click', function(){ var o = $('#mnav').classList.toggle('open'); this.setAttribute('aria-expanded', String(o)); });
 /* 정렬 규칙 R3: 영문 세리프(Cormorant) 글꼴이 걸린 요소에 한글이 있으면 .ko 부여 */
 function koFix(root){ (root || document).querySelectorAll('#app *, header *, footer *').forEach(function(el){ if(el.children.length > 3) return; var ff = getComputedStyle(el).fontFamily; if(/Cormorant/i.test(ff.split(',')[0]) && /[\uAC00-\uD7A3]/.test(el.textContent)) el.classList.add('ko'); }); }
-new MutationObserver(function(){ koFix(); }).observe(document.getElementById('app'), {childList:true});
+/* 설계 노트 인포그래픽: 화면에 들어오면 움직임 (docs/ui-guide.md R7) */
+function animViz(){
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.vz:not([data-obs])');
+  if(!els.length) return;
+  var run = function(vz){
+    vz.classList.add('in');
+    if(still) return;
+    vz.querySelectorAll('.cu').forEach(function(el){
+      var v = el.getAttribute('data-v'), m = v.match(/[\d.]+/); if(!m) return;
+      var to = parseFloat(m[0]), dec = (m[0].split('.')[1] || '').length, pre = v.slice(0, m.index), post = v.slice(m.index + m[0].length), t0 = null;
+      var step = function(t){ if(!t0) t0 = t; var k = Math.min(1, (t - t0) / 1400), e = 1 - Math.pow(1 - k, 3); el.textContent = pre + (to * e).toFixed(dec) + post; if(k < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    });
+  };
+  if(still || !('IntersectionObserver' in window)){ els.forEach(function(v){ v.setAttribute('data-obs','1'); run(v); }); return; }
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ io.unobserve(e.target); run(e.target); } }); }, {threshold:.35});
+  els.forEach(function(v){ v.setAttribute('data-obs','1'); io.observe(v); });
+}
+new MutationObserver(function(){ koFix(); animViz(); }).observe(document.getElementById('app'), {childList:true});
 window.addEventListener('hashchange', route);
 renderAuth();
 if(!/vercel\.app$|(^|\.)chaand\.ai$|^localhost$|^127\.|\.test$|^x\.test$/.test(location.hostname)) $('#pvNote').hidden = false;
