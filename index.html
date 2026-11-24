@@ -700,6 +700,10 @@ html{font-variant-numeric:lining-nums}
 @keyframes nudgeUp{0%,100%{transform:none}50%{transform:translateY(-5px)}}
 @keyframes nudgeDn{0%,100%{transform:none}50%{transform:translateY(5px)}}
 @media (prefers-reduced-motion: reduce){.vz *{transition:none!important;animation:none!important}}
+/* 결론 칸 = 우리의 차별점: 라벨 없이 크게 */
+.note .nd{margin:18px 0 0;padding:16px 20px;border-radius:14px;background:#EEF2EE;border-left:4px solid #667866}
+.note .nd span{font-size:18px;font-weight:700;line-height:1.5;color:#26313D;letter-spacing:-.01em}
+@media (max-width:860px){.note .nd span{font-size:16.5px}}
 </style>
 </head>
 <body>
@@ -1022,7 +1026,7 @@ function viz(v){
 function designNotes(){
   return '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Design notes</p><h2 class="h2 one">이렇게 만든 데는 이유가 있어요</h2></div><p class="lead">순서 하나, 장치 하나마다 근거가 있어요. 국내외 조사를 살펴보고 정했어요.</p></div>' +
-    '<div class="notes">' + NOTES.map(function(x){ return '<article class="note"><span class="nn">' + x.n + '</span><h3 class="ol">' + esc(x.h) + '</h3>' + viz(x.v) + '<p class="nf ol">' + esc(x.c) + '</p><p class="ns ol">출처 · ' + esc(x.src) + '</p><p class="nd"><b>그래서 CHA&amp;I는</b><span class="ol">' + esc(x.d) + '</span></p></article>'; }).join('') + '</div>' +
+    '<div class="notes">' + NOTES.map(function(x){ return '<article class="note"><span class="nn">' + x.n + '</span><h3 class="ol">' + esc(x.h) + '</h3>' + viz(x.v) + '<p class="nf ol">' + esc(x.c) + '</p><p class="ns ol">출처 · ' + esc(x.src) + '</p><p class="nd"><span class="ol">' + esc(x.d) + '</span></p></article>'; }).join('') + '</div>' +
   '</div></section>';
 }
 function vIntro(){
