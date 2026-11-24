@@ -1230,7 +1230,7 @@ function vTeam(){
   return '<section class="section dark"><div class="wrap">' +
     '<p class="eyebrow">Hosts</p><h1 class="h1 one" style="font-size:clamp(28px,3.9vw,50px)">세 사람이 우린 하나의 블렌드</h1>' +
     '<p class="lead" style="max-width:680px;margin:16px 0 48px">집중을 지키는 사람, 설계하는 사람, 만드는 사람. 차도 블렌드할 때 맛이 완성되듯, 세 사람이 한 워크샵에 함께 들어가요.</p>' +
-    '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#t-' + k + '">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proofS || t.proof) + '</p><p>워크샵에서 · ' + esc(t.jobS) + '</p></a>'; }).join('') + '</div>' +
+    '<div class="btns" style="gap:10px">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="btn btn-line btn-sm" href="#t-' + k + '">' + t.nm + ' · ' + t.role + '</a>'; }).join('') + '</div>' +
   '</div></section>' +
   ['lee','han','jun'].map(function(k, i){ var t = T[k]; return '<section class="section' + (i % 2 ? ' paper' : '') + '" id="t-' + k + '"><div class="wrap bio">' +
     tph(t, 900, 'bio-pic') +
