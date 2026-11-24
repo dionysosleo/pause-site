@@ -704,6 +704,79 @@ html{font-variant-numeric:lining-nums}
 .note .nd{margin:18px 0 0;padding:16px 20px;border-radius:14px;background:#EEF2EE;border-left:4px solid #667866}
 .note .nd span{font-size:18px;font-weight:700;line-height:1.5;color:#26313D;letter-spacing:-.01em}
 @media (max-width:860px){.note .nd span{font-size:16.5px}}
+/* R8 비교는 SaaS 플랜 카드 */
+.plans{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;align-items:stretch}
+.plan{background:#fff;border-radius:18px;box-shadow:0 8px 24px rgba(30,42,54,.06);padding:22px 18px 18px;display:flex;flex-direction:column;border:1.5px solid transparent}
+.plan.hi{border-color:#667866;box-shadow:0 12px 30px rgba(94,111,94,.16)}
+.plan .ptag{align-self:flex-start;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:#F1F3F1;color:#5E6F5E;font-variant-numeric:lining-nums}
+.plan.hi .ptag{background:#667866;color:#fff}
+.plan h3{margin:14px 0 0;font-size:17px;font-weight:700;color:#26313D}
+.plan .pbig{margin:10px 0 0;line-height:1.1}
+.plan .pbig b{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:34px;font-weight:800;letter-spacing:-.02em;color:#26313D}
+.plan .psub{margin:4px 0 0;font-size:13px;color:#6B727A}
+.plan .pbest{margin:14px 0 0;padding:8px 10px;border-radius:10px;background:#F6F7F6;font-size:13.5px;font-weight:700;color:#3A4450;text-align:center}
+.plan .pf{list-style:none;margin:14px 0 18px;padding:0;display:flex;flex-direction:column;gap:9px}
+.plan .pf li{display:flex;align-items:center;gap:8px;font-size:13.5px;color:#3A4450}
+.plan .ck{flex:none;width:16px;height:16px;border-radius:50%;background:#EEF2EE;display:flex;align-items:center;justify-content:center}
+.plan .ck::after{content:'';width:6px;height:3px;border-left:1.6px solid #667866;border-bottom:1.6px solid #667866;transform:rotate(-45deg) translate(.5px,-.5px)}
+.plan .btn{margin-top:auto;justify-content:center}
+@media (max-width:1100px){.plans{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.plans{grid-template-columns:minmax(0,1fr)}}
+/* 살롱: 흐름 그래픽 · 형식 · 사실↔질문 (R9) */
+.sflow{background:#fff;border:0;border-radius:20px;box-shadow:0 8px 24px rgba(30,42,54,.06);padding:30px 26px 18px;margin:8px 0 18px;position:relative}
+.sflow .sf-line{position:absolute;left:calc(26px + 100% / 12 - 52px / 12);right:calc(26px + 100% / 12 - 52px / 12);top:43px;height:3px;border-radius:3px;background:#ECEEEC;overflow:hidden}
+.sflow .sf-line i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8FA48C,#C2A47E);transition:width 1.8s cubic-bezier(.3,.6,.2,1)}
+.sflow.in .sf-line i{width:100%}
+.sflow ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:relative}
+.sflow li{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.sflow .sf-dot{width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid #D9DED9;transition:border-color .4s,transform .4s;transition-delay:calc(var(--i) * .3s)}
+.sflow.in .sf-dot{border-color:#667866;transform:scale(1.08)}
+.sflow li:nth-child(n+4) .sf-dot{}.sflow.in li:nth-child(n+4) .sf-dot{border-color:#B08F65}
+.sflow li b{margin-top:6px;font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:13px;color:#6B727A;font-weight:600}
+.sflow li span.ol{font-size:15px;font-weight:700;color:#26313D}
+.sflow .sf-ends{display:flex;justify-content:space-between;margin-top:14px;font-size:12px;color:#8A9098}
+.sfmt{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.sfm{display:flex;align-items:center;gap:16px;background:#fff;border-radius:18px;box-shadow:0 8px 24px rgba(30,42,54,.06);padding:20px 22px}
+.sfm-ic{flex:none;width:52px;height:52px;border-radius:16px;background:#F1F4F1;display:flex;align-items:center;justify-content:center}
+.sfm-ic svg{width:26px;height:26px;fill:none;stroke:#667866;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.sfm b{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:24px;font-weight:800;color:#26313D;line-height:1.2}
+.sfm h3{margin:2px 0 0;font-size:15px;font-weight:700;color:#26313D}
+.sfm p{margin:2px 0 0;font-size:13.5px;color:#6B727A}
+.sqs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.sq{background:#fff;border-radius:18px;box-shadow:0 8px 24px rgba(30,42,54,.06);padding:20px 20px 18px;display:flex;flex-direction:column;gap:14px}
+.sq h4{margin:0;font-size:19px;font-weight:800;color:#26313D}
+.sq-pair{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:stretch;gap:8px}
+.sq-f{border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.sq-f small{font-size:11.5px;font-weight:700;letter-spacing:.04em}
+.sq-f span{font-size:13.5px;color:#26313D}
+.sq-f.tea{background:#FBF3EA}.sq-f.tea small{color:#A8835A}
+.sq-f.ai{background:#EEF2F6}.sq-f.ai small{color:#5B6F86}
+.sq-vs{align-self:center;color:#B9C3B9;font-size:16px}
+.sq-q{margin:0;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:#26313D}
+.sq-q i{flex:none;width:24px;height:24px;border-radius:50%;background:#667866;color:#fff;font-style:normal;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.sq-q span{font-size:15.5px;font-weight:700;color:#fff}
+@media (max-width:1000px){.sqs,.sfmt{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:700px){.sflow{padding:22px 14px 14px}.sflow ol{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:18px}.sflow .sf-line{display:none}}
+@media (prefers-reduced-motion: reduce){.sflow *{transition:none!important}}
+/* R8 인원 선택 + 상품 카드 */
+.psz{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.psz button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:14px 10px;border-radius:16px;border:1.5px solid #E3E7E3;background:#fff;cursor:pointer;font:inherit;color:#26313D;transition:all .25s}
+.psz button b{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:20px;font-weight:800}
+.psz button span{font-size:12.5px;color:#6B727A}
+.psz button.on{background:#667866;border-color:#667866;color:#fff;box-shadow:0 10px 24px rgba(94,111,94,.22)}
+.psz button.on span{color:#E9EFE9}
+.pcards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pcard{position:relative;display:flex;flex-direction:column;gap:4px;padding:18px 18px 16px;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(30,42,54,.06);text-decoration:none;color:#26313D;border:1.5px solid transparent;transition:opacity .35s,transform .35s,border-color .35s}
+.pcard:not(.dim){border-color:#CBD5CB}
+.pcard.dim{opacity:.38;transform:scale(.97);box-shadow:none}
+.pcard:hover{opacity:1;transform:translateY(-2px)}
+.pc-chip{align-self:flex-start;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:#F1F4F1;color:#5E6F5E;font-variant-numeric:lining-nums}
+.pcard h3{margin:10px 0 0;font-size:16px;font-weight:700}
+.pc-big{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.pcard p{margin:2px 0 0;font-size:13.5px;color:#6B727A}
+.pc-go{position:absolute;right:16px;top:16px;width:28px;height:28px;border-radius:50%;background:#F1F4F1;color:#667866;display:flex;align-items:center;justify-content:center;font-size:14px}
+@media (max-width:1000px){.pcards{grid-template-columns:repeat(2,minmax(0,1fr))}.psz{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.pcards{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -962,15 +1035,23 @@ function faqSection(){
   return '<section class="section"><div class="wrap faq" style="max-width:860px"><p class="eyebrow">FAQ</p><h2 class="h2" style="margin-bottom:12px">자주 묻는 질문</h2>' +
     FAQ_CORP.map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') + '</div></section>';
 }
+/* 인원별 고르기: 상품 카드 + 인원 선택 (R8) */
+var PCARD = [['저녁 찻자리','4시간','10~20명','네 잔의 차와 파트너 에이전트','#w-evening'],['오후 반나절','5~6시간','10~30명','하루를 비우기 어려운 팀에','#w-office'],['숲속 하루','7시간','15~40명','숲에서 보내는 팀 워크샵','#w-outdoor'],['찻자리 클럽','4개월','10~20명','같은 멤버, 매달 한 단계씩','#w-club'],['차와 술 사이 살롱','3시간','12~24명','AI × 차 × 전통주의 저녁','#w-salon'],['AI 티 라운지','2시간','20~100명','컨퍼런스·타운홀 5분 체험','#contact'],['찻자리 강연','60~90분','30~400명','전사 행사, 차와 AI 토크','#contact'],['사계절 프로그램','분기 1회','10~30명','계절마다 에이전트 점검','#program']];
+var PSIZE = [['8~20명','1인 1에이전트, 가장 깊게',[0,3,4,7,1]],['20~40명','1인 1에이전트 + 팀 공용',[2,1,7]],['40~100명','팀 단위 에이전트 · 5분 체험',[1,5]],['100~400명','시연 관람 · 대표 실습',[6,5]]];
 function sizeSection(full){
+  var on = PSIZE[0][2];
   return '<section class="section paper" id="sizes"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">인원에 맞춰 고르세요</h2></div><p class="lead">40명까지는 한 사람이 자기 에이전트를 끝까지 만들고, 그 이상은 팀 단위·체험·강연으로 넓혀요.</p></div>' +
-    '<div class="tbl-wrap"><table class="cmp"><thead><tr><th scope="col">인원</th><th scope="col">추천</th><th scope="col">시간</th><th scope="col">실습</th></tr></thead><tbody>' +
-      SIZES.map(function(r){ return '<tr><td><b>' + r[0] + '</b></td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td><td>' + esc(r[3]) + '</td></tr>'; }).join('') +
-    '</tbody></table></div>' +
-    (full ? '<div class="progs">' + PROGS.map(function(p, i){ return '<div class="prog"><span class="no en">0' + (i+1) + '</span><h3>' + esc(p[0]) + '</h3><p class="meta">' + esc(p[1]) + '</p><p>' + esc(p[2]) + '</p></div>'; }).join('') + '</div>' : '<p style="margin:20px 0 0"><a class="lnk" href="#workshop">프로그램 ' + PROGS.length + '종 자세히 보기 →</a></p>') +
+    '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">인원에 맞춰 고르세요</h2></div><p class="lead">인원을 누르면 맞는 프로그램이 켜져요.</p></div>' +
+    '<div class="psz" role="tablist" aria-label="인원 선택">' + PSIZE.map(function(z, i){ return '<button type="button" role="tab" class="' + (i ? '' : 'on') + '" aria-selected="' + (i ? 'false' : 'true') + '" data-size="' + i + '"><b>' + esc(z[0]) + '</b><span class="ol">' + esc(z[1]) + '</span></button>'; }).join('') + '</div>' +
+    '<div class="pcards">' + PCARD.map(function(c, i){ return '<a class="pcard' + (on.indexOf(i) < 0 ? ' dim' : '') + '" data-pi="' + i + '" href="' + c[4] + '"><span class="pc-chip">' + esc(c[2]) + '</span><h3 class="ol">' + esc(c[0]) + '</h3><b class="pc-big">' + esc(c[1]) + '</b><p class="ol">' + esc(c[3]) + '</p><span class="pc-go" aria-hidden="true">→</span></a>'; }).join('') + '</div>' +
   '</div></section>';
 }
+document.addEventListener('click', function(e){
+  var b = e.target.closest && e.target.closest('[data-size]'); if(!b) return;
+  var box = b.closest('section'), list = PSIZE[+b.getAttribute('data-size')][2];
+  box.querySelectorAll('[data-size]').forEach(function(x){ var me = x === b; x.classList.toggle('on', me); x.setAttribute('aria-selected', me ? 'true' : 'false'); });
+  box.querySelectorAll('.pcard').forEach(function(c){ c.classList.toggle('dim', list.indexOf(+c.getAttribute('data-pi')) < 0); });
+});
 
 /* ===== 라우팅 ===== */
 var app = $('#app');
@@ -1224,24 +1305,48 @@ function vWorkshop(){
     '<div class="wlist" id="wlist">' + W.map(wCard).join('') + '</div>' +
   '</div></section>' +
   '<section class="section paper"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">Compare</p><h2 class="h2">어떤 걸 고를까요</h2></div></div>' +
-    '<div class="tbl-wrap"><table class="cmp"><thead><tr><th scope="col"></th>' + W.map(function(w){ return '<th scope="col">' + esc(w.title) + '</th>'; }).join('') + '</tr></thead><tbody>' +
-      [['시간','hours'],['장소','place'],['인원','size'],['이럴 때','fit'],['더하기','opt']].map(function(r){ return '<tr><td>' + r[0] + '</td>' + W.map(function(w){ return '<td>' + esc(w[r[1]]) + '</td>'; }).join('') + '</tr>'; }).join('') +
-      '<tr><td>차</td><td>네 잔 — 백차·대홍포·티백·한국차, 한 시간에 한 잔</td><td>티 브레이크 20분 + 마무리 차 한 잔</td><td>아침의 차 + 숲속 티 세션 30분</td><td>매달 계절 차 한 잔</td><td>웰컴 티 → 차와 전통주 페어링 → 마지막 잔</td></tr>' +
-    '</tbody></table></div>' +
+    '<div class="sec-head"><div><p class="eyebrow">Compare</p><h2 class="h2 one">어떤 걸 고를까요</h2></div></div>' +
+    planCards() +
   '</div></section>' + salonSection() + sizeSection(true) + flowSection() + faqSection();
 }
+/* 워크샵 비교: SaaS 플랜 카드 (docs/ui-guide.md R8) — 칸마다 한 줄 */
+var PLANS = {
+  evening:{tag:'대표', name:'저녁 찻자리', big:'4시간', sub:'18:00~22:00', best:'처음 도입할 때', f:['10~20명 · 6인 1조','귀사 라운지·교육장','차 네 잔 · 시간당 한 잔','파트너 에이전트 1개']},
+  office:{tag:'확장', name:'오후 반나절', big:'5~6시간', sub:'13:00~18:00', best:'한 팀이 일을 바꿀 때', f:['10~30명','귀사 교육장·회의실','티 브레이크 + 마무리 잔','팀 업무 에이전트']},
+  outdoor:{tag:'확장', name:'숲속 하루', big:'7시간', sub:'09:30~17:30', best:'팀 과제를 끝낼 때', f:['15~40명','서울 근교·강원 야외','아침 차 + 숲속 티 세션','1박 2일로 늘리기']},
+  club:{tag:'정기', name:'찻자리 클럽', big:'4개월', sub:'월 1회 저녁 3시간', best:'꾸준히 모일 때', f:['10~20명 고정 멤버','귀사 라운지·협력 공간','매달 계절 차 한 잔','온라인 일반 이용권']},
+  salon:{tag:'살롱', name:'차와 술 사이', big:'3시간', sub:'19:00~22:00 · 월 1회', best:'고객·리더를 초청할 때', f:['12~24명 · 만 19세 이상','전통주 바·양조장·한옥','웰컴 티 → 전통주 페어링','차만 즐기는 자리도']}
+};
+function planCards(){
+  return '<div class="plans">' + W.map(function(w){ var p = PLANS[w.id]; if(!p) return ''; var hi = p.tag === '대표';
+    return '<article class="plan' + (hi ? ' hi' : '') + '"><span class="ptag">' + esc(p.tag) + (hi ? ' · 추천' : '') + '</span><h3 class="ol">' + esc(p.name) + '</h3>' +
+      '<p class="pbig"><b>' + esc(p.big) + '</b></p><p class="psub ol">' + esc(p.sub) + '</p><p class="pbest ol">' + esc(p.best) + '</p>' +
+      '<ul class="pf">' + p.f.map(function(x){ return '<li><span class="ck" aria-hidden="true"></span><span class="ol">' + esc(x) + '</span></li>'; }).join('') + '</ul>' +
+      '<a class="btn ' + (hi ? 'btn-lime' : 'btn-line') + ' btn-sm" href="#w-' + w.id + '">자세히 보기</a></article>'; }).join('') + '</div>';
+}
 function salonSection(){
-  var F = [['오픈 살롱','월 1회 · 개인 티켓','처음 오는 분과 단골이 섞이는 정기 저녁. CHA&I를 처음 만나는 문'],['프라이빗 살롱','기업·브랜드 초청','고객·파트너·임원 초청 행사, 연말 모임을 살롱으로'],['살롱 시즌','4개월 · 같은 멤버','찻자리 클럽처럼 같은 사람들이 매달 한 주제로']];
-  var Q = [['기다림','우러나는 차, 바로 나오는 답','빨리 아는 것과 천천히 이해하는 것은 어떻게 다를까'],['숙성','익어 가는 술, 학습하는 기계','시간이 만드는 맛처럼, 시간이 만드는 사람이 있을까'],['관계','찻자리의 손님, 대화하는 AI','AI와 나누는 대화도 관계라고 부를 수 있을까'],['기억','잔에 남는 향, 잊지 않는 기계','모든 걸 기록하는 시대에 잊는다는 것의 의미'],['취향','고르는 차, 추천받는 술','추천받은 취향도 나의 취향일까'],['노동','차를 덖는 손, 일을 맡는 에이전트','AI에게 일을 맡기면 내 일에는 무엇이 남을까']];
-  var R = [['이달의 질문','매달 하나의 인문학 질문을 정하고, 차·술·AI 세 방향에서 함께 물어요'],['짧은 이야기 두 편','차의 인문학과 AI의 인문학, 20분씩. 답이 아니라 대화의 씨앗을 심어요'],['대화 메뉴','철학 질문이 적힌 대화 메뉴로 처음 만난 사람과도 깊게 이야기해요'],['둘러앉아 대화','가운데 몇 자리를 비워 두고, 누구나 들어와 말할 수 있어요'],['차와 술의 만남','차를 우린 전통주, 차 하이볼 — 차와 우리 술을 함께 맛봐요'],['살롱 노트','그날 나온 생각을 에이전트가 정리해, 다음 달 질문과 함께 한 장으로 보내 드려요']];
+  var IC = {
+    ticket:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/></svg>',
+    invite:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+    season:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01"/></svg>'
+  };
+  var F = [['ticket','월 1회','오픈 살롱','개인 티켓으로 누구나'],['invite','초청형','프라이빗 살롱','고객·파트너·임원 행사'],['season','4개월','살롱 시즌','같은 멤버, 매달 한 주제']];
+  var Q = [['기다림','차','3분을 기다려 우러나요','AI','3초 만에 답해요','빨리 아는 것과 천천히 아는 것'],
+           ['숙성','술','몇 달을 익어요','AI','수많은 글로 배워요','시간이 만드는 사람이 있을까'],
+           ['관계','차','마주 앉아 따라 줘요','AI','언제든 대답해요','AI와의 대화도 관계일까'],
+           ['기억','차','향은 곧 사라져요','AI','모두 기록해요','다 기록되는 시대, 잊는다는 것'],
+           ['취향','차','내가 골라요','AI','대신 추천해 줘요','추천받은 취향도 내 취향일까'],
+           ['노동','차','손으로 덖어요','AI','에이전트가 맡아요','맡기고 나면 내 일엔 무엇이 남을까']];
+  var FL = [['19:00','웰컴 티'],['19:20','두 이야기'],['20:00','질문 카드'],['20:30','차와 술 사이'],['21:40','마지막 잔'],['다음 날','살롱 노트']];
   return '<section class="section"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">Salon · AI × Tea × Sool</p><h2 class="h2 one">차와 술 사이, CHA&amp;I 살롱</h2></div><p class="lead">낮의 차에서 밤의 우리 술로. 빠르게 답하는 AI 곁에서, 기다리고 익혀야 알 수 있는 것들을 이야기해요.</p></div>' +
-    '<div class="pkgs" style="grid-template-columns:repeat(3,minmax(0,1fr));max-width:none">' + F.map(function(f){ return '<div class="pkg"><span class="en">' + esc(f[1]) + '</span><h3>' + esc(f[0]) + '</h3><p>' + esc(f[2]) + '</p></div>'; }).join('') + '</div>' +
-    '<h3 class="h3" style="text-align:center;margin:34px 0 6px">살롱의 질문들</h3><p class="muted" style="text-align:center;margin:0 0 16px;font-size:14px">매달 하나를 골라 그날 저녁 내내 함께 물어요</p>' +
-    '<div class="pkgs" style="grid-template-columns:repeat(3,minmax(0,1fr));max-width:none">' + Q.map(function(q){ return '<div class="pkg"><span class="en">' + esc(q[1]) + '</span><h3>' + esc(q[0]) + '</h3><p>' + esc(q[2]) + '</p></div>'; }).join('') + '</div>' +
-    '<div class="tbl-wrap" style="margin-top:22px"><table class="cmp"><thead><tr><th scope="col">살롱을 이루는 것</th><th scope="col">이렇게 해요</th></tr></thead><tbody>' + R.map(function(r){ return '<tr><td><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
-    '<p class="muted" style="text-align:center;margin:16px 0 0;font-size:14px">만 19세 이상 · 술 없이 차만 즐기는 자리도 함께 준비해요.</p>' +
+    '<div class="sec-head"><div><p class="eyebrow">Salon · AI × Tea × Sool</p><h2 class="h2 one">차와 술 사이, CHA&amp;I 살롱</h2></div><p class="lead">빠르게 답하는 AI 곁에서, 기다리고 익혀야 알 수 있는 것들을 이야기해요.</p></div>' +
+    '<div class="vz sflow" role="img" aria-label="살롱 저녁 흐름: ' + FL.map(function(f){ return f[0] + ' ' + f[1]; }).join(', ') + '"><div class="sf-line"><i></i></div><ol>' + FL.map(function(f, i){ return '<li style="--i:' + i + '"><span class="sf-dot"></span><b>' + esc(f[0]) + '</b><span class="ol">' + esc(f[1]) + '</span></li>'; }).join('') + '</ol><div class="sf-ends"><span>낮의 차</span><span>밤의 우리 술</span></div></div>' +
+    '<div class="sfmt">' + F.map(function(f){ return '<div class="sfm"><span class="sfm-ic">' + IC[f[0]] + '</span><div><b>' + esc(f[1]) + '</b><h3 class="ol">' + esc(f[2]) + '</h3><p class="ol">' + esc(f[3]) + '</p></div></div>'; }).join('') + '</div>' +
+    '<h3 class="h3 one" style="text-align:center;margin:48px 0 6px">살롱의 질문들</h3><p class="muted" style="text-align:center;margin:0 0 18px;font-size:14px">사실 두 개를 나란히 놓고, 그 사이의 질문을 함께 물어요</p>' +
+    '<div class="sqs">' + Q.map(function(q){ return '<article class="sq"><h4>' + esc(q[0]) + '</h4>' +
+      '<div class="sq-pair"><div class="sq-f tea"><small>' + esc(q[1]) + '</small><span class="ol">' + esc(q[2]) + '</span></div><span class="sq-vs" aria-hidden="true">↔</span><div class="sq-f ai"><small>' + esc(q[3]) + '</small><span class="ol">' + esc(q[4]) + '</span></div></div>' +
+      '<p class="sq-q"><i aria-hidden="true">Q</i><span class="ol">' + esc(q[5]) + '</span></p></article>'; }).join('') + '</div>' +
+    '<p class="muted" style="text-align:center;margin:20px 0 0;font-size:14px">만 19세 이상 · 술 없이 차만 즐기는 자리도 준비해요</p>' +
     '<div class="btns" style="justify-content:center;margin-top:22px"><a class="btn btn-lime" href="#w-salon">살롱 자세히 보기</a><a class="btn btn-line" href="#contact?type=salon">프라이빗 살롱 문의</a></div>' +
   '</div></section>';
 }
