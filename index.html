@@ -1068,9 +1068,8 @@ footer .biz{font-size:13px}
   footer .legal nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 8px!important;width:100%}
   footer .legal p{font-size:12px;opacity:.8}
   footer a{display:block;line-height:1.5}
-  .btns.tjump{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * var(--gutter));padding:0 var(--gutter) 2px}
-  .btns.tjump::-webkit-scrollbar{display:none}
-  .btns.tjump .btn{flex:none!important;width:auto!important}
+  .btns.tjump{display:grid!important;grid-template-columns:minmax(0,1fr);gap:8px!important}
+  .btns.tjump .btn{width:100%!important;justify-content:center}
   .tabbar{padding-bottom:calc(14px + env(safe-area-inset-bottom))!important}
   .tabbar a{font-size:11px!important;color:#6B7178!important}
   .tabbar a.on{color:var(--navy)!important}
@@ -2278,6 +2277,6 @@ if(!/vercel\.app$|(^|\.)chaand\.ai$|^localhost$|^127\.|\.test$|^x\.test$/.test(l
 route();
 })();
 </script>
-<script>(function(){function up(){var h=(location.hash||'#intro').slice(1).split(/[-?]/)[0];document.querySelectorAll('#tabbar a').forEach(function(a){a.classList.toggle('on',a.dataset.h===h||(h==='home'&&a.dataset.h==='intro'));});}window.addEventListener('hashchange',up);up();})();</script>
+<script>(function(){function up(){var h=(location.hash||'#intro').slice(1).split(/[-?]/)[0];h=({t:'team',w:'workshop',c:'program',online:'program',proposal:'contact',brief:'contact'})[h]||h;document.querySelectorAll('#tabbar a').forEach(function(a){a.classList.toggle('on',a.dataset.h===h||(h==='home'&&a.dataset.h==='intro'));});}window.addEventListener('hashchange',up);up();})();</script>
 </body>
 </html>
