@@ -1057,6 +1057,25 @@ footer .biz{font-size:13px}
 .band .photo::after{background:linear-gradient(90deg,rgba(12,18,14,.72) 0%,rgba(12,18,14,.5) 45%,rgba(12,18,14,.12) 80%),linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.45))!important}
 .band .h1,.band .h2,.band .lead,.band .eyebrow{text-shadow:0 1px 12px rgba(0,0,0,.35)}
 .band .eyebrow{color:#DCE8C6!important}
+
+/* ===== 모바일 최적화 (R20, 2026-11-25) ===== */
+@media (max-width:760px){
+  footer{margin:var(--sec-t) 0 0!important;border-radius:28px 28px 0 0!important;padding:36px 0 28px!important}
+  footer .wrap{flex-direction:column;gap:22px!important}
+  footer .wrap > div:first-child{gap:10px!important;max-width:none!important}
+  footer .wrap > nav{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px!important;font-size:14px}
+  footer .legal{flex-direction:column;align-items:flex-start;gap:14px!important;padding-top:18px}
+  footer .legal nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 8px!important;width:100%}
+  footer .legal p{font-size:12px;opacity:.8}
+  footer a{display:block;line-height:1.5}
+  .btns.tjump{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * var(--gutter));padding:0 var(--gutter) 2px}
+  .btns.tjump::-webkit-scrollbar{display:none}
+  .btns.tjump .btn{flex:none!important;width:auto!important}
+  .tabbar{padding-bottom:calc(14px + env(safe-area-inset-bottom))!important}
+  .tabbar a{font-size:11px!important;color:#6B7178!important}
+  .tabbar a.on{color:var(--navy)!important}
+  body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+}
 </style>
 </head>
 <body>
@@ -1912,7 +1931,7 @@ function vTeam(){
   return '<section class="section dark"><div class="wrap">' +
     '<p class="eyebrow">Hosts</p><h1 class="h1 one" style="font-size:clamp(28px,3.9vw,50px)">세 사람이 우린 하나의 블렌드</h1>' +
     '<p class="lead ol" style="margin:16px 0 48px">집중을 지키는 사람, 설계하는 사람, 만드는 사람이 함께 들어가요.</p>' +
-    '<div class="btns" style="gap:10px">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="btn btn-line btn-sm" href="#t-' + k + '">' + t.nm + ' · ' + t.role + '</a>'; }).join('') + '</div>' +
+    '<div class="btns tjump" style="gap:10px">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="btn btn-line btn-sm" href="#t-' + k + '">' + t.nm + ' · ' + t.role + '</a>'; }).join('') + '</div>' +
   '</div></section>' +
   ['lee','han','jun'].map(function(k, i){ var t = T[k]; return '<section class="section' + (i % 2 ? ' paper' : '') + '" id="t-' + k + '"><div class="wrap bio">' +
     tph(t, 900, 'bio-pic') +
