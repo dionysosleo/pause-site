@@ -856,6 +856,9 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
 .photo,.ph{-webkit-touch-callout:none}
 html.veil body{filter:blur(18px)!important;transition:none}
 @media print{body *{visibility:hidden!important}body::after{content:'CHA&I · chaand.ai — 인쇄용 자료는 소개서 PDF를 받아 주세요.';visibility:visible;position:fixed;inset:40% 0 auto;text-align:center;font-size:16px;color:#26313D}}
+/* 글자 선택: 운영자만 */
+html:not(.owner) body{-webkit-user-select:none;user-select:none}
+html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit-user-select:text;user-select:text}
 </style>
 </head>
 <body>
@@ -1880,10 +1883,26 @@ document.addEventListener('click', function(e){
 $('#burger').addEventListener('click', function(){ var o = $('#mnav').classList.toggle('open'); this.setAttribute('aria-expanded', String(o)); });
 /* 정렬 규칙 R3: 영문 세리프(Cormorant) 글꼴이 걸린 요소에 한글이 있으면 .ko 부여 */
 function koFix(root){ (root || document).querySelectorAll('#app *, header *, footer *').forEach(function(el){ if(el.children.length > 3) return; var ff = getComputedStyle(el).fontFamily; if(/Cormorant/i.test(ff.split(',')[0]) && /[\uAC00-\uD7A3]/.test(el.textContent)) el.classList.add('ko'); }); }
+/* 글자 복사: 운영자 브라우저만 허용 (주소 끝 ?owner=열쇠 로 한 번 열면 이 브라우저에 기억, ?owner=off 로 해제). 억제용. */
+(function(){
+  var H = 'e81550704ea91f1ae849dcc03a736a05a7fcf5466923e2be38f7826feb4eb945', root = document.documentElement;
+  var setOwner = function(on){ try{ on ? localStorage.setItem('chai_owner', H) : localStorage.removeItem('chai_owner'); }catch(_){} root.classList.toggle('owner', !!on); };
+  try{ if(localStorage.getItem('chai_owner') === H) root.classList.add('owner'); }catch(_){}
+  var m = location.search.match(/[?&]owner=([^&#]+)/);
+  if(m){
+    var v = decodeURIComponent(m[1]);
+    var clean = function(){ history.replaceState(null, '', location.pathname + location.hash); };
+    if(v === 'off'){ setOwner(false); clean(); }
+    else if(window.crypto && crypto.subtle){ crypto.subtle.digest('SHA-256', new TextEncoder().encode(v)).then(function(b){ var hx = Array.prototype.map.call(new Uint8Array(b), function(x){ return ('0' + x.toString(16)).slice(-2); }).join(''); if(hx === H) setOwner(true); clean(); }); }
+  }
+  var isField = function(t){ return t && t.closest && t.closest('input,textarea,select,[contenteditable]'); };
+  ['copy','cut'].forEach(function(ev){ document.addEventListener(ev, function(e){ if(!root.classList.contains('owner') && !isField(e.target)) e.preventDefault(); }); });
+  document.addEventListener('selectstart', function(e){ if(!root.classList.contains('owner') && !isField(e.target)) e.preventDefault(); });
+})();
 /* 우클릭·이미지 저장·캡처 억제 (완벽한 차단은 불가 — 억제용) */
 (function(){
   var isField = function(t){ return t && t.closest && t.closest('input,textarea,select,[contenteditable]'); };
-  document.addEventListener('contextmenu', function(e){ if(!isField(e.target)) e.preventDefault(); });
+  document.addEventListener('contextmenu', function(e){ if(!isField(e.target) && !document.documentElement.classList.contains('owner')) e.preventDefault(); });
   document.addEventListener('dragstart', function(e){ if(e.target && e.target.tagName === 'IMG') e.preventDefault(); });
   var veil = function(){ document.documentElement.classList.add('veil'); clearTimeout(veil.t); veil.t = setTimeout(function(){ document.documentElement.classList.remove('veil'); }, 1200); };
   document.addEventListener('keyup', function(e){ if(e.key === 'PrintScreen'){ veil(); try{ navigator.clipboard && navigator.clipboard.writeText(''); }catch(_){} } });
