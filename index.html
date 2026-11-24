@@ -928,6 +928,37 @@ html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit
 .dn-sec{scroll-margin-top:calc(var(--hdh,72px) + 60px)}
 @media (max-width:760px){.dn-here,.dn-sep{display:none}.dn-toc{justify-content:flex-start}.dnav-in{gap:8px}}
 @media (prefers-reduced-motion: reduce){.dn-ind{transition:none}}
+/* R16 페이지 머리 경로 칩 */
+.pchips{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:22px}
+.pchip{display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;background:#fff;border:1.5px solid #E3E7E3;text-decoration:none;color:#26313D;transition:border-color .3s,box-shadow .3s}
+a.pchip:hover{border-color:#667866;box-shadow:0 8px 20px rgba(94,111,94,.14)}
+.pchip b{flex:none;width:28px;height:28px;border-radius:50%;background:#667866;color:#fff;font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.pchip span{font-size:15px;font-weight:700;white-space:nowrap}
+.pchip small{font-size:12.5px;color:#8A9098;white-space:nowrap}
+.pc-ar{color:#B9C3B9;font-size:16px}
+.pc-sep{width:1px;height:26px;background:#E3E7E3;margin:0 4px}
+@media (max-width:760px){.pchips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.pchips::-webkit-scrollbar{display:none}.pchip{flex:none}}
+.hero .pchips{flex-wrap:nowrap;gap:6px}
+.hero .pchip{padding:5px 12px 5px 5px;gap:7px}
+.hero .pchip b{width:24px;height:24px;font-size:12px}
+.hero .pchip span{font-size:14px}
+.hero .pchip small{display:none}
+.hero .pc-ar{font-size:13px}
+.hero .pc-sep{height:20px;margin:0 2px}
+@media (max-width:760px){.hero .pchips{overflow-x:auto}}
+/* 살롱: 구역 구분 (번호 소제목 + 구분선 + 따뜻한 띠 배경) */
+.salon-band{background:linear-gradient(180deg,#FFFFFF 0%,#FBF8F4 18%,#FBF8F4 82%,#FFFFFF 100%)}
+.subhd{display:flex;align-items:center;gap:14px;margin:44px 0 16px;padding-top:28px;border-top:1px solid rgba(38,49,61,.10)}
+.subhd:first-of-type{margin-top:28px}
+.subn{flex:none;width:44px;height:44px;border-radius:14px;background:#26313D;color:#fff;font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums tabular-nums;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.subhd h3{margin:0;font-size:20px;font-weight:800;color:#26313D}
+.subhd p{margin:2px 0 0;font-size:14px;color:#6B727A}
+.sq-legend{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 14px}
+.sq-legend .lg{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#4A5460}
+.sq-legend .lg::before{content:'';width:14px;height:14px;border-radius:4px}
+.sq-legend .lg-tea::before{background:#FBF3EA;box-shadow:inset 0 0 0 1px #E8D6C1}
+.sq-legend .lg-ai::before{background:#EEF2F6;box-shadow:inset 0 0 0 1px #CFD9E3}
+.sq-legend .lg-q::before{background:#26313D}
 </style>
 </head>
 <body>
@@ -1519,12 +1550,20 @@ function bindHome(){
   }); });
 }
 
+/* 페이지 머리: 긴 문단 대신 한 줄 + 경로 칩 (R16) */
+function pathChips(steps, extra){
+  var chip = function(c){ var inner = '<b aria-hidden="true">' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span><small>' + esc(c[2]) + '</small>'; return c[3] ? '<a class="pchip" href="' + c[3] + '">' + inner + '</a>' : '<span class="pchip">' + inner + '</span>'; };
+  return '<div class="pchips">' + steps.map(chip).join('<span class="pc-ar" aria-hidden="true">→</span>') + (extra ? '<span class="pc-sep" aria-hidden="true"></span>' + chip(extra) : '') + '</div>';
+}
 /* ===== 워크샵 목록 (사진 중심 카드) ===== */
 function vWorkshop(){
-  return '<section class="section tight"><div class="wrap">' +
-    '<p class="eyebrow">Workshops</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">워크샵</h1>' +
-    '<p class="lead" style="max-width:680px;margin-top:16px">처음 만나는 <b>저녁 4시간 찻자리</b>가 기본이에요. 반응을 보고 <b>오후 반나절</b>·<b>하루</b>로 넓히거나, 같은 멤버가 4개월 동안 매달 모이는 <b>찻자리 클럽 시즌</b>으로 이어가요. 차에서 우리 술로 넘어가는 저녁, <b>차와 술 사이 살롱</b>도 열어요. 듣고 끝나는 강의가 아니라 각자 파트너 에이전트를 만들어 돌아가요.</p>' +
-  '</div></section>' +
+  return '<section class="hero" style="min-height:min(70vh,640px)">' +
+    '<div class="hero-copy"><p class="eyebrow">Workshops</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">차 한 잔에 에이전트 하나</h1>' +
+    '<p class="lead ol">듣고 끝나는 강의가 아니라, 각자 파트너 에이전트를 만들어 돌아가요.</p>' +
+    pathChips([['1','저녁 찻자리','시작','#w-evening'],['2','반나절 · 하루','넓히기','#w-office'],['3','찻자리 클럽','이어 가기','#w-club']], ['+','살롱','저녁 모임','#w-salon']) +
+    '<div class="btns"><a class="btn btn-lime" href="#contact">워크샵 문의</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
+    ph('fWorkshop', 1600, '', true) +
+  '</section>' +
   '<section style="padding-bottom:56px"><div class="wrap">' +
     '<div class="wlist" id="wlist">' + W.map(wCard).join('') + '</div>' +
   '</div></section>' +
@@ -1562,11 +1601,15 @@ function salonSection(){
            ['취향','차','내가 골라요','AI','대신 추천해 줘요','추천받은 취향도 내 취향일까'],
            ['노동','차','손으로 덖어요','AI','에이전트가 맡아요','맡기고 나면 내 일엔 무엇이 남을까']];
   var FL = [['19:00','웰컴 티'],['19:20','두 이야기'],['20:00','질문 카드'],['20:30','차와 술 사이'],['21:40','마지막 잔'],['다음 날','살롱 노트']];
-  return '<section class="section"><div class="wrap">' +
+  var SUB = function(n, t, d){ return '<div class="subhd"><span class="subn">' + n + '</span><div><h3 class="ol">' + t + '</h3><p class="ol">' + d + '</p></div></div>'; };
+  return '<section class="section salon-band"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Salon · AI × Tea × Sool</p><h2 class="h2 one">차와 술 사이, CHA&amp;I 살롱</h2></div><p class="lead">빠르게 답하는 AI 곁에서, 기다리고 익혀야 알 수 있는 것들을 이야기해요.</p></div>' +
+    SUB('01', '하루 저녁의 흐름', '19시 웰컴 티에서 다음 날 살롱 노트까지') +
     '<div class="vz sflow" role="img" aria-label="살롱 저녁 흐름: ' + FL.map(function(f){ return f[0] + ' ' + f[1]; }).join(', ') + '"><ol>' + FL.map(function(f, i){ return '<li style="--i:' + i + '"><span class="sf-dot"></span><b>' + esc(f[0]) + '</b><span class="ol">' + esc(f[1]) + '</span></li>'; }).join('') + '</ol><div class="sf-ends"><span>낮의 차</span><span>밤의 우리 술</span></div></div>' +
+    SUB('02', '세 가지 운영 방식', '누구와, 얼마나 자주 모일지 골라요') +
     '<div class="sfmt">' + F.map(function(f){ return '<div class="sfm"><span class="sfm-ic">' + IC[f[0]] + '</span><div><b>' + esc(f[1]) + '</b><h3 class="ol">' + esc(f[2]) + '</h3><p class="ol">' + esc(f[3]) + '</p></div></div>'; }).join('') + '</div>' +
-    '<h3 class="h3 one" style="text-align:center;margin:48px 0 6px">살롱의 질문들</h3><p class="muted" style="text-align:center;margin:0 0 18px;font-size:14px">사실 두 개를 나란히 놓고, 그 사이의 질문을 함께 물어요</p>' +
+    SUB('03', '이달의 질문', '사실 두 개를 나란히 놓고, 그 사이를 함께 물어요') +
+    '<div class="sq-legend" aria-hidden="true"><span class="lg lg-tea">차 · 술의 사실</span><span class="lg lg-ai">AI의 사실</span><span class="lg lg-q">함께 묻는 질문</span></div>' +
     '<div class="sqs">' + Q.map(function(q){ return '<article class="sq"><h4>' + esc(q[0]) + '</h4>' +
       '<div class="sq-pair"><div class="sq-f tea"><small>' + esc(q[1]) + '</small><span class="ol">' + esc(q[2]) + '</span></div><span class="sq-vs" aria-hidden="true">↔</span><div class="sq-f ai"><small>' + esc(q[3]) + '</small><span class="ol">' + esc(q[4]) + '</span></div></div>' +
       '<p class="sq-q"><i aria-hidden="true">Q</i><span class="ol">' + esc(q[5]) + '</span></p></article>'; }).join('') + '</div>' +
@@ -1639,7 +1682,7 @@ function vProgram(){
   ];
   return '<section class="hero" style="min-height:min(70vh,640px)">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">한 회사를 1년 동안 맡아요</h1>' +
-    '<p class="lead">한 번의 특강은 그날로 끝나요. 정기프로그램은 분기마다 진단하고, 만들고, 시연하고, 성과를 보면서 AI를 팀의 일하는 방식으로 자리 잡게 합니다.</p>' +
+    '<p class="lead ol">한 번의 특강이 아니라, AI가 팀의 일하는 방식이 될 때까지.</p>' + pathChips([['1','진단','분기 시작'],['2','만들기','팀 에이전트'],['3','시연','사내 공유'],['4','성과','분기 리포트']]) + '' +
     '<div class="btns"><a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
     ph('team', 1600, '', true) +
   '</section>' +
@@ -1759,7 +1802,7 @@ function notifyDialog(c){
 function vTeam(){
   return '<section class="section dark"><div class="wrap">' +
     '<p class="eyebrow">Hosts</p><h1 class="h1 one" style="font-size:clamp(28px,3.9vw,50px)">세 사람이 우린 하나의 블렌드</h1>' +
-    '<p class="lead" style="max-width:680px;margin:16px 0 48px">집중을 지키는 사람, 설계하는 사람, 만드는 사람. 차도 블렌드할 때 맛이 완성되듯, 세 사람이 한 워크샵에 함께 들어가요.</p>' +
+    '<p class="lead ol" style="margin:16px 0 48px">집중을 지키는 사람, 설계하는 사람, 만드는 사람이 함께 들어가요.</p>' +
     '<div class="btns" style="gap:10px">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="btn btn-line btn-sm" href="#t-' + k + '">' + t.nm + ' · ' + t.role + '</a>'; }).join('') + '</div>' +
   '</div></section>' +
   ['lee','han','jun'].map(function(k, i){ var t = T[k]; return '<section class="section' + (i % 2 ? ' paper' : '') + '" id="t-' + k + '"><div class="wrap bio">' +
