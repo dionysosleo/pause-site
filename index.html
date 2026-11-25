@@ -1999,7 +1999,14 @@ function notifyDialog(c){
     '<label class="field">이메일<input name="email" type="email" required autocomplete="email"><span class="err">이메일을 확인해 주세요</span></label>' +
     '<div class="field consent"><label class="check"><input type="checkbox" name="agree" required><span>(필수) 오픈 알림을 받기 위해 이름·이메일을 수집하고, 알림을 보낸 뒤 파기하는 데 동의해요. 동의하지 않으면 알림을 받을 수 없어요. <a href="#privacy">개인정보처리방침</a></span></label><span class="err">동의가 필요해요</span></div>' +
     '<button class="btn btn-lime" type="submit">신청하기</button></form>');
-  bindForm($('#dlgBody form'), function(){ openDialog('<h2>온라인 신청은 준비 중이에요</h2><p style="margin:0">신청 접수 기능을 붙이는 중이에요. 그전까지는 ' + mailTarget() + '로 “' + esc(c.title) + ' 오픈 알림”이라고 보내 주시면 챙겨 둘게요.</p><button type="button" class="btn btn-line" data-close>닫기</button>'); });
+  var f = $('#dlgBody form');
+  bindForm(f, function(){
+    var d = new FormData(f), data = {kind:'오픈 알림', course:c.title, name:String(d.get('name') || '').trim(), email:String(d.get('email') || '').trim(), msg:'오픈 알림 수신 동의함'};
+    sendLead(data).then(function(sent){
+      if(sent){ openDialog('<h2>오픈 알림을 신청했어요</h2><p style="margin:0">' + esc(c.title) + '이 열리면 ' + esc(data.email) + '로 가장 먼저 알려 드릴게요.</p><button type="button" class="btn btn-line" data-close>닫기</button>'); return; }
+      openDialog('<h2>신청이 잠시 안 되고 있어요</h2><p style="margin:0">' + mailTarget() + '로 “' + esc(c.title) + ' 오픈 알림”이라고 보내 주시면 챙겨 둘게요.</p><button type="button" class="btn btn-line" data-close>닫기</button>');
+    });
+  });
 }
 
 /* ===== 강사 ===== */
@@ -2036,7 +2043,7 @@ function bindTeam(){
 /* ===== 약관·정책 (원문은 policies.js) =====
    사업자 정보는 OPERATOR에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
 var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'이준혁', cpoDept:'' };
-var VENDORS = []; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
+var VENDORS = [{name:'Google LLC (Google Workspace: 스프레드시트·Apps Script·Gmail)', task:'웹사이트 문의·상담 신청 접수와 보관, 운영 담당자에게 알림 메일 발송', items:'문의 양식에 적은 항목 전부', country:'미국', when:'양식을 보낼 때', how:'네트워크를 통한 전송', period:'상담이 끝난 날부터 1년(매일 자동 삭제), 오픈 알림은 알림을 보낸 뒤 삭제'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
 function bizName(){ return OPERATOR.name || 'CHA&I'; }
 function contactMail(){ return OPERATOR.email ? '<a href="mailto:' + esc(OPERATOR.email) + '">' + esc(OPERATOR.email) + '</a>' : ''; }
 function bizRows(){
@@ -2130,10 +2137,10 @@ function bindBrief(){
 /* ===== 문의·제안서 접수 설정 =====
    endpoint: 문의를 받을 주소 (구글 시트 Apps Script 웹앱 URL 등, 설정법은 SETUP-LEADS.md). 비어 있으면 메일 복사 방식으로 대체
    proposalUrl: 제안서 PDF 주소 (예: '/CHAandI-proposal.pdf'). 비어 있으면 "메일로 보내 드려요"로 안내 */
-var LEAD_CONFIG = { endpoint: '', proposalUrl: '' };
+var LEAD_CONFIG = { endpoint: 'https://script.google.com/macros/s/AKfycbznjt7abxus2cE7sAse9CBHc6JzKfrYzUArrwLGUFwMfaYk4YkSanxEbp8voRDcYoaPbA/exec', proposalUrl: '' };
 function sendLead(data){
   data.at = new Date().toISOString(); data.page = location.href;
-  var hp = document.querySelector('#app [name=website]'); if(hp && hp.value) data.website = hp.value;
+  $$('form [name=website]').forEach(function(hp){ if(hp.value) data.website = hp.value; });
   if(!LEAD_CONFIG.endpoint) return Promise.resolve(false);
   return fetch(LEAD_CONFIG.endpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).then(function(r){ return r.ok || r.type === 'opaque'; }, function(){ return false; });
 }
@@ -2146,7 +2153,7 @@ function proposalBox(){
     : '<p style="margin:0">제안서는 남겨 주신 이메일로 확인하는 대로 보내 드려요.</p>';
 }
 function copyDialog(title, txt, extra){
-  openDialog('<h2>' + title + '</h2>' + (extra || '') + '<p style="margin:0">온라인 접수를 붙이는 중이에요. 아래 내용을 복사해 ' + mailTarget() + '로 보내 주시면 바로 연락드릴게요.</p><textarea readonly style="width:100%;min-height:180px;border:1px solid var(--hair);border-radius:10px;padding:12px;font-size:14px" id="copyTxt">' + esc(txt) + '</textarea><button type="button" class="btn btn-line" id="copyBtn">내용 복사하기</button>');
+  openDialog('<h2>' + title + '</h2>' + (extra || '') + '<p style="margin:0">접수가 잠시 안 되고 있어요. 아래 내용을 복사해 ' + mailTarget() + '로 보내 주시면 바로 연락드릴게요.</p><textarea readonly style="width:100%;min-height:180px;border:1px solid var(--hair);border-radius:10px;padding:12px;font-size:14px" id="copyTxt">' + esc(txt) + '</textarea><button type="button" class="btn btn-line" id="copyBtn">내용 복사하기</button>');
   $('#copyBtn').addEventListener('click', function(){
     var ta = $('#copyTxt'); ta.select();
     var done = function(){ toast('복사했어요'); };
