@@ -1494,7 +1494,8 @@ function curRoute(){
   if(HASH_MODE) return hs || 'intro';
   if(isRoute(hs)){ history.replaceState(null, '', routeUrl(hs)); return hs; }
   var p = decodeURIComponent(location.pathname.replace(/^\/+|\/+$/g, '')).replace(/\.html$/, '');
-  return (p || 'intro') + (location.search || '');
+  p = p || 'intro';
+  return /^(learn|contact)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
 }
 function nav(url, replace){
   if(HASH_MODE){ if(replace) location.replace(url); else location.hash = url.slice(1); return; }
