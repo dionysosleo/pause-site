@@ -1103,6 +1103,10 @@ footer .biz{font-size:13px}
 <style>/* 영어판: 영어 문장이 한글보다 길어 한 줄 원칙(R6)·기호 정렬(R13)을 지키도록 글자를 조금 줄임 */
 html[lang="en"] .ol,html[lang="en"] .pf{font-size:.86em;letter-spacing:-.01em}
 html[lang="en"] .pchip{font-size:.86em;gap:7px;padding:7px 12px 7px 7px}html[lang="en"] .pchips{gap:6px}html[lang="en"] .pchip span{font-size:12.5px}
+/* 영어 제목은 한글보다 길어 한 줄 고정(.one)이 옆 사진·칸 밖으로 밀림 → 영어판만 자연스럽게 두 줄로 나눔 */
+html[lang="en"] .one{white-space:normal;text-wrap:balance}
+html[lang="en"] .plan .pf li.lv{grid-template-columns:8.6em minmax(0,1fr)}html[lang="en"] .plan .pf li.lv small{padding:3px 6px}
+@media (min-width:761px){html[lang="en"] .hero .pchips{flex-wrap:wrap;row-gap:8px}}
 </style>
 </head>
 <body>
@@ -1150,7 +1154,7 @@ html[lang="en"] .pchip{font-size:.86em;gap:7px;padding:7px 12px 7px 7px}html[lan
 
 <dialog id="dlg"><div style="position:relative"><button type="button" class="x" data-close aria-label="Close">×</button><div class="dlg" id="dlgBody"></div></div></dialog>
 
-<script src="policies.js"></script>
+<script src="/policies.js"></script>
 <script>
 (function(){
 'use strict';
@@ -1160,11 +1164,11 @@ function esc(s){ return String(s == null ? '' : s).replace(/&(?!(amp|lt|gt|quot|
 
 /* ===== 사진 (Unsplash, 무료 라이선스) — 실제 사진이 생기면 이 주소만 바꾸면 됩니다 ===== */
 var PH = {
-  fTable:   {local:'img/field/tea-table.jpg', alt:'A round table set with teacups and materials at an on-site session', by:'Yoojin Lee at an on-site session'},
-  fSweets:  {local:'img/field/tea-sweets.jpg', alt:'A tea table set with cups and sweets at an on-site session', by:'Yoojin Lee at an on-site session'},
-  fSetting: {local:'img/field/tea-setting.jpg', alt:'A long table set with teaware at an on-site session', by:'Yoojin Lee at an on-site session'},
-  fWorkshop:{local:'img/field/tea-workshop.jpg', alt:'A team tea workshop, brewing tea at the table', by:'Yoojin Lee at an on-site session'},
-  fLounge:  {local:'img/field/tea-lounge.jpg', alt:'A tea lounge serving tea on an outdoor terrace', by:'Yoojin Lee at an on-site session'},
+  fTable:   {local:'/img/field/tea-table.jpg', alt:'A round table set with teacups and materials at an on-site session', by:'Yoojin Lee at an on-site session'},
+  fSweets:  {local:'/img/field/tea-sweets.jpg', alt:'A tea table set with cups and sweets at an on-site session', by:'Yoojin Lee at an on-site session'},
+  fSetting: {local:'/img/field/tea-setting.jpg', alt:'A long table set with teaware at an on-site session', by:'Yoojin Lee at an on-site session'},
+  fWorkshop:{local:'/img/field/tea-workshop.jpg', alt:'A team tea workshop, brewing tea at the table', by:'Yoojin Lee at an on-site session'},
+  fLounge:  {local:'/img/field/tea-lounge.jpg', alt:'A tea lounge serving tea on an outdoor terrace', by:'Yoojin Lee at an on-site session'},
   desk:     {id:'1742764915162-20349ae0638f', alt:'A laptop, kettle and teacup on a wooden table', by:'Caroline Badran'},
   desk2:    {id:'1746792613213-c154e2891449', alt:'A wooden desk with a laptop and a plant', by:'Andrea Stuart'},
   teaCup:   {id:'1577016029703-cc22a7c0c28c', alt:'A teacup beside a brown teapot', by:'Sergey N'},
@@ -1193,21 +1197,20 @@ function ph(k, w, cls, eager){
 }
 
 /* ===== 강사 ===== */
-/* img: 강사 본인이 보내 준 사진 파일 경로 (예: 'img/han.jpg'). 비어 있으면 분위기 사진(pic)을 씁니다 */
+/* img: 강사 본인이 보내 준 사진 파일 경로 (예: '/img/han.jpg'). 비어 있으면 분위기 사진(pic)을 씁니다 */
 var T = {
   /* 소개 순서: 이유진 → 한성희 → 이준혁. 경력은 최신순(위가 최근) */
-  han: {img:'img/han.jpg?v=2', pic:'brainstorm', nm:'Sunghee Han', role:'AI COACH', line:'CEO, Simplifier · Former CPO of Yogiyo, COO of Bithumb', book:'Author of “The Planner’s Way of Asking,” “The Language of UX” and “Unicorn Leadership”',
+  han: {img:'/img/han.jpg?v=2', pic:'brainstorm', nm:'Sunghee Han', role:'AI COACH', line:'CEO, Simplifier · Former CPO of Yogiyo, COO of Bithumb', book:'Author of “The Planner’s Way of Asking,” “The Language of UX” and “Unicorn Leadership”',
         proof:'A playing coach who has coached 300+ startups', job:'Diagnosis — what to hand to AI and what people should decide', jobS:'Diagnosis: what to hand off and what to decide',
         does:'A playing coach who works alongside teams rather than only advising. She grew services and organizations at Naver, Samsung Electronics, Yogiyo and Bithumb, and now builds and uses her own service, Carvit, with seven AI agents.',
         career:['2022– CEO, Simplifier — startup playing coach and corporate speaker; AI agent service Carvit','COO, Bithumb','CPO, Yogiyo (Delivery Hero Korea) — grew the organization from 50 to 1,000 people','PM, Samsung Electronics Smart TV','Team Lead, Naver Content Services','2001 Planner at Damoim — first job'],
         links:[['LinkedIn','https://www.linkedin.com/in/simplifier/'],['Brunch','https://brunch.co.kr/@simplifier'],['Website','https://simplifier.co.kr/']]},
-  jun: {img:'img/jun.jpg?v=2', pic:'manLaptop', nm:'Junhyuck Lee', role:'AGENT BUILDER', line:'PO at JobKorea · Former COO & CPO, Tandem', book:'Author of “We Are Still on Our Way to Work” and “We Are Still on Our Way Home”',
+  jun: {img:'/img/jun.jpg?v=2', pic:'manLaptop', nm:'Junhyuck Lee', role:'AGENT BUILDER', line:'PO at JobKorea · Former COO & CPO, Tandem', book:'Author of “We Are Still on Our Way to Work” and “We Are Still on Our Way Home”',
         proof:'A PO who has handed over and taken on work through two M&As and roles as head of operations, business division head, COO and CPO. Today he hands his repetitive work to AI — and goes home.', proofS:'A builder who went through two M&As and a PO who runs agents every day', job:'Going home — hand repetitive work to an AI companion partner and protect the time you get back', jobS:'Bring in a partner',
-        talk:{title:'Work goes to AI, the evening comes back to you', sub:'From someone who has handed work over to people: how to hand work to AI and go home on time · 2 hours (4-hour package with tea available)', parts:[['Before · 3-minute pre-check','Click through the AI you use now, your repetitive tasks and how you leave work. The session starts from your company’s real concerns'],['On the day · Practice with your own material','Hand one repetitive task to AI with a handover document instead of prompts, take it through probation, and use it from the next day'],['Two weeks later · Going-home report','From two weeks of records, we show how much you offloaded and how often you left on time. The company receives an anonymous summary']], take:'Companion partner kit · One task handed over with your own material · Going-home report after two weeks', note:'Not how to do more with AI, but how to hand off and do less. Works with whatever AI tool your company uses; schedule and fees are by arrangement.'},
         does:'Through two M&As (Kmong and MediaWill) he ran, on the ground, the process of organizations and work being rebuilt from scratch. Using the skills he learned then — breaking work down and redesigning it — he now hands repetitive work to AI agents and runs them himself every day.',
         career:['PO, JobKorea','Former COO & CPO, Tandem','Former Head of Business Division, Medi-i Plus','Former New Business PO, Marketeam Damda (Kmong M&A)','Former Head of Operations, Station3 (real-estate platform Dabang) (MediaWill M&A)'],
         links:[['LinkedIn','https://www.linkedin.com/in/junhyuck-l-7707081aa/'],['Brunch','https://brunch.co.kr/@5e7ac6b8a3314c9']]},
-  lee: {img:'img/lee.jpg?v=2', pic:'teapot', nm:'Yoojin Lee', role:'TEA DIRECTOR', line:'Tea director with 18 years of experience · President, TAWA Tea & Wellness Association', book:'Author of “I Drink Tea Every Morning,” “Tea and Everyday Life,” “A Journey by Tea,” “Time When Black Tea Grows on You,” “4 p.m., Falling for Black Tea,” “Falling for India,” “A Woman’s Time” (co-author) and “Starting a Business with Tea”',
+  lee: {img:'/img/lee.jpg?v=2', pic:'teapot', nm:'Yoojin Lee', role:'TEA DIRECTOR', line:'Tea director with 18 years of experience · President, TAWA Tea & Wellness Association', book:'Author of “I Drink Tea Every Morning,” “Tea and Everyday Life,” “A Journey by Tea,” “Time When Black Tea Grows on You,” “4 p.m., Falling for Black Tea,” “Falling for India,” “A Woman’s Time” (co-author) and “Starting a Business with Tea”',
         proof:'Over 4,000 sessions at about 100 companies and institutions', job:'Focus — tea breaks and 1:1 questions between practice sessions', jobS:'Focus: tea breaks and 1:1 questions',
         does:'A tea director who has taught tea for 18 years. She trained in yoga and Ayurveda in India and studied Chinese tea, tea blending and meditation, treating tea as time to care for body and mind. She has led in-house tea classes and wellness tea times at Nexon, HD Hyundai, Hyundai Department Store and others.',
         career:['President, TAWA Tea & Wellness Association · Owner, Pangyo Ilsang Teahouse','2025 TAWA Chinese Tea Expert · Tea Master · Tea Blending Master','2023 Meditation Instructor · Aromatherapist','2017 International Viniyoga Yoga Teacher','2015–2019 Lived in India, trained in yoga and Ayurveda · Chinese tea evaluator and tea art practitioner','2010 Tea Master, International Tea Culture Foundation','2009 Began tea education and talks · Naver power blogger in tea (until 2012)'],
