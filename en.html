@@ -2072,12 +2072,12 @@ function bindTeam(){
 /* ===== 개인정보처리방침 ===== */
 /* ===== 약관·정책 (원문은 policies.js) =====
    사업자 정보는 OPERATOR에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
-var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'Junhyuck Lee', cpoDept:'' };
+var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'Junhyuck Lee', cpoDept:'', host:'Vercel Inc.' }; /* host = 호스팅 서비스 제공자 (전자상거래법 사이버몰 표시) */
 var VENDORS = [{name:'Google LLC (Google Workspace: Sheets, Apps Script, Gmail)', task:'Receiving and storing website inquiries, consultation requests and pre-session check-ins; sending notification emails to our team', items:'Everything entered in the inquiry forms and the pre-session check-in', country:'United States', when:'When the form is submitted', how:'Transmission over the network', period:'1 year from receipt (deleted automatically every day); launch-update sign-ups are deleted after the update is sent'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
 function bizName(){ return OPERATOR.name || 'CHA&I'; }
 function contactMail(){ return OPERATOR.email ? '<a href="mailto:' + esc(OPERATOR.email) + '">' + esc(OPERATOR.email) + '</a>' : ''; }
 function bizRows(){
-  return [['Business name', OPERATOR.name], ['Representative', OPERATOR.ceo], ['Business registration number', OPERATOR.regNo], ['Mail-order business report number', OPERATOR.mailOrder], ['Address', OPERATOR.address], ['Email', OPERATOR.email], ['Phone', OPERATOR.phone]].filter(function(r){ return r[1]; });
+  return [['Business name', OPERATOR.name], ['Representative', OPERATOR.ceo], ['Business registration number', OPERATOR.regNo], ['Mail-order business report number', OPERATOR.mailOrder], ['Address', OPERATOR.address], ['Email', OPERATOR.email], ['Phone', OPERATOR.phone], ['Hosting provider', OPERATOR.host]].filter(function(r){ return r[1]; });
 }
 function policyTokens(html){
   var rows = bizRows();
@@ -2112,9 +2112,12 @@ function renderBiz(){
   var el = document.getElementById('bizLine'), y = document.getElementById('fyear');
   if(y) y.textContent = new Date().getFullYear();
   if(!el) return;
-  var r = bizRows().filter(function(x){ return x[0] !== 'Address'; });
+  var r = bizRows();
   el.hidden = !r.length;
-  el.innerHTML = r.map(function(x){ return x[0] === 'Business name' || x[0] === 'Email' || x[0] === 'Phone' ? esc(x[1]) : x[0] + ' ' + esc(x[1]); }).join(' · ');
+  /* 사업자등록번호가 있으면 공정위 사업자정보 확인 링크를 함께 (PG 카드사 심사·전자상거래법 표시) */
+  var reg = String(OPERATOR.regNo || '').replace(/[^0-9]/g, '');
+  el.innerHTML = r.map(function(x){ return x[0] === 'Business name' || x[0] === 'Email' || x[0] === 'Phone' ? esc(x[1]) : x[0] + ' ' + esc(x[1]); }).join(' · ') +
+    (reg.length === 10 ? ' · <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=' + reg + '" target="_blank" rel="noopener">Verify business info</a>' : '');
 }
 
 /* ===== 대표·본부장용 한 페이지 ===== */

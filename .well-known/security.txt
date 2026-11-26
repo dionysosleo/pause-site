@@ -1,0 +1,5 @@
+# CHA&I (chaand.ai) — 보안 취약점 신고 창구 / Security vulnerability reports
+Contact: mailto:help@chaandai.com
+Expires: 2027-11-26T00:00:00.000Z
+Preferred-Languages: ko, en
+Canonical: https://www.chaand.ai/.well-known/security.txt

@@ -2064,12 +2064,12 @@ function bindTeam(){
 /* ===== 개인정보처리방침 ===== */
 /* ===== 약관·정책 (원문은 policies.js) =====
    사업자 정보는 OPERATOR에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
-var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'이준혁', cpoDept:'' };
+var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'이준혁', cpoDept:'', host:'Vercel Inc.' }; /* host = 호스팅 서비스 제공자 (전자상거래법 사이버몰 표시) */
 var VENDORS = [{name:'Google LLC (Google Workspace: 스프레드시트·Apps Script·Gmail)', task:'웹사이트 문의·상담 신청과 강의 사전 진단 접수·보관, 운영 담당자에게 알림 메일 발송', items:'문의 양식과 사전 진단에 적은 항목 전부', country:'미국', when:'양식을 보낼 때', how:'네트워크를 통한 전송', period:'접수한 날부터 1년(매일 자동 삭제), 오픈 알림은 알림을 보낸 뒤 삭제'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
 function bizName(){ return OPERATOR.name || 'CHA&I'; }
 function contactMail(){ return OPERATOR.email ? '<a href="mailto:' + esc(OPERATOR.email) + '">' + esc(OPERATOR.email) + '</a>' : ''; }
 function bizRows(){
-  return [['상호', OPERATOR.name], ['대표자', OPERATOR.ceo], ['사업자등록번호', OPERATOR.regNo], ['통신판매업 신고번호', OPERATOR.mailOrder], ['주소', OPERATOR.address], ['이메일', OPERATOR.email], ['전화', OPERATOR.phone]].filter(function(r){ return r[1]; });
+  return [['상호', OPERATOR.name], ['대표자', OPERATOR.ceo], ['사업자등록번호', OPERATOR.regNo], ['통신판매업 신고번호', OPERATOR.mailOrder], ['주소', OPERATOR.address], ['이메일', OPERATOR.email], ['전화', OPERATOR.phone], ['호스팅 제공자', OPERATOR.host]].filter(function(r){ return r[1]; });
 }
 function policyTokens(html){
   var rows = bizRows();
@@ -2104,9 +2104,12 @@ function renderBiz(){
   var el = document.getElementById('bizLine'), y = document.getElementById('fyear');
   if(y) y.textContent = new Date().getFullYear();
   if(!el) return;
-  var r = bizRows().filter(function(x){ return x[0] !== '주소'; });
+  var r = bizRows();
   el.hidden = !r.length;
-  el.innerHTML = r.map(function(x){ return x[0] === '상호' || x[0] === '이메일' || x[0] === '전화' ? esc(x[1]) : x[0] + ' ' + esc(x[1]); }).join(' · ');
+  /* 사업자등록번호가 있으면 공정위 사업자정보 확인 링크를 함께 (PG 카드사 심사·전자상거래법 표시) */
+  var reg = String(OPERATOR.regNo || '').replace(/[^0-9]/g, '');
+  el.innerHTML = r.map(function(x){ return x[0] === '상호' || x[0] === '이메일' || x[0] === '전화' ? esc(x[1]) : x[0] + ' ' + esc(x[1]); }).join(' · ') +
+    (reg.length === 10 ? ' · <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=' + reg + '" target="_blank" rel="noopener">사업자정보 확인</a>' : '');
 }
 
 /* ===== 대표·본부장용 한 페이지 ===== */
