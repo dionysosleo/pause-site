@@ -1335,7 +1335,7 @@ function pkgSection(){
       {href: sale('pkg-season') ? buyHref('pkg-season') : '', btn: sale('pkg-season') ? '결제하기 · ' + won(sale('pkg-season').price) : '', tag:'03 · 시즌', name:'찻자리 클럽 시즌', big:'4개월', sub:'월 1회 저녁 + 온라인', best:'리더 모임·입주사', f:['전원 일반 이용권','한 달은 에이전트 파트너 회차']},
       {href: sale('pkg-year') ? buyHref('pkg-year') : '', btn: sale('pkg-year') ? '결제하기 · ' + won(sale('pkg-year').price) : '', tag:'04 · 1년', name:'1년 웰니스', big:'1년', sub:'사계절 + 사내 챔피언', best:'1년 함께할 회사', f:['분기마다 에이전트 파트너 점검','리더는 프리미엄으로']}
     ], 4) +
-    (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">패키지 금액은 20명 기준이에요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요. (부가세 포함)</p>' : '') +
+    (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">패키지 금액은 20명 기준이에요. 03·04는 묶음 10% 할인을 적용했어요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요. (부가세 포함)</p>' : '') +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=package">패키지 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div>' +
   '</div></section>';
 }
@@ -1891,7 +1891,7 @@ function vWDetail(w){
     '</div>' +
     '<aside class="aside" aria-label="워크샵 요약">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
-      '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (부가세 포함)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') : '구성에 따라 견적') + '</dd></dl>' +
+      '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (부가세 포함)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') + (sale(w.id).company ? '<br><span class="muted" style="font-weight:500">처음 함께하는 회사는 첫 회 10% 할인 (상담 시 적용)</span>' : '') : '구성에 따라 견적') + '</dd></dl>' +
       (sale(w.id) ? '<a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기</a><a class="btn btn-line" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>' : '<a class="btn btn-lime" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>') +
       '<a class="btn btn-line btn-sm" href="#program">1년 프로그램으로 이어 가기</a>' +
       '<p class="muted" style="margin:0;font-size:13px">제안서가 먼저 필요하면 <a href="#proposal">제안서 받기</a>에서 바로 받아 보세요.</p>' +

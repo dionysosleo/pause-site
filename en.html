@@ -1343,7 +1343,7 @@ function pkgSection(){
       {href: sale('pkg-season') ? buyHref('pkg-season') : '', btn: sale('pkg-season') ? 'Pay · ' + won(sale('pkg-season').price) : '', tag:'03 · Season', name:'Tea Table Club season', big:'Month 4', sub:'Monthly evening + online', best:'Leader groups, tenants', f:['Standard pass for everyone','One month: agent-partner session']},
       {href: sale('pkg-year') ? buyHref('pkg-year') : '', btn: sale('pkg-year') ? 'Pay · ' + won(sale('pkg-year').price) : '', tag:'04 · One year', name:'One-year wellness', big:'1 year', sub:'Four seasons + champions', best:'Year-long partners', f:['Agent-partner check-in each quarter','Premium for leaders']}
     ], 4) +
-    (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">Package prices are for 20 people. We run on a 15-person minimum and adjust the price after a consultation if your headcount differs. (VAT included)</p>' : '') +
+    (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">Package prices are for 20 people; 03 and 04 include a 10% bundle discount. We run on a 15-person minimum and adjust the price after a consultation if your headcount differs. (VAT included)</p>' : '') +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=package">Package consultation</a><a class="btn btn-line" href="#proposal">Get the brochure</a></div>' +
   '</div></section>';
 }
@@ -1899,7 +1899,7 @@ function vWDetail(w){
     '</div>' +
     '<aside class="aside" aria-label="Workshop summary">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
-      '<dl><dt>Time</dt><dd>' + esc(w.hours) + '</dd><dt>Group size</dt><dd>' + esc(w.size) + '</dd><dt>Venue</dt><dd>' + esc(w.place) + '</dd><dt>Tools</dt><dd>' + esc(w.tools) + '</dd><dt>Fee</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (VAT incl.)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') : 'Quoted based on configuration') + '</dd></dl>' +
+      '<dl><dt>Time</dt><dd>' + esc(w.hours) + '</dd><dt>Group size</dt><dd>' + esc(w.size) + '</dd><dt>Venue</dt><dd>' + esc(w.place) + '</dd><dt>Tools</dt><dd>' + esc(w.tools) + '</dd><dt>Fee</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (VAT incl.)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') + (sale(w.id).company ? '<br><span class="muted" style="font-weight:500">First session 10% off for new companies (applied on consultation)</span>' : '') : 'Quoted based on configuration') + '</dd></dl>' +
       (sale(w.id) ? '<a class="btn btn-lime" href="' + buyHref(w.id) + '">Pay now</a><a class="btn btn-line" href="#contact?type=' + w.id + '">Inquire about this workshop</a>' : '<a class="btn btn-lime" href="#contact?type=' + w.id + '">Inquire about this workshop</a>') +
       '<a class="btn btn-line btn-sm" href="#program">Continue with the one-year program</a>' +
       '<p class="muted" style="margin:0;font-size:13px">Need a proposal first? <a href="#proposal">Get the brochure</a> — it arrives right away.</p>' +
