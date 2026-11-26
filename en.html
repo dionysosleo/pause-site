@@ -1338,10 +1338,10 @@ function pkgSection(){
   return '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Online × Offline</p><h2 class="h2 one">Online + offline packages</h2></div><p class="lead">Online fills the time before, after and between on-site sessions — with the same hosts and the same four cups.</p></div>' +
     planGrid([
-      {tag:'01 · Before', name:'Steep ahead', big:'Videos + 4 hours', sub:'Prepare online, go deep on site', best:'Teams starting out', f:['Basic terms and access in advance','On site: tea, people, practice']},
-      {tag:'02 · After', hi:1, name:'Four weeks after the workshop', big:'4 hours + 4 weeks', sub:'4-week cohort from day 2', best:'To make it stick', f:['Premium cohort, same group','Bring in a partner · 60 min (Leo)']},
-      {tag:'03 · Season', name:'Tea Table Club season', big:'Month 4', sub:'Monthly evening + online', best:'Leader groups, tenants', f:['Standard pass for everyone','One month: partner session']},
-      {tag:'04 · One year', name:'One-year wellness', big:'1 year', sub:'Four seasons + champions', best:'Year-long partners', f:['Quarterly · partner check-in','Premium for leaders']}
+      {href: sale('pkg-before') ? buyHref('pkg-before') : '', btn: sale('pkg-before') ? 'Pay · ' + won(sale('pkg-before').price) : '', tag:'01 · Before', name:'Steep ahead', big:'Videos + 4 hours', sub:'Prepare online, go deep on site', best:'Teams starting out', f:['Basic terms and access in advance','On site: tea, people, practice']},
+      {href: sale('pkg-after') ? buyHref('pkg-after') : '', btn: sale('pkg-after') ? 'Pay · ' + won(sale('pkg-after').price) : '', tag:'02 · After', hi:1, name:'Four weeks after the workshop', big:'4 hours + 4 weeks', sub:'4-week cohort from day 2', best:'To make it stick', f:['Premium cohort, same group','Bring in a partner · 60 min (Leo)']},
+      {href: sale('pkg-season') ? buyHref('pkg-season') : '', btn: sale('pkg-season') ? 'Pay · ' + won(sale('pkg-season').price) : '', tag:'03 · Season', name:'Tea Table Club season', big:'Month 4', sub:'Monthly evening + online', best:'Leader groups, tenants', f:['Standard pass for everyone','One month: partner session']},
+      {href: sale('pkg-year') ? buyHref('pkg-year') : '', btn: sale('pkg-year') ? 'Pay · ' + won(sale('pkg-year').price) : '', tag:'04 · One year', name:'One-year wellness', big:'1 year', sub:'Four seasons + champions', best:'Year-long partners', f:['Quarterly · partner check-in','Premium for leaders']}
     ], 4) +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=package">Package consultation</a><a class="btn btn-line" href="#proposal">Get the brochure</a></div>' +
   '</div></section>';
@@ -1543,6 +1543,7 @@ document.addEventListener('click', function(e){
     if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); if(el.focus) el.focus({preventScroll:true}); }
     return;
   }
+  if(/^\/(checkout|pay\/|api\/|shop\/)/.test(href)) return;   /* 결제 경로는 일반 페이지 이동 */
   if(!HASH_MODE && href.charAt(0) === '/' && href.charAt(1) !== '/' && !/\.[a-z0-9]+(\?|$)/i.test(href.split('#')[0])){ e.preventDefault(); nav(href); }
 });
 if(!HASH_MODE) window.addEventListener('popstate', route);
@@ -1896,8 +1897,8 @@ function vWDetail(w){
     '</div>' +
     '<aside class="aside" aria-label="Workshop summary">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
-      '<dl><dt>Time</dt><dd>' + esc(w.hours) + '</dd><dt>Group size</dt><dd>' + esc(w.size) + '</dd><dt>Venue</dt><dd>' + esc(w.place) + '</dd><dt>Tools</dt><dd>' + esc(w.tools) + '</dd><dt>Fee</dt><dd>Quoted based on configuration</dd></dl>' +
-      '<a class="btn btn-lime" href="#contact?type=' + w.id + '">Inquire about this workshop</a>' +
+      '<dl><dt>Time</dt><dd>' + esc(w.hours) + '</dd><dt>Group size</dt><dd>' + esc(w.size) + '</dd><dt>Venue</dt><dd>' + esc(w.place) + '</dd><dt>Tools</dt><dd>' + esc(w.tools) + '</dd><dt>Fee</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (VAT incl.)' : 'Quoted based on configuration') + '</dd></dl>' +
+      (sale(w.id) ? '<a class="btn btn-lime" href="' + buyHref(w.id) + '">Pay now</a><a class="btn btn-line" href="#contact?type=' + w.id + '">Inquire about this workshop</a>' : '<a class="btn btn-lime" href="#contact?type=' + w.id + '">Inquire about this workshop</a>') +
       '<a class="btn btn-line btn-sm" href="#program">Continue with the one-year program</a>' +
       '<p class="muted" style="margin:0;font-size:13px">Need a proposal first? <a href="#proposal">Get the brochure</a> — it arrives right away.</p>' +
     '</aside>' +
@@ -1915,7 +1916,7 @@ function vProgram(){
   return '<section class="hero lite">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">We partner with one company for a full year</h1>' +
     '<p class="lead ol">Not a one-off lecture — until AI becomes the way the team works.</p>' + pathChips([['1','Diagnose','Start of quarter'],['2','Build','Team agents'],['3','Demo','Share internally'],['4','Results','Quarterly report']]) + '' +
-    '<div class="btns"><a class="btn btn-lime" href="#contact?type=annual">One-year program consultation</a><a class="btn btn-line" href="#proposal">Get the brochure</a></div></div>' +
+    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="' + buyHref('annual') + '">Pay · ' + won(sale('annual').price) + '</a><a class="btn btn-line" href="#contact?type=annual">One-year program consultation</a>' : '<a class="btn btn-lime" href="#contact?type=annual">One-year program consultation</a>') + '<a class="btn btn-line" href="#proposal">Get the brochure</a></div></div>' +
     ph('team', 1600, '', true) +
   '</section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -2002,7 +2003,7 @@ function vCourse(c){
     '<p class="note">We’re collecting reviews from the first cohort. We only post real reviews.</p>' +
   '</div></section>' +
   '<section class="section paper"><div class="wrap" style="max-width:960px">' +
-    '<div class="price-box"><div><p class="eyebrow">Open soon</p><div class="big">Sign up for launch updates</div><p class="muted" style="margin:8px 0 0">We’ll let you know first when pricing and the launch date are set. Those who sign up will receive an early-bird offer.</p></div><button type="button" class="btn btn-lime" data-notify>Get launch updates</button></div>' +
+    (sale(c.id) ? buyBox(c.id, 'Enroll') : '<div class="price-box"><div><p class="eyebrow">Open soon</p><div class="big">Sign up for launch updates</div><p class="muted" style="margin:8px 0 0">We’ll let you know first when pricing and the launch date are set. Those who sign up will receive an early-bird offer.</p></div><button type="button" class="btn btn-lime" data-notify>Get launch updates</button></div>') +
   '</div></section>' +
   tierSection() + pkgSection() +
   '<section class="section"><div class="wrap faq" style="max-width:860px"><h2 class="h2" style="margin-bottom:12px">Frequently asked questions</h2>' +
@@ -2073,6 +2074,16 @@ function bindTeam(){
 /* ===== 약관·정책 (원문은 policies.js) =====
    사업자 정보는 OPERATOR에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
 var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'Junhyuck Lee', cpoDept:'', host:'Vercel Inc.' }; /* host = 호스팅 서비스 제공자 (전자상거래법 사이버몰 표시) */
+/* ===== 판매 상품 (shop/catalog.json — 가격이 0보다 큰 상품만 결제 경로가 열림) ===== */
+var SHOP = {};
+function sale(id){ var it = SHOP && SHOP[id]; return it && it.price > 0 ? it : null; }
+function won(n){ return Number(n).toLocaleString('ko-KR') + ' KRW'; }
+function buyHref(id){ return '/checkout?item=' + encodeURIComponent(id); }
+function buyBox(id, eyebrow){
+  var it = sale(id); if(!it) return '';
+  return '<div class="price-box"><div><p class="eyebrow">' + esc(eyebrow || 'Enroll') + '</p><div class="big">' + won(it.price) + '</div><p class="muted" style="margin:8px 0 0">' + esc([it.unit, it.period].filter(Boolean).join(' · ')) + ' · VAT incl.</p></div><a class="btn btn-lime" href="' + buyHref(id) + '">Pay now</a></div>';
+}
+try { fetch('/shop/catalog.json', {cache:'no-store'}).then(function(r){ return r.json(); }).then(function(j){ SHOP = (j && j.items) || {}; if(Object.keys(SHOP).some(sale) && typeof route === 'function') route(); }).catch(function(){}); } catch(e){}
 var VENDORS = [{name:'Google LLC (Google Workspace: Sheets, Apps Script, Gmail)', task:'Receiving and storing website inquiries, consultation requests and pre-session check-ins; sending notification emails to our team', items:'Everything entered in the inquiry forms and the pre-session check-in', country:'United States', when:'When the form is submitted', how:'Transmission over the network', period:'1 year from receipt (deleted automatically every day); launch-update sign-ups are deleted after the update is sent'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
 function bizName(){ return OPERATOR.name || 'CHA&I'; }
 function contactMail(){ return OPERATOR.email ? '<a href="mailto:' + esc(OPERATOR.email) + '">' + esc(OPERATOR.email) + '</a>' : ''; }

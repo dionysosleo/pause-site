@@ -1330,10 +1330,10 @@ function pkgSection(){
   return '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Online × Offline</p><h2 class="h2 one">온·오프 연계 패키지</h2></div><p class="lead">온라인은 현장의 앞과 뒤, 그리고 사이를 채워요. 같은 강사, 같은 네 잔으로 이어집니다.</p></div>' +
     planGrid([
-      {tag:'01 · 앞', name:'미리 우리고 오기', big:'VOD + 4시간', sub:'온라인으로 미리, 현장은 깊게', best:'처음 여는 팀', f:['기본 용어·접속은 미리','현장은 차·관계·실습에']},
-      {tag:'02 · 뒤', hi:1, name:'현장 뒤 4주', big:'4시간 + 4주', sub:'현장 다음 날부터 4주 기수', best:'만든 것을 정착시킬 때', f:['같은 참가자로 프리미엄 기수','반려 파트너 들이기 60분 (Leo)']},
-      {tag:'03 · 시즌', name:'찻자리 클럽 시즌', big:'4개월', sub:'월 1회 저녁 + 온라인', best:'리더 모임·입주사', f:['전원 일반 이용권','한 달은 반려 파트너 회차']},
-      {tag:'04 · 1년', name:'1년 웰니스', big:'1년', sub:'사계절 + 사내 챔피언', best:'1년 함께할 회사', f:['분기마다 대면 · 반려 파트너 점검','리더는 프리미엄으로']}
+      {href: sale('pkg-before') ? buyHref('pkg-before') : '', btn: sale('pkg-before') ? '결제하기 · ' + won(sale('pkg-before').price) : '', tag:'01 · 앞', name:'미리 우리고 오기', big:'VOD + 4시간', sub:'온라인으로 미리, 현장은 깊게', best:'처음 여는 팀', f:['기본 용어·접속은 미리','현장은 차·관계·실습에']},
+      {href: sale('pkg-after') ? buyHref('pkg-after') : '', btn: sale('pkg-after') ? '결제하기 · ' + won(sale('pkg-after').price) : '', tag:'02 · 뒤', hi:1, name:'현장 뒤 4주', big:'4시간 + 4주', sub:'현장 다음 날부터 4주 기수', best:'만든 것을 정착시킬 때', f:['같은 참가자로 프리미엄 기수','반려 파트너 들이기 60분 (Leo)']},
+      {href: sale('pkg-season') ? buyHref('pkg-season') : '', btn: sale('pkg-season') ? '결제하기 · ' + won(sale('pkg-season').price) : '', tag:'03 · 시즌', name:'찻자리 클럽 시즌', big:'4개월', sub:'월 1회 저녁 + 온라인', best:'리더 모임·입주사', f:['전원 일반 이용권','한 달은 반려 파트너 회차']},
+      {href: sale('pkg-year') ? buyHref('pkg-year') : '', btn: sale('pkg-year') ? '결제하기 · ' + won(sale('pkg-year').price) : '', tag:'04 · 1년', name:'1년 웰니스', big:'1년', sub:'사계절 + 사내 챔피언', best:'1년 함께할 회사', f:['분기마다 대면 · 반려 파트너 점검','리더는 프리미엄으로']}
     ], 4) +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=package">패키지 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div>' +
   '</div></section>';
@@ -1535,6 +1535,7 @@ document.addEventListener('click', function(e){
     if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); if(el.focus) el.focus({preventScroll:true}); }
     return;
   }
+  if(/^\/(checkout|pay\/|api\/|shop\/)/.test(href)) return;   /* 결제 경로는 일반 페이지 이동 */
   if(!HASH_MODE && href.charAt(0) === '/' && href.charAt(1) !== '/' && !/\.[a-z0-9]+(\?|$)/i.test(href.split('#')[0])){ e.preventDefault(); nav(href); }
 });
 if(!HASH_MODE) window.addEventListener('popstate', route);
@@ -1888,8 +1889,8 @@ function vWDetail(w){
     '</div>' +
     '<aside class="aside" aria-label="워크샵 요약">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
-      '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>구성에 따라 견적</dd></dl>' +
-      '<a class="btn btn-lime" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>' +
+      '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (부가세 포함)' : '구성에 따라 견적') + '</dd></dl>' +
+      (sale(w.id) ? '<a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기</a><a class="btn btn-line" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>' : '<a class="btn btn-lime" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>') +
       '<a class="btn btn-line btn-sm" href="#program">1년 프로그램으로 이어 가기</a>' +
       '<p class="muted" style="margin:0;font-size:13px">제안서가 먼저 필요하면 <a href="#proposal">제안서 받기</a>에서 바로 받아 보세요.</p>' +
     '</aside>' +
@@ -1907,7 +1908,7 @@ function vProgram(){
   return '<section class="hero lite">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">한 회사를 1년 동안 맡아요</h1>' +
     '<p class="lead ol">한 번의 특강이 아니라, AI가 팀의 일하는 방식이 될 때까지.</p>' + pathChips([['1','진단','분기 시작'],['2','만들기','팀 에이전트'],['3','시연','사내 공유'],['4','성과','분기 리포트']]) + '' +
-    '<div class="btns"><a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
+    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="' + buyHref('annual') + '">결제하기 · ' + won(sale('annual').price) + '</a><a class="btn btn-line" href="#contact?type=annual">1년 프로그램 상담</a>' : '<a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a>') + '<a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
     ph('team', 1600, '', true) +
   '</section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -1994,7 +1995,7 @@ function vCourse(c){
     '<p class="note">첫 기수 후기를 모으는 중이에요. 실제 후기만 올려요.</p>' +
   '</div></section>' +
   '<section class="section paper"><div class="wrap" style="max-width:960px">' +
-    '<div class="price-box"><div><p class="eyebrow">Open soon</p><div class="big">오픈 알림 신청</div><p class="muted" style="margin:8px 0 0">가격과 오픈일이 정해지면 가장 먼저 알려 드려요. 알림 신청자에게는 얼리버드 혜택을 드릴 예정이에요.</p></div><button type="button" class="btn btn-lime" data-notify>오픈 알림 받기</button></div>' +
+    (sale(c.id) ? buyBox(c.id, 'Enroll') : '<div class="price-box"><div><p class="eyebrow">Open soon</p><div class="big">오픈 알림 신청</div><p class="muted" style="margin:8px 0 0">가격과 오픈일이 정해지면 가장 먼저 알려 드려요. 알림 신청자에게는 얼리버드 혜택을 드릴 예정이에요.</p></div><button type="button" class="btn btn-lime" data-notify>오픈 알림 받기</button></div>') +
   '</div></section>' +
   tierSection() + pkgSection() +
   '<section class="section"><div class="wrap faq" style="max-width:860px"><h2 class="h2" style="margin-bottom:12px">자주 묻는 질문</h2>' +
@@ -2065,6 +2066,16 @@ function bindTeam(){
 /* ===== 약관·정책 (원문은 policies.js) =====
    사업자 정보는 OPERATOR에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
 var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'이준혁', cpoDept:'', host:'Vercel Inc.' }; /* host = 호스팅 서비스 제공자 (전자상거래법 사이버몰 표시) */
+/* ===== 판매 상품 (shop/catalog.json — 가격이 0보다 큰 상품만 결제 경로가 열림) ===== */
+var SHOP = {};
+function sale(id){ var it = SHOP && SHOP[id]; return it && it.price > 0 ? it : null; }
+function won(n){ return Number(n).toLocaleString('ko-KR') + '원'; }
+function buyHref(id){ return '/checkout?item=' + encodeURIComponent(id); }
+function buyBox(id, eyebrow){
+  var it = sale(id); if(!it) return '';
+  return '<div class="price-box"><div><p class="eyebrow">' + esc(eyebrow || 'Enroll') + '</p><div class="big">' + won(it.price) + '</div><p class="muted" style="margin:8px 0 0">' + esc([it.unit, it.period].filter(Boolean).join(' · ')) + ' · 부가세 포함</p></div><a class="btn btn-lime" href="' + buyHref(id) + '">결제하기</a></div>';
+}
+try { fetch('/shop/catalog.json', {cache:'no-store'}).then(function(r){ return r.json(); }).then(function(j){ SHOP = (j && j.items) || {}; if(Object.keys(SHOP).some(sale) && typeof route === 'function') route(); }).catch(function(){}); } catch(e){}
 var VENDORS = [{name:'Google LLC (Google Workspace: 스프레드시트·Apps Script·Gmail)', task:'웹사이트 문의·상담 신청과 강의 사전 진단 접수·보관, 운영 담당자에게 알림 메일 발송', items:'문의 양식과 사전 진단에 적은 항목 전부', country:'미국', when:'양식을 보낼 때', how:'네트워크를 통한 전송', period:'접수한 날부터 1년(매일 자동 삭제), 오픈 알림은 알림을 보낸 뒤 삭제'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
 function bizName(){ return OPERATOR.name || 'CHA&I'; }
 function contactMail(){ return OPERATOR.email ? '<a href="mailto:' + esc(OPERATOR.email) + '">' + esc(OPERATOR.email) + '</a>' : ''; }

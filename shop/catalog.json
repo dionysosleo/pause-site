@@ -1,0 +1,156 @@
+{
+  "_readme": "판매 상품 기준표 (화면과 결제 서버가 함께 씀). price가 0이면 판매하지 않고 기존처럼 문의·오픈 알림으로 보여요. 가격·단위·기간은 주인이 정해서 넣어요. 상품 화면 가격 = 결제 금액 = 이 값.",
+  "currency": "KRW",
+  "items": {
+    "evening": {
+      "name": "차를 우리고, AI를 키우다 (저녁 찻자리 4시간)",
+      "cat": "workshop",
+      "price": 0,
+      "unit": "1회 진행",
+      "qtyMax": 1,
+      "period": "18:00~22:00 · 4시간",
+      "refund": "기업 워크샵·출강 (기업 고객)",
+      "company": true
+    },
+    "office": {
+      "name": "사무실에서 보내는 오후 반나절 워크샵",
+      "cat": "workshop",
+      "price": 0,
+      "unit": "1회 진행",
+      "qtyMax": 1,
+      "period": "5~6시간",
+      "refund": "기업 워크샵·출강 (기업 고객)",
+      "company": true
+    },
+    "outdoor": {
+      "name": "숲에서 보내는 하루 워크샵",
+      "cat": "workshop",
+      "price": 0,
+      "unit": "1회 진행",
+      "qtyMax": 1,
+      "period": "09:30~17:30 · 7시간",
+      "refund": "기업 워크샵·출강 (기업 고객)",
+      "company": true
+    },
+    "club": {
+      "name": "찻자리 클럽 · 한 시즌",
+      "cat": "workshop",
+      "price": 0,
+      "unit": "1시즌 (월 1회 × 4회)",
+      "qtyMax": 1,
+      "period": "4개월",
+      "refund": "기업 워크샵·출강 (기업 고객)",
+      "company": true
+    },
+    "salon": {
+      "name": "차와 술 사이 — CHA&I 살롱",
+      "cat": "workshop",
+      "price": 0,
+      "unit": "1인 참가",
+      "qtyMax": 4,
+      "period": "19:00~22:00 · 3시간",
+      "refund": "살롱·원데이 프로그램 (개인 수강생)",
+      "company": false
+    },
+    "annual": {
+      "name": "1년 정기프로그램",
+      "cat": "program",
+      "price": 0,
+      "unit": "1개 분기",
+      "qtyMax": 1,
+      "period": "분기 단위",
+      "refund": "기업 워크샵·출강 (기업 고객)",
+      "company": true
+    },
+    "agent-vod": {
+      "name": "기획자를 위한 AI 에이전트 입문",
+      "cat": "online",
+      "price": 0,
+      "unit": "1인 수강권",
+      "qtyMax": 1,
+      "period": "",
+      "refund": "VOD 온라인 강의",
+      "company": false
+    },
+    "builder-vod": {
+      "name": "퇴근 후에도 굴러가는 콘텐츠 자동화",
+      "cat": "online",
+      "price": 0,
+      "unit": "1인 수강권",
+      "qtyMax": 1,
+      "period": "",
+      "refund": "VOD 온라인 강의",
+      "company": false
+    },
+    "tea-live": {
+      "name": "집중을 우리는 하루 세 잔",
+      "cat": "online",
+      "price": 0,
+      "unit": "1인 · 1회",
+      "qtyMax": 1,
+      "period": "월 1회 라이브",
+      "refund": "정기 프로그램·기수제 과정·라이브 강의 (개인 수강생)",
+      "company": false
+    },
+    "partner-4w": {
+      "name": "네 잔으로 키우는 파트너 에이전트 (4주 기수)",
+      "cat": "online",
+      "price": 0,
+      "unit": "1인 · 1기수",
+      "qtyMax": 1,
+      "period": "4주 · 주 1회 라이브 90분",
+      "refund": "정기 프로그램·기수제 과정·라이브 강의 (개인 수강생)",
+      "company": false
+    },
+    "pkg-before": {
+      "name": "패키지 01 · 미리 우리고 오기",
+      "cat": "package",
+      "price": 0,
+      "unit": "1회",
+      "qtyMax": 1,
+      "period": "",
+      "refund": "기업 워크샵·출강 (기업 고객)",
+      "company": true
+    },
+    "pkg-after": {
+      "name": "패키지 02 · 현장 뒤 4주",
+      "cat": "package",
+      "price": 0,
+      "unit": "1회",
+      "qtyMax": 1,
+      "period": "",
+      "refund": "기업 워크샵·출강 (기업 고객)",
+      "company": true
+    },
+    "pkg-season": {
+      "name": "패키지 03 · 찻자리 클럽 시즌",
+      "cat": "package",
+      "price": 0,
+      "unit": "1시즌",
+      "qtyMax": 1,
+      "period": "4개월",
+      "refund": "기업 워크샵·출강 (기업 고객)",
+      "company": true
+    },
+    "pkg-year": {
+      "name": "패키지 04 · 1년 웰니스",
+      "cat": "package",
+      "price": 0,
+      "unit": "1년",
+      "qtyMax": 1,
+      "period": "1년",
+      "refund": "기업 워크샵·출강 (기업 고객)",
+      "company": true
+    },
+    "zz-flowtest": {
+      "name": "결제 흐름 점검용 (판매 상품 아님)",
+      "cat": "online",
+      "price": 1000,
+      "unit": "1회",
+      "qtyMax": 2,
+      "period": "",
+      "refund": "VOD 온라인 강의",
+      "company": false
+    }
+  }
+}

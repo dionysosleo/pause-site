@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>주문·결제 — CHA&amp;I</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#fff;--ink:#26313D;--mut:#6B727A;--line:#E3E6EA;--sage:#5E6F5E;--soft:#F4F5F2;--bad:#B3261E}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'Noto Sans KR',system-ui,sans-serif}
+.top{border-bottom:1px solid var(--line)}.top .in{max-width:1040px;margin:0 auto;padding:16px max(5vw,18px);display:flex;justify-content:space-between;align-items:center}
+.logo{letter-spacing:.2em;font-size:18px;color:var(--ink);text-decoration:none}.logo i{font-style:normal;color:#7E8F7E}
+.steps{display:flex;gap:6px;font-size:13px;color:var(--mut)}.steps b{color:var(--ink)}
+.wrap{max-width:1040px;margin:0 auto;padding:28px max(5vw,18px) 80px;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:32px;align-items:start}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr)}}
+h1{font-size:clamp(24px,3.4vw,30px);font-weight:700;margin:0 0 6px}
+h2{font-size:17px;font-weight:700;margin:0 0 12px}
+.card{border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:16px;background:#fff}
+.test{background:#FFF7E0;border:1px solid #F1D48A;border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:16px}
+.item{display:flex;gap:14px;align-items:flex-start}.item .ic{width:56px;height:56px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:24px;flex:none}
+.item .nm{font-weight:700}.item .mt{color:var(--mut);font-size:14px}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:14px 0 0;font-size:14px}dl.kv dt{color:var(--mut)}dl.kv dd{margin:0}
+label.f{display:block;margin-bottom:12px;font-size:14px;font-weight:500}
+label.f input,select{display:block;width:100%;margin-top:6px;font:inherit;font-weight:400;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+label.f input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
+.req{color:var(--bad)}
+.agree{display:flex;gap:10px;align-items:flex-start;font-size:14px;margin:10px 0}.agree input{width:20px;height:20px;flex:none;margin-top:2px;accent-color:var(--sage)}
+.agree.all{font-weight:700;border-bottom:1px solid var(--line);padding-bottom:12px}
+details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{border-collapse:collapse;margin-top:6px}details td,details th{border:1px solid var(--line);padding:4px 8px;text-align:left;font-weight:400}
+.sum{position:sticky;top:20px}
+.row{display:flex;justify-content:space-between;font-size:15px;margin:6px 0}.row.tot{font-size:20px;font-weight:700;border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.pay{width:100%;min-height:54px;border:0;border-radius:999px;background:var(--ink);color:#fff;font:inherit;font-weight:700;font-size:17px;cursor:pointer;margin-top:16px}
+.pay:disabled{opacity:.45;cursor:not-allowed}
+.err{color:var(--bad);font-size:14px;min-height:1.2em;margin:8px 0 0}
+.mut{color:var(--mut);font-size:13px}
+.biz{max-width:1040px;margin:0 auto;padding:24px max(5vw,18px) 40px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mut)}.biz a{color:var(--mut)}
+.qty{display:flex;align-items:center;gap:8px}.qty button{width:36px;height:36px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;cursor:pointer}
+</style></head><body>
+<header class="top"><div class="in"><a class="logo" href="/">CHA<i>&amp;</i>I</a><div class="steps" aria-label="결제 단계"><span>상품 선택</span>›<b>주문서 작성</b>›<span>결제</span>›<span>완료</span></div></div></header>
+
+<main class="wrap" id="main">
+  <div>
+    <h1>주문서</h1>
+    <p class="mut" style="margin:0 0 18px">주문 내용을 확인하고 결제해 주세요. 회원가입 없이 결제할 수 있어요.</p>
+    <div class="test" id="testNote" hidden><b>테스트 결제 모드</b> — 실제로 청구되지 않아요. 결제창 동작을 확인하는 용도예요.</div>
+
+    <section class="card" aria-labelledby="h-item">
+      <h2 id="h-item">주문 상품</h2>
+      <div class="item"><div class="ic" aria-hidden="true">☕</div><div><div class="nm" id="iName"></div><div class="mt" id="iMeta"></div></div></div>
+      <dl class="kv" id="iKv"></dl>
+      <div class="qty" id="qtyBox" hidden style="margin-top:14px"><span style="font-size:14px">수량</span><button type="button" id="qMinus" aria-label="수량 줄이기">−</button><b id="qVal">1</b><button type="button" id="qPlus" aria-label="수량 늘리기">+</button><span class="mut" id="qMax"></span></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-buyer">
+      <h2 id="h-buyer">주문자 정보</h2>
+      <form id="f" novalidate>
+        <label class="f" id="coWrap" hidden>회사·기관명 <span class="req">*</span><input id="co" autocomplete="organization" maxlength="80"></label>
+        <label class="f">이름 <span class="req">*</span><input id="nm" autocomplete="name" maxlength="40" required></label>
+        <label class="f">이메일 <span class="req">*</span> <span class="mut">(수강·일정 안내와 영수증을 보내 드려요)</span><input id="em" type="email" autocomplete="email" maxlength="100" required></label>
+        <label class="f">휴대폰 번호 <span class="req">*</span><input id="ph" type="tel" inputmode="numeric" autocomplete="tel" maxlength="13" placeholder="01012345678" required></label>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="h-refund">
+      <h2 id="h-refund">취소·환불 기준</h2>
+      <p style="margin:0;font-size:14px">이 상품은 <a href="/refund" target="_blank" rel="noopener">취소·환불정책</a>의 <b id="rfSec"></b> 기준을 따라요. 결제 전에 꼭 확인해 주세요.</p>
+    </section>
+
+    <section class="card" aria-labelledby="h-agree">
+      <h2 id="h-agree">약관 동의</h2>
+      <label class="agree all"><input type="checkbox" id="aAll"> 아래 내용에 모두 동의해요.</label>
+      <label class="agree"><input type="checkbox" class="a" id="a1"> (필수) 주문 상품의 이름·가격·수량·진행 방식을 확인했고, 결제에 동의해요.</label>
+      <label class="agree"><input type="checkbox" class="a" id="a2"> (필수) 개인정보 수집·이용에 동의해요.</label>
+      <details><summary>자세히 보기</summary><table><tbody>
+        <tr><th>목적</th><td>주문·결제 처리, 수강·일정 안내, 영수증 발행, 취소·환불 처리</td></tr>
+        <tr><th>항목</th><td>이름, 이메일, 휴대폰 번호 (기업 상품: 회사·기관명), 결제 기록</td></tr>
+        <tr><th>보유</th><td>거래 기록은 전자상거래법에 따라 5년, 그 밖의 정보는 서비스 제공이 끝난 뒤 1년</td></tr>
+        <tr><th>위탁</th><td>결제 처리: 토스페이먼츠(주)</td></tr>
+      </tbody></table>동의하지 않으면 결제할 수 없어요. <a href="/privacy" target="_blank" rel="noopener">개인정보처리방침</a></details>
+      <label class="agree"><input type="checkbox" class="a" id="a3"> (필수) <a href="/terms" target="_blank" rel="noopener">이용약관</a>과 <a href="/refund" target="_blank" rel="noopener">취소·환불정책</a>을 확인했어요.</label>
+    </section>
+  </div>
+
+  <aside class="sum" aria-label="결제 금액">
+    <section class="card">
+      <h2>결제 금액</h2>
+      <div class="row"><span>상품 금액</span><span id="sUnit"></span></div>
+      <div class="row"><span>수량</span><span id="sQty">1</span></div>
+      <div class="row tot"><span>총 결제 금액</span><span id="sTot"></span></div>
+      <p class="mut" style="margin:10px 0 0">부가세 포함 금액이에요. 결제 수단: 신용·체크카드, 간편결제</p>
+      <button type="button" class="pay" id="pay" disabled>결제하기</button>
+      <p class="err" id="err" role="alert"></p>
+      <p class="mut" style="margin:6px 0 0">결제는 토스페이먼츠 결제창에서 안전하게 진행돼요. 카드 정보는 CHA&amp;I에 저장되지 않아요.</p>
+    </section>
+  </aside>
+</main>
+
+<main class="wrap" id="none" hidden><div><h1>지금은 결제할 수 없는 상품이에요</h1><p>이 상품은 아직 온라인 결제가 열리지 않았어요. 문의를 남겨 주시면 일정과 비용을 안내해 드릴게요.</p><p><a href="/contact">문의하기</a> · <a href="/">처음으로</a></p></div></main>
+
+<footer class="biz" id="biz">CHA&amp;I · <a href="/terms">이용약관</a> · <a href="/privacy"><b>개인정보처리방침</b></a> · <a href="/refund">취소·환불정책</a> · 호스팅 제공자 Vercel Inc.</footer>
+
+<script src="https://js.tosspayments.com/v2/standard"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var q=new URLSearchParams(location.search), id=(q.get('item')||'').replace(/[^a-z0-9-]/g,'');
+  var item=null, qty=1, cfg=null;
+  function won(n){return Number(n).toLocaleString('ko-KR')+'원';}
+  function none(){$('main').hidden=true;$('none').hidden=false;}
+  function render(){
+    $('iName').textContent=item.name;
+    $('iMeta').textContent=[{workshop:'워크샵',program:'정기프로그램',online:'온라인 강의',package:'온·오프 패키지'}[item.cat]||'',item.unit].filter(Boolean).join(' · ');
+    var kv=[['단위',item.unit],['진행·이용 기간',item.period],['상품 금액',won(item.price)]].filter(function(x){return x[1];});
+    $('iKv').innerHTML='';kv.forEach(function(x){var a=document.createElement('dt');a.textContent=x[0];var b=document.createElement('dd');b.textContent=x[1];$('iKv').appendChild(a);$('iKv').appendChild(b);});
+    $('rfSec').textContent='‘'+item.refund+'’';
+    $('coWrap').hidden=!item.company;
+    var mx=item.qtyMax||1; $('qtyBox').hidden=mx<2; $('qMax').textContent='(최대 '+mx+')';
+    $('qVal').textContent=qty;$('sQty').textContent=qty;$('sUnit').textContent=won(item.price);$('sTot').textContent=won(item.price*qty);
+    $('pay').textContent=won(item.price*qty)+' 결제하기';
+    document.title='주문·결제 — '+item.name+' — CHA&I';
+  }
+  $('qMinus').onclick=function(){if(qty>1){qty--;render();}};
+  $('qPlus').onclick=function(){if(qty<(item.qtyMax||1)){qty++;render();}};
+  var boxes=[].slice.call(document.querySelectorAll('input.a'));
+  $('aAll').onchange=function(){boxes.forEach(function(b){b.checked=$('aAll').checked;});check();};
+  boxes.forEach(function(b){b.onchange=function(){$('aAll').checked=boxes.every(function(x){return x.checked;});check();};});
+  function check(){$('pay').disabled=!(item&&cfg&&boxes.every(function(x){return x.checked;}));}
+  function rid(){var a=new Uint8Array(9);crypto.getRandomValues(a);return Array.from(a,function(x){return 'abcdefghijkmnpqrstuvwxyz23456789'[x%32];}).join('');}
+
+  Promise.all([fetch('/shop/catalog.json',{cache:'no-store'}).then(function(r){return r.json();}),fetch('/api/payments/config',{cache:'no-store'}).then(function(r){return r.json();}).catch(function(){return null;})])
+  .then(function(v){
+    var it=v[0]&&v[0].items&&v[0].items[id];
+    if(!it||!it.price){none();return;}
+    item=it;cfg=v[1];qty=Math.min(Math.max(1,parseInt(q.get('qty')||'1',10)||1),item.qtyMax||1);
+    if(cfg&&cfg.mode!=='live')$('testNote').hidden=false;
+    render();check();
+    if(!cfg||typeof TossPayments!=='function'){$('err').textContent='결제창을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.';}
+  }).catch(none);
+
+  $('pay').onclick=function(){
+    var nm=$('nm').value.trim(),em=$('em').value.trim(),ph=$('ph').value.replace(/[^0-9]/g,''),co=$('co').value.trim();
+    var miss=item.company&&!co?['co','회사·기관명을 적어 주세요.']:!nm?['nm','이름을 적어 주세요.']:!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)?['em','이메일을 확인해 주세요.']:!/^01[0-9]{8,9}$/.test(ph)?['ph','휴대폰 번호를 확인해 주세요. (숫자만, 예: 01012345678)']:null;
+    if(miss){$('err').textContent=miss[1];$(miss[0]).focus();return;}
+    $('err').textContent='';$('pay').disabled=true;
+    try{
+      var tp=TossPayments(cfg.clientKey);
+      var ck=(crypto.randomUUID?crypto.randomUUID():rid()+'-'+rid()+'-'+rid());
+      var payment=tp.payment({customerKey:ck});
+      payment.requestPayment({
+        method:'CARD',
+        amount:{currency:'KRW',value:item.price*qty},
+        orderId:id+'_'+qty+'_'+rid(),
+        orderName:(item.name+(qty>1?' × '+qty:'')).slice(0,100),
+        successUrl:location.origin+'/pay/success',
+        failUrl:location.origin+'/pay/fail',
+        customerEmail:em, customerName:(co?co+' ':'')+nm, customerMobilePhone:ph,
+        card:{useEscrow:false,flowMode:'DEFAULT',useCardPoint:false,useAppCardOnly:false}
+      }).catch(function(e){
+        $('pay').disabled=false;
+        $('err').textContent=(e&&e.code==='USER_CANCEL')?'결제를 취소하셨어요.':'결제창을 열지 못했어요. 잠시 뒤 다시 시도해 주세요.';
+      });
+    }catch(e){$('pay').disabled=false;$('err').textContent='결제창을 열지 못했어요. 잠시 뒤 다시 시도해 주세요.';}
+  };
+})();
+</script></body></html>

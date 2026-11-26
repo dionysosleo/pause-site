@@ -19,6 +19,7 @@ p{margin:0 0 14px}.mut{color:var(--mut);font-size:14px}
 </style></head><body><div class="wrap">
 <a class="logo" href="/">CHA&amp;I</a>
 <h1 id="t">결제를 확인하고 있어요</h1>
+<div style="display:flex;gap:6px;font-size:13px;color:var(--mut);margin-top:18px"><span>상품 선택</span>›<span>주문서 작성</span>›<span>결제</span>›<b style="color:var(--ink)">완료</b></div>
 <p id="m">창을 닫지 말고 잠시만 기다려 주세요.</p>
 <div class="box" id="box" hidden><dl id="dl"></dl></div>
 <p class="mut" id="n"></p>
@@ -36,7 +37,7 @@ p{margin:0 0 14px}.mut{color:var(--mut);font-size:14px}
   .then(function(d){
     history.replaceState(null,'',location.pathname);   /* 주소창에서 결제 키 지우기 */
     if(d.ok){
-      show('결제가 완료됐어요','안내 메일과 함께 담당자가 일정을 연락드릴게요.');
+      if(d.mode==='test') show('테스트 결제가 완료됐어요','테스트 모드라 실제로 청구되지 않았어요. 결제 흐름 확인용이에요.'); else show('결제가 완료됐어요','안내 메일과 함께 담당자가 일정을 연락드릴게요.');
       var dl=$('dl');[['주문 번호',d.orderId],['상품',d.orderName],['금액',Number(d.amount).toLocaleString('ko-KR')+'원'],['결제 수단',d.method]].forEach(function(x){if(!x[1])return;var a=document.createElement('dt');a.textContent=x[0];var b=document.createElement('dd');b.textContent=x[1];dl.appendChild(a);dl.appendChild(b);});
       $('box').hidden=false;$('n').textContent='취소·환불은 취소·환불정책의 기준을 따라요.';
     } else if(d.code==='NOT_READY'){
