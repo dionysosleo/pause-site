@@ -1883,6 +1883,7 @@ function vWDetail(w){
       '<div style="display:flex;gap:6px;margin-bottom:14px"><span class="badge">' + esc(w.badge) + '</span><span class="badge ln">' + esc(w.kind) + '</span></div>' +
       '<h1 class="h1" style="font-size:clamp(30px,4.4vw,50px)">' + esc(w.title) + '</h1>' +
       '<p class="lead" style="margin-top:16px">' + esc(w.sub) + '</p>' +
+      (sale(w.id) ? '<div class="btns" style="margin-top:18px;align-items:center"><a class="btn btn-lime" href="' + buyHref(w.id) + '">Pay · ' + won(sale(w.id).price) + '</a><span class="muted" style="font-size:14px">' + esc(sale(w.id).unit) + ' · VAT incl.</span></div>' : '') +
       '<p class="bio-proof" style="margin-top:20px">Best when — ' + esc(w.fit) + '</p>' +
       '<h2>What you’ll build</h2><ul class="checks">' + w.make.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h2>Flow</h2><ol class="tl">' + w.tl.map(function(r){ return '<li' + (r[3] ? ' class="tea"' : '') + '><span class="t">' + esc(r[0]) + '</span><b>' + esc(r[1]) + (r[3] ? ' ☕' : '') + '</b><span>' + esc(r[2]) + '</span></li>'; }).join('') + '</ol>' +
