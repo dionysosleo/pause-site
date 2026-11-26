@@ -7,40 +7,68 @@
       "cat": "workshop",
       "price": 4400000,
       "unit": "1회 진행",
-      "qtyMax": 1,
+      "qtyMax": 20,
       "period": "18:00~22:00 · 4시간",
       "refund": "기업 워크샵·출강 (기업 고객)",
-      "company": true
+      "company": true,
+      "head": {
+        "base": 2860000,
+        "per": 77000,
+        "min": 15,
+        "max": 20,
+        "ref": 20
+      }
     },
     "office": {
       "name": "사무실에서 보내는 오후 반나절 워크샵",
       "cat": "workshop",
-      "price": 5470000,
+      "price": 5472500,
       "unit": "1회 진행",
-      "qtyMax": 1,
+      "qtyMax": 30,
       "period": "5~6시간",
       "refund": "기업 워크샵·출강 (기업 고객)",
-      "company": true
+      "company": true,
+      "head": {
+        "base": 3932500,
+        "per": 77000,
+        "min": 15,
+        "max": 30,
+        "ref": 20
+      }
     },
     "outdoor": {
       "name": "숲에서 보내는 하루 워크샵",
       "cat": "workshop",
-      "price": 6900000,
+      "price": 6902500,
       "unit": "1회 진행",
-      "qtyMax": 1,
+      "qtyMax": 40,
       "period": "09:30~17:30 · 7시간",
       "refund": "기업 워크샵·출강 (기업 고객)",
-      "company": true
+      "company": true,
+      "head": {
+        "base": 5362500,
+        "per": 77000,
+        "min": 15,
+        "max": 40,
+        "ref": 20
+      }
     },
     "club": {
       "name": "찻자리 클럽 · 한 시즌",
       "cat": "workshop",
       "price": 17600000,
       "unit": "1시즌 (월 1회 × 4회)",
-      "qtyMax": 1,
+      "qtyMax": 20,
       "period": "4개월",
       "refund": "기업 워크샵·출강 (기업 고객)",
-      "company": true
+      "company": true,
+      "head": {
+        "base": 11440000,
+        "per": 308000,
+        "min": 15,
+        "max": 20,
+        "ref": 20
+      }
     },
     "salon": {
       "name": "차와 술 사이 — CHA&I 살롱",
@@ -57,10 +85,17 @@
       "cat": "program",
       "price": 4400000,
       "unit": "1개 분기",
-      "qtyMax": 1,
+      "qtyMax": 30,
       "period": "분기 단위",
       "refund": "기업 워크샵·출강 (기업 고객)",
-      "company": true
+      "company": true,
+      "head": {
+        "base": 2860000,
+        "per": 77000,
+        "min": 15,
+        "max": 30,
+        "ref": 20
+      }
     },
     "agent-vod": {
       "name": "기획자를 위한 AI 에이전트 입문",
@@ -110,7 +145,8 @@
       "qtyMax": 1,
       "period": "",
       "refund": "기업 워크샵·출강 (기업 고객)",
-      "company": true
+      "company": true,
+      "note": "20명 기준 금액이에요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요."
     },
     "pkg-after": {
       "name": "패키지 02 · 현장 뒤 4주",
@@ -120,7 +156,8 @@
       "qtyMax": 1,
       "period": "",
       "refund": "기업 워크샵·출강 (기업 고객)",
-      "company": true
+      "company": true,
+      "note": "20명 기준 금액이에요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요."
     },
     "pkg-season": {
       "name": "패키지 03 · 찻자리 클럽 시즌",
@@ -130,7 +167,8 @@
       "qtyMax": 1,
       "period": "4개월",
       "refund": "기업 워크샵·출강 (기업 고객)",
-      "company": true
+      "company": true,
+      "note": "20명 기준 금액이에요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요."
     },
     "pkg-year": {
       "name": "패키지 04 · 1년 웰니스",
@@ -140,8 +178,9 @@
       "qtyMax": 1,
       "period": "1년",
       "refund": "기업 워크샵·출강 (기업 고객)",
-      "company": true
+      "company": true,
+      "note": "20명 기준 금액이에요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요."
     }
   },
-  "_note": "2026-11-27 임시 가격. 기준(공급가): 이유진 1인 7만, 한성희 시간당 65만, 이준혁 시간당 32.5만(한성희의 절반). 화면 가격은 부가세 포함. 저녁 찻자리 20명 기준 440만. 주인 확정 전."
+  "_note": "2026-11-27 임시 가격. 기준(공급가): 이유진 1인 7만, 한성희 시간당 65만, 이준혁 시간당 32.5만(한성희의 절반). 화면 가격은 부가세 포함. head가 있는 상품은 결제 금액 = base + per × max(인원, min). price는 ref(20명) 기준 표시가. 주인 확정 전."
 }

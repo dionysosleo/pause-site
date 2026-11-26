@@ -1335,6 +1335,7 @@ function pkgSection(){
       {href: sale('pkg-season') ? buyHref('pkg-season') : '', btn: sale('pkg-season') ? '결제하기 · ' + won(sale('pkg-season').price) : '', tag:'03 · 시즌', name:'찻자리 클럽 시즌', big:'4개월', sub:'월 1회 저녁 + 온라인', best:'리더 모임·입주사', f:['전원 일반 이용권','한 달은 에이전트 파트너 회차']},
       {href: sale('pkg-year') ? buyHref('pkg-year') : '', btn: sale('pkg-year') ? '결제하기 · ' + won(sale('pkg-year').price) : '', tag:'04 · 1년', name:'1년 웰니스', big:'1년', sub:'사계절 + 사내 챔피언', best:'1년 함께할 회사', f:['분기마다 에이전트 파트너 점검','리더는 프리미엄으로']}
     ], 4) +
+    (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">패키지 금액은 20명 기준이에요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요. (부가세 포함)</p>' : '') +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=package">패키지 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div>' +
   '</div></section>';
 }
@@ -1875,7 +1876,7 @@ function vWDetail(w){
       '<div style="display:flex;gap:6px;margin-bottom:14px"><span class="badge">' + esc(w.badge) + '</span><span class="badge ln">' + esc(w.kind) + '</span></div>' +
       '<h1 class="h1" style="font-size:clamp(30px,4.4vw,50px)">' + esc(w.title) + '</h1>' +
       '<p class="lead" style="margin-top:16px">' + esc(w.sub) + '</p>' +
-      (sale(w.id) ? '<div class="btns" style="margin-top:18px;align-items:center"><a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기 · ' + won(sale(w.id).price) + '</a><span class="muted" style="font-size:14px">' + esc(sale(w.id).unit) + ' · 부가세 포함</span></div>' : '') +
+      (sale(w.id) ? '<div class="btns" style="margin-top:18px;align-items:center"><a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기 · ' + won(sale(w.id).price) + '</a><span class="muted" style="font-size:14px">' + esc(sale(w.id).head ? headLine(sale(w.id)) + ' · 부가세 포함' : sale(w.id).unit + ' · 부가세 포함') + '</span></div>' : '') +
       '<p class="bio-proof" style="margin-top:20px">이럴 때 좋아요 — ' + esc(w.fit) + '</p>' +
       '<h2>만들어 가는 것</h2><ul class="checks">' + w.make.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h2>진행 순서</h2><ol class="tl">' + w.tl.map(function(r){ return '<li' + (r[3] ? ' class="tea"' : '') + '><span class="t">' + esc(r[0]) + '</span><b>' + esc(r[1]) + (r[3] ? ' ☕' : '') + '</b><span>' + esc(r[2]) + '</span></li>'; }).join('') + '</ol>' +
@@ -1890,7 +1891,7 @@ function vWDetail(w){
     '</div>' +
     '<aside class="aside" aria-label="워크샵 요약">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
-      '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (부가세 포함)' : '구성에 따라 견적') + '</dd></dl>' +
+      '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (부가세 포함)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') : '구성에 따라 견적') + '</dd></dl>' +
       (sale(w.id) ? '<a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기</a><a class="btn btn-line" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>' : '<a class="btn btn-lime" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>') +
       '<a class="btn btn-line btn-sm" href="#program">1년 프로그램으로 이어 가기</a>' +
       '<p class="muted" style="margin:0;font-size:13px">제안서가 먼저 필요하면 <a href="#proposal">제안서 받기</a>에서 바로 받아 보세요.</p>' +
@@ -1909,7 +1910,7 @@ function vProgram(){
   return '<section class="hero lite">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">한 회사를 1년 동안 맡아요</h1>' +
     '<p class="lead ol">한 번의 특강이 아니라, AI가 팀의 일하는 방식이 될 때까지.</p>' + pathChips([['1','진단','분기 시작'],['2','만들기','팀 에이전트'],['3','시연','사내 공유'],['4','성과','분기 리포트']]) + '' +
-    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="' + buyHref('annual') + '">결제하기 · ' + won(sale('annual').price) + '</a><a class="btn btn-line" href="#contact?type=annual">1년 프로그램 상담</a>' : '<a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a>') + '<a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
+    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="' + buyHref('annual') + '">결제하기 · ' + won(sale('annual').price) + '</a><a class="btn btn-line" href="#contact?type=annual">1년 프로그램 상담</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">분기 1회 · ' + esc(headLine(sale('annual'))) + ' · 부가세 포함</p>' : '<a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a>') + '<a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
     ph('team', 1600, '', true) +
   '</section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -2073,6 +2074,7 @@ var SHOP = {};
 function sale(id){ var it = SHOP && SHOP[id]; return it && it.price > 0 ? it : null; }
 function won(n){ return Number(n).toLocaleString('ko-KR') + '원'; }
 function buyHref(id){ return '/checkout?item=' + encodeURIComponent(id); }
+function headLine(it){ var h = it && it.head; return h ? '20명 기준 · 1명마다 ' + won(h.per) + ' · 최소 ' + h.min + '명 기준 진행' : ''; }
 function buyBox(id, eyebrow){
   var it = sale(id); if(!it) return '';
   return '<div class="price-box"><div><p class="eyebrow">' + esc(eyebrow || 'Enroll') + '</p><div class="big">' + won(it.price) + '</div><p class="muted" style="margin:8px 0 0">' + esc([it.unit, it.period].filter(Boolean).join(' · ')) + ' · 부가세 포함</p></div><a class="btn btn-lime" href="' + buyHref(id) + '">결제하기</a></div>';

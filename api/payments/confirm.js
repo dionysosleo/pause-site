@@ -9,6 +9,8 @@
 /* 판매 상품 기준표는 shop/catalog.json 하나만 씀 (화면 가격 = 결제 금액). price가 0인 상품은 판매하지 않음.
    orderId 형식: <상품ID>_<수량>_<무작위>  예) agent-vod_1_k3j9x0q2m1za */
 const CATALOG = require('../../shop/catalog.json').items;
+/* 인원제 상품(head): 강사 고정분 + 1인 금액 × 인원(최소 청구 인원 이하는 최소 인원으로). 그 밖에는 단가 × 수량 */
+const total = (item, qty) => item.head ? item.head.base + item.head.per * Math.max(qty, item.head.min) : item.price * qty;
 const KEYS = require('./_keys.js');
 
 const ALLOWED_HOSTS = ['www.chaand.ai', 'chaand.ai'];
@@ -71,13 +73,13 @@ module.exports = async (req, res) => {
   const qty = parts.length === 3 ? Number(parts[1]) : NaN;
   if (!item || !item.price) return send(res, 503, { ok: false, code: 'NOT_READY' });          // 가격이 정해지지 않은 상품
   if (!Number.isInteger(qty) || qty < 1 || qty > (item.qtyMax || 1)) return send(res, 400, { ok: false, code: 'BAD_QTY' });
-  if (item.price * qty !== amount) return send(res, 400, { ok: false, code: 'AMOUNT_MISMATCH' });   // 화면에서 바뀐 금액은 승인하지 않음
+  if (total(item, qty) !== amount) return send(res, 400, { ok: false, code: 'AMOUNT_MISMATCH' });   // 화면에서 바뀐 금액은 승인하지 않음
 
   try {
     const { ok, data } = await confirmWithPg({ paymentKey, orderId, amount }, secret);
     if (!ok) return send(res, 402, { ok: false, code: String(data.code || 'PG_REJECTED').slice(0, 60), message: String(data.message || '').slice(0, 200) });
     // 카드번호 등 민감한 값은 돌려주지 않고 확인에 필요한 것만
-    return send(res, 200, { ok: true, mode, orderId, orderName: item.name + (qty > 1 ? ' × ' + qty : ''), amount, method: data.method || '', approvedAt: data.approvedAt || '' });
+    return send(res, 200, { ok: true, mode, orderId, orderName: item.name + (item.head ? ' · ' + qty + '명' : (qty > 1 ? ' × ' + qty : '')), amount, method: data.method || '', approvedAt: data.approvedAt || '' });
   } catch (e) {
     return send(res, 504, { ok: false, code: 'PG_TIMEOUT' });
   }
