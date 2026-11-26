@@ -5,7 +5,7 @@
     "evening": {
       "name": "차를 우리고, AI를 키우다 (저녁 찻자리 4시간)",
       "cat": "workshop",
-      "price": 2400000,
+      "price": 4400000,
       "unit": "1회 진행",
       "qtyMax": 1,
       "period": "18:00~22:00 · 4시간",
@@ -15,7 +15,7 @@
     "office": {
       "name": "사무실에서 보내는 오후 반나절 워크샵",
       "cat": "workshop",
-      "price": 3200000,
+      "price": 5120000,
       "unit": "1회 진행",
       "qtyMax": 1,
       "period": "5~6시간",
@@ -25,7 +25,7 @@
     "outdoor": {
       "name": "숲에서 보내는 하루 워크샵",
       "cat": "workshop",
-      "price": 4800000,
+      "price": 6550000,
       "unit": "1회 진행",
       "qtyMax": 1,
       "period": "09:30~17:30 · 7시간",
@@ -35,7 +35,7 @@
     "club": {
       "name": "찻자리 클럽 · 한 시즌",
       "cat": "workshop",
-      "price": 8000000,
+      "price": 17600000,
       "unit": "1시즌 (월 1회 × 4회)",
       "qtyMax": 1,
       "period": "4개월",
@@ -45,7 +45,7 @@
     "salon": {
       "name": "차와 술 사이 — CHA&I 살롱",
       "cat": "workshop",
-      "price": 89000,
+      "price": 165000,
       "unit": "1인 참가",
       "qtyMax": 4,
       "period": "19:00~22:00 · 3시간",
@@ -55,7 +55,7 @@
     "annual": {
       "name": "1년 정기프로그램",
       "cat": "program",
-      "price": 6000000,
+      "price": 4400000,
       "unit": "1개 분기",
       "qtyMax": 1,
       "period": "분기 단위",
@@ -65,7 +65,7 @@
     "agent-vod": {
       "name": "기획자를 위한 AI 에이전트 입문",
       "cat": "online",
-      "price": 99000,
+      "price": 132000,
       "unit": "1인 수강권",
       "qtyMax": 1,
       "period": "",
@@ -75,7 +75,7 @@
     "builder-vod": {
       "name": "퇴근 후에도 굴러가는 콘텐츠 자동화",
       "cat": "online",
-      "price": 129000,
+      "price": 172000,
       "unit": "1인 수강권",
       "qtyMax": 1,
       "period": "",
@@ -85,7 +85,7 @@
     "tea-live": {
       "name": "집중을 우리는 하루 세 잔",
       "cat": "online",
-      "price": 29000,
+      "price": 65000,
       "unit": "1인 · 1회",
       "qtyMax": 1,
       "period": "월 1회 라이브",
@@ -95,7 +95,7 @@
     "partner-4w": {
       "name": "네 잔으로 키우는 파트너 에이전트 (4주 기수)",
       "cat": "online",
-      "price": 390000,
+      "price": 435000,
       "unit": "1인 · 1기수",
       "qtyMax": 1,
       "period": "4주 · 주 1회 라이브 90분",
@@ -105,7 +105,7 @@
     "pkg-before": {
       "name": "패키지 01 · 미리 우리고 오기",
       "cat": "package",
-      "price": 3000000,
+      "price": 5830000,
       "unit": "1회",
       "qtyMax": 1,
       "period": "",
@@ -115,7 +115,7 @@
     "pkg-after": {
       "name": "패키지 02 · 현장 뒤 4주",
       "cat": "package",
-      "price": 4500000,
+      "price": 11040000,
       "unit": "1회",
       "qtyMax": 1,
       "period": "",
@@ -125,7 +125,7 @@
     "pkg-season": {
       "name": "패키지 03 · 찻자리 클럽 시즌",
       "cat": "package",
-      "price": 8000000,
+      "price": 19030000,
       "unit": "1시즌",
       "qtyMax": 1,
       "period": "4개월",
@@ -135,7 +135,7 @@
     "pkg-year": {
       "name": "패키지 04 · 1년 웰니스",
       "cat": "package",
-      "price": 28000000,
+      "price": 24780000,
       "unit": "1년",
       "qtyMax": 1,
       "period": "1년",
@@ -143,5 +143,5 @@
       "company": true
     }
   },
-  "_note": "2026-11-26 임시 가격(시장 참고가로 넣은 값). 주인이 확정 전까지 바꿀 수 있음."
+  "_note": "2026-11-27 임시 가격. 기준: 이유진 1인 7만 + 한성희 시간당 65만(공급가), 화면 가격은 부가세 포함. 저녁 찻자리 20명 기준 440만. 주인 확정 전."
 }
