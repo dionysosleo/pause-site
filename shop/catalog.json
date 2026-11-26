@@ -141,16 +141,6 @@
       "period": "1년",
       "refund": "기업 워크샵·출강 (기업 고객)",
       "company": true
-    },
-    "zz-flowtest": {
-      "name": "결제 흐름 점검용 (판매 상품 아님)",
-      "cat": "online",
-      "price": 1000,
-      "unit": "1회",
-      "qtyMax": 2,
-      "period": "",
-      "refund": "VOD 온라인 강의",
-      "company": false
     }
   }
 }
