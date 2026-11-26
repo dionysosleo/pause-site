@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:light;--bg:#fff;--ink:#26313D;--mut:#6B727A;--line:#E3E6EA;--sage:#5E6F5E;--soft:#F4F5F2;--bad:#B3261E}
-*{box-sizing:border-box;min-width:0}
+*{box-sizing:border-box;min-width:0}[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'Noto Sans KR',system-ui,sans-serif}
 .top{border-bottom:1px solid var(--line)}.top .in{max-width:1040px;margin:0 auto;padding:16px max(5vw,18px);display:flex;justify-content:space-between;align-items:center}
 .logo{letter-spacing:.2em;font-size:18px;color:var(--ink);text-decoration:none}.logo i{font-style:normal;color:#7E8F7E}
@@ -61,6 +61,12 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
       </form>
     </section>
 
+    <section class="card" aria-labelledby="h-method">
+      <h2 id="h-method">결제 수단</h2>
+      <div id="pm"></div>
+      <div id="ag"></div>
+    </section>
+
     <section class="card" aria-labelledby="h-refund">
       <h2 id="h-refund">취소·환불 기준</h2>
       <p style="margin:0;font-size:14px">이 상품은 <a href="/refund" target="_blank" rel="noopener">취소·환불정책</a>의 <b id="rfSec"></b> 기준을 따라요. 결제 전에 꼭 확인해 주세요.</p>
@@ -87,7 +93,7 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
       <div class="row"><span>상품 금액</span><span id="sUnit"></span></div>
       <div class="row"><span>수량</span><span id="sQty">1</span></div>
       <div class="row tot"><span>총 결제 금액</span><span id="sTot"></span></div>
-      <p class="mut" style="margin:10px 0 0">부가세 포함 금액이에요. 결제 수단: 신용·체크카드, 간편결제</p>
+      <p class="mut" style="margin:10px 0 0">부가세 포함 금액이에요.</p>
       <button type="button" class="pay" id="pay" disabled>결제하기</button>
       <p class="err" id="err" role="alert"></p>
       <p class="mut" style="margin:6px 0 0">결제는 토스페이먼츠 결제창에서 안전하게 진행돼요. 카드 정보는 CHA&amp;I에 저장되지 않아요.</p>
@@ -104,7 +110,7 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
 (function(){
   var $=function(i){return document.getElementById(i)};
   var q=new URLSearchParams(location.search), id=(q.get('item')||'').replace(/[^a-z0-9-]/g,'');
-  var item=null, qty=1, cfg=null;
+  var item=null, qty=1, cfg=null, widgets=null;
   function won(n){return Number(n).toLocaleString('ko-KR')+'원';}
   function none(){$('main').hidden=true;$('none').hidden=false;}
   function render(){
@@ -119,8 +125,9 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
     $('pay').textContent=won(item.price*qty)+' 결제하기';
     document.title='주문·결제 — '+item.name+' — CHA&I';
   }
-  $('qMinus').onclick=function(){if(qty>1){qty--;render();}};
-  $('qPlus').onclick=function(){if(qty<(item.qtyMax||1)){qty++;render();}};
+  function setQty(n){qty=n;render();if(widgets)widgets.setAmount({currency:'KRW',value:item.price*qty});}
+  $('qMinus').onclick=function(){if(qty>1)setQty(qty-1);};
+  $('qPlus').onclick=function(){if(qty<(item.qtyMax||1))setQty(qty+1);};
   var boxes=[].slice.call(document.querySelectorAll('input.a'));
   $('aAll').onchange=function(){boxes.forEach(function(b){b.checked=$('aAll').checked;});check();};
   boxes.forEach(function(b){b.onchange=function(){$('aAll').checked=boxes.every(function(x){return x.checked;});check();};});
@@ -134,32 +141,30 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
     item=it;cfg=v[1];qty=Math.min(Math.max(1,parseInt(q.get('qty')||'1',10)||1),item.qtyMax||1);
     if(cfg&&cfg.mode!=='live')$('testNote').hidden=false;
     render();check();
-    if(!cfg||typeof TossPayments!=='function'){$('err').textContent='결제창을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.';}
+    if(!cfg||typeof TossPayments!=='function'){$('err').textContent='결제창을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.';return;}
+    var ck=(crypto.randomUUID?crypto.randomUUID():rid()+'-'+rid()+'-'+rid());
+    widgets=TossPayments(cfg.clientKey).widgets({customerKey:ck});
+    widgets.setAmount({currency:'KRW',value:item.price*qty}).then(function(){
+      return Promise.all([widgets.renderPaymentMethods({selector:'#pm',variantKey:'DEFAULT'}),widgets.renderAgreement({selector:'#ag',variantKey:'AGREEMENT'})]);
+    }).catch(function(){widgets=null;$('err').textContent='결제 수단을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.';});
   }).catch(none);
 
   $('pay').onclick=function(){
     var nm=$('nm').value.trim(),em=$('em').value.trim(),ph=$('ph').value.replace(/[^0-9]/g,''),co=$('co').value.trim();
     var miss=item.company&&!co?['co','회사·기관명을 적어 주세요.']:!nm?['nm','이름을 적어 주세요.']:!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)?['em','이메일을 확인해 주세요.']:!/^01[0-9]{8,9}$/.test(ph)?['ph','휴대폰 번호를 확인해 주세요. (숫자만, 예: 01012345678)']:null;
     if(miss){$('err').textContent=miss[1];$(miss[0]).focus();return;}
+    if(!widgets){$('err').textContent='결제 수단을 불러오지 못했어요. 새로고침해 주세요.';return;}
     $('err').textContent='';$('pay').disabled=true;
-    try{
-      var tp=TossPayments(cfg.clientKey);
-      var ck=(crypto.randomUUID?crypto.randomUUID():rid()+'-'+rid()+'-'+rid());
-      var payment=tp.payment({customerKey:ck});
-      payment.requestPayment({
-        method:'CARD',
-        amount:{currency:'KRW',value:item.price*qty},
-        orderId:id+'_'+qty+'_'+rid(),
-        orderName:(item.name+(qty>1?' × '+qty:'')).slice(0,100),
-        successUrl:location.origin+'/pay/success',
-        failUrl:location.origin+'/pay/fail',
-        customerEmail:em, customerName:(co?co+' ':'')+nm, customerMobilePhone:ph,
-        card:{useEscrow:false,flowMode:'DEFAULT',useCardPoint:false,useAppCardOnly:false}
-      }).catch(function(e){
-        $('pay').disabled=false;
-        $('err').textContent=(e&&e.code==='USER_CANCEL')?'결제를 취소하셨어요.':'결제창을 열지 못했어요. 잠시 뒤 다시 시도해 주세요.';
-      });
-    }catch(e){$('pay').disabled=false;$('err').textContent='결제창을 열지 못했어요. 잠시 뒤 다시 시도해 주세요.';}
+    widgets.requestPayment({
+      orderId:id+'_'+qty+'_'+rid(),
+      orderName:(item.name+(qty>1?' × '+qty:'')).slice(0,100),
+      successUrl:location.origin+'/pay/success',
+      failUrl:location.origin+'/pay/fail',
+      customerEmail:em, customerName:(co?co+' ':'')+nm, customerMobilePhone:ph
+    }).catch(function(e){
+      $('pay').disabled=false;
+      $('err').textContent=(e&&e.code==='USER_CANCEL')?'결제를 취소하셨어요.':(e&&e.message)?String(e.message).slice(0,120):'결제창을 열지 못했어요. 잠시 뒤 다시 시도해 주세요.';
+    });
   };
 })();
 </script></body></html>
