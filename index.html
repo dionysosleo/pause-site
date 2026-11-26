@@ -1968,8 +1968,8 @@ function vCourse(c){
       '<h1 class="h1 one" style="font-size:clamp(28px,2.7vw,40px)">' + esc(c.title) + '</h1>' +
       '<p class="lead">' + esc(c.hook) + '</p>' +
       '<p style="margin:0;font-weight:700;font-size:18px">' + esc(c.promise) + '</p>' +
-      '<div class="btns"><button type="button" class="btn btn-lime" data-notify>오픈 알림 받기</button><a class="btn btn-line" href="#learn?t=' + (c.tier === '프리미엄' ? 'cohort' : 'course&c=' + c.id) + '">' + (c.tier === '프리미엄' ? '기수 문의' : '수강 문의') + '</a></div>' +
-      '<p class="muted" style="margin:0;font-size:14px">오픈 일정과 가격은 확정되는 대로 알려 드려요.</p>' +
+      '<div class="btns">' + (sale(c.id) ? '<a class="btn btn-lime" href="' + buyHref(c.id) + '">결제하기 · ' + won(sale(c.id).price) + '</a>' : '<button type="button" class="btn btn-lime" data-notify>오픈 알림 받기</button>') + '<a class="btn btn-line" href="#learn?t=' + (c.tier === '프리미엄' ? 'cohort' : 'course&c=' + c.id) + '">' + (c.tier === '프리미엄' ? '기수 문의' : '수강 문의') + '</a></div>' +
+      (sale(c.id) ? '' : '<p class="muted" style="margin:0;font-size:14px">오픈 일정과 가격은 확정되는 대로 알려 드려요.</p>') +
     '</div>' + ph(c.photo, 1300, '', true) +
   '</div></section>' +
   '<section style="padding-bottom:56px"><div class="wrap"><div class="strip" aria-label="수업 분위기 사진">' + strip.map(function(k){ return ph(k, 600); }).join('') + '</div></div></section>' +
@@ -2005,7 +2005,8 @@ function vCourse(c){
 function bindCourse(c){
   $$('[data-notify]').forEach(function(b){ b.addEventListener('click', function(){ notifyDialog(c); }); });
   $('#stickyTitle').textContent = c.title;
-  $('#stickyBtn').onclick = function(){ notifyDialog(c); };
+  $('#stickyBtn').textContent = sale(c.id) ? '결제하기' : '오픈 알림 받기';
+  $('#stickyBtn').onclick = function(){ if(sale(c.id)) location.href = buyHref(c.id); else notifyDialog(c); };
   var heroBtn = $('[data-notify]');
   if('IntersectionObserver' in window && heroBtn){
     stickyObs = new IntersectionObserver(function(es){ var show = !es[0].isIntersecting; $('#stickyCta').classList.toggle('show', show); $('#stickyCta').setAttribute('aria-hidden', String(!show)); });
