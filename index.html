@@ -2065,7 +2065,7 @@ function bindTeam(){
 /* ===== 약관·정책 (원문은 policies.js) =====
    사업자 정보는 OPERATOR에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
 var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'이준혁', cpoDept:'' };
-var VENDORS = [{name:'Google LLC (Google Workspace: 스프레드시트·Apps Script·Gmail)', task:'웹사이트 문의·상담 신청 접수와 보관, 운영 담당자에게 알림 메일 발송', items:'문의 양식에 적은 항목 전부', country:'미국', when:'양식을 보낼 때', how:'네트워크를 통한 전송', period:'상담이 끝난 날부터 1년(매일 자동 삭제), 오픈 알림은 알림을 보낸 뒤 삭제'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
+var VENDORS = [{name:'Google LLC (Google Workspace: 스프레드시트·Apps Script·Gmail)', task:'웹사이트 문의·상담 신청과 강의 사전 진단 접수·보관, 운영 담당자에게 알림 메일 발송', items:'문의 양식과 사전 진단에 적은 항목 전부', country:'미국', when:'양식을 보낼 때', how:'네트워크를 통한 전송', period:'접수한 날부터 1년(매일 자동 삭제), 오픈 알림은 알림을 보낸 뒤 삭제'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
 function bizName(){ return OPERATOR.name || 'CHA&I'; }
 function contactMail(){ return OPERATOR.email ? '<a href="mailto:' + esc(OPERATOR.email) + '">' + esc(OPERATOR.email) + '</a>' : ''; }
 function bizRows(){
@@ -2165,7 +2165,7 @@ function sendLead(data){
   data.at = new Date().toISOString(); data.page = location.href;
   $$('form [name=website]').forEach(function(hp){ if(hp.value) data.website = hp.value; });
   if(!LEAD_CONFIG.endpoint) return Promise.resolve(false);
-  return fetch(LEAD_CONFIG.endpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).then(function(r){ return r.ok || r.type === 'opaque'; }, function(){ return false; });
+  return fetch(LEAD_CONFIG.endpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).then(function(r){ return r.ok ? r.text().then(function(t){ return String(t).trim() === 'ok'; }) : false; }).catch(function(){ return false; }); /* success only when the sheet replies ok */
 }
 function savedLead(){ return null; }
 try { localStorage.removeItem('pause_lead'); } catch(e){} /* 예전 버전이 남긴 문의 정보 정리 */
@@ -2184,7 +2184,7 @@ function copyDialog(title, txt, extra){
     else { try { document.execCommand('copy'); done(); } catch(e){} }
   });
 }
-var CONSENT = '<div class="full pnotice" role="note"><b>개인정보 수집·이용 안내</b><table><tbody><tr><th scope="row">목적</th><td>문의 상담, 견적·제안서 전달, 일정 조율</td></tr><tr><th scope="row">항목</th><td>필수: 회사·기관명, 성함, 이메일 · 선택: 직함, 연락처, 인원, 희망 시기, 문의 내용</td></tr><tr><th scope="row">보유</th><td>상담이 끝난 뒤 1년</td></tr></tbody></table><p>보내 주신 요청에 답하기 위한 처리라 별도 동의 없이 진행돼요. 선택 항목은 비워 두셔도 돼요. <a href="#privacy">개인정보처리방침</a></p></div>';
+var CONSENT = '<div class="full pnotice" role="note"><b>개인정보 수집·이용 안내</b><table><tbody><tr><th scope="row">목적</th><td>문의 상담, 견적·제안서 전달, 일정 조율</td></tr><tr><th scope="row">항목</th><td>필수: 회사·기관명, 성함, 이메일 · 선택: 직함, 연락처, 인원, 희망 시기, 문의 내용</td></tr><tr><th scope="row">보유</th><td>접수한 날부터 1년 (매일 자동 삭제)</td></tr></tbody></table><p>보내 주신 요청에 답하기 위한 처리라 별도 동의 없이 진행돼요. 선택 항목은 비워 두셔도 돼요. <a href="#privacy">개인정보처리방침</a></p></div>';
 
 /* ===== 제안서 받기 (짧은 폼) ===== */
 function vProposal(){
@@ -2322,7 +2322,7 @@ function learnFields(t, cid){
   ]).join('');
 }
 function learnNotice(L){
-  return '<div class="full pnotice" role="note"><b>개인정보 수집·이용 안내</b><table><tbody><tr><th scope="row">목적</th><td>' + L.purpose + '</td></tr><tr><th scope="row">항목</th><td>' + L.items + '</td></tr><tr><th scope="row">보유</th><td>상담이 끝난 뒤 1년</td></tr></tbody></table><p>보내 주신 요청에 답하기 위한 처리라 별도 동의 없이 진행돼요. 선택 항목은 비워 두셔도 돼요. <a href="#privacy">개인정보처리방침</a></p></div>';
+  return '<div class="full pnotice" role="note"><b>개인정보 수집·이용 안내</b><table><tbody><tr><th scope="row">목적</th><td>' + L.purpose + '</td></tr><tr><th scope="row">항목</th><td>' + L.items + '</td></tr><tr><th scope="row">보유</th><td>접수한 날부터 1년 (매일 자동 삭제)</td></tr></tbody></table><p>보내 주신 요청에 답하기 위한 처리라 별도 동의 없이 진행돼요. 선택 항목은 비워 두셔도 돼요. <a href="#privacy">개인정보처리방침</a></p></div>';
 }
 function vLearn(q){
   var t = (q.match(/(?:^|&)t=([a-z]+)/) || [])[1], cid = (q.match(/(?:^|&)c=([a-z0-9-]+)/) || [])[1] || '';

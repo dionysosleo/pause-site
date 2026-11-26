@@ -32,9 +32,11 @@ h2{font-size:17px;font-weight:500;margin:0 0 4px}h2 small{color:var(--mut);font-
 .go{appearance:none;border:0;background:#26313D;color:#fff;font:inherit;font-weight:500;font-size:16px;padding:12px 22px;border-radius:999px;min-height:48px;cursor:pointer}
 :root[data-theme=dark] .go{background:#5E6F5E}
 .agree{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:14px;color:var(--mut)}.agree input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:#5E6F5E}
+.agree .req{display:block;color:var(--ink,#222);font-weight:600}.agree a{color:var(--sage)}.agree .pinfo{display:block;margin-top:4px;font-size:12.5px;line-height:1.55}
 .err{color:#B3261E;font-size:14px;min-height:1em;margin:6px 0 0}
 .done{display:none;margin-top:18px;padding:16px 18px;background:var(--soft);border-radius:14px;font-size:15px}
 .done.on{display:block}
+.send{margin:0 0 8px;font-weight:600}.send.ok{color:#2E6B3F}.send.bad{color:#B3261E}.send.wait{color:#666}
 details{margin-top:14px;font-size:14px;color:var(--mut)}pre{white-space:pre-wrap;font-size:13px;background:var(--soft);padding:12px;border-radius:10px;max-height:260px;overflow:auto}
 textarea.fallback{width:100%;height:160px;font-size:13px;margin-top:10px}
 </style></head><body>
@@ -50,7 +52,7 @@ textarea.fallback{width:100%;height:160px;font-size:13px;margin-top:10px}
     <input class="other" id="nm" placeholder="이름 (닉네임 가능)" autocomplete="name" required>
     <input class="other" id="em" type="email" placeholder="피드백 받을 이메일" autocomplete="email" required>
     <input type="text" id="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
-    <label class="agree"><input type="checkbox" id="ok"> 이름·이메일과 아래에서 고른 항목·숫자를 강의 운영과 피드백에만 쓰는 데 동의해요. 회사 업무 내용은 받지 않아요. (강의 후 1년 뒤 삭제)</label>
+    <label class="agree"><input type="checkbox" id="ok"> <span><b class="req">(필수) 개인정보 수집·이용에 동의해요.</b><small class="pinfo">목적: 참가자별 실습 준비와 강의 후 피드백 · 항목: 이름(닉네임 가능), 이메일, 직무, 아래에서 고른 업무 종류·근무 습관 숫자·가져올 자료 종류, 회사·기수 · 보유: 제출한 날부터 1년(매일 자동 삭제) · 동의하지 않을 수 있고, 그러면 사전 진단만 제출되지 않아요(복사 기능과 강의 참여는 그대로). 회사 업무 내용은 받지 않아요. <a href="/privacy" target="_blank" rel="noopener">개인정보처리방침</a></small></span></label>
   </section>
   <section><h2>직무 <small>하나</small></h2><div class="chips" id="job"></div><input class="other" id="jobOther" placeholder="기타 직무 (선택)" hidden></section>
   <section><h2>지난주에 한 일 <small>해당하는 것 모두</small></h2><div class="chips" id="tasks"></div><input class="other" id="taskOther" placeholder="목록에 없는 일 (선택, 쉼표로)"></section>
@@ -58,7 +60,7 @@ textarea.fallback{width:100%;height:160px;font-size:13px;margin-top:10px}
   <section><h2>강의 날 실제 자료 <small>선택</small></h2><div class="chips" id="real"></div></section>
   </form>
   <p class="err" id="err" role="alert"></p>
-  <div class="done" id="done">제출되고 복사됐어요. 회사에서 쓰는 AI(Claude · ChatGPT · Gemini)에서 <b>새 대화</b>를 열고 붙여 넣은 뒤 보내세요. 바로 결과가 나옵니다. <b>그 대화는 강의 끝까지 지우지 마세요.</b>
+  <div class="done" id="done" role="status" aria-live="polite"><p id="sendMsg" class="send"></p><span id="copyMsg">복사됐어요.</span> 회사에서 쓰는 AI(Claude · ChatGPT · Gemini)에서 <b>새 대화</b>를 열고 붙여 넣은 뒤 보내세요. 바로 결과가 나옵니다. <b>그 대화는 강의 끝까지 지우지 마세요.</b>
     <details><summary>붙여 넣을 내용 보기</summary><pre id="preview"></pre></details></div>
   <textarea class="fallback" id="fb" hidden aria-label="복사할 내용"></textarea>
 </div>
@@ -112,22 +114,39 @@ function text(){
 ${KIT}`;
 }
 function upd(){const k=(st.job?1:0)+st.tasks.size+Object.values(st.nums).filter(Boolean).length+(st.real?1:0);$('count').textContent=k?`${k}개 골랐어요`:'아직 고른 것이 없어요';}
-let sent=false;
+let sent=false,busy=false;
+function payload(nm,em){
+  const job=st.job==='기타'?('기타: '+$('jobOther').value.trim()):st.job;
+  const extra=$('taskOther').value.trim();
+  return {kind:'사전 진단',company:$('co').value.trim(),name:nm,email:em,job:job,group:GROUP[st.job]||'',tasks:[...st.tasks].concat(extra?[extra]:[]).join(', '),
+    rep:st.nums.rep||'',ontime:st.nums.ontime||'',after:st.nums.after||'',weekend:st.nums.weekend||'',burden:st.nums.burden||'',real:st.real||'',website:$('website').value,page:location.href.slice(0,300)};
+}
+/* 시트가 'ok'를 돌려줄 때만 성공. 응답을 못 읽거나 15초 안에 답이 없으면 실패로 봄 */
+async function send(d){
+  const ctl=('AbortController' in window)?new AbortController():null; const tm=ctl&&setTimeout(()=>ctl.abort(),15000);
+  try{const r=await fetch(EP,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d),signal:ctl&&ctl.signal});
+    return r.ok&&(await r.text()).trim()==='ok';}
+  catch(e){return false;} finally{if(tm)clearTimeout(tm);}
+}
+function sendMsg(cls,txt){const m=$('sendMsg');m.className='send '+cls;m.textContent=txt;}
 $('f').addEventListener('submit',e=>e.preventDefault());
 $('go').addEventListener('click',async()=>{
+  if(busy)return;
   const nm=$('nm').value.trim(),em=$('em').value.trim();
   const miss=!nm?'이름을 적어 주세요.':!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)?'이메일을 확인해 주세요.':!st.job?'직무를 골라 주세요.':!$('ok').checked?'동의에 체크해 주세요.':'';
   $('err').textContent=miss;
   if(miss){const id=!nm?'nm':!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)?'em':!st.job?'job':'ok';$(id).scrollIntoView({behavior:'smooth',block:'center'});return;}
   const t=text();$('preview').textContent=t;
-  try{await navigator.clipboard.writeText(t);$('done').classList.add('on');$('go').textContent='다시 복사';$('fb').hidden=true;}
-  catch(err){$('fb').hidden=false;$('fb').value=t;$('fb').focus();$('fb').select();$('done').classList.add('on');$('done').firstChild.textContent='자동 복사가 막혀 있어요. 아래 칸이 선택돼 있으니 Ctrl+C(⌘+C)로 복사해 주세요. ';}
-  if(!sent){sent=true;
-    const job=st.job==='기타'?('기타: '+$('jobOther').value.trim()):st.job;
-    const extra=$('taskOther').value.trim();
-    const d={kind:'사전 진단',company:$('co').value.trim(),name:nm,email:em,job:job,group:GROUP[st.job]||'',tasks:[...st.tasks].concat(extra?[extra]:[]).join(', '),
-      rep:st.nums.rep||'',ontime:st.nums.ontime||'',after:st.nums.after||'',weekend:st.nums.weekend||'',burden:st.nums.burden||'',real:st.real||'',website:$('website').value,page:location.href.slice(0,300)};
-    fetch(EP,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d)}).catch(()=>{sent=false;$('err').textContent='제출이 안 됐어요. 인터넷 연결을 확인하고 한 번 더 눌러 주세요.';});
+  /* 복사는 클릭 직후에(브라우저가 사용자 동작 안에서만 허용) */
+  try{await navigator.clipboard.writeText(t);$('fb').hidden=true;$('copyMsg').textContent='복사됐어요.';}
+  catch(err){$('fb').hidden=false;$('fb').value=t;$('fb').select();$('copyMsg').textContent='자동 복사가 막혀 있어요. 아래 칸이 선택돼 있으니 Ctrl+C(⌘+C)로 복사해 주세요.';}
+  $('done').classList.add('on');
+  if(!sent){
+    busy=true;$('go').disabled=true;$('go').textContent='보내는 중…';sendMsg('wait','제출하는 중이에요…');
+    const ok=await send(payload(nm,em));
+    busy=false;$('go').disabled=false;
+    if(ok){sent=true;sendMsg('ok','제출됐어요. 강의 전에 확인할게요.');$('go').textContent='다시 복사';}
+    else{sendMsg('bad','제출은 아직 안 됐어요. 인터넷 연결을 확인하고 ‘다시 제출하기’를 눌러 주세요. 복사는 그대로 쓰셔도 돼요.');$('go').textContent='다시 제출하기';}
   }
   $('done').scrollIntoView({behavior:'smooth',block:'nearest'});
 });

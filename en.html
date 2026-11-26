@@ -2073,7 +2073,7 @@ function bindTeam(){
 /* ===== 약관·정책 (원문은 policies.js) =====
    사업자 정보는 OPERATOR에 채우면 푸터·약관·방침에 함께 나와요. 빈 값은 화면에 안 보여요(괄호 자리표시 금지). */
 var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'Junhyuck Lee', cpoDept:'' };
-var VENDORS = [{name:'Google LLC (Google Workspace: Sheets, Apps Script, Gmail)', task:'Receiving and storing website inquiries and consultation requests, and sending notification emails to the operator', items:'All fields entered in the inquiry form', country:'United States', when:'When the form is submitted', how:'Transmission over the network', period:'One year from the end of the consultation (checked and deleted automatically every day); launch-update sign-ups are deleted after the update is sent'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
+var VENDORS = [{name:'Google LLC (Google Workspace: Sheets, Apps Script, Gmail)', task:'Receiving and storing website inquiries, consultation requests and pre-session check-ins; sending notification emails to our team', items:'Everything entered in the inquiry forms and the pre-session check-in', country:'United States', when:'When the form is submitted', how:'Transmission over the network', period:'1 year from receipt (deleted automatically every day); launch-update sign-ups are deleted after the update is sent'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
 function bizName(){ return OPERATOR.name || 'CHA&I'; }
 function contactMail(){ return OPERATOR.email ? '<a href="mailto:' + esc(OPERATOR.email) + '">' + esc(OPERATOR.email) + '</a>' : ''; }
 function bizRows(){
@@ -2173,7 +2173,7 @@ function sendLead(data){
   data.at = new Date().toISOString(); data.page = location.href;
   $$('form [name=website]').forEach(function(hp){ if(hp.value) data.website = hp.value; });
   if(!LEAD_CONFIG.endpoint) return Promise.resolve(false);
-  return fetch(LEAD_CONFIG.endpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).then(function(r){ return r.ok || r.type === 'opaque'; }, function(){ return false; });
+  return fetch(LEAD_CONFIG.endpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).then(function(r){ return r.ok ? r.text().then(function(t){ return String(t).trim() === 'ok'; }) : false; }).catch(function(){ return false; }); /* success only when the sheet replies ok */
 }
 function savedLead(){ return null; }
 try { localStorage.removeItem('pause_lead'); } catch(e){} /* 예전 버전이 남긴 문의 정보 정리 */
@@ -2192,7 +2192,7 @@ function copyDialog(title, txt, extra){
     else { try { document.execCommand('copy'); done(); } catch(e){} }
   });
 }
-var CONSENT = '<div class="full pnotice" role="note"><b>Personal information collection and use</b><table><tbody><tr><th scope="row">Purpose</th><td>Responding to inquiries, sending quotes and proposals, scheduling</td></tr><tr><th scope="row">Items</th><td>Required: company or organization, name, email · Optional: title, phone, group size, preferred timing, message</td></tr><tr><th scope="row">Retention</th><td>One year after the consultation ends</td></tr></tbody></table><p>This processing is necessary to respond to your request, so no separate consent is required. Optional fields may be left blank. <a href="#privacy">Privacy Policy</a></p></div>';
+var CONSENT = '<div class="full pnotice" role="note"><b>Personal information collection and use</b><table><tbody><tr><th scope="row">Purpose</th><td>Responding to inquiries, sending quotes and proposals, scheduling</td></tr><tr><th scope="row">Items</th><td>Required: company or organization, name, email · Optional: title, phone, group size, preferred timing, message</td></tr><tr><th scope="row">Retention</th><td>1 year from receipt (deleted automatically every day)</td></tr></tbody></table><p>This processing is necessary to respond to your request, so no separate consent is required. Optional fields may be left blank. <a href="#privacy">Privacy Policy</a></p></div>';
 
 /* ===== 제안서 받기 (짧은 폼) ===== */
 function vProposal(){
@@ -2330,7 +2330,7 @@ function learnFields(t, cid){
   ]).join('');
 }
 function learnNotice(L){
-  return '<div class="full pnotice" role="note"><b>Personal information collection and use</b><table><tbody><tr><th scope="row">Purpose</th><td>' + L.purpose + '</td></tr><tr><th scope="row">Items</th><td>' + L.items + '</td></tr><tr><th scope="row">Retention</th><td>One year after the consultation ends</td></tr></tbody></table><p>This processing is necessary to respond to your request, so no separate consent is required. Optional fields may be left blank. <a href="#privacy">Privacy Policy</a></p></div>';
+  return '<div class="full pnotice" role="note"><b>Personal information collection and use</b><table><tbody><tr><th scope="row">Purpose</th><td>' + L.purpose + '</td></tr><tr><th scope="row">Items</th><td>' + L.items + '</td></tr><tr><th scope="row">Retention</th><td>1 year from receipt (deleted automatically every day)</td></tr></tbody></table><p>This processing is necessary to respond to your request, so no separate consent is required. Optional fields may be left blank. <a href="#privacy">Privacy Policy</a></p></div>';
 }
 function vLearn(q){
   var t = (q.match(/(?:^|&)t=([a-z]+)/) || [])[1], cid = (q.match(/(?:^|&)c=([a-z0-9-]+)/) || [])[1] || '';
