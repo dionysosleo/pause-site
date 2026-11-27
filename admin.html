@@ -599,9 +599,9 @@ function loginGate(msg){
 }
 function pwChange(first){
   var html='<h3>'+(first?'새 비밀번호 정하기':'비밀번호 바꾸기')+'</h3><div class="f">'+(first?'<p style="margin:0">임시 비밀번호로 처음 로그인했어요. 다른 곳에서 쓰지 않는 새 비밀번호를 정해 주세요.</p>':'')+
-    '<label>새 비밀번호 (12자 이상)<input id="np1" type="password" autocomplete="new-password"></label><label>한 번 더<input id="np2" type="password" autocomplete="new-password"></label><div class="acts">'+(first?'':'<button class="btn" data-close>닫기</button>')+'<button class="btn p" id="npGo">바꾸기</button></div></div>';
+    '<label>새 비밀번호 (8자 이상)<input id="np1" type="password" autocomplete="new-password"></label><label>한 번 더<input id="np2" type="password" autocomplete="new-password"></label><div class="acts">'+(first?'':'<button class="btn" data-close>닫기</button>')+'<button class="btn p" id="npGo">바꾸기</button></div></div>';
   if(first){$('#root').innerHTML='<div class="gate" style="text-align:left"><div class="box">'+html+'</div></div>';}else openDlg(html);
-  $('#npGo').onclick=function(){var a=$('#np1').value,b2=$('#np2').value;if(a.length<12){toast('12자 이상으로 정해 주세요');return;}if(a!==b2){toast('두 번 넣은 비밀번호가 달라요');return;}
+  $('#npGo').onclick=function(){var a=$('#np1').value,b2=$('#np2').value;if(a.length<8){toast('8자 이상으로 정해 주세요');return;}if(a!==b2){toast('두 번 넣은 비밀번호가 달라요');return;}
     var btn=this;btn.disabled=true;sb.auth.updateUser({password:a}).then(function(r){if(r.error){btn.disabled=false;toast(/same/i.test(r.error.message)?'임시 비밀번호와 다른 비밀번호로 정해 주세요':'바꾸지 못했어요 ('+r.error.message+')');return;}
       return act({action:'pw_changed'}).then(function(){return sb.auth.refreshSession();}).then(function(){toast('비밀번호를 바꿨어요');if(first)boot();else closeDlg();});});};
 }
