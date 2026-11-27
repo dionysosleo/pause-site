@@ -13,7 +13,6 @@ const uuid = v => /^[0-9a-f-]{36}$/i.test(String(v || '')) ? String(v) : '';
 const int = v => (Number.isInteger(Number(v)) ? Number(v) : NaN);
 async function get(path) { const r = await S.rest('GET', path); if (!r.ok) throw new Error('DB ' + r.status + ' ' + r.text); return r.data || []; }
 async function write(method, path, body, prefer) { const r = await S.rest(method, path, body, prefer || 'return=representation'); if (!r.ok) throw new Error('DB ' + r.status + ' ' + r.text); return r.data; }
-function monthStartKST() { const n = new Date(Date.now() + 9 * 3600e3); return new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), 1) - 9 * 3600e3).toISOString(); }
 
 const C = require('../_company.js');
 const progressFor = C.progressFor;
@@ -27,19 +26,24 @@ const READ = {
   async orders_csv() {
     return { orders: await get('orders?select=id,paid_at,item_id,qty,amount,refund_amount,status,is_test,buyer_name,buyer_email,method,refunded_at,refund_reason&status=neq.ready&order=paid_at.desc&limit=5000') };
   },
+  /* 대시보드: 기간별(일·주·월·년) 집계는 화면에서 함. 여기서는 필요한 칸만 가볍게 내려줌 */
   async dashboard() {
-    const since = monthStartKST();
-    const os = await get('orders?select=item_id,amount,refund_amount,status,is_test,paid_at,refund_requested_at,shipped_at,ship_addr&status=neq.ready&order=created_at.desc&limit=2000');
-    const real = os.filter(o => !o.is_test), month = real.filter(o => o.paid_at && o.paid_at >= since);
-    const ps = await get('profiles?select=created_at');
+    const [os, ps, en, pr] = await Promise.all([
+      get('orders?select=id,item_id,qty,amount,refund_amount,status,is_test,method,paid_at,refunded_at,refund_requested_at,shipped_at,ship_addr,buyer_name,buyer_email,user_id&status=neq.ready&order=paid_at.desc&limit=10000'),
+      get('profiles?select=id,name,email,login_method,marketing_ok,created_at&order=created_at.desc&limit=20000'),
+      get('enrollments?select=user_id,course_id,source,started_at,revoked_at&limit=20000'),
+      get('progress?select=user_id,updated_at,completed_at&order=updated_at.desc&limit=50000')
+    ]);
+    const live = o => o.status === 'paid' || o.status === 'partial_refunded';
     return {
-      month: { orders: month.length, sales: month.reduce((s, o) => s + o.amount, 0), refunds: month.reduce((s, o) => s + (o.refund_amount || 0), 0) },
-      all: { orders: real.length, net: real.reduce((s, o) => s + o.amount - (o.refund_amount || 0), 0), tests: os.length - real.length },
-      members: { total: ps.length, month: ps.filter(p => p.created_at >= since).length },
+      orders: os.map(o => ({ id: o.id, item: o.item_id, qty: o.qty, amount: o.amount, refund: o.refund_amount || 0, status: o.status, test: !!o.is_test, method: o.method, paid: o.paid_at, refunded: o.refunded_at, name: o.buyer_name, email: o.buyer_email, member: !!o.user_id })),
+      members: ps.map(p => ({ id: p.id, name: p.name, email: p.email, via: p.login_method, mk: !!p.marketing_ok, at: p.created_at })),
+      enrollments: en.map(e => ({ u: e.user_id, c: e.course_id, src: e.source, at: e.started_at, off: !!e.revoked_at })),
+      progress: pr.map(x => ({ u: x.user_id, at: x.updated_at, done: x.completed_at })),
       todo: {
         refunds: os.filter(o => o.refund_requested_at && o.status === 'paid').length,
-        ship: os.filter(o => isKitItem(o.item_id) && o.status === 'paid' && !o.shipped_at).length,
-        shipNoAddr: os.filter(o => isKitItem(o.item_id) && o.status === 'paid' && !o.shipped_at && !o.ship_addr).length
+        ship: os.filter(o => isKitItem(o.item_id) && live(o) && !o.shipped_at).length,
+        shipNoAddr: os.filter(o => isKitItem(o.item_id) && live(o) && !o.shipped_at && !o.ship_addr).length
       }
     };
   },
