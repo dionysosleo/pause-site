@@ -185,7 +185,7 @@ function spark(v){var W=96,H=28,m=Math.max.apply(null,v.concat([1])),st=W/Math.m
 function chart(host,o){
   var draw=function(){
     var W=Math.max(host.clientWidth,280),H=o.h||260,pl=52,pr=o.line?52:14,pt=14,pb=30,iw=W-pl-pr,ih=H-pt-pb,n=o.v.length;
-    var mx=niceMax(Math.max.apply(null,o.v.concat([0]))),lx=o.line?niceMax(Math.max.apply(null,o.line.concat([0]))):1;
+    var mx=niceMax(Math.max.apply(null,o.v.concat([o.min||4]))),lx=o.line?niceMax(Math.max.apply(null,o.line.concat([4]))):1;
     var cw=iw/n,bw=Math.max(Math.min(cw*0.62,46),3),y=function(v){return pt+ih-(v/mx)*ih;},yl=function(v){return pt+ih-(v/lx)*ih;};
     var step=Math.ceil(n/Math.max(Math.floor(iw/58),1)),h='<svg width="'+W+'" height="'+H+'" role="img" aria-label="'+esc(o.title||'')+'">';
     for(var t=0;t<=4;t++){var v=mx*t/4,yy=y(v);h+='<line class="gl" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+yy+'" y2="'+yy+'"/><text class="ax" x="'+(pl-8)+'" y="'+(yy+4)+'" text-anchor="end">'+(o.fmtAx?o.fmtAx(v):v)+'</text>';
@@ -247,7 +247,7 @@ V.home=function(m){
 
     var fl=R.b.map(function(b){return blabel(b,g,true);});
     var mt=DASH.metric,S=R.series;
-    chart($('#cMain',m),{title:mk[0]+' 추이',v:S[mt],labels:L,fmtAx:mk[2]==='won'?shortWon:function(v){return Math.round(v).toLocaleString('ko-KR');},
+    chart($('#cMain',m),{title:mk[0]+' 추이',min:mk[2]==='won'?40000:4,v:S[mt],labels:L,fmtAx:mk[2]==='won'?shortWon:function(v){return Math.round(v).toLocaleString('ko-KR');},
       tip:function(i){return '<b>'+esc(fl[i])+'</b><div>순매출 <span>'+won(S.net[i])+'</span></div><div>결제 금액 <span>'+won(S.gross[i])+'</span></div><div>환불 <span>'+won(S.refund[i])+'</span></div><div>주문 <span>'+S.orders[i]+'건</span></div><div>객단가 <span>'+won(Math.round(S.aov[i]))+'</span></div>';}});
     chart($('#cMem',m),{title:'회원 추이',v:S.signup,line:cum,labels:L,h:220,fmtAx:function(v){return Math.round(v).toLocaleString('ko-KR');},
       tip:function(i){return '<b>'+esc(fl[i])+'</b><div>신규 가입 <span>'+S.signup[i]+'명</span></div><div>누적 회원 <span>'+cum[i]+'명</span></div><div>학습한 회원 <span>'+S.learners[i]+'명</span></div>';}});
