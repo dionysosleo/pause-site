@@ -1,0 +1,34 @@
+# 사진 담기: .github/photos.txt 에 적힌 Unsplash 사진을 받아 사이트 안(img/u/)에 WebP로 저장하고 같은 브랜치에 커밋해요.
+# 사이트가 외부 사진 서비스에 기대지 않게(느려지거나 막혀도 사진이 보이게) 하려는 것. photos.txt 를 바꿔 올리면 다시 돌아요.
+name: photos
+on:
+  push:
+    paths: ['.github/photos.txt']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: WebP 도구
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq webp
+      - name: 사진 받기·변환
+        run: |
+          mkdir -p img/u
+          while read -r key id; do
+            [ -z "$key" ] && continue
+            for w in 800 1600; do
+              curl -sfL --retry 3 -o /tmp/p.jpg "https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80&fm=jpg"
+              cwebp -quiet -q 72 /tmp/p.jpg -o "img/u/${key}-${w}.webp"
+            done
+            echo "$key ok"
+          done < .github/photos.txt
+          ls -la img/u | head -60
+      - name: 커밋
+        run: |
+          git config user.name "photos-bot"; git config user.email "photos-bot@users.noreply.github.com"
+          git add img/u
+          git diff --cached --quiet || (git commit -m "사진을 사이트 안에 담기 (WebP)" && git push)
