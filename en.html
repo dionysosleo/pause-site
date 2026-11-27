@@ -1099,6 +1099,69 @@ footer .biz{font-size:13px}
 .talk ol li b{line-height:28px}
 .talk ol li span{font-size:15px;line-height:1.6;color:#4A5460}
 .talk-take{margin:4px 0 0;font-size:15px}.talk-take b{margin-right:6px}
+.ch{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:44px;align-items:center;padding-top:48px;padding-bottom:40px}
+.ch-txt{display:flex;flex-direction:column;gap:14px}
+.ch-crumb{margin:0;font-size:13px;font-weight:700;color:#667866}
+.ch-meta{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 0;font-size:14px;color:#3f4652}
+.ch-meta li+li::before{content:"·";margin:0 10px;color:#C5CCC5}
+.ch-tags .tag{font-size:13px;color:#5E6F5E;background:#F1F4F1;border-radius:999px;padding:5px 11px}
+.ch .ch-ph{aspect-ratio:4/3;border-radius:24px}
+.cd{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;align-items:start;padding-bottom:96px}
+.cd-main{min-width:0}
+.cd-sec{padding:44px 0 8px;border-top:1px solid var(--hair)}
+.cd-sec .h2{margin-bottom:18px}
+.cd-promise{font-size:18px;font-weight:700;margin:0 0 22px}
+.cd-need{margin:0;padding-left:20px;color:#3f4652}
+.cd-need li{margin:4px 0}
+.cu-head{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5b6270;margin-bottom:10px}
+.cu-all{background:none;border:0;font:inherit;font-weight:700;color:#5E6F5E;cursor:pointer;padding:6px 0}
+details.cu{border:1px solid var(--hair);border-radius:14px;margin:10px 0;background:#fff;overflow:hidden}
+details.cu summary{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;list-style:none;background:#FAF7F3}
+details.cu summary::-webkit-details-marker{display:none}
+details.cu summary::after{content:"";margin-left:8px;width:8px;height:8px;border-right:2px solid #8a9199;border-bottom:2px solid #8a9199;transform:rotate(45deg);transition:transform .2s}
+details.cu[open] summary::after{transform:rotate(-135deg)}
+.cu-n{flex:none;width:26px;height:26px;border-radius:50%;background:#667866;color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center}
+.cu-c{margin-left:auto;font-size:13px;color:#6B727A}
+details.cu ol{list-style:none;margin:0;padding:4px 18px 10px}
+details.cu li{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--hair);font-size:15px}
+details.cu li:first-child{border-top:0}
+.cu-no{flex:none;min-width:36px;white-space:nowrap;font-size:13px;color:#6B727A}
+.cu-t{flex:1;min-width:0}
+.cu-free{flex:none;font-size:12px;font-weight:700;color:#5E6F5E;background:#EEF2EE;border-radius:999px;padding:3px 8px}
+.cu-d{flex:none;font-size:13px;color:#6B727A}
+.cd-t{display:grid;grid-template-columns:140px minmax(0,1fr);gap:24px;align-items:start}
+.cd-t .cd-t-ph{aspect-ratio:1;border-radius:20px}
+.cd-t-nm{font-size:20px}
+.cd-next{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.cd-nx{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;align-items:center;text-decoration:none;color:inherit;border:1px solid var(--hair);border-radius:14px;padding:12px;background:#fff}
+.cd-nx .photo{aspect-ratio:1;border-radius:10px}
+.cd-nx div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.cd-nx .badge{align-self:flex-start}
+.cd-nx b{font-size:15px;line-height:1.4}
+.cd-nx .muted{font-size:13px}
+.cd-side{position:sticky;top:calc(var(--hdh,72px) + 76px);margin-top:44px}
+.cbuy{border:1.5px solid var(--ink);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:14px;background:#fff}
+.cb-big{font-family:var(--en);font-size:30px;font-weight:700;letter-spacing:-.02em}
+.cb-big s{font-size:16px;color:#8a9199;font-weight:400;margin-left:6px}
+.cb-opts{display:flex;flex-direction:column;gap:8px}
+.cb-opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--hair);border-radius:12px;padding:12px;cursor:pointer;font-size:14px}
+.cb-opt:has(input:checked){border-color:#667866;background:#F4F7F4}
+.cb-opt input{accent-color:#667866;margin:0}
+.cb-p{display:flex;flex-direction:column;align-items:flex-end;line-height:1.3}
+.cb-p s{font-size:12px;color:#8a9199}
+.cb-go{width:100%;justify-content:center}
+.cb-meta{list-style:none;margin:0;padding:12px 0 0;border-top:1px solid var(--hair);display:flex;flex-direction:column;gap:8px;font-size:14px}
+.cb-meta li{display:flex;justify-content:space-between;gap:12px}
+.cb-meta span{color:#6B727A;flex:none}
+.cb-meta b{font-weight:600;text-align:right}
+.cbuy [data-notify]{align-self:center}
+.cprice{margin:4px 0 0;font-size:15px}
+.cgrid .ccard h2{min-height:2.8em;line-height:1.4}
+.cprice s{color:#8a9199;font-size:13px}
+.cprice span{font-size:12px;font-weight:700;color:#5E6F5E;background:#EEF2EE;border-radius:999px;padding:2px 8px;margin-left:4px}
+@media (max-width:1000px){.cd{grid-template-columns:minmax(0,1fr)}.cd-side{display:none}.ch{grid-template-columns:minmax(0,1fr);padding-top:28px}}
+@media (min-width:701px){.cgrid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.cd-next{grid-template-columns:minmax(0,1fr)}.cd-t{grid-template-columns:96px minmax(0,1fr)}.cu-d{display:none}}
 </style>
 <style>/* 영어판: 영어 문장이 한글보다 길어 한 줄 원칙(R6)·기호 정렬(R13)을 지키도록 글자를 조금 줄임 */
 html[lang="en"] .ol,html[lang="en"] .pf{font-size:.86em;letter-spacing:-.01em}
@@ -1256,45 +1319,75 @@ var FLOW = [['D-3','Pre-check','Pre-check + pre-session videos. Security and acc
 
 /* ===== 온라인강의 (셀링 페이지) ===== */
 var C = [
-  {id:'agent-vod', tier:'Standard', kind:'4 videos', who:'han', photo:'desk', strip:['brainstorm','notes','teapot','manLaptop','pointNotes','teaCup'], title:'AI Agents for Planners: An Introduction', hook:'Questions come before tools: what to hand to AI and what people should decide.',
-   promise:'After four steeps, you’ll have your own one-page “AI team blueprint.”',
-   pain:['There are so many AI tools, but I don’t know how to apply them to my work','I’ve tried them, but I have to redo the output every time','I’m supposed to roll it out to my team but don’t know where to start'],
-   after:['You can tell what to hand off and what to decide yourself','You get agents for research, reports and meeting notes','You can explain a team rollout roadmap and success metrics'],
-   lessons:[['Episode 1','Start by defining the problem','notes',['What to hand to AI, what people decide','Map your repetitive work','Pick one thing to offload']],['Episode 2','Design your own AI team','brainstorm',['Agents vs. chatbots','Splitting roles: researcher, organizer, writer']],['Episode 3','Automating planning, reporting and research','desk',['Automating research summaries','A workflow for report drafts','How to review the output']],['Episode 4','Rolling it out to your team','pointNotes',['Three stages of team adoption','Setting success metrics','Security and ethics checklist']]],
-   fit:['Planners and PMs stuck at applying AI','Leaders rolling out AI','Report- and research-heavy roles']},
-  {id:'builder-vod', tier:'Standard', kind:'4 videos', who:'jun', photo:'desk2', strip:['manLaptop','bookLaptop','notes','teaPour','laptops','desk'], title:'Content automation that keeps running after you clock out', hook:'We show the real operating screens of daily social and blog publishing handed to agents.',
-   promise:'After four steeps, you’ll have one publishing agent that runs on its own every morning.',
-   pain:['Posting content consistently is the hardest part','There are many posts about automation, but few people have actually run it','What I build stops working a few days later'],
-   after:['You can choose which content tasks to hand off','You build a structure that handles scheduling, review and record-keeping','You know how to fix it when it stops'],
-   lessons:[['Lesson 1','Which tasks to hand off','bookLaptop',['Breaking down content work','What should not be automated']],['Lesson 2','Designing a publishing agent','laptops',['Plan → draft → review flow','Narrowing to one tool']],['Lesson 3','Making it run every day','manLaptop',['Scheduling, review and records','Real operating screens revealed']],['Lesson 4','Fixing as you run','laugh',['Three reasons it stops','An improvement routine']]],
-   fit:['Solo brand and social owners','In-house content managers','POs who want to build it']},
-  {id:'tea-live', tier:'Standard', kind:'Live · Monthly', who:'lee', photo:'teaPour', strip:['teapot','teaCup','pine','sunForest','birch','forest'], title:'Three cups a day that steep your focus', hook:'At 3 p.m., when focus breaks, bring it back with a 3-minute steep. A monthly live class where you receive a tea kit and brew together.',
-   promise:'Once a month, build your own 3-minute steeping routine that fits your work rhythm.',
-   pain:['My focus breaks every afternoon','I drink more coffee and feel heavier in the afternoon','I like tea but brewing it feels difficult'],
-   after:['Choose teas that fit your morning, afternoon and evening work rhythm','Gain a 3-minute routine that restores focus without caffeine','Lead a 3-minute steep yourself before team meetings'],
-   lessons:[['Session 1','The morning cup','sunForest',['The first cup that opens the day','Water temperature and steeping time']],['Session 2','The afternoon cup','teapot',['When focus breaks','A 3-minute steeping routine']],['Session 3','The evening cup','forest',['Closing the day with decaf','Ten minutes of tea to wrap up the day']]],
-   fit:['Anyone losing focus by 3 p.m.','Beginners who want to learn tea properly','HR previewing tea sessions']},
-  {id:'partner-4w', tier:'Premium', kind:'4-week cohort · 12 seats', who:'han', photo:'teaPour', strip:['teapot','laptops','teaCup','notes','fSetting','fTable'], title:'Growing a Partner Agent in Four Cups', hook:'The four cups of the evening tea session, spread over four weeks at home or at the office. Each week, brew one cup from your tea kit and grow your partner agent one step in small-group live sessions.',
-   promise:'After four weeks, you’ll have a partner agent that knows your work and a routine you use every day.',
-   pain:['I couldn’t apply the agent from the workshop to my daily work','When I get stuck on my own, I have no one to ask','It’s hard to turn what I learned into a habit'],
-   after:['Hand one task a week to your partner agent','Resolve what’s stuck right away with 1:1 feedback','Build a weekly rhythm around a cup of tea'],
-   lessons:[['Week 1','White tea · What I think I know','teaCup',['Rewrite the words that describe you','Map what to hand to your agent']],['Week 2','Da Hong Pao · Relationships','teapot',['Decide how to work with your agent','What to share with colleagues, what to do alone']],['Week 3','Tea bag · A taste that changes with what you know','laptops',['Refine the five documents','Try connecting mail, calendar and documents']],['Week 4','Korean tea · Knowing myself well','notes',['Look back on the month','Commitments for the next month']]],
-   fit:['Past workshop participants','Leaders who want to keep going','Tea lovers, home or office'],
-   incl:['4-week cohort · 12 seats','Weekly 90-minute live session (recordings provided)','Weekly assignments and feedback','One 1:1 feedback session (Sunghee Han · Simon)','Four tea kits shipped — white tea, Da Hong Pao, tea bags, Korean tea','Full access to standard courses','Invitation to an alumni tea session after completion']}
+  {id:'ai-onboard', level:'Beginner', step:'2', kind:'8-lesson VOD + setup kit', who:'jun', photo:'desk', title:'AI Onboarding Kit: Claude setup + my AI partner', short:'Claude setup you just paste in',
+   hook:'Explaining yourself to Claude from scratch every time? Paste in a few files and Claude knows you, and an AI partner starts work on one repetitive task.',
+   promise:'Follow the 8 lessons and you keep a Claude that knows you and one AI partner with a job.',
+   tags:['Claude setup','Projects · instructions · memory','Skills','Connectors','AI partner'],
+   pain:['You re-explain your work and tone every time you open Claude','There are plenty of setup videos, but you get stuck following them','You want to hand off repetitive work but don’t know where to start'],
+   after:['One setup and Claude knows you','Reports, meeting notes and emails done with Skills','Hand one repetitive task to your AI partner and leave on time'],
+   parts:[{nm:'Getting ready · setup', ls:[['Episode 1','5 things to set up when you first open Claude',1],['Episode 2','An AI that knows you: projects, instructions, memory'],['Episode 3','Paste in an instruction template for your job']]},
+          {nm:'Connecting your work', ls:[['Episode 4','Finish repetitive work with Skills: reports, notes, email'],['Episode 5','Connect mail, calendar and Drive with connectors']]},
+          {nm:'Onboarding · AI partner', ls:[['Episode 6','Create your AI partner: name, role, three-line brief'],['Episode 7','First day: hand off one repetitive task'],['Episode 8','Leaving routine: wrap up the day and hand off tomorrow']]}],
+   kit:['One-page setup checklist','Instruction templates by job (planning, marketing, design, small business, students)','Ready-to-use Skills (reports, meeting notes, email)','AI partner brief form','Handover template','Kit updates when Claude’s features change'],
+   out:['A Claude that knows you','One AI partner handling a repetitive task'],
+   fit:['Workers who use Claude but explain everything from scratch each time','People who got stuck following setup videos','Anyone who wants less repetitive work and to leave on time'],
+   need:['A Claude account (free to start; some features need a paid plan)','No coding knowledge needed'],
+   opts:['ai-onboard','ai-onboard-kit'], next:['vibe-web','agent-team']},
+  {id:'vibe-web', level:'Hands-on', step:'3', kind:'8-lesson VOD + web templates', who:'jun', photo:'laptops', title:'Build my website with vibe coding', short:'Publish your own web page, no coding',
+   hook:'No coding, you build by talking. This very site, payments included, was made the same way. With your AI partner you build your own web page and put it online.',
+   promise:'Follow the 8 lessons and you have one web page of your own, live online.',
+   tags:['Vibe coding','Claude Code','Web building','Deploying','Total beginners'],
+   pain:['You need an About or shop page but outsourcing feels too much','You’re curious about vibe coding but get stuck at installing','You worry the AI might delete your files'],
+   after:['Set up Claude Code safely','Finish your web page by asking for changes in plain words','Deploy it, connect an address and publish it'],
+   parts:[{nm:'Getting ready', ls:[['Episode 1','What vibe coding is, and what you’ll build',1],['Episode 2','Installing Claude Code and safe settings: permissions, undo'],['Episode 3','Describe your project in CLAUDE.md']]},
+          {nm:'Build', ls:[['Episode 4','Pick a starter template: About, portfolio, small shop'],['Episode 5','Edit by talking: copy, photos, colours'],['Episode 6','Forms and taking enquiries']]},
+          {nm:'Publishing', ls:[['Episode 7','Go live: deploy and connect an address'],['Episode 8','Next step: a taste of adding payments and bookings']]}],
+   kit:['CLAUDE.md template','Safe permission settings file (blocks deletes and more)','3 starter web templates (About, portfolio, small shop)','Deploy checklist'],
+   out:['One web page of your own, live online'],
+   fit:['Freelancers who need an About or portfolio page','Shop and studio owners who want to build their own page','Workers who want to try vibe coding'],
+   need:['Taking the AI Onboarding Kit first helps (not required)','A laptop (Mac or Windows)','Requires a paid Claude plan'],
+   opts:['vibe-web','vibe-web-4w'], next:['ai-onboard','agent-team']},
+  {id:'agent-team', level:'Advanced', step:'4', kind:'8-lesson VOD + agent team kit', who:'han', photo:'brainstorm', title:'Work like a team on your own: setting up an AI agent team', short:'A team on your own: your agent team',
+   hook:'Work alone, like a team. Start by deciding what AI handles and what you decide, then take one idea all the way to a prototype with your agent team.',
+   promise:'Follow the 8 lessons and you keep your agent team and one working prototype.',
+   tags:['Agent team','Planning','Harness','Vibe coding','Solo founders'],
+   pain:['You use several AIs but they don’t connect','You redo what you hand off every time','You have ideas but can’t get to a prototype alone'],
+   after:['Split what to hand off from what you decide, through questions','An agent team with clear roles works together','Go from a plan to a working prototype'],
+   parts:[{nm:'Design', ls:[['Episode 1','Define the work with questions: what to hand off, what you decide',1],['Episode 2','Team design: research, planning, design, build, review']]},
+          {nm:'Setup', ls:[['Episode 3','Setting up your agent team'],['Episode 4','Passing work along: plans and handovers'],['Episode 5','Avoiding accidents: review criteria and undo rules']]},
+          {nm:'Hands-on', ls:[['Episode 6','From plan to prototype'],['Episode 7','Refine from the user’s view'],['Episode 8','An operating routine that keeps the team going']]}],
+   kit:['5 agent files by role','Question and plan templates','Review checklist'],
+   out:['Your agent team','A plan and a working prototype'],
+   fit:['Planners and PMs who want to use AI deeply at work','Solo founders running a business alone','Leaders who want to learn team-level AI first'],
+   need:['Some Claude experience (AI Onboarding Kit level)','Requires a paid Claude plan'],
+   opts:['agent-team','agent-team-6w'], next:['ai-onboard','vibe-web']},
+  {id:'tea-brand', level:'Rest · Start-up', step:'1', kind:'8-lesson VOD + seasonal tea kit', who:'lee', photo:'teaPour', title:'A cup a day at home, and your own tea brand', short:'From one cup to your own tea brand',
+   hook:'Find the cup that fits your day, then turn it into your first product under your own name. Blend with a tea director; name, label and promote it with AI.',
+   promise:'Follow the 8 lessons and you keep your own tea routine, your blend and a first product plan.',
+   tags:['Home tea','Tea meditation','Blending','Brand','Starting up with AI'],
+   pain:['Even rest doesn’t feel like rest','You like tea but don’t know where to start learning','You’d like to build a small brand from something you love'],
+   after:['A tea that fits your day and a 10-minute rest routine','Adjust the ratios and make your own blend','A first product plan with name, label and posts'],
+   parts:[{nm:'A cup a day', ls:[['Episode 1','A cup a day: find your taste with seasonal teas',1],['Episode 2','10-minute tea meditation: build a rest routine']]},
+          {nm:'Blending', ls:[['Episode 3','Blending basics: change the ratios, make your recipe'],['Episode 4','Organise your tasting notes with AI and set a blending direction']]},
+          {nm:'Your own tea brand', ls:[['Episode 5','Building the brand: name, story and label with AI'],['Episode 6','Getting the word out: photos, social posts, posters'],['Episode 7','First sales plan: price, channels, product page draft'],['Episode 8','Looking back: my tea, my next season']]}],
+   kit:['Several seasonal teas','Measuring tools and empty pouches','Recipe cards','Label stickers','AI prompt cards'],
+   out:['Your own tea routine','Your own blend','A first product plan'],
+   fit:['Workers who need rest','Beginners who want to learn tea properly','Anyone who wants to start a small brand or side business this year'],
+   need:['We send everything you need in the kit','You can follow the AI parts on a phone'],
+   opts:['tea-brand','tea-brand-live'], next:['vibe-web','ai-onboard']}
 ];
 
 /* ===== 온라인 일반 / 프리미엄, 온·오프 연계 패키지 ===== */
-var SHORT = {'agent-vod':'Start with what to hand off and what to decide','builder-vod':'A self-running publishing agent','tea-live':'3 p.m., a 3-minute steeping routine','partner-4w':'Four weeks together, applied to your work'};
 var TIERS = [
   {nm:'Standard', en:'Self-paced', line:'On your own, at your own pace', items:['10–15 minute videos and practice templates','Templates and examples for the five documents','Monthly open Q&A live (recordings provided)','Question board'], fit:'For those who want to try on their own first, prepare before a workshop or review after'},
-  {nm:'Premium', en:'Cohort', line:'Together, all the way through four weeks', items:['Everything in Standard','4-week cohort — 12 seats','Weekly 90-minute live + weekly assignment feedback','One 1:1 feedback session','Four tea kits shipped','Invitation to an alumni tea session after completion'], fit:'For those who want to apply their agent to real work and daily life'}
+  {nm:'Premium', en:'Cohort', line:'Together, all the way through four weeks', items:['Everything in Standard','A 4–6 week cohort per course, limited seats','Weekly live session + weekly feedback','1:1 feedback','Invitation to an alumni tea session after completion'], fit:'For those who want to apply their agent to real work and daily life'}
 ];
 var TIER_ROWS = [
-  ['Format','On your own, anytime','Together on set dates (4-week cohort)'],
-  ['Seats','Unlimited','12 people'],
-  ['Live','Monthly open Q&A','Weekly, 90 minutes'],
-  ['Feedback','Question board','Weekly assignment feedback + one 1:1'],
-  ['Tea','—','Four tea kits (white tea, Da Hong Pao, tea bags, Korean tea)'],
+  ['Format','On your own, anytime','Together on set dates (4–6 week cohort)'],
+  ['Seats','Unlimited','Set per cohort'],
+  ['Live','Monthly open Q&A','Weekly'],
+  ['Feedback','Question board','Weekly assignment feedback + 1:1'],
+  ['Kit','A kit with every course','Course kit + cohort materials'],
   ['Afterwards','Recordings','Alumni tea session invitation'],
   ['Add-ons','—','1:1 coaching available']
 ];
@@ -1318,12 +1411,12 @@ function planGrid(list, cols){
 }
 function tierSection(){
   return '<section class="section paper"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">Plans</p><h2 class="h2 one">Standard and Premium</h2></div><p class="lead">Choose whether to steep on your own at your own pace, or together all the way through four weeks.</p></div>' +
+    '<div class="sec-head"><div><p class="eyebrow">Plans</p><h2 class="h2 one">Standard and Premium</h2></div><p class="lead">Learn alone at your own pace, or go all the way with a cohort.</p></div>' +
     planGrid([
-      {tag:'Standard', name:'On your own, at your own pace', big:'Anytime', sub:'Videos + monthly open Q&A', best:'Prepare before or review after a workshop', f:['10–15 minute videos + practice templates','Templates and examples for the five documents','Monthly open Q&A live','Question board'], href:'#learn?t=course', btn:'Course inquiry'},
-      {tag:'Premium', hi:1, name:'Together, all the way through four weeks', big:'4 weeks · 12 people', sub:'Weekly 90-minute live session', best:'When you want it to stick in your work', f:['Everything in Standard','Weekly assignment feedback + 1:1','Four tea kits shipped','Alumni tea session after completion'], href:'#learn?t=cohort', btn:'Cohort inquiry'}
+      {tag:'Standard', name:'On your own, at your own pace', big:'Anytime', sub:'8-lesson VOD + kit', best:'Follow along, keep the result', f:['About 10 minutes per lesson','A kit and templates with every course','Monthly open Q&A live','Question board'], href:'#learn?t=course', btn:'Course inquiry'},
+      {tag:'Premium', hi:1, name:'Together, to the finish', big:'4–6 weeks', sub:'Weekly live', best:'When you want to finish it', f:['Everything in Standard','Weekly assignment feedback + 1:1','Cohort materials per course','Alumni tea session after completion'], href:'#learn?t=cohort', btn:'Cohort inquiry'}
     ], 2) +
-    '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">We’ll share pricing, course duration and cohort dates as soon as they’re confirmed.</p>' +
+    '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">Prices are on each course page. Access periods and cohort dates will be announced once set.</p>' +
   '</div></section>' +
   '<section class="section"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">For teams</p><h2 class="h2 one">Taking courses as a company</h2></div><p class="lead">Two options, depending on whether you offer it as a benefit or run it as training together.</p></div>' +
@@ -1457,7 +1550,7 @@ function detailNav(backHref, backLabel, title){
   var secs = Array.prototype.filter.call(app.querySelectorAll('section'), function(sec){ return sec.querySelector('.eyebrow') && sec.querySelector('h2'); });
   if(!secs.length) return;
   secs = secs.slice(0, 6);
-  var LBL = {Instructor:'Hosts', Instructors:'Hosts', Hosts:'Hosts', Reviews:'Reviews', Curriculum:'Curriculum', 'Before · After':'Before and after', 'For you':'Who it’s for', Included:'Includes', Timeline:'Flow', FAQ:'Frequently asked questions', 'The day':'Flow', 'What you make':'Outcomes', 'Why tea':'Why tea', Compare:'Compare'};
+  var LBL = {About:'About', Kit:'Kit', Next:'Next course', Instructor:'Hosts', Instructors:'Hosts', Hosts:'Hosts', Reviews:'Reviews', Curriculum:'Curriculum', 'Before · After':'Before and after', 'For you':'Who it’s for', Included:'Includes', Timeline:'Flow', FAQ:'Frequently asked questions', 'The day':'Flow', 'What you make':'Outcomes', 'Why tea':'Why tea', Compare:'Compare'};
   var items = secs.map(function(sec, i){ if(!sec.id) sec.id = 'sec-' + i; sec.classList.add('dn-sec'); var eb = sec.querySelector('.eyebrow').textContent.trim(); var key = Object.keys(LBL).filter(function(k){ return eb.toLowerCase() === k.toLowerCase(); })[0]; return {id:sec.id, t: key ? LBL[key] : sec.querySelector('h2').textContent.trim()}; });
   var bar = document.createElement('nav'); bar.className = 'dnav'; bar.setAttribute('aria-label', 'On this page');
   bar.innerHTML = '<div class="wrap dnav-in"><a class="dn-back" href="' + backHref + '"><span aria-hidden="true">←</span> ' + esc(backLabel) + '</a><span class="dn-sep" aria-hidden="true">/</span><span class="dn-here ol">' + esc(title) + '</span>' +
@@ -1961,65 +2054,76 @@ function vOnline(){
   return '<section class="section tight"><div class="wrap">' +
     '<p class="eyebrow">Online</p><h1 class="h1" style="font-size:clamp(34px,5vw,58px)">Online courses</h1>' +
     '<div class="ol-hero">' + ph('bookLaptop', 1000) + ph('teaCup', 700) + ph('manLaptop', 700) + '</div>' +
-    '<p class="lead ol" style="margin-top:16px">Solo: <b>Standard</b>, together: <b>Premium</b>. For companies: <b>benefit or training</b>.</p>' +
+    '<p class="lead ol" style="margin-top:16px">From beginner to advanced, every course comes with a kit. Pre-orders are open now.</p>' +
   '</div></section>' +
-  '<section style="padding-bottom:88px"><div class="wrap"><div class="cgrid">' +
-    C.map(function(c){ return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge' + (c.tier === 'Premium' ? '' : ' ln') + '">' + esc(c.tier) + '</span><span class="badge ln">' + esc(c.kind) + '</span></span><h2 class="h3 one" style="font-size:clamp(17px,1.55vw,22px)">' + esc(c.title) + '</h2><p class="muted ol" style="margin:0">' + esc(SHORT[c.id] || c.hook) + '</p><span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
+  '<section style="padding-bottom:88px"><div class="wrap"><div class="cgrid c2">' +
+    C.map(function(c){ var it = sale(c.opts[0]); return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge">' + esc(c.level) + '</span><span class="badge ln">' + esc(c.kind) + '</span></span><h2 class="h3" style="font-size:clamp(17px,1.55vw,21px)">' + esc(c.title) + '</h2><p class="muted ol" style="margin:0">' + esc(c.short) + '</p>' + (it ? '<p class="cprice">' + (it.list ? '<s>' + won(it.list) + '</s> ' : '') + '<b>' + won(it.price) + '</b> <span>Pre-order</span></p>' : '') + '<span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
   '</div></div></section>' + tierSection() + pkgSection();
 }
 
 /* ===== 온라인강의 셀링 페이지 (광고 착지용) ===== */
+function cLessons(c){ return c.parts.reduce(function(n, p){ return n + p.ls.length; }, 0); }
+function cOpt(id){ var it = sale(id); if(!it) return ''; return '<label class="cb-opt"><input type="radio" name="cbopt" value="' + id + '"' + (id === sale(id) && false ? '' : '') + '><span class="cb-l">' + esc((BASE && it.label_en) || it.label || it.name) + '</span><span class="cb-p">' + (it.list ? '<s>' + won(it.list) + '</s>' : '') + '<b>' + won(it.price) + '</b></span></label>'; }
+function cBuy(c){
+  var main = sale(c.opts[0]);
+  if(!main) return '<div class="cbuy"><p class="eyebrow">Open soon</p><div class="cb-big">Sign up for launch updates</div><p class="muted" style="margin:0;font-size:14px">We’ll tell you first once the price and launch date are set.</p><button type="button" class="btn btn-lime" data-notify>Get launch updates</button></div>';
+  var off = main.list ? Math.round((1 - main.price / main.list) * 100) : 0;
+  return '<div class="cbuy"><span class="badge" style="align-self:flex-start">Pre-order · early bird' + (off ? ' ' + off + '%' : '') + '</span>' +
+    '<div class="cb-big">' + won(main.price) + (main.list ? ' <s>' + won(main.list) + '</s>' : '') + '</div>' +
+    '<div class="cb-opts" role="radiogroup" aria-label="Course options">' + c.opts.map(cOpt).join('').replace('name="cbopt" value="' + c.opts[0] + '"', 'name="cbopt" value="' + c.opts[0] + '" checked') + '</div>' +
+    '<a class="btn btn-lime cb-go" href="' + buyHref(c.opts[0]) + '">Pay now</a>' +
+    '<ul class="cb-meta"><li><span>Level</span><b>' + esc(c.level) + '</b></li><li><span>Format</span><b>' + cLessons(c) + ' lessons · about 10 min each</b></li><li><span>Included</span><b>' + esc(c.kind.split(' + ')[1] || '') + '</b></li><li><span>Launch</span><b>To be announced</b></li></ul>' +
+    '<p class="muted" style="margin:0;font-size:13px">VAT included · full refund if the course doesn’t launch.</p>' +
+    '<button type="button" class="btn btn-line btn-sm" data-notify>Just notify me at launch</button></div>';
+}
 function vCourse(c){
-  var t = T[c.who];
-  var strip = (c.strip || ['desk','teaPour','laptops','desk2','teaCup','laugh','forest']).filter(function(k){ return k !== c.photo; }).slice(0, 6);
-  return '<section><div class="wrap sp-hero">' +
-    '<div style="display:flex;flex-direction:column;gap:18px">' +
-      '<span class="badge" style="align-self:flex-start">' + esc(c.tier) + ' · ' + esc(c.kind) + ' · ' + t.nm + (c.id === 'partner-4w' ? ' · Yoojin Lee (Bayu)' : '') + '</span>' +
-      '<h1 class="h1 one" style="font-size:clamp(28px,2.7vw,40px)">' + esc(c.title) + '</h1>' +
+  var t = T[c.who], n = cLessons(c), main = sale(c.opts[0]);
+  return '<section><div class="wrap ch">' +
+    '<div class="ch-txt">' +
+      '<p class="ch-crumb">Online course · ' + esc(c.level) + '</p>' +
+      '<h1 class="h1" style="font-size:clamp(28px,3vw,42px)">' + esc(c.title) + '</h1>' +
       '<p class="lead">' + esc(c.hook) + '</p>' +
-      '<p style="margin:0;font-weight:700;font-size:18px">' + esc(c.promise) + '</p>' +
-      '<div class="btns">' + (sale(c.id) ? '<a class="btn btn-lime" href="' + buyHref(c.id) + '">Pay · ' + won(sale(c.id).price) + '</a>' : '<button type="button" class="btn btn-lime" data-notify>Get launch updates</button>') + '<a class="btn btn-line" href="#learn?t=' + (c.tier === 'Premium' ? 'cohort' : 'course&c=' + c.id) + '">' + (c.tier === 'Premium' ? 'Cohort inquiry' : 'Course inquiry') + '</a></div>' +
-      (sale(c.id) ? '' : '<p class="muted" style="margin:0;font-size:14px">We’ll share launch dates and pricing as soon as they’re confirmed.</p>') +
-    '</div>' + ph(c.photo, 1300, '', true) +
+      '<ul class="ch-meta"><li>' + esc(c.level) + '</li><li>' + n + ' lessons · about 10 min each</li><li>+ ' + esc(c.kind.split(' + ')[1] || c.kind) + '</li><li>' + t.nm + '</li></ul>' +
+      '<div class="chips ch-tags">' + c.tags.map(function(x){ return '<span class="tag">#' + esc(x) + '</span>'; }).join('') + '</div>' +
+      '<div class="btns ch-cta">' + (main ? '<a class="btn btn-lime" id="heroBuy" href="' + buyHref(c.opts[0]) + '">Pre-order · ' + won(main.price) + '</a>' : '<button type="button" class="btn btn-lime" id="heroBuy" data-notify>Get launch updates</button>') + '<a class="btn btn-line" href="#learn?t=course&c=' + c.id + '">Course inquiry</a></div>' +
+    '</div>' + ph(c.photo, 1300, 'ch-ph', true) +
   '</div></section>' +
-  '<section style="padding-bottom:56px"><div class="wrap"><div class="strip" aria-label="Class atmosphere photo">' + strip.map(function(k){ return ph(k, 600); }).join('') + '</div></div></section>' +
-  '<section class="section paper"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">Before · After</p><h2 class="h2">Before and after this course</h2></div></div>' +
-    '<div class="ba"><div class="bf"><b>Now</b><ul>' + c.pain.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div><div class="af"><b>After the course</b><ul>' + c.after.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div></div>' +
-  '</div></section>' +
-  (c.incl ? '<section class="section"><div class="wrap" style="max-width:960px"><div class="sec-head"><div><p class="eyebrow">Included</p><h2 class="h2">Included in Premium</h2></div></div><ul class="checks">' + c.incl.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div></section>' : '') +
-  '<section class="section" id="curri"><div class="wrap" style="max-width:960px">' +
-    '<div class="sec-head"><div><p class="eyebrow">Curriculum</p><h2 class="h2">What you’ll learn</h2></div></div>' +
-    c.lessons.map(function(l, i){ return '<div class="lesson">' + ph(l[2], 500) + '<div><span class="wk">' + esc(l[0]) + '</span><h3 class="h3">' + esc(l[1]) + '</h3><ul>' + l[3].map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div></div>'; }).join('') +
-  '</div></section>' +
-  '<section class="section paper"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">For you</p><h2 class="h2">Who it’s for</h2></div></div>' +
-    '<div class="fit">' + c.fit.map(function(x){ return '<div><span class="ol">' + esc(x) + '</span></div>'; }).join('') + '</div>' +
-  '</div></section>' +
-  '<section class="section dark"><div class="wrap split">' +
-    '<div style="display:flex;flex-direction:column;gap:14px"><p class="eyebrow">Instructor</p><h2 class="h2">' + t.nm + '</h2><p class="lead">' + esc(t.line) + '<br>' + esc(t.book) + '</p><p class="lead">' + esc(t.does) + '</p></div>' +
-    tph(t, 1000, 'rounded54 sp-portrait') +
-  '</div></section>' +
-  '<section class="section"><div class="wrap" style="max-width:960px">' +
-    '<div class="sec-head"><div><p class="eyebrow">Reviews</p><h2 class="h2">Course reviews</h2></div></div>' +
-    '<p class="note">We’re collecting reviews from the first cohort. We only post real reviews.</p>' +
-  '</div></section>' +
-  '<section class="section paper"><div class="wrap" style="max-width:960px">' +
-    (sale(c.id) ? buyBox(c.id, 'Enroll') : '<div class="price-box"><div><p class="eyebrow">Open soon</p><div class="big">Sign up for launch updates</div><p class="muted" style="margin:8px 0 0">We’ll let you know first when pricing and the launch date are set. Those who sign up will receive an early-bird offer.</p></div><button type="button" class="btn btn-lime" data-notify>Get launch updates</button></div>') +
-  '</div></section>' +
-  tierSection() + pkgSection() +
-  '<section class="section"><div class="wrap faq" style="max-width:860px"><h2 class="h2" style="margin-bottom:12px">Frequently asked questions</h2>' +
-    [['How long is the course access?','It’s set per course and shown on the course page and checkout screen at launch. If you have questions, send us a course inquiry.'],['Can we pay with the company training budget?','We plan to support tax invoices and group enrollment. If several people will take it together, contact us for group enrollment.'],['How is it different from the workshop?','Workshops are classes a team builds together on site; online courses are taken on your own, anytime. They use the same examples, so they work as pre-session and review for the workshop.']].map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') +
-  '</div></section>';
+  '<div class="wrap cd"><div class="cd-main">' +
+    '<section class="cd-sec"><p class="eyebrow">About</p><h2 class="h2">What you get</h2>' +
+      '<p class="cd-promise">' + esc(c.promise) + '</p>' +
+      '<div class="ba"><div class="bf"><b>Now</b><ul>' + c.pain.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div><div class="af"><b>After the course</b><ul>' + c.after.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div></div>' +
+      '<h3 class="h3" style="margin:32px 0 12px">Recommended for</h3><ul class="checks">' + c.fit.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+      '<h3 class="h3" style="margin:28px 0 12px">Before you start</h3><ul class="cd-need">' + c.need.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+    '</section>' +
+    '<section class="cd-sec"><p class="eyebrow">Curriculum</p><h2 class="h2">Curriculum</h2>' +
+      '<div class="cu-head"><span>' + c.parts.length + ' stages · ' + n + ' lessons · about 10 min each</span><button type="button" class="cu-all" data-cuall>Expand all</button></div>' +
+      c.parts.map(function(p, i){ return '<details class="cu"' + (i === 0 ? ' open' : '') + '><summary><span class="cu-n">' + (i + 1) + '</span><b>' + esc(p.nm) + '</b><span class="cu-c">' + p.ls.length + ' lessons</span></summary><ol>' + p.ls.map(function(l){ return '<li><span class="cu-no">' + esc(l[0]) + '</span><span class="cu-t">' + esc(l[1]) + '</span>' + (l[2] ? '<span class="cu-free">Free preview</span>' : '') + '<span class="cu-d">~10 min</span></li>'; }).join('') + '</ol></details>'; }).join('') +
+    '</section>' +
+    '<section class="cd-sec"><p class="eyebrow">Kit</p><h2 class="h2">The kit you get</h2><ul class="checks">' + c.kit.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+      '<p class="muted" style="margin:16px 0 0">What you keep: <b style="color:var(--ink)">' + c.out.map(esc).join(', ') + '</b></p></section>' +
+    '<section class="cd-sec"><p class="eyebrow">Instructor</p><h2 class="h2">Hosts</h2>' +
+      '<div class="cd-t">' + tph(t, 600, 'cd-t-ph') + '<div><b class="cd-t-nm">' + t.nm + '</b><p class="muted" style="margin:2px 0 10px">' + esc(t.role) + '</p><p style="margin:0">' + esc(t.does) + '</p><p class="muted" style="margin:10px 0 0;font-size:14px">' + esc(t.line) + ' · ' + esc(t.book) + '</p><a class="btn btn-line btn-sm" style="margin-top:14px" href="#t-' + c.who + '">More about the instructor</a></div></div>' +
+    '</section>' +
+    '<section class="cd-sec"><p class="eyebrow">Next</p><h2 class="h2">Good courses to take next</h2><div class="cd-next">' +
+      c.next.map(function(id){ var x = cById(id); if(!x) return ''; var it = sale(x.opts[0]); return '<a class="cd-nx" href="#c-' + x.id + '">' + ph(x.photo, 500) + '<div><span class="badge ln">' + esc(x.level) + '</span><b>' + esc(x.title) + '</b><span class="muted">' + T[x.who].nm + (it ? ' · ' + won(it.price) : '') + '</span></div></a>'; }).join('') +
+    '</div></section>' +
+    '<section class="cd-sec faq"><p class="eyebrow">FAQ</p><h2 class="h2">Frequently asked questions</h2>' +
+      [['If I pay now, can I watch right away?','Right now it’s pre-order only. We’ll let you in first at launch, and refund you in full if the course doesn’t launch.'],['How long is the course access?','We’ll state it on the course page and checkout at launch.'],['Can we pay with the company training budget?','We plan to support tax invoices and group enrollment. If several people will take it together, contact us for group enrollment.'],['How is it different from the workshop?','Workshops are built together on site; online courses you watch on your own, anytime.']].map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') +
+    '</section>' +
+  '</div><aside class="cd-side">' + cBuy(c) + '</aside></div>';
 }
 function bindCourse(c){
   $$('[data-notify]').forEach(function(b){ b.addEventListener('click', function(){ notifyDialog(c); }); });
+  var go = $('.cb-go');
+  $$('input[name="cbopt"]').forEach(function(r){ r.addEventListener('change', function(){ if(go) go.setAttribute('href', buyHref(r.value)); }); });
+  var all = $('[data-cuall]');
+  if(all) all.addEventListener('click', function(){ var ds = $$('details.cu'), open = !ds.every(function(d){ return d.open; }); ds.forEach(function(d){ d.open = open; }); all.textContent = open ? 'Collapse all' : 'Expand all'; });
   $('#stickyTitle').textContent = c.title;
-  $('#stickyBtn').textContent = sale(c.id) ? 'Pay now' : 'Get launch updates';
-  $('#stickyBtn').onclick = function(){ if(sale(c.id)) location.href = buyHref(c.id); else notifyDialog(c); };
-  var heroBtn = $('[data-notify]');
+  $('#stickyBtn').textContent = sale(c.opts[0]) ? 'Pre-order' : 'Get launch updates';
+  $('#stickyBtn').onclick = function(){ if(sale(c.opts[0])) location.href = buyHref(c.opts[0]); else notifyDialog(c); };
+  var heroBtn = $('#heroBuy');
   if('IntersectionObserver' in window && heroBtn){
-    stickyObs = new IntersectionObserver(function(es){ var show = !es[0].isIntersecting; $('#stickyCta').classList.toggle('show', show); $('#stickyCta').setAttribute('aria-hidden', String(!show)); });
+    stickyObs = new IntersectionObserver(function(es){ var show = !es[0].isIntersecting && innerWidth <= 1000; $('#stickyCta').classList.toggle('show', show); $('#stickyCta').setAttribute('aria-hidden', String(!show)); });
     stickyObs.observe(heroBtn);
   }
 }
@@ -2314,9 +2418,9 @@ function lfield(label, name, opt){
 function learnFields(t, cid){
   var person = [lfield('Name', 'name', {req:1, ac:'name', err:'Please enter your name'}), lfield('Email', 'email', {req:1, type:'email', ac:'email', err:'Please check your email'})];
   var corp = [lfield('Company / organization', 'company', {req:1, ac:'organization', err:'Please enter your company name'}), lfield('Contact name', 'name', {req:1, ac:'name', err:'Please enter your name'}), lfield('Email', 'email', {req:1, type:'email', ac:'email', err:'Please check your email'}), lfield('Phone', 'phone', {type:'tel', ac:'tel'})];
-  var vod = C.filter(function(c){ return c.tier === 'Standard'; });
+  var vod = C;
   if(t === 'course') return person.concat([
-    lfield('Course of interest', 'course', {req:1, full:1, err:'Please choose a course', sel:cid || '', select:[['','Please select']].concat(vod.map(function(c){ return [c.id, c.title + ' (' + c.kind + ')']; }), [['all','All standard courses'],['unsure','Not sure yet']])}),
+    lfield('Course of interest', 'course', {req:1, full:1, err:'Please choose a course', sel:cid || '', select:[['','Please select']].concat(vod.map(function(c){ return [c.id, c.title + ' (' + c.kind + ')']; }), [['all','All courses'],['unsure','Not sure yet']])}),
     lfield('Topics (select all that apply)', 'ask', {full:1, chips:['Pricing and payment','Course duration','Refunds','Curriculum','Course environment','Difference from workshops']}),
     lfield('Your question', 'msg', {full:1, area:1, ph:'e.g., Can I take it on a company laptop?'})
   ]).join('');

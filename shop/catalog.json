@@ -97,46 +97,6 @@
         "ref": 20
       }
     },
-    "agent-vod": {
-      "name": "기획자를 위한 AI 에이전트 입문",
-      "cat": "online",
-      "price": 132000,
-      "unit": "1인 수강권",
-      "qtyMax": 1,
-      "period": "",
-      "refund": "VOD 온라인 강의",
-      "company": false
-    },
-    "builder-vod": {
-      "name": "퇴근 후에도 굴러가는 콘텐츠 자동화",
-      "cat": "online",
-      "price": 66000,
-      "unit": "1인 수강권",
-      "qtyMax": 1,
-      "period": "",
-      "refund": "VOD 온라인 강의",
-      "company": false
-    },
-    "tea-live": {
-      "name": "집중을 우리는 하루 세 잔",
-      "cat": "online",
-      "price": 65000,
-      "unit": "1인 · 1회",
-      "qtyMax": 1,
-      "period": "월 1회 라이브",
-      "refund": "정기 프로그램·기수제 과정·라이브 강의 (개인 수강생)",
-      "company": false
-    },
-    "partner-4w": {
-      "name": "네 잔으로 키우는 파트너 에이전트 (4주 기수)",
-      "cat": "online",
-      "price": 490000,
-      "unit": "1인 · 1기수",
-      "qtyMax": 1,
-      "period": "4주 · 주 1회 라이브 90분",
-      "refund": "정기 프로그램·기수제 과정·라이브 강의 (개인 수강생)",
-      "company": false
-    },
     "pkg-before": {
       "name": "패키지 01 · 미리 우리고 오기",
       "cat": "package",
@@ -180,7 +140,109 @@
       "refund": "기업 워크샵·출강 (기업 고객)",
       "company": true,
       "note": "20명 기준, 묶음 10% 할인을 적용한 금액이에요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요."
+    },
+    "ai-onboard": {
+      "name": "AI 입사식 키트: 클로드 세팅 + 나의 AI 파트너 (얼리버드)",
+      "cat": "online",
+      "price": 49000,
+      "list": 69000,
+      "label": "강의 8편 + 세팅 키트",
+      "unit": "1인 수강권",
+      "qtyMax": 1,
+      "period": "",
+      "refund": "VOD 온라인 강의",
+      "company": false,
+      "label_en": "8 lessons + setup kit"
+    },
+    "ai-onboard-kit": {
+      "name": "AI 입사식 세팅 키트 (파일만)",
+      "cat": "online",
+      "price": 29000,
+      "label": "세팅 키트 파일만",
+      "unit": "1인 · 파일 내려받기",
+      "qtyMax": 1,
+      "period": "",
+      "refund": "VOD 온라인 강의",
+      "company": false,
+      "label_en": "Setup kit files only"
+    },
+    "vibe-web": {
+      "name": "바이브코딩으로 내 웹 만들기 (얼리버드)",
+      "cat": "online",
+      "price": 69000,
+      "list": 99000,
+      "label": "강의 8편 + 웹 템플릿",
+      "unit": "1인 수강권",
+      "qtyMax": 1,
+      "period": "",
+      "refund": "VOD 온라인 강의",
+      "company": false,
+      "label_en": "8 lessons + web templates"
+    },
+    "vibe-web-4w": {
+      "name": "바이브코딩으로 내 웹 만들기 · 4주 기수",
+      "cat": "online",
+      "price": 290000,
+      "label": "4주 기수 · 라이브 + 1:1 피드백",
+      "unit": "1인 · 1기수",
+      "qtyMax": 1,
+      "period": "4주 · 주 1회 라이브",
+      "refund": "정기 프로그램·기수제 과정·라이브 강의 (개인 수강생)",
+      "company": false,
+      "label_en": "4-week cohort · live + 1:1 feedback"
+    },
+    "agent-team": {
+      "name": "혼자서 팀처럼 일하기: AI 에이전트 팀 세팅 (얼리버드)",
+      "cat": "online",
+      "price": 149000,
+      "list": 199000,
+      "label": "강의 8편 + 에이전트 팀 키트",
+      "unit": "1인 수강권",
+      "qtyMax": 1,
+      "period": "",
+      "refund": "VOD 온라인 강의",
+      "company": false,
+      "label_en": "8 lessons + agent team kit"
+    },
+    "agent-team-6w": {
+      "name": "혼자서 팀처럼 일하기 · 6주 기수",
+      "cat": "online",
+      "price": 490000,
+      "label": "6주 기수 · 내 프로젝트에 직접 피드백",
+      "unit": "1인 · 1기수",
+      "qtyMax": 1,
+      "period": "6주 · 주 1회 라이브",
+      "refund": "정기 프로그램·기수제 과정·라이브 강의 (개인 수강생)",
+      "company": false,
+      "label_en": "6-week cohort · feedback on your project"
+    },
+    "tea-brand": {
+      "name": "하루 한 잔 홈티, 그리고 나만의 차 브랜드 (얼리버드)",
+      "cat": "online",
+      "price": 99000,
+      "list": 129000,
+      "label": "강의 8편 + 계절 차 키트",
+      "unit": "1인 수강권 + 차 키트",
+      "qtyMax": 1,
+      "period": "",
+      "refund": "VOD 온라인 강의 (차 키트 부분은 실물 키트 기준)",
+      "note": "차 키트는 결제 후 배송지를 받아 보내 드려요.",
+      "company": false,
+      "label_en": "8 lessons + seasonal tea kit"
+    },
+    "tea-brand-live": {
+      "name": "하루 한 잔 홈티, 그리고 나만의 차 브랜드 · 창업 라이브 포함",
+      "cat": "online",
+      "price": 290000,
+      "label": "강의 + 차 키트 + 창업 라이브",
+      "unit": "1인 수강권 + 차 키트",
+      "qtyMax": 1,
+      "period": "창업 라이브 1회 포함",
+      "refund": "정기 프로그램·기수제 과정·라이브 강의 (개인 수강생) (차 키트 부분은 실물 키트 기준)",
+      "note": "차 키트는 결제 후 배송지를 받아 보내 드려요.",
+      "company": false,
+      "label_en": "Course + tea kit + start-up live"
     }
   },
-  "_note": "2026-11-27 임시 가격(주인 확정 전). 강사 단가(공급가): 이유진 1인 7만, 한성희 시간당 65만, 이준혁 시간당 32.5만. 기업 상품 판매가 = 강사비 ÷ 0.8 (영업·운영 수수료 = 판매가의 20%), 화면 가격은 부가세 포함. head 상품(1인 추가 10만, 클럽은 1회 9만) 결제 금액 = base + per × max(인원, min). 클럽·패키지 03·04는 묶음 10% 할인. 살롱 15만·4주 기수 49만은 시장가 기준 조정. 첫 회 파일럿 10% 할인은 상담 시 적용. 2026-11-27: 반나절 680만·숲속 하루 860만으로 확정 제시, 찻자리 클럽은 1회당 가격(495만)으로 판매."
+  "_note": "2026-11-27 임시 가격(주인 확정 전). 강사 단가(공급가): 이유진 1인 7만, 한성희 시간당 65만, 이준혁 시간당 32.5만. 기업 상품 판매가 = 강사비 ÷ 0.8 (영업·운영 수수료 = 판매가의 20%), 화면 가격은 부가세 포함. head 상품(1인 추가 10만, 클럽은 1회 9만) 결제 금액 = base + per × max(인원, min). 클럽·패키지 03·04는 묶음 10% 할인. 살롱 15만·4주 기수 49만은 시장가 기준 조정. 첫 회 파일럿 10% 할인은 상담 시 적용. 2026-11-27: 반나절 680만·숲속 하루 860만으로 확정 제시, 찻자리 클럽은 1회당 가격(495만)으로 판매. 2026-11-27: 온라인 강의를 1차 라인업 4개로 교체(사전 판매 제안가, list=정가)."
 }
