@@ -291,8 +291,9 @@ const ACT = {
   },
   async kit_upload(b) {
     const course = String(b.courseId || ''); if (!(await get('courses?select=id&id=eq.' + enc(course))).length) throw new Error('BAD_REQUEST');
-    const name = String(b.fileName || 'kit').replace(/[^\w.\-가-힣 ]/g, '_').slice(0, 120);
-    const path = course + '/' + Date.now().toString(36) + '-' + name.replace(/\s+/g, '_');
+    /* 저장소 경로는 영문·숫자만 (한글 파일명은 내려받을 때 원래 이름으로 바꿔 줌) */
+    const ext = (String(b.fileName || '').match(/\.([A-Za-z0-9]{1,8})$/) || [])[1] || 'bin';
+    const path = course + '/' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8) + '.' + ext.toLowerCase();
     const url = await S.signedPut('kits', path);
     if (!url) throw new Error('STORAGE');
     return { url, path };
