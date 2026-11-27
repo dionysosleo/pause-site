@@ -3,7 +3,8 @@
    GET  ?r=kits              → 내가 받을 수 있는 파일 키트 목록
    GET  ?r=kit&id=           → 키트 내려받기 (2분짜리 서명된 주소) + 내려받기 기록(환불 계산 기준)
    POST {action:'ping'}      → 접속 기록 (IP·일시, 1년 보관 — 개인정보처리방침)
-   POST {action:'ship', …}   → 차 키트 배송지 입력·수정 (본인 주문, 발송 전까지) */
+   POST {action:'ship', …}   → 차 키트 배송지 입력·수정 (본인 주문, 발송 전까지)
+   POST {action:'enroll_free', item} → 무료 강의 수강 등록 */
 const S = require('./_sb.js');
 const PG = require('./_pg');
 const MAIL = require('./_mail.js');
@@ -72,6 +73,16 @@ module.exports = async (req, res) => {
       if (!(last.ok && last.data[0] && Date.parse(last.data[0].at) > Date.now() - 30 * 60e3))
         await S.rest('POST', 'access_logs', { user_id: u.id, ip: S.ip(req), ua: String(req.headers['user-agent'] || '').slice(0, 200), kind: String(b.kind || 'visit').slice(0, 20) }, 'return=minimal');
       return S.send(res, 200, { ok: true });
+    }
+    /* 무료 강의 수강 등록: catalog 에 free:true 인 상품만. 결제 없이 수강권(source=free) */
+    if (b.action === 'enroll_free') {
+      const id = String(b.item || '').replace(/[^a-z0-9-]/g, ''), it = CATALOG[id];
+      if (!it || !it.free || !it.grants) return S.send(res, 400, { ok: false, code: 'NOT_FREE' });
+      const ex = await S.rest('GET', 'enrollments?select=id,revoked_at&user_id=eq.' + u.id + '&course_id=eq.' + encodeURIComponent(it.grants) + '&source=eq.free');
+      const row = ex.ok && ex.data[0];
+      if (row && row.revoked_at) await S.rest('PATCH', 'enrollments?id=eq.' + row.id, { revoked_at: null, started_at: new Date().toISOString() }, 'return=minimal');
+      else if (!row) { const w = await S.rest('POST', 'enrollments', { user_id: u.id, course_id: it.grants, source: 'free' }, 'return=minimal'); if (!w.ok) { console.error('enroll free', w.status, w.text); return S.send(res, 500, { ok: false, code: 'DB' }); } }
+      return S.send(res, 200, { ok: true, course: it.grants });
     }
     if (b.action === 'ship') {
       const id = /^[A-Za-z0-9_-]{6,64}$/.test(String(b.orderId || '')) ? b.orderId : '';

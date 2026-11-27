@@ -1531,10 +1531,10 @@ function pkgSection(){
   return '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Online × Offline</p><h2 class="h2 one">Online + offline packages</h2></div><p class="lead">Online fills the time before, after and between on-site sessions — with the same hosts and the same four cups.</p></div>' +
     planGrid([
-      {href: sale('pkg-before') ? buyHref('pkg-before') : '', btn: sale('pkg-before') ? 'Pay · ' + won(sale('pkg-before').price) : '', tag:'01 · Before', name:'Steep ahead', big:'Videos + 4 hours', sub:'Prepare online, go deep on site', best:'Teams starting out', f:['Basic terms and access in advance','On site: tea, people, practice']},
-      {href: sale('pkg-after') ? buyHref('pkg-after') : '', btn: sale('pkg-after') ? 'Pay · ' + won(sale('pkg-after').price) : '', tag:'02 · After', hi:1, name:'Four weeks after the workshop', big:'4 hours + 4 weeks', sub:'4-week cohort from day 2', best:'To make it stick', f:['Premium cohort, same group','Partner onboarding · 60 min (Leo)']},
-      {href: sale('pkg-season') ? buyHref('pkg-season') : '', btn: sale('pkg-season') ? 'Pay · ' + won(sale('pkg-season').price) : '', tag:'03 · Season', name:'Tea Table Club season', big:'Month 4', sub:'Monthly evening + online', best:'Leader groups, tenants', f:['Standard pass for everyone','One month: agent-partner session']},
-      {href: sale('pkg-year') ? buyHref('pkg-year') : '', btn: sale('pkg-year') ? 'Pay · ' + won(sale('pkg-year').price) : '', tag:'04 · One year', name:'One-year wellness', big:'1 year', sub:'Four seasons + champions', best:'Year-long partners', f:['Agent-partner check-in each quarter','Premium for leaders']}
+      {href: sale('pkg-before') ? buyHref('pkg-before') : '', btn: sale('pkg-before') ? 'Pay · ' + priceTxt(sale('pkg-before')) : '', tag:'01 · Before', name:'Steep ahead', big:'Videos + 4 hours', sub:'Prepare online, go deep on site', best:'Teams starting out', f:['Basic terms and access in advance','On site: tea, people, practice']},
+      {href: sale('pkg-after') ? buyHref('pkg-after') : '', btn: sale('pkg-after') ? 'Pay · ' + priceTxt(sale('pkg-after')) : '', tag:'02 · After', hi:1, name:'Four weeks after the workshop', big:'4 hours + 4 weeks', sub:'4-week cohort from day 2', best:'To make it stick', f:['Premium cohort, same group','Partner onboarding · 60 min (Leo)']},
+      {href: sale('pkg-season') ? buyHref('pkg-season') : '', btn: sale('pkg-season') ? 'Pay · ' + priceTxt(sale('pkg-season')) : '', tag:'03 · Season', name:'Tea Table Club season', big:'Month 4', sub:'Monthly evening + online', best:'Leader groups, tenants', f:['Standard pass for everyone','One month: agent-partner session']},
+      {href: sale('pkg-year') ? buyHref('pkg-year') : '', btn: sale('pkg-year') ? 'Pay · ' + priceTxt(sale('pkg-year')) : '', tag:'04 · One year', name:'One-year wellness', big:'1 year', sub:'Four seasons + champions', best:'Year-long partners', f:['Agent-partner check-in each quarter','Premium for leaders']}
     ], 4) +
     (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">Package prices are for 20 people; 03 and 04 include a 10% bundle discount. We run on a 15-person minimum and adjust the price after a consultation if your headcount differs. (VAT included)</p>' : '') +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=package">Package consultation</a><a class="btn btn-line" href="#proposal">Get the brochure</a></div>' +
@@ -1687,6 +1687,7 @@ function route(){
   else if(/^contact\?type=(online|package)/.test(h)){ nav(routeUrl('learn?t=' + (h.indexOf('package') > 0 ? 'package' : 'group')), true); return; }
   else if(h.indexOf('login') === 0){ page('login'); app.innerHTML = vLogin(h.split('?')[1] || ''); bindLogin(); }
   else if(h === 'my'){ page('my'); app.innerHTML = vMy(); bindMy(); }
+  else if(h.indexOf('enroll') === 0){ page('my'); app.innerHTML = vEnroll(); bindEnroll(h.split('?')[1] || ''); }
   else if((m = h.match(/^p-(.+)$/)) && cById(m[1])){ page('my'); app.innerHTML = vPlay(m[1]); bindPlay(m[1]); }
   else if(h.indexOf('contact') === 0){ page('contact'); app.innerHTML = vContact(h.split('?')[1] || ''); bindContact(); }
   else { page(''); app.innerHTML = '<section class="section"><div class="wrap"><h1 class="h2">Page not found</h1><p class="lead" style="margin-top:12px"><a href="#home">Go to home</a></p></div></section>'; }
@@ -1709,7 +1710,7 @@ function route(){
    화면 코드는 '#workshop'처럼 써도 됨 → pathify가 '/workshop'으로 바꾸고, 클릭은 nav가 처리.
    file:// 로 열 때(검사 스크립트)는 예전처럼 # 주소로 동작. 예전 # 링크로 들어오면 실제 주소로 바꿔 줌. */
 var HASH_MODE = location.protocol === 'file:';
-var ROUTE_RE = /^(intro|home|workshop|program|online|team|contact|proposal|brief|learn|privacy|terms|ai-policy|refund|copyright|day|login|my)(\?.*)?$|^[wctp]-[a-z0-9-]+$/;
+var ROUTE_RE = /^(intro|home|workshop|program|online|team|contact|proposal|brief|learn|privacy|terms|ai-policy|refund|copyright|day|login|my|enroll)(\?.*)?$|^[wctp]-[a-z0-9-]+$/;
 function isRoute(t){ return ROUTE_RE.test(t || ''); }
 var BASE = document.documentElement.lang === 'en' ? '/en' : '';
 function routeUrl(t){ return HASH_MODE ? '#' + t : (t === 'intro' ? (BASE || '/') : BASE + '/' + t); }
@@ -1719,7 +1720,7 @@ function curRoute(){
   if(isRoute(hs)){ history.replaceState(null, '', routeUrl(hs)); return hs; }
   var p = decodeURIComponent(location.pathname.replace(/^\/en(?=\/|$)/, '').replace(/^\/+|\/+$/g, '')).replace(/\.html$/, '');
   p = p || 'intro';
-  return /^(learn|contact|login)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
+  return /^(learn|contact|login|enroll)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
 }
 function nav(url, replace){
   if(HASH_MODE){ if(replace) location.replace(url); else location.hash = url.slice(1); return; }
@@ -1760,7 +1761,7 @@ function afterRoute(h){
   var faq = $$('#app .faq details').map(function(d){ var q = d.querySelector('summary'); return q ? {'@type':'Question', name:q.textContent.trim(), acceptedAnswer:{'@type':'Answer', text:d.textContent.replace(q.textContent, '').trim()}} : null; }).filter(Boolean);
   if(faq.length) ld = ld ? [ld, {'@context':'https://schema.org', '@type':'FAQPage', mainEntity:faq}] : {'@context':'https://schema.org', '@type':'FAQPage', mainEntity:faq};
   $('#ldRoute').textContent = ld ? JSON.stringify(ld) : '';
-  var notFound = /Page not found/.test($('#app').textContent.slice(0, 200)) || /^(login|my|p-)/.test(h), rb = document.querySelector('meta[name="robots"]');
+  var notFound = /Page not found/.test($('#app').textContent.slice(0, 200)) || /^(login|my|p-|enroll)/.test(h), rb = document.querySelector('meta[name="robots"]');
   if(notFound && !rb){ rb = document.createElement('meta'); rb.name = 'robots'; rb.content = 'noindex'; document.head.appendChild(rb); } else if(!notFound && rb) rb.remove();
   var hsh = location.hash.slice(1); if(!HASH_MODE && hsh && !isRoute(hsh)){ var el = document.getElementById(hsh); if(el) setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60); }
   window.dispatchEvent(new Event('routechange'));
@@ -2080,7 +2081,7 @@ function vWDetail(w){
       '<div style="display:flex;gap:6px;margin-bottom:14px"><span class="badge">' + esc(w.badge) + '</span><span class="badge ln">' + esc(w.kind) + '</span></div>' +
       '<h1 class="h1" style="font-size:clamp(30px,4.4vw,50px)">' + esc(w.title) + '</h1>' +
       '<p class="lead" style="margin-top:16px">' + esc(w.sub) + '</p>' +
-      (sale(w.id) ? '<div class="btns" style="margin-top:18px;align-items:center"><a class="btn btn-lime" href="' + buyHref(w.id) + '">Pay · ' + won(sale(w.id).price) + '</a><span class="muted" style="font-size:14px">' + esc(sale(w.id).head ? headLine(sale(w.id)) + ' · VAT incl.' : sale(w.id).unit + ' · VAT incl.') + '</span></div>' : '') +
+      (sale(w.id) ? '<div class="btns" style="margin-top:18px;align-items:center"><a class="btn btn-lime" href="' + buyHref(w.id) + '">Pay · ' + priceTxt(sale(w.id)) + '</a><span class="muted" style="font-size:14px">' + esc(sale(w.id).head ? headLine(sale(w.id)) + ' · VAT incl.' : sale(w.id).unit + ' · VAT incl.') + '</span></div>' : '') +
       '<p class="bio-proof" style="margin-top:20px">Best when — ' + esc(w.fit) + '</p>' +
       '<h2>What you’ll build</h2><ul class="checks">' + w.make.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h2>Flow</h2><ol class="tl">' + w.tl.map(function(r){ return '<li' + (r[3] ? ' class="tea"' : '') + '><span class="t">' + esc(r[0]) + '</span><b>' + esc(r[1]) + (r[3] ? ' ☕' : '') + '</b><span>' + esc(r[2]) + '</span></li>'; }).join('') + '</ol>' +
@@ -2095,7 +2096,7 @@ function vWDetail(w){
     '</div>' +
     '<aside class="aside" aria-label="Workshop summary">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
-      '<dl><dt>Time</dt><dd>' + esc(w.hours) + '</dd><dt>Group size</dt><dd>' + esc(w.size) + '</dd><dt>Venue</dt><dd>' + esc(w.place) + '</dd><dt>Tools</dt><dd>' + esc(w.tools) + '</dd><dt>Fee</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (VAT incl.)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') + (sale(w.id).company ? '<br><span class="muted" style="font-weight:500">First session 10% off for new companies (applied on consultation)</span>' : '') : 'Quoted based on configuration') + '</dd></dl>' +
+      '<dl><dt>Time</dt><dd>' + esc(w.hours) + '</dd><dt>Group size</dt><dd>' + esc(w.size) + '</dd><dt>Venue</dt><dd>' + esc(w.place) + '</dd><dt>Tools</dt><dd>' + esc(w.tools) + '</dd><dt>Fee</dt><dd>' + (sale(w.id) ? '<b>' + priceTxt(sale(w.id)) + '</b> / ' + esc(sale(w.id).unit) + ' (VAT incl.)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') + (sale(w.id).company ? '<br><span class="muted" style="font-weight:500">First session 10% off for new companies (applied on consultation)</span>' : '') : 'Quoted based on configuration') + '</dd></dl>' +
       (sale(w.id) ? '<a class="btn btn-lime" href="' + buyHref(w.id) + '">Pay now</a><a class="btn btn-line" href="#contact?type=' + w.id + '">Inquire about this workshop</a>' : '<a class="btn btn-lime" href="#contact?type=' + w.id + '">Inquire about this workshop</a>') +
       '<a class="btn btn-line btn-sm" href="#program">Continue with the one-year program</a>' +
       '<p class="muted" style="margin:0;font-size:13px">Need a proposal first? <a href="#proposal">Get the brochure</a> — it arrives right away.</p>' +
@@ -2114,7 +2115,7 @@ function vProgram(){
   return '<section class="hero lite">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">We partner with one company for a full year</h1>' +
     '<p class="lead ol">Not a one-off lecture — until AI becomes the way the team works.</p>' + pathChips([['1','Diagnose','Start of quarter'],['2','Build','Team agents'],['3','Demo','Share internally'],['4','Results','Quarterly report']]) + '' +
-    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="' + buyHref('annual') + '">Pay · ' + won(sale('annual').price) + '</a><a class="btn btn-line" href="#contact?type=annual">One-year program consultation</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">Once a quarter · ' + esc(headLine(sale('annual'))) + ' · VAT incl.</p>' : '<a class="btn btn-lime" href="#contact?type=annual">One-year program consultation</a>') + '<a class="btn btn-line" href="#proposal">Get the brochure</a></div></div>' +
+    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="' + buyHref('annual') + '">Pay · ' + priceTxt(sale('annual')) + '</a><a class="btn btn-line" href="#contact?type=annual">One-year program consultation</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">Once a quarter · ' + esc(headLine(sale('annual'))) + ' · VAT incl.</p>' : '<a class="btn btn-lime" href="#contact?type=annual">One-year program consultation</a>') + '<a class="btn btn-line" href="#proposal">Get the brochure</a></div></div>' +
     ph('team', 1600, '', true) +
   '</section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -2160,21 +2161,21 @@ function vOnline(){
     '<p class="lead ol" style="margin-top:16px">From beginner to advanced, every course comes with a kit. Pre-orders are open now.</p>' +
   '</div></section>' +
   '<section style="padding-bottom:88px"><div class="wrap"><div class="cgrid c2">' +
-    C.map(function(c){ var it = sale(c.opts[0]); return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge">' + esc(c.level) + '</span><span class="badge ln">' + esc(c.kind) + '</span></span><h2 class="h3" style="font-size:clamp(17px,1.55vw,21px)">' + esc(c.title) + '</h2><p class="muted ol" style="margin:0">' + esc(c.short) + '</p>' + (it ? '<p class="cprice">' + (it.list ? '<s>' + won(it.list) + '</s> ' : '') + '<b>' + won(it.price) + '</b> <span>Pre-order</span></p>' : '') + '<span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
+    C.map(function(c){ var it = sale(c.opts[0]); return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge">' + esc(c.level) + '</span><span class="badge ln">' + esc(c.kind) + '</span></span><h2 class="h3" style="font-size:clamp(17px,1.55vw,21px)">' + esc(c.title) + '</h2><p class="muted ol" style="margin:0">' + esc(c.short) + '</p>' + (it ? '<p class="cprice">' + (it.list ? '<s>' + won(it.list) + '</s> ' : '') + '<b>' + priceTxt(it) + '</b> <span>Pre-order</span></p>' : '') + '<span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
   '</div></div></section>' + tierSection() + pkgSection();
 }
 
 /* ===== 온라인강의 셀링 페이지 (광고 착지용) ===== */
 function cLessons(c){ return c.parts.reduce(function(n, p){ return n + p.ls.length; }, 0); }
-function cOpt(id){ var it = sale(id); if(!it) return ''; return '<label class="cb-opt"><input type="radio" name="cbopt" value="' + id + '"' + (id === sale(id) && false ? '' : '') + '><span class="cb-l">' + esc((BASE && it.label_en) || it.label || it.name) + '</span><span class="cb-p">' + (it.list ? '<s>' + won(it.list) + '</s>' : '') + '<b>' + won(it.price) + '</b></span></label>'; }
+function cOpt(id){ var it = sale(id); if(!it) return ''; return '<label class="cb-opt"><input type="radio" name="cbopt" value="' + id + '"' + (id === sale(id) && false ? '' : '') + '><span class="cb-l">' + esc((BASE && it.label_en) || it.label || it.name) + '</span><span class="cb-p">' + (it.list ? '<s>' + won(it.list) + '</s>' : '') + '<b>' + priceTxt(it) + '</b></span></label>'; }
 function cBuy(c){
   var main = sale(c.opts[0]);
   if(!main) return '<div class="cbuy"><p class="eyebrow">Open soon</p><div class="cb-big">Sign up for launch updates</div><p class="muted" style="margin:0;font-size:14px">We’ll tell you first once the price and launch date are set.</p><button type="button" class="btn btn-lime" data-notify>Get launch updates</button></div>';
   var off = main.list ? Math.round((1 - main.price / main.list) * 100) : 0;
   return '<div class="cbuy"><span class="badge" style="align-self:flex-start">Pre-order · early bird' + (off ? ' ' + off + '%' : '') + '</span>' +
-    '<div class="cb-big">' + won(main.price) + (main.list ? ' <s>' + won(main.list) + '</s>' : '') + '</div>' +
+    '<div class="cb-big">' + priceTxt(main) + (main.list ? ' <s>' + won(main.list) + '</s>' : '') + '</div>' +
     '<div class="cb-opts" role="radiogroup" aria-label="Course options">' + c.opts.map(cOpt).join('').replace('name="cbopt" value="' + c.opts[0] + '"', 'name="cbopt" value="' + c.opts[0] + '" checked') + '</div>' +
-    '<a class="btn btn-lime cb-go" href="' + buyHref(c.opts[0]) + '">Pay now</a>' +
+    '<a class="btn btn-lime cb-go" href="' + buyHref(c.opts[0]) + '">' + (main && main.free ? 'Start for free' : 'Pay now') + '</a>' +
     '<ul class="cb-meta"><li><span>Level</span><b>' + esc(c.level) + '</b></li><li><span>Format</span><b>' + cLessons(c) + ' lessons · about 10 min each</b></li><li><span>Included</span><b>' + esc(c.kind.split(' + ')[1] || '') + '</b></li><li><span>Launch</span><b>To be announced</b></li></ul>' +
     '<p class="muted" style="margin:0;font-size:13px">VAT included · full refund if the course doesn’t launch.</p>' +
     '<button type="button" class="btn btn-line btn-sm" data-notify>Just notify me at launch</button></div>';
@@ -2188,7 +2189,7 @@ function vCourse(c){
       '<p class="lead">' + esc(c.hook) + '</p>' +
       '<ul class="ch-meta"><li>' + esc(c.level) + '</li><li>' + n + ' lessons · about 10 min each</li><li>+ ' + esc(c.kind.split(' + ')[1] || c.kind) + '</li><li>' + t.nm + '</li></ul>' +
       '<div class="chips ch-tags">' + c.tags.map(function(x){ return '<span class="tag">#' + esc(x) + '</span>'; }).join('') + '</div>' +
-      '<div class="btns ch-cta">' + (main ? '<a class="btn btn-lime" id="heroBuy" href="' + buyHref(c.opts[0]) + '">Pre-order · ' + won(main.price) + '</a>' : '<button type="button" class="btn btn-lime" id="heroBuy" data-notify>Get launch updates</button>') + '<a class="btn btn-line" href="#learn?t=course&c=' + c.id + '">Course inquiry</a></div>' +
+      '<div class="btns ch-cta">' + (main ? '<a class="btn btn-lime" id="heroBuy" href="' + buyHref(c.opts[0]) + '">' + (main.free ? 'Start for free' : 'Pre-order · ' + priceTxt(main)) + '</a>' : '<button type="button" class="btn btn-lime" id="heroBuy" data-notify>Get launch updates</button>') + '<a class="btn btn-line" href="#learn?t=course&c=' + c.id + '">Course inquiry</a></div>' +
     '</div>' + ph(c.photo, 1300, 'ch-ph', true) +
   '</div></section>' +
   '<div class="wrap cd"><div class="cd-main">' +
@@ -2208,7 +2209,7 @@ function vCourse(c){
       '<div class="cd-t">' + tph(t, 600, 'cd-t-ph') + '<div><b class="cd-t-nm">' + t.nm + '</b><p class="muted" style="margin:2px 0 10px">' + esc(t.role) + '</p><p style="margin:0">' + esc(t.does) + '</p><p class="muted" style="margin:10px 0 0;font-size:14px">' + esc(t.line) + ' · ' + esc(t.book) + '</p><a class="btn btn-line btn-sm" style="margin-top:14px" href="#t-' + c.who + '">More about the instructor</a></div></div>' +
     '</section>' +
     '<section class="cd-sec"><p class="eyebrow">Next</p><h2 class="h2">Good courses to take next</h2><div class="cd-next">' +
-      c.next.map(function(id){ var x = cById(id); if(!x) return ''; var it = sale(x.opts[0]); return '<a class="cd-nx" href="#c-' + x.id + '">' + ph(x.photo, 500) + '<div><span class="badge ln">' + esc(x.level) + '</span><b>' + esc(x.title) + '</b><span class="muted">' + T[x.who].nm + (it ? ' · ' + won(it.price) : '') + '</span></div></a>'; }).join('') +
+      c.next.map(function(id){ var x = cById(id); if(!x) return ''; var it = sale(x.opts[0]); return '<a class="cd-nx" href="#c-' + x.id + '">' + ph(x.photo, 500) + '<div><span class="badge ln">' + esc(x.level) + '</span><b>' + esc(x.title) + '</b><span class="muted">' + T[x.who].nm + (it ? ' · ' + priceTxt(it) : '') + '</span></div></a>'; }).join('') +
     '</div></section>' +
     '<section class="cd-sec faq"><p class="eyebrow">FAQ</p><h2 class="h2">Frequently asked questions</h2>' +
       [['If I pay now, can I watch right away?','Right now it’s pre-order only. We’ll let you in first at launch, and refund you in full if the course doesn’t launch.'],['How long is the course access?','We’ll state it on the course page and checkout at launch.'],['Can we pay with the company training budget?','We plan to support tax invoices and group enrollment. If several people will take it together, contact us for group enrollment.'],['How is it different from the workshop?','Workshops are built together on site; online courses you watch on your own, anytime.']].map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') +
@@ -2222,7 +2223,7 @@ function bindCourse(c){
   var all = $('[data-cuall]');
   if(all) all.addEventListener('click', function(){ var ds = $$('details.cu'), open = !ds.every(function(d){ return d.open; }); ds.forEach(function(d){ d.open = open; }); all.textContent = open ? 'Collapse all' : 'Expand all'; });
   $('#stickyTitle').textContent = c.title;
-  $('#stickyBtn').textContent = sale(c.opts[0]) ? 'Pre-order' : 'Get launch updates';
+  $('#stickyBtn').textContent = sale(c.opts[0]) ? (sale(c.opts[0]).free ? 'Start for free' : 'Pre-order') : 'Get launch updates';
   $('#stickyBtn').onclick = function(){ if(sale(c.opts[0])) location.href = buyHref(c.opts[0]); else notifyDialog(c); };
   var heroBtn = $('#heroBuy');
   if('IntersectionObserver' in window && heroBtn){
@@ -2286,13 +2287,15 @@ function bindTeam(){
 var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'Junhyuck Lee', cpoDept:'', host:'Vercel Inc.' }; /* host = 호스팅 서비스 제공자 (전자상거래법 사이버몰 표시) */
 /* ===== 판매 상품 (shop/catalog.json — 가격이 0보다 큰 상품만 결제 경로가 열림) ===== */
 var SHOP = {};
-function sale(id){ var it = SHOP && SHOP[id]; return it && it.price > 0 ? it : null; }
+function sale(id){ var it = SHOP && SHOP[id]; return it && (it.price > 0 || it.free) ? it : null; }
+/* 무료 강의(catalog free:true): 가격 대신 'Free', 결제 대신 바로 수강 등록 */
+function priceTxt(it){ return it && it.free ? 'Free' : won(it ? it.price : 0); }
 function won(n){ return Number(n).toLocaleString('ko-KR') + ' KRW'; }
-function buyHref(id){ return '/checkout?item=' + encodeURIComponent(id); }
+function buyHref(id){ var it = SHOP && SHOP[id]; return it && it.free ? '#enroll?item=' + encodeURIComponent(id) : '/checkout?item=' + encodeURIComponent(id); }
 function headLine(it){ var h = it && it.head; return h ? 'Based on 20 people · per extra person ' + won(h.per) + ' · minimum ' + h.min + '-person basis' : ''; }
 function buyBox(id, eyebrow){
   var it = sale(id); if(!it) return '';
-  return '<div class="price-box"><div><p class="eyebrow">' + esc(eyebrow || 'Enroll') + '</p><div class="big">' + won(it.price) + '</div><p class="muted" style="margin:8px 0 0">' + esc([it.unit, it.period].filter(Boolean).join(' · ')) + ' · VAT incl.</p></div><a class="btn btn-lime" href="' + buyHref(id) + '">Pay now</a></div>';
+  return '<div class="price-box"><div><p class="eyebrow">' + esc(eyebrow || 'Enroll') + '</p><div class="big">' + priceTxt(it) + '</div><p class="muted" style="margin:8px 0 0">' + esc([it.unit, it.period].filter(Boolean).join(' · ')) + ' · VAT incl.</p></div><a class="btn btn-lime" href="' + buyHref(id) + '">Pay now</a></div>';
 }
 try { fetch('/shop/catalog.json', {cache:'no-store'}).then(function(r){ return r.json(); }).then(function(j){ SHOP = (j && j.items) || {}; if(Object.keys(SHOP).some(sale) && typeof route === 'function') route(); }).catch(function(){}); } catch(e){}
 var VENDORS = [{name:'Google LLC (Google Workspace: Sheets, Apps Script, Gmail)', task:'Receiving and storing website inquiries, consultation requests and pre-session check-ins; sending notifications to staff and order confirmation and course emails', items:'Everything entered in the inquiry forms and the pre-session check-in', country:'United States', when:'When the form is submitted', how:'Transmission over the network', period:'1 year from receipt (deleted automatically every day); launch-update sign-ups are deleted after the update is sent'}, {name:'Supabase Inc.', task:'Member accounts and sign-in; storing member information, learning records and order records', items:'Member information, sign-in identifiers, learning records, order information, access logs', country:'US company (data stored in the Seoul, Korea region)', when:'When you sign up or use the service', how:'Transmission over the network', period:'Until you close your account or the retention period in this policy ends'}, {name:'BunnyWay d.o.o. (Bunny Stream)', task:'Storing and streaming course videos; checking playback rights', items:'Playback authorization data, IP address, browser information', country:'Slovenia (streamed from nearby regional servers)', when:'When you play a course video', how:'Transmission over the network', period:'The provider’s log retention period after delivery (up to 30 days)'}, {name:'Toss Payments Co., Ltd.', task:'Processing payments, storing payment method details, cancellations and refunds', items:'Order number, amount, payment method details, buyer’s name and email', country:'Republic of Korea', when:'When you pay', how:'Through the payment window', period:'The period required by law (Electronic Financial Transactions Act, etc.)'}, {name:'Vercel Inc.', task:'Running the website and processing payment approval requests', items:'Order information, IP address, browser information', country:'United States', when:'When you use the website or pay', how:'Transmission over the network', period:'The provider’s log retention period (up to 30 days)'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
@@ -2512,7 +2515,7 @@ function bindLogin(){
     bindForm(lf, function(){
       var btn = lf.querySelector('[type=submit]'); btn.disabled = true;
       sb().then(function(c){ return c.auth.signInWithPassword({email:lf.elements.email.value.trim(), password:lf.elements.pw.value}); })
-        .then(function(r){ btn.disabled = false; if(r.error) return toast(authErr(r.error.message)); if(staffOut(r.data && r.data.user)) return; authUI(); nav(routeUrl('my')); }, function(){ btn.disabled = false; toast(authErr()); });
+        .then(function(r){ btn.disabled = false; if(r.error) return toast(authErr(r.error.message)); if(staffOut(r.data && r.data.user)) return; authUI(); var back = ''; try { back = sessionStorage.getItem('chai_after_login') || ''; sessionStorage.removeItem('chai_after_login'); } catch(e){} nav(routeUrl(back || 'my')); }, function(){ btn.disabled = false; toast(authErr()); });
     });
     $('[data-forgot]').addEventListener('click', function(){
       var em = lf.elements.email.value.trim();
@@ -2581,6 +2584,20 @@ function myGate(c, u){
   });
 }
 var LOGIN_BY = {email:'Email', kakao:'Kakao', google:'Google'};
+/* 무료 강의 수강 등록 (/enroll?item=…): 로그인 → 서버가 수강권을 만들고 → 바로 재생 화면 */
+function vEnroll(){ return '<section class="section tight"><div class="wrap" style="max-width:560px;text-align:center"><h1 class="h2">Enroll</h1><p class="lead" id="enMsg" style="margin-top:12px">One moment</p></div></section>'; }
+function bindEnroll(q){
+  var id = (new URLSearchParams(q).get('item') || '').replace(/[^a-z0-9-]/g, ''), msg = function(t){ var e = $('#enMsg'); if(e) e.innerHTML = t; pathify($('#enMsg')); };
+  sb().then(function(c){ return c.auth.getSession().then(function(r){
+    var s = r.data && r.data.session;
+    if(!s){ try { sessionStorage.setItem('chai_after_login', 'enroll?item=' + id); } catch(e){} msg('Log in to start this free course right away.<br><br><a class="btn btn-lime" href="#login?mode=signup">Sign up and start</a> <a class="btn btn-line" href="#login">Log in</a>'); return; }
+    if(staffOut(s.user)) return;
+    return fetch('/api/me', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + s.access_token}, body:JSON.stringify({action:'enroll_free', item:id})}).then(function(x){ return x.json(); }).then(function(d){
+      if(d && d.ok){ nav(routeUrl('p-' + d.course), true); return; }
+      msg(d && d.code === 'NOT_FREE' ? 'This is not a free course. Please check the course page.' : 'Could not enroll. Please try again shortly.');
+    });
+  }); }).catch(function(){ msg('Could not enroll. Please try again shortly.'); });
+}
 function vMy(){
   return '<section class="section tight my-pg"><div class="wrap" style="max-width:960px">' +
     '<p class="eyebrow">My</p><h1 class="h2 my-title">My learning</h1>' +
@@ -2618,7 +2635,7 @@ function myDash(c, u){
             '<div class="my-c-bot"><span class="muted">Progress ' + v + '%</span><a class="btn btn-lime btn-sm" href="#p-' + esc(e.course_id) + '">' + (v ? 'Continue' : 'Start') + '</a></div></li>'; }).join('') + '</ul>'
       : '<div class="my-empty"><p class="my-empty-t">No courses yet</p><p class="muted">Courses you buy will appear here.</p></div>' +
         '<p class="my-sub">Courses you might like</p><ul class="my-reco">' + C.map(function(x){ var it = sale(x.opts[0]);
-          return '<li><a href="#c-' + esc(x.id) + '"><span class="my-tag">' + esc(x.level) + '</span><b class="ol">' + esc(x.title) + '</b><span class="muted ol">' + esc(x.short) + '</span>' + (it ? '<span class="my-price">' + won(it.price) + '</span>' : '') + '</a></li>'; }).join('') + '</ul>';
+          return '<li><a href="#c-' + esc(x.id) + '"><span class="my-tag">' + esc(x.level) + '</span><b class="ol">' + esc(x.title) + '</b><span class="muted ol">' + esc(x.short) + '</span>' + (it ? '<span class="my-price">' + priceTxt(it) + '</span>' : '') + '</a></li>'; }).join('') + '</ul>';
     var orders = od.length
       ? '<ul class="my-rows">' + od.map(function(o){ var it = SHOP && SHOP[o.item_id];
           return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + '</b><span class="muted ol">' + d(o.paid_at || o.created_at) + ' · Order no. ' + esc(o.id) + '</span>' + (o.status === 'waiting' && o.vbank ? '<span class="my-tag my-warn">' + esc(o.vbank.bank) + ' ' + esc(o.vbank.account) + (o.vbank.holder ? ' (' + esc(o.vbank.holder) + ')' : '') + (o.due_at ? ' · ' + d(o.due_at) + ' deposit deadline' : '') + '</span>' : '') + '</div><div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + (o.refund_requested_at && o.status === 'paid' ? ' · Requested' : '') + '</span>' + ((o.status === 'paid' || o.status === 'partial_refunded') ? '<button type="button" class="btn btn-line btn-sm" data-myrf="' + esc(o.id) + '">Request refund</button>' : '') + '</div>' + (it && /\uCC28 \uD0A4\uD2B8/.test(it.note || '') && (o.status === 'paid' || o.status === 'partial_refunded') ? '<div class="my-ship">' + (o.shipped_at ? '<span class="muted">Tea kit shipped ' + d(o.shipped_at) + (o.ship_tracking ? ' · ' + esc(o.ship_tracking) : '') + '</span>' : (o.ship_addr ? '<span class="muted ol">Ship to: ' + esc(o.ship_addr) + '</span>' : '<span class="my-tag my-warn">Please add a tea kit address</span>') + '<button type="button" class="lnk" data-ship="' + esc(o.id) + '">' + (o.ship_addr ? 'Edit' : 'Add address') + '</button>') + '</div>' : '') + '</li>'; }).join('') + '</ul>' +
@@ -2805,6 +2822,8 @@ function myShip(c, o, done){
 function deviceId(){
   try { var d = localStorage.getItem('chai_device'); if(!d){ d = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(36).slice(2)); localStorage.setItem('chai_device', d); } return d; } catch(e){ return 'nostore'; }
 }
+/* 편 공개 여부: 예약 시각이 있으면 그 시각부터, 없으면 공개 표시대로 */
+function lessonLive(l){ return l.publish_at ? Date.parse(l.publish_at) <= Date.now() : l.published !== false; }
 function vPlay(cid){
   var c = cById(cid);
   return '<section class="section tight play-pg"><div class="wrap" style="max-width:1200px">' +
@@ -2824,7 +2843,7 @@ function bindPlay(cid){
       myKits(c, $('#pKits'), cid);
       return Promise.all([
         c.from('courses').select('id,title,is_open').eq('id', cid).maybeSingle(),
-        c.from('lessons').select('id,part,sort,title,is_free,duration_s').eq('course_id', cid).order('sort'),
+        c.from('lessons').select('id,part,sort,title,is_free,duration_s,published,publish_at').eq('course_id', cid).order('sort'),
         c.from('progress').select('lesson_id,watched_s,position_s,completed_at'),
         c.rpc('has_access', {p_course:cid})
       ]).then(function(v){
@@ -2840,8 +2859,8 @@ function bindPlay(cid){
           var done = ls.filter(function(l){ return !l.is_free && pr[l.id] && pr[l.id].completed_at; }).length, tot = ls.filter(function(l){ return !l.is_free; }).length;
           $('#pSide').innerHTML = '<div class="play-sum"><b>Progress ' + (tot ? Math.round(100 * done / tot) : 0) + '%</b><span class="muted">' + done + '/' + tot + 'lessons done</span><span class="my-bar"><i style="width:' + (tot ? Math.round(100 * done / tot) : 0) + '%"></i></span></div>' +
             (ls.length ? parts.map(function(k){ return '<p class="play-part">' + esc(k) + '</p><ol class="play-list">' + by[k].map(function(l){
-              var p = pr[l.id] || {}, lock = !l.is_free && !access;
-              return '<li><button type="button" data-l="' + l.id + '"' + (cur === l.id ? ' aria-current="true"' : '') + (lock || !course.is_open ? ' disabled' : '') + '><span class="play-ck' + (p.completed_at ? ' on' : '') + '" aria-hidden="true"></span><span class="play-lt">' + esc(l.title) + '</span><span class="muted play-len">' + (l.is_free ? '<span class="my-tag">Preview</span> ' : '') + (l.duration_s ? Math.round(l.duration_s / 60) + 'min' : '') + '</span></button></li>'; }).join('') + '</ol>'; }).join('') : '<p class="muted">No lessons yet.</p>');
+              var p = pr[l.id] || {}, soon = !lessonLive(l), lock = soon || (!l.is_free && !access);
+              return '<li><button type="button" data-l="' + l.id + '"' + (cur === l.id ? ' aria-current="true"' : '') + (lock || !course.is_open ? ' disabled' : '') + '><span class="play-ck' + (p.completed_at ? ' on' : '') + '" aria-hidden="true"></span><span class="play-lt">' + esc(l.title) + '</span><span class="muted play-len">' + (soon ? '<span class="my-tag">' + (l.publish_at ? new Date(l.publish_at).toLocaleDateString('ko-KR', {month:'numeric', day:'numeric'}) + ' available' : 'Coming soon') + '</span> ' : '') + (l.is_free ? '<span class="my-tag">Preview</span> ' : '') + (l.duration_s ? Math.round(l.duration_s / 60) + 'min' : '') + '</span></button></li>'; }).join('') + '</ol>'; }).join('') : '<p class="muted">No lessons yet.</p>');
           $$('[data-l]').forEach(function(b){ b.onclick = function(){ open(+b.getAttribute('data-l')); }; });
         };
         var timer = null, onMsg = null;
@@ -2883,7 +2902,7 @@ function bindPlay(cid){
         };
         side(null);
         if(course.is_open && ls.length){
-          var next = ls.filter(function(l){ return (l.is_free || access) && !(pr[l.id] && pr[l.id].completed_at); })[0] || ls.filter(function(l){ return l.is_free || access; })[0];
+          var next = ls.filter(function(l){ return lessonLive(l) && (l.is_free || access) && !(pr[l.id] && pr[l.id].completed_at); })[0] || ls.filter(function(l){ return lessonLive(l) && (l.is_free || access); })[0];
           if(next) open(next.id); else msg('You do not have access to this course', 'Preview lessons are on the course page.');
         }
       });

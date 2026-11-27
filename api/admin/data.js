@@ -57,7 +57,7 @@ async function notifyOpen(courseId) {
 const PERM_READ = { brief: 'dash', dashboard: 'dash', orders: 'orders', orders_csv: 'orders', members: 'members', member: 'members', companies: 'companies', company: 'companies', courses: 'courses', shipments: 'ship', logs: 'logs', leads: 'leads', coupons: 'coupons', admins: 'admins', backups: 'admins', launch: 'admins', kits: 'courses' };
 const PERM_ACT = { refund: 'refund', cancel_waiting: 'refund', order_manual: 'refund', pg_sync: 'orders', order_memo: 'orders', grant: 'members', revoke: 'members',
   company_create: 'companies', company_admin: 'companies', seat_add: 'companies', company_invite: 'companies', company_assign: 'companies', company_unassign: 'companies', company_remove: 'companies',
-  course_open: 'courses', lesson_save: 'courses', lesson_delete: 'courses', video_init: 'courses', video_status: 'courses', kit_upload: 'courses', kit_save: 'courses', kit_delete: 'courses',
+  course_open: 'courses', lesson_save: 'courses', lesson_delete: 'courses', lesson_publish: 'courses', video_init: 'courses', video_status: 'courses', kit_upload: 'courses', kit_save: 'courses', kit_delete: 'courses',
   shipped: 'ship', lead_update: 'leads', coupon_save: 'coupons', coupon_toggle: 'coupons', admin_save: 'admins', admin_remove: 'admins', convert_self: 'admins', staff_reset: 'admins', pw_changed: 'self', backup_now: 'admins', backup_get: 'admins', purge_test: 'admins' };
 const PRESETS = {
   owner:   { label: '대표 (전체 권한)', perms: ['all'] },
@@ -216,7 +216,7 @@ const READ = {
   },
   async company(q) { const id = uuid(q.id); if (!id) throw new Error('BAD_ID'); return C.detail(id); },
   async courses() {
-    const [cs, ls, md, en] = await Promise.all([get('courses?select=id,title,is_open,opened_at&order=id'), get('lessons?select=id,course_id,part,sort,title,is_free,duration_s&order=course_id,sort'), get('lesson_media?select=lesson_id,provider,video_id,status'), get('enrollments?select=course_id&revoked_at=is.null')]);
+    const [cs, ls, md, en] = await Promise.all([get('courses?select=id,title,is_open,opened_at&order=id'), get('lessons?select=id,course_id,part,sort,title,is_free,duration_s,published,publish_at&order=course_id,sort'), get('lesson_media?select=lesson_id,provider,video_id,status'), get('enrollments?select=course_id&revoked_at=is.null')]);
     return { bunny: B.configured(), courses: cs.map(c => Object.assign(c, { students: en.filter(e => e.course_id === c.id).length, lessons: ls.filter(l => l.course_id === c.id).map(l => Object.assign(l, { video_id: (md.find(m => m.lesson_id === l.id) || {}).video_id || '', video_status: (md.find(m => m.lesson_id === l.id) || {}).status })) })) };
   },
   async shipments() {
@@ -466,7 +466,7 @@ const ACT = {
   async lesson_save(b) {
     const course = String(b.courseId || ''), title = String(b.title || '').trim().slice(0, 120), sort = int(b.sort);
     if (!course || !title || !(sort > 0)) throw new Error('BAD_REQUEST');
-    const row = { course_id: course, part: String(b.part || '').trim().slice(0, 60), sort, title, is_free: !!b.isFree, duration_s: Math.max(0, int(b.durationS) || 0) };
+    const row = { course_id: course, part: String(b.part || '').trim().slice(0, 60), sort, title, is_free: !!b.isFree, duration_s: Math.max(0, int(b.durationS) || 0), published: b.published !== false, publish_at: b.publishAt ? new Date(b.publishAt).toISOString() : null };
     let id = int(b.id);
     if (id > 0) await write('PATCH', 'lessons?id=eq.' + id, row);
     else { const r = await write('POST', 'lessons', row); id = r[0].id; }
@@ -475,6 +475,8 @@ const ACT = {
     else await write('DELETE', 'lesson_media?lesson_id=eq.' + id);
     return { id };
   },
+  /* 편 공개 켜기·끄기 (목록에서 바로) */
+  async lesson_publish(b) { const id = int(b.id); if (!(id > 0)) throw new Error('BAD_REQUEST'); await write('PATCH', 'lessons?id=eq.' + id, { published: !!b.on, publish_at: null }); return {}; },
   async lesson_delete(b) {
     const id = int(b.id); if (!(id > 0)) throw new Error('BAD_REQUEST');
     await write('DELETE', 'lessons?id=eq.' + id);

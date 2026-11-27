@@ -1523,10 +1523,10 @@ function pkgSection(){
   return '<section class="section paper"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Online × Offline</p><h2 class="h2 one">온·오프 연계 패키지</h2></div><p class="lead">온라인은 현장의 앞과 뒤, 그리고 사이를 채워요. 같은 강사, 같은 네 잔으로 이어집니다.</p></div>' +
     planGrid([
-      {href: sale('pkg-before') ? buyHref('pkg-before') : '', btn: sale('pkg-before') ? '결제하기 · ' + won(sale('pkg-before').price) : '', tag:'01 · 앞', name:'미리 우리고 오기', big:'VOD + 4시간', sub:'온라인으로 미리, 현장은 깊게', best:'처음 여는 팀', f:['기본 용어·접속은 미리','현장은 차·관계·실습에']},
-      {href: sale('pkg-after') ? buyHref('pkg-after') : '', btn: sale('pkg-after') ? '결제하기 · ' + won(sale('pkg-after').price) : '', tag:'02 · 뒤', hi:1, name:'현장 뒤 4주', big:'4시간 + 4주', sub:'현장 다음 날부터 4주 기수', best:'만든 것을 정착시킬 때', f:['같은 참가자로 프리미엄 기수','에이전트 파트너 들이기 60분 (Leo)']},
-      {href: sale('pkg-season') ? buyHref('pkg-season') : '', btn: sale('pkg-season') ? '결제하기 · ' + won(sale('pkg-season').price) : '', tag:'03 · 시즌', name:'찻자리 클럽 시즌', big:'4개월', sub:'월 1회 저녁 + 온라인', best:'리더 모임·입주사', f:['전원 일반 이용권','한 달은 에이전트 파트너 회차']},
-      {href: sale('pkg-year') ? buyHref('pkg-year') : '', btn: sale('pkg-year') ? '결제하기 · ' + won(sale('pkg-year').price) : '', tag:'04 · 1년', name:'1년 웰니스', big:'1년', sub:'사계절 + 사내 챔피언', best:'1년 함께할 회사', f:['분기마다 에이전트 파트너 점검','리더는 프리미엄으로']}
+      {href: sale('pkg-before') ? buyHref('pkg-before') : '', btn: sale('pkg-before') ? '결제하기 · ' + priceTxt(sale('pkg-before')) : '', tag:'01 · 앞', name:'미리 우리고 오기', big:'VOD + 4시간', sub:'온라인으로 미리, 현장은 깊게', best:'처음 여는 팀', f:['기본 용어·접속은 미리','현장은 차·관계·실습에']},
+      {href: sale('pkg-after') ? buyHref('pkg-after') : '', btn: sale('pkg-after') ? '결제하기 · ' + priceTxt(sale('pkg-after')) : '', tag:'02 · 뒤', hi:1, name:'현장 뒤 4주', big:'4시간 + 4주', sub:'현장 다음 날부터 4주 기수', best:'만든 것을 정착시킬 때', f:['같은 참가자로 프리미엄 기수','에이전트 파트너 들이기 60분 (Leo)']},
+      {href: sale('pkg-season') ? buyHref('pkg-season') : '', btn: sale('pkg-season') ? '결제하기 · ' + priceTxt(sale('pkg-season')) : '', tag:'03 · 시즌', name:'찻자리 클럽 시즌', big:'4개월', sub:'월 1회 저녁 + 온라인', best:'리더 모임·입주사', f:['전원 일반 이용권','한 달은 에이전트 파트너 회차']},
+      {href: sale('pkg-year') ? buyHref('pkg-year') : '', btn: sale('pkg-year') ? '결제하기 · ' + priceTxt(sale('pkg-year')) : '', tag:'04 · 1년', name:'1년 웰니스', big:'1년', sub:'사계절 + 사내 챔피언', best:'1년 함께할 회사', f:['분기마다 에이전트 파트너 점검','리더는 프리미엄으로']}
     ], 4) +
     (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">패키지 금액은 20명 기준이에요. 03·04는 묶음 10% 할인을 적용했어요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요. (부가세 포함)</p>' : '') +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=package">패키지 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div>' +
@@ -1679,6 +1679,7 @@ function route(){
   else if(/^contact\?type=(online|package)/.test(h)){ nav(routeUrl('learn?t=' + (h.indexOf('package') > 0 ? 'package' : 'group')), true); return; }
   else if(h.indexOf('login') === 0){ page('login'); app.innerHTML = vLogin(h.split('?')[1] || ''); bindLogin(); }
   else if(h === 'my'){ page('my'); app.innerHTML = vMy(); bindMy(); }
+  else if(h.indexOf('enroll') === 0){ page('my'); app.innerHTML = vEnroll(); bindEnroll(h.split('?')[1] || ''); }
   else if((m = h.match(/^p-(.+)$/)) && cById(m[1])){ page('my'); app.innerHTML = vPlay(m[1]); bindPlay(m[1]); }
   else if(h.indexOf('contact') === 0){ page('contact'); app.innerHTML = vContact(h.split('?')[1] || ''); bindContact(); }
   else { page(''); app.innerHTML = '<section class="section"><div class="wrap"><h1 class="h2">페이지를 찾을 수 없어요</h1><p class="lead" style="margin-top:12px"><a href="#home">홈으로 가기</a></p></div></section>'; }
@@ -1701,7 +1702,7 @@ function route(){
    화면 코드는 '#workshop'처럼 써도 됨 → pathify가 '/workshop'으로 바꾸고, 클릭은 nav가 처리.
    file:// 로 열 때(검사 스크립트)는 예전처럼 # 주소로 동작. 예전 # 링크로 들어오면 실제 주소로 바꿔 줌. */
 var HASH_MODE = location.protocol === 'file:';
-var ROUTE_RE = /^(intro|home|workshop|program|online|team|contact|proposal|brief|learn|privacy|terms|ai-policy|refund|copyright|day|login|my)(\?.*)?$|^[wctp]-[a-z0-9-]+$/;
+var ROUTE_RE = /^(intro|home|workshop|program|online|team|contact|proposal|brief|learn|privacy|terms|ai-policy|refund|copyright|day|login|my|enroll)(\?.*)?$|^[wctp]-[a-z0-9-]+$/;
 function isRoute(t){ return ROUTE_RE.test(t || ''); }
 var BASE = document.documentElement.lang === 'en' ? '/en' : '';
 function routeUrl(t){ return HASH_MODE ? '#' + t : (t === 'intro' ? (BASE || '/') : BASE + '/' + t); }
@@ -1711,7 +1712,7 @@ function curRoute(){
   if(isRoute(hs)){ history.replaceState(null, '', routeUrl(hs)); return hs; }
   var p = decodeURIComponent(location.pathname.replace(/^\/en(?=\/|$)/, '').replace(/^\/+|\/+$/g, '')).replace(/\.html$/, '');
   p = p || 'intro';
-  return /^(learn|contact|login)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
+  return /^(learn|contact|login|enroll)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
 }
 function nav(url, replace){
   if(HASH_MODE){ if(replace) location.replace(url); else location.hash = url.slice(1); return; }
@@ -1752,7 +1753,7 @@ function afterRoute(h){
   var faq = $$('#app .faq details').map(function(d){ var q = d.querySelector('summary'); return q ? {'@type':'Question', name:q.textContent.trim(), acceptedAnswer:{'@type':'Answer', text:d.textContent.replace(q.textContent, '').trim()}} : null; }).filter(Boolean);
   if(faq.length) ld = ld ? [ld, {'@context':'https://schema.org', '@type':'FAQPage', mainEntity:faq}] : {'@context':'https://schema.org', '@type':'FAQPage', mainEntity:faq};
   $('#ldRoute').textContent = ld ? JSON.stringify(ld) : '';
-  var notFound = /페이지를 찾을 수 없어요/.test($('#app').textContent.slice(0, 200)) || /^(login|my|p-)/.test(h), rb = document.querySelector('meta[name="robots"]');
+  var notFound = /페이지를 찾을 수 없어요/.test($('#app').textContent.slice(0, 200)) || /^(login|my|p-|enroll)/.test(h), rb = document.querySelector('meta[name="robots"]');
   if(notFound && !rb){ rb = document.createElement('meta'); rb.name = 'robots'; rb.content = 'noindex'; document.head.appendChild(rb); } else if(!notFound && rb) rb.remove();
   var hsh = location.hash.slice(1); if(!HASH_MODE && hsh && !isRoute(hsh)){ var el = document.getElementById(hsh); if(el) setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60); }
   window.dispatchEvent(new Event('routechange'));
@@ -2072,7 +2073,7 @@ function vWDetail(w){
       '<div style="display:flex;gap:6px;margin-bottom:14px"><span class="badge">' + esc(w.badge) + '</span><span class="badge ln">' + esc(w.kind) + '</span></div>' +
       '<h1 class="h1" style="font-size:clamp(30px,4.4vw,50px)">' + esc(w.title) + '</h1>' +
       '<p class="lead" style="margin-top:16px">' + esc(w.sub) + '</p>' +
-      (sale(w.id) ? '<div class="btns" style="margin-top:18px;align-items:center"><a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기 · ' + won(sale(w.id).price) + '</a><span class="muted" style="font-size:14px">' + esc(sale(w.id).head ? headLine(sale(w.id)) + ' · 부가세 포함' : sale(w.id).unit + ' · 부가세 포함') + '</span></div>' : '') +
+      (sale(w.id) ? '<div class="btns" style="margin-top:18px;align-items:center"><a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기 · ' + priceTxt(sale(w.id)) + '</a><span class="muted" style="font-size:14px">' + esc(sale(w.id).head ? headLine(sale(w.id)) + ' · 부가세 포함' : sale(w.id).unit + ' · 부가세 포함') + '</span></div>' : '') +
       '<p class="bio-proof" style="margin-top:20px">이럴 때 좋아요 — ' + esc(w.fit) + '</p>' +
       '<h2>만들어 가는 것</h2><ul class="checks">' + w.make.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h2>진행 순서</h2><ol class="tl">' + w.tl.map(function(r){ return '<li' + (r[3] ? ' class="tea"' : '') + '><span class="t">' + esc(r[0]) + '</span><b>' + esc(r[1]) + (r[3] ? ' ☕' : '') + '</b><span>' + esc(r[2]) + '</span></li>'; }).join('') + '</ol>' +
@@ -2087,7 +2088,7 @@ function vWDetail(w){
     '</div>' +
     '<aside class="aside" aria-label="워크샵 요약">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
-      '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>' + (sale(w.id) ? '<b>' + won(sale(w.id).price) + '</b> / ' + esc(sale(w.id).unit) + ' (부가세 포함)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') + (sale(w.id).company ? '<br><span class="muted" style="font-weight:500">처음 함께하는 회사는 첫 회 10% 할인 (상담 시 적용)</span>' : '') : '구성에 따라 견적') + '</dd></dl>' +
+      '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>' + (sale(w.id) ? '<b>' + priceTxt(sale(w.id)) + '</b> / ' + esc(sale(w.id).unit) + ' (부가세 포함)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') + (sale(w.id).company ? '<br><span class="muted" style="font-weight:500">처음 함께하는 회사는 첫 회 10% 할인 (상담 시 적용)</span>' : '') : '구성에 따라 견적') + '</dd></dl>' +
       (sale(w.id) ? '<a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기</a><a class="btn btn-line" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>' : '<a class="btn btn-lime" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>') +
       '<a class="btn btn-line btn-sm" href="#program">1년 프로그램으로 이어 가기</a>' +
       '<p class="muted" style="margin:0;font-size:13px">제안서가 먼저 필요하면 <a href="#proposal">제안서 받기</a>에서 바로 받아 보세요.</p>' +
@@ -2106,7 +2107,7 @@ function vProgram(){
   return '<section class="hero lite">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">한 회사를 1년 동안 맡아요</h1>' +
     '<p class="lead ol">한 번의 특강이 아니라, AI가 팀의 일하는 방식이 될 때까지.</p>' + pathChips([['1','진단','분기 시작'],['2','만들기','팀 에이전트'],['3','시연','사내 공유'],['4','성과','분기 리포트']]) + '' +
-    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="' + buyHref('annual') + '">결제하기 · ' + won(sale('annual').price) + '</a><a class="btn btn-line" href="#contact?type=annual">1년 프로그램 상담</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">분기 1회 · ' + esc(headLine(sale('annual'))) + ' · 부가세 포함</p>' : '<a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a>') + '<a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
+    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="' + buyHref('annual') + '">결제하기 · ' + priceTxt(sale('annual')) + '</a><a class="btn btn-line" href="#contact?type=annual">1년 프로그램 상담</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">분기 1회 · ' + esc(headLine(sale('annual'))) + ' · 부가세 포함</p>' : '<a class="btn btn-lime" href="#contact?type=annual">1년 프로그램 상담</a>') + '<a class="btn btn-line" href="#proposal">제안서 받기</a></div></div>' +
     ph('team', 1600, '', true) +
   '</section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -2152,21 +2153,21 @@ function vOnline(){
     '<p class="lead ol" style="margin-top:16px">입문부터 심화까지, 강의마다 키트를 함께 드려요. 지금은 사전 예약 기간이에요.</p>' +
   '</div></section>' +
   '<section style="padding-bottom:88px"><div class="wrap"><div class="cgrid c2">' +
-    C.map(function(c){ var it = sale(c.opts[0]); return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge">' + esc(c.level) + '</span><span class="badge ln">' + esc(c.kind) + '</span></span><h2 class="h3" style="font-size:clamp(17px,1.55vw,21px)">' + esc(c.title) + '</h2><p class="muted ol" style="margin:0">' + esc(c.short) + '</p>' + (it ? '<p class="cprice">' + (it.list ? '<s>' + won(it.list) + '</s> ' : '') + '<b>' + won(it.price) + '</b> <span>사전 예약</span></p>' : '') + '<span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
+    C.map(function(c){ var it = sale(c.opts[0]); return '<a class="ccard" href="#c-' + c.id + '">' + ph(c.photo, 900) + '<div class="ccard-body"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge">' + esc(c.level) + '</span><span class="badge ln">' + esc(c.kind) + '</span></span><h2 class="h3" style="font-size:clamp(17px,1.55vw,21px)">' + esc(c.title) + '</h2><p class="muted ol" style="margin:0">' + esc(c.short) + '</p>' + (it ? '<p class="cprice">' + (it.list ? '<s>' + won(it.list) + '</s> ' : '') + '<b>' + priceTxt(it) + '</b> <span>사전 예약</span></p>' : '') + '<span class="who">' + T[c.who].nm + ' · ' + T[c.who].role + ' →</span></div></a>'; }).join('') +
   '</div></div></section>' + tierSection() + pkgSection();
 }
 
 /* ===== 온라인강의 셀링 페이지 (광고 착지용) ===== */
 function cLessons(c){ return c.parts.reduce(function(n, p){ return n + p.ls.length; }, 0); }
-function cOpt(id){ var it = sale(id); if(!it) return ''; return '<label class="cb-opt"><input type="radio" name="cbopt" value="' + id + '"' + (id === sale(id) && false ? '' : '') + '><span class="cb-l">' + esc((BASE && it.label_en) || it.label || it.name) + '</span><span class="cb-p">' + (it.list ? '<s>' + won(it.list) + '</s>' : '') + '<b>' + won(it.price) + '</b></span></label>'; }
+function cOpt(id){ var it = sale(id); if(!it) return ''; return '<label class="cb-opt"><input type="radio" name="cbopt" value="' + id + '"' + (id === sale(id) && false ? '' : '') + '><span class="cb-l">' + esc((BASE && it.label_en) || it.label || it.name) + '</span><span class="cb-p">' + (it.list ? '<s>' + won(it.list) + '</s>' : '') + '<b>' + priceTxt(it) + '</b></span></label>'; }
 function cBuy(c){
   var main = sale(c.opts[0]);
   if(!main) return '<div class="cbuy"><p class="eyebrow">Open soon</p><div class="cb-big">오픈 알림 신청</div><p class="muted" style="margin:0;font-size:14px">가격과 오픈일이 정해지면 가장 먼저 알려 드려요.</p><button type="button" class="btn btn-lime" data-notify>오픈 알림 받기</button></div>';
   var off = main.list ? Math.round((1 - main.price / main.list) * 100) : 0;
   return '<div class="cbuy"><span class="badge" style="align-self:flex-start">사전 예약 · 얼리버드' + (off ? ' ' + off + '%' : '') + '</span>' +
-    '<div class="cb-big">' + won(main.price) + (main.list ? ' <s>' + won(main.list) + '</s>' : '') + '</div>' +
+    '<div class="cb-big">' + priceTxt(main) + (main.list ? ' <s>' + won(main.list) + '</s>' : '') + '</div>' +
     '<div class="cb-opts" role="radiogroup" aria-label="수강 옵션">' + c.opts.map(cOpt).join('').replace('name="cbopt" value="' + c.opts[0] + '"', 'name="cbopt" value="' + c.opts[0] + '" checked') + '</div>' +
-    '<a class="btn btn-lime cb-go" href="' + buyHref(c.opts[0]) + '">결제하기</a>' +
+    '<a class="btn btn-lime cb-go" href="' + buyHref(c.opts[0]) + '">' + (main && main.free ? '무료로 수강하기' : '결제하기') + '</a>' +
     '<ul class="cb-meta"><li><span>난이도</span><b>' + esc(c.level) + '</b></li><li><span>구성</span><b>' + cLessons(c) + '편 · 편당 약 10분</b></li><li><span>함께 드리는 것</span><b>' + esc(c.kind.split(' + ')[1] || '') + '</b></li><li><span>오픈</span><b>확정 후 안내</b></li></ul>' +
     '<p class="muted" style="margin:0;font-size:13px">부가세 포함 · 강의가 열리지 않으면 전액 환불해요.</p>' +
     '<button type="button" class="btn btn-line btn-sm" data-notify>오픈 알림만 받기</button></div>';
@@ -2180,7 +2181,7 @@ function vCourse(c){
       '<p class="lead">' + esc(c.hook) + '</p>' +
       '<ul class="ch-meta"><li>' + esc(c.level) + '</li><li>' + n + '편 · 편당 약 10분</li><li>+ ' + esc(c.kind.split(' + ')[1] || c.kind) + '</li><li>' + t.nm + '</li></ul>' +
       '<div class="chips ch-tags">' + c.tags.map(function(x){ return '<span class="tag">#' + esc(x) + '</span>'; }).join('') + '</div>' +
-      '<div class="btns ch-cta">' + (main ? '<a class="btn btn-lime" id="heroBuy" href="' + buyHref(c.opts[0]) + '">사전 예약 · ' + won(main.price) + '</a>' : '<button type="button" class="btn btn-lime" id="heroBuy" data-notify>오픈 알림 받기</button>') + '<a class="btn btn-line" href="#learn?t=course&c=' + c.id + '">수강 문의</a></div>' +
+      '<div class="btns ch-cta">' + (main ? '<a class="btn btn-lime" id="heroBuy" href="' + buyHref(c.opts[0]) + '">' + (main.free ? '무료로 수강하기' : '사전 예약 · ' + priceTxt(main)) + '</a>' : '<button type="button" class="btn btn-lime" id="heroBuy" data-notify>오픈 알림 받기</button>') + '<a class="btn btn-line" href="#learn?t=course&c=' + c.id + '">수강 문의</a></div>' +
     '</div>' + ph(c.photo, 1300, 'ch-ph', true) +
   '</div></section>' +
   '<div class="wrap cd"><div class="cd-main">' +
@@ -2200,7 +2201,7 @@ function vCourse(c){
       '<div class="cd-t">' + tph(t, 600, 'cd-t-ph') + '<div><b class="cd-t-nm">' + t.nm + '</b><p class="muted" style="margin:2px 0 10px">' + esc(t.role) + '</p><p style="margin:0">' + esc(t.does) + '</p><p class="muted" style="margin:10px 0 0;font-size:14px">' + esc(t.line) + ' · ' + esc(t.book) + '</p><a class="btn btn-line btn-sm" style="margin-top:14px" href="#t-' + c.who + '">강사 소개 더 보기</a></div></div>' +
     '</section>' +
     '<section class="cd-sec"><p class="eyebrow">Next</p><h2 class="h2">이어서 들으면 좋은 강의</h2><div class="cd-next">' +
-      c.next.map(function(id){ var x = cById(id); if(!x) return ''; var it = sale(x.opts[0]); return '<a class="cd-nx" href="#c-' + x.id + '">' + ph(x.photo, 500) + '<div><span class="badge ln">' + esc(x.level) + '</span><b>' + esc(x.title) + '</b><span class="muted">' + T[x.who].nm + (it ? ' · ' + won(it.price) : '') + '</span></div></a>'; }).join('') +
+      c.next.map(function(id){ var x = cById(id); if(!x) return ''; var it = sale(x.opts[0]); return '<a class="cd-nx" href="#c-' + x.id + '">' + ph(x.photo, 500) + '<div><span class="badge ln">' + esc(x.level) + '</span><b>' + esc(x.title) + '</b><span class="muted">' + T[x.who].nm + (it ? ' · ' + priceTxt(it) : '') + '</span></div></a>'; }).join('') +
     '</div></section>' +
     '<section class="cd-sec faq"><p class="eyebrow">FAQ</p><h2 class="h2">자주 묻는 질문</h2>' +
       [['지금 결제하면 바로 볼 수 있나요?','지금은 사전 예약 기간이에요. 오픈하면 가장 먼저 수강할 수 있게 알려 드리고, 강의가 열리지 않으면 전액 환불해 드려요.'],['수강 기간은 얼마나 되나요?','오픈할 때 상세 페이지와 결제 화면에 함께 적어 드려요.'],['회사 교육비로 결제할 수 있나요?','세금계산서 발행과 단체 수강을 지원할 예정이에요. 여러 명이 함께 들으면 단체 수강 상담으로 연락 주세요.'],['워크샵과 어떻게 다른가요?','워크샵은 팀이 함께 현장에서 만드는 수업이고, 온라인강의는 혼자 언제든 보는 수업이에요.']].map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') +
@@ -2214,7 +2215,7 @@ function bindCourse(c){
   var all = $('[data-cuall]');
   if(all) all.addEventListener('click', function(){ var ds = $$('details.cu'), open = !ds.every(function(d){ return d.open; }); ds.forEach(function(d){ d.open = open; }); all.textContent = open ? '모두 접기' : '모두 펼치기'; });
   $('#stickyTitle').textContent = c.title;
-  $('#stickyBtn').textContent = sale(c.opts[0]) ? '사전 예약' : '오픈 알림 받기';
+  $('#stickyBtn').textContent = sale(c.opts[0]) ? (sale(c.opts[0]).free ? '무료로 수강하기' : '사전 예약') : '오픈 알림 받기';
   $('#stickyBtn').onclick = function(){ if(sale(c.opts[0])) location.href = buyHref(c.opts[0]); else notifyDialog(c); };
   var heroBtn = $('#heroBuy');
   if('IntersectionObserver' in window && heroBtn){
@@ -2278,13 +2279,15 @@ function bindTeam(){
 var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'이준혁', cpoDept:'', host:'Vercel Inc.' }; /* host = 호스팅 서비스 제공자 (전자상거래법 사이버몰 표시) */
 /* ===== 판매 상품 (shop/catalog.json — 가격이 0보다 큰 상품만 결제 경로가 열림) ===== */
 var SHOP = {};
-function sale(id){ var it = SHOP && SHOP[id]; return it && it.price > 0 ? it : null; }
+function sale(id){ var it = SHOP && SHOP[id]; return it && (it.price > 0 || it.free) ? it : null; }
+/* 무료 강의(catalog free:true): 가격 대신 '무료', 결제 대신 바로 수강 등록 */
+function priceTxt(it){ return it && it.free ? '무료' : won(it ? it.price : 0); }
 function won(n){ return Number(n).toLocaleString('ko-KR') + '원'; }
-function buyHref(id){ return '/checkout?item=' + encodeURIComponent(id); }
+function buyHref(id){ var it = SHOP && SHOP[id]; return it && it.free ? '#enroll?item=' + encodeURIComponent(id) : '/checkout?item=' + encodeURIComponent(id); }
 function headLine(it){ var h = it && it.head; return h ? '20명 기준 · 1명마다 ' + won(h.per) + ' · 최소 ' + h.min + '명 기준 진행' : ''; }
 function buyBox(id, eyebrow){
   var it = sale(id); if(!it) return '';
-  return '<div class="price-box"><div><p class="eyebrow">' + esc(eyebrow || 'Enroll') + '</p><div class="big">' + won(it.price) + '</div><p class="muted" style="margin:8px 0 0">' + esc([it.unit, it.period].filter(Boolean).join(' · ')) + ' · 부가세 포함</p></div><a class="btn btn-lime" href="' + buyHref(id) + '">결제하기</a></div>';
+  return '<div class="price-box"><div><p class="eyebrow">' + esc(eyebrow || 'Enroll') + '</p><div class="big">' + priceTxt(it) + '</div><p class="muted" style="margin:8px 0 0">' + esc([it.unit, it.period].filter(Boolean).join(' · ')) + ' · 부가세 포함</p></div><a class="btn btn-lime" href="' + buyHref(id) + '">결제하기</a></div>';
 }
 try { fetch('/shop/catalog.json', {cache:'no-store'}).then(function(r){ return r.json(); }).then(function(j){ SHOP = (j && j.items) || {}; if(Object.keys(SHOP).some(sale) && typeof route === 'function') route(); }).catch(function(){}); } catch(e){}
 var VENDORS = [{name:'Google LLC (Google Workspace: 스프레드시트·Apps Script·Gmail)', task:'웹사이트 문의·상담 신청과 강의 사전 진단 접수·보관, 운영 담당자 알림과 주문 확인·수강 안내 메일 발송', items:'문의 양식과 사전 진단에 적은 항목 전부', country:'미국', when:'양식을 보낼 때', how:'네트워크를 통한 전송', period:'접수한 날부터 1년(매일 자동 삭제), 오픈 알림은 알림을 보낸 뒤 삭제'}, {name:'Supabase Inc.', task:'회원 계정·로그인 처리, 회원 정보·수강 기록·주문 기록 저장', items:'회원 정보, 로그인 식별값, 수강 기록, 주문 정보, 접속 기록', country:'미국 회사 (데이터 저장: 대한민국 서울 리전)', when:'가입하거나 이용할 때', how:'네트워크를 통한 전송', period:'탈퇴 또는 이 방침의 보유 기간까지'}, {name:'BunnyWay d.o.o. (Bunny Stream)', task:'강의 영상 저장과 전송, 재생 권한 확인', items:'재생 권한 확인 정보, 접속 IP 주소, 브라우저 정보', country:'슬로베니아 (전송은 가까운 지역 서버)', when:'강의를 재생할 때', how:'네트워크를 통한 전송', period:'전송을 마친 뒤 업체의 기록 보관 기간 (최대 30일)'}, {name:'토스페이먼츠(주)', task:'결제 처리와 결제 수단 정보 보관, 결제 취소·환불', items:'주문번호, 금액, 결제 수단 정보, 구매자 이름·이메일', country:'대한민국', when:'결제할 때', how:'결제 창을 통한 전송', period:'관계 법령이 정한 기간 (전자금융거래법 등)'}, {name:'Vercel Inc.', task:'웹사이트 운영과 결제 승인 요청 처리', items:'주문 정보, 접속 IP 주소, 브라우저 정보', country:'미국', when:'웹사이트를 이용하거나 결제할 때', how:'네트워크를 통한 전송', period:'업체의 기록 보관 기간 (최대 30일)'}]; /* 개인정보 처리 위탁·국외 이전: {name, task, items, country, when, how, period, basis} */
@@ -2504,7 +2507,7 @@ function bindLogin(){
     bindForm(lf, function(){
       var btn = lf.querySelector('[type=submit]'); btn.disabled = true;
       sb().then(function(c){ return c.auth.signInWithPassword({email:lf.elements.email.value.trim(), password:lf.elements.pw.value}); })
-        .then(function(r){ btn.disabled = false; if(r.error) return toast(authErr(r.error.message)); if(staffOut(r.data && r.data.user)) return; authUI(); nav(routeUrl('my')); }, function(){ btn.disabled = false; toast(authErr()); });
+        .then(function(r){ btn.disabled = false; if(r.error) return toast(authErr(r.error.message)); if(staffOut(r.data && r.data.user)) return; authUI(); var back = ''; try { back = sessionStorage.getItem('chai_after_login') || ''; sessionStorage.removeItem('chai_after_login'); } catch(e){} nav(routeUrl(back || 'my')); }, function(){ btn.disabled = false; toast(authErr()); });
     });
     $('[data-forgot]').addEventListener('click', function(){
       var em = lf.elements.email.value.trim();
@@ -2573,6 +2576,20 @@ function myGate(c, u){
   });
 }
 var LOGIN_BY = {email:'이메일', kakao:'카카오', google:'구글'};
+/* 무료 강의 수강 등록 (/enroll?item=…): 로그인 → 서버가 수강권을 만들고 → 바로 재생 화면 */
+function vEnroll(){ return '<section class="section tight"><div class="wrap" style="max-width:560px;text-align:center"><h1 class="h2">수강 등록</h1><p class="lead" id="enMsg" style="margin-top:12px">잠시만 기다려 주세요</p></div></section>'; }
+function bindEnroll(q){
+  var id = (new URLSearchParams(q).get('item') || '').replace(/[^a-z0-9-]/g, ''), msg = function(t){ var e = $('#enMsg'); if(e) e.innerHTML = t; pathify($('#enMsg')); };
+  sb().then(function(c){ return c.auth.getSession().then(function(r){
+    var s = r.data && r.data.session;
+    if(!s){ try { sessionStorage.setItem('chai_after_login', 'enroll?item=' + id); } catch(e){} msg('무료 강의는 로그인하면 바로 볼 수 있어요.<br><br><a class="btn btn-lime" href="#login?mode=signup">가입하고 시작하기</a> <a class="btn btn-line" href="#login">로그인</a>'); return; }
+    if(staffOut(s.user)) return;
+    return fetch('/api/me', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + s.access_token}, body:JSON.stringify({action:'enroll_free', item:id})}).then(function(x){ return x.json(); }).then(function(d){
+      if(d && d.ok){ nav(routeUrl('p-' + d.course), true); return; }
+      msg(d && d.code === 'NOT_FREE' ? '무료 강의가 아니에요. 강의 페이지에서 확인해 주세요.' : '등록하지 못했어요. 잠시 뒤 다시 해 주세요.');
+    });
+  }); }).catch(function(){ msg('등록하지 못했어요. 잠시 뒤 다시 해 주세요.'); });
+}
 function vMy(){
   return '<section class="section tight my-pg"><div class="wrap" style="max-width:960px">' +
     '<p class="eyebrow">My</p><h1 class="h2 my-title">내 학습</h1>' +
@@ -2610,7 +2627,7 @@ function myDash(c, u){
             '<div class="my-c-bot"><span class="muted">진도 ' + v + '%</span><a class="btn btn-lime btn-sm" href="#p-' + esc(e.course_id) + '">' + (v ? '이어 보기' : '시작하기') + '</a></div></li>'; }).join('') + '</ul>'
       : '<div class="my-empty"><p class="my-empty-t">아직 수강 중인 강의가 없어요</p><p class="muted">강의를 사면 여기에서 바로 이어 볼 수 있어요.</p></div>' +
         '<p class="my-sub">이런 강의가 있어요</p><ul class="my-reco">' + C.map(function(x){ var it = sale(x.opts[0]);
-          return '<li><a href="#c-' + esc(x.id) + '"><span class="my-tag">' + esc(x.level) + '</span><b class="ol">' + esc(x.title) + '</b><span class="muted ol">' + esc(x.short) + '</span>' + (it ? '<span class="my-price">' + won(it.price) + '</span>' : '') + '</a></li>'; }).join('') + '</ul>';
+          return '<li><a href="#c-' + esc(x.id) + '"><span class="my-tag">' + esc(x.level) + '</span><b class="ol">' + esc(x.title) + '</b><span class="muted ol">' + esc(x.short) + '</span>' + (it ? '<span class="my-price">' + priceTxt(it) + '</span>' : '') + '</a></li>'; }).join('') + '</ul>';
     var orders = od.length
       ? '<ul class="my-rows">' + od.map(function(o){ var it = SHOP && SHOP[o.item_id];
           return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + '</b><span class="muted ol">' + d(o.paid_at || o.created_at) + ' · 주문번호 ' + esc(o.id) + '</span>' + (o.status === 'waiting' && o.vbank ? '<span class="my-tag my-warn">' + esc(o.vbank.bank) + ' ' + esc(o.vbank.account) + (o.vbank.holder ? ' (' + esc(o.vbank.holder) + ')' : '') + (o.due_at ? ' · ' + d(o.due_at) + '까지 입금' : '') + '</span>' : '') + '</div><div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + (o.refund_requested_at && o.status === 'paid' ? ' · 신청 접수' : '') + '</span>' + ((o.status === 'paid' || o.status === 'partial_refunded') ? '<button type="button" class="btn btn-line btn-sm" data-myrf="' + esc(o.id) + '">환불 신청</button>' : '') + '</div>' + (it && /\uCC28 \uD0A4\uD2B8/.test(it.note || '') && (o.status === 'paid' || o.status === 'partial_refunded') ? '<div class="my-ship">' + (o.shipped_at ? '<span class="muted">차 키트 발송 ' + d(o.shipped_at) + (o.ship_tracking ? ' · ' + esc(o.ship_tracking) : '') + '</span>' : (o.ship_addr ? '<span class="muted ol">배송지: ' + esc(o.ship_addr) + '</span>' : '<span class="my-tag my-warn">차 키트 배송지를 넣어 주세요</span>') + '<button type="button" class="lnk" data-ship="' + esc(o.id) + '">' + (o.ship_addr ? '수정' : '배송지 입력') + '</button>') + '</div>' : '') + '</li>'; }).join('') + '</ul>' +
@@ -2797,6 +2814,8 @@ function myShip(c, o, done){
 function deviceId(){
   try { var d = localStorage.getItem('chai_device'); if(!d){ d = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(36).slice(2)); localStorage.setItem('chai_device', d); } return d; } catch(e){ return 'nostore'; }
 }
+/* 편 공개 여부: 예약 시각이 있으면 그 시각부터, 없으면 공개 표시대로 */
+function lessonLive(l){ return l.publish_at ? Date.parse(l.publish_at) <= Date.now() : l.published !== false; }
 function vPlay(cid){
   var c = cById(cid);
   return '<section class="section tight play-pg"><div class="wrap" style="max-width:1200px">' +
@@ -2816,7 +2835,7 @@ function bindPlay(cid){
       myKits(c, $('#pKits'), cid);
       return Promise.all([
         c.from('courses').select('id,title,is_open').eq('id', cid).maybeSingle(),
-        c.from('lessons').select('id,part,sort,title,is_free,duration_s').eq('course_id', cid).order('sort'),
+        c.from('lessons').select('id,part,sort,title,is_free,duration_s,published,publish_at').eq('course_id', cid).order('sort'),
         c.from('progress').select('lesson_id,watched_s,position_s,completed_at'),
         c.rpc('has_access', {p_course:cid})
       ]).then(function(v){
@@ -2832,8 +2851,8 @@ function bindPlay(cid){
           var done = ls.filter(function(l){ return !l.is_free && pr[l.id] && pr[l.id].completed_at; }).length, tot = ls.filter(function(l){ return !l.is_free; }).length;
           $('#pSide').innerHTML = '<div class="play-sum"><b>진도 ' + (tot ? Math.round(100 * done / tot) : 0) + '%</b><span class="muted">' + done + '/' + tot + '편 완료</span><span class="my-bar"><i style="width:' + (tot ? Math.round(100 * done / tot) : 0) + '%"></i></span></div>' +
             (ls.length ? parts.map(function(k){ return '<p class="play-part">' + esc(k) + '</p><ol class="play-list">' + by[k].map(function(l){
-              var p = pr[l.id] || {}, lock = !l.is_free && !access;
-              return '<li><button type="button" data-l="' + l.id + '"' + (cur === l.id ? ' aria-current="true"' : '') + (lock || !course.is_open ? ' disabled' : '') + '><span class="play-ck' + (p.completed_at ? ' on' : '') + '" aria-hidden="true"></span><span class="play-lt">' + esc(l.title) + '</span><span class="muted play-len">' + (l.is_free ? '<span class="my-tag">맛보기</span> ' : '') + (l.duration_s ? Math.round(l.duration_s / 60) + '분' : '') + '</span></button></li>'; }).join('') + '</ol>'; }).join('') : '<p class="muted">편 목록이 아직 없어요.</p>');
+              var p = pr[l.id] || {}, soon = !lessonLive(l), lock = soon || (!l.is_free && !access);
+              return '<li><button type="button" data-l="' + l.id + '"' + (cur === l.id ? ' aria-current="true"' : '') + (lock || !course.is_open ? ' disabled' : '') + '><span class="play-ck' + (p.completed_at ? ' on' : '') + '" aria-hidden="true"></span><span class="play-lt">' + esc(l.title) + '</span><span class="muted play-len">' + (soon ? '<span class="my-tag">' + (l.publish_at ? new Date(l.publish_at).toLocaleDateString('ko-KR', {month:'numeric', day:'numeric'}) + ' 공개' : '곧 공개') + '</span> ' : '') + (l.is_free ? '<span class="my-tag">맛보기</span> ' : '') + (l.duration_s ? Math.round(l.duration_s / 60) + '분' : '') + '</span></button></li>'; }).join('') + '</ol>'; }).join('') : '<p class="muted">편 목록이 아직 없어요.</p>');
           $$('[data-l]').forEach(function(b){ b.onclick = function(){ open(+b.getAttribute('data-l')); }; });
         };
         var timer = null, onMsg = null;
@@ -2875,7 +2894,7 @@ function bindPlay(cid){
         };
         side(null);
         if(course.is_open && ls.length){
-          var next = ls.filter(function(l){ return (l.is_free || access) && !(pr[l.id] && pr[l.id].completed_at); })[0] || ls.filter(function(l){ return l.is_free || access; })[0];
+          var next = ls.filter(function(l){ return lessonLive(l) && (l.is_free || access) && !(pr[l.id] && pr[l.id].completed_at); })[0] || ls.filter(function(l){ return lessonLive(l) && (l.is_free || access); })[0];
           if(next) open(next.id); else msg('이 강의의 수강권이 없어요', '맛보기 편은 강의 상세 페이지에서 볼 수 있어요.');
         }
       });

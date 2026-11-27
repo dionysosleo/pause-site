@@ -10,13 +10,15 @@ module.exports = async (req, res) => {
   try {
     const id = Number(req.query && req.query.lesson);
     if (!(id > 0)) return S.send(res, 400, { ok: false, code: 'BAD_REQUEST' });
-    const [l] = (await S.rest('GET', 'lessons?select=id,course_id,is_free,title&id=eq.' + id)).data || [];
+    const [l] = (await S.rest('GET', 'lessons?select=id,course_id,is_free,title,published,publish_at&id=eq.' + id)).data || [];
     if (!l) return S.send(res, 404, { ok: false, code: 'NO_LESSON' });
     const [c] = (await S.rest('GET', 'courses?select=id,is_open&id=eq.' + encodeURIComponent(l.course_id))).data || [];
     const u = await S.user(S.bearer(req));
     const admin = u ? await S.isAdminStrict(u, S.bearer(req)) : false;
     if (!admin) {
       if (!c || !c.is_open) return S.send(res, 403, { ok: false, code: 'NOT_OPEN' });
+      const live = l.publish_at ? Date.parse(l.publish_at) <= Date.now() : l.published !== false;
+      if (!live) return S.send(res, 403, { ok: false, code: 'NOT_PUBLISHED', at: l.publish_at || null });
       if (!l.is_free) {
         if (!u) return S.send(res, 401, { ok: false, code: 'AUTH' });
         const en = (await S.rest('GET', 'enrollments?select=id,ends_at&revoked_at=is.null&user_id=eq.' + u.id + '&course_id=eq.' + encodeURIComponent(l.course_id))).data || [];
