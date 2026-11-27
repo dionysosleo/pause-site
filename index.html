@@ -440,6 +440,33 @@ footer .logo{color:#fff}
 footer .logo .amp{color:var(--lime)}
 footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:14px 20px;border-radius:12px;z-index:90;font-size:15px;max-width:calc(100% - 32px)}
+/* 회원: 로그인·가입·내 학습 */
+.hutil .hauth{display:inline-flex;align-items:center;height:32px;padding:0 10px;margin-right:2px;font-size:14px;font-weight:600;color:inherit;text-decoration:none}
+@media (max-width:900px){.hutil .hauth{display:none}}
+.auth{max-width:440px}.my{max-width:760px}
+.auth-h{font-size:clamp(30px,4vw,44px)}.auth-lead{margin:12px 0 24px}
+.atabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--hair);margin:0 0 24px}
+.atabs a{display:flex;align-items:center;justify-content:center;height:46px;font-weight:700;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+.atabs a[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.sso{display:grid;gap:10px}.sso .btn{width:100%}
+.sso .sso-k{background:#FEE500!important;color:#191919!important;border-color:#FEE500!important}
+.sso .sso-g{background:#fff!important;color:#1F1F1F!important;border:1.5px solid var(--hair)!important}
+.sso .btn:disabled{opacity:.5;cursor:not-allowed}
+.sso-note{font-size:13px;margin:10px 0 0}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin:24px 0}.or::before,.or::after{content:'';flex:1;height:1px;background:var(--hair)}
+.form.one-col{grid-template-columns:minmax(0,1fr)}
+.aforgot{justify-self:center;background:none;border:0;font-size:14px;color:var(--muted);cursor:pointer;padding:6px}
+.cons{border:1px solid var(--hair);border-radius:14px;padding:14px 16px;margin:0;gap:10px}
+.cons .check{font-size:14px;line-height:22px}.cons-all{font-weight:700;padding-bottom:10px;border-bottom:1px solid var(--soft)}
+.my-who{padding:20px 0 4px}.my-name{font-size:20px;font-weight:700;margin:0 0 4px}
+.my-h{margin:36px 0 12px;font-size:18px}
+.my-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.my-list li>a,.my-list li>div{display:grid;gap:4px;padding:16px 18px;border:1px solid var(--hair);border-radius:14px;background:#fff;color:inherit;text-decoration:none}
+.my-list li>a:hover{border-color:var(--ink)}
+.my-list span{font-size:14px}
+.my-empty{margin:0}.my-mk{margin:0 0 20px}
+.my-act{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:8px 0 0}
+.my-act .lnk{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline}
 
 /* soft luxury layer */
 :root{--navy:#2B3A4A;--glass:rgba(255,255,255,.72);--glass-b:rgba(255,255,255,.85);--sh:0 18px 44px rgba(30,42,54,.09);--r:26px;--cream:#F4EADF;--gold:#C9A27E}
@@ -1178,13 +1205,14 @@ details.cu li:first-child{border-top:0}
       <li><a href="#day" data-nav="day">현장</a></li>
     </ul>
     <div class="hutil">
+      <a class="hauth" data-auth href="#login">로그인</a>
       <a class="lang" data-lang href="/en" hreflang="en" lang="en">EN</a>
       <a class="btn btn-lime btn-sm" id="hdCta" href="#contact">워크샵 문의</a>
       <button class="burger" type="button" aria-expanded="false" aria-controls="mnav" id="burger"><span class="sr">메뉴</span><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="#0E0E0E" stroke-width="2"/></svg></button>
     </div>
   </div>
   <nav class="mnav" id="mnav" aria-label="모바일 메뉴">
-    <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#day">현장 기록</a><a href="#contact">워크샵 문의</a><a data-lang href="/en" hreflang="en" lang="en">English</a>
+    <a href="#workshop">워크샵</a><a href="#program">정기프로그램</a><a href="#online">온라인강의</a><a href="#team">강사</a><a href="#day">현장 기록</a><a href="#contact">워크샵 문의</a><a data-auth href="#login">로그인</a><a data-lang href="/en" hreflang="en" lang="en">English</a>
   </nav>
 </header>
 
@@ -1577,6 +1605,8 @@ function route(){
   else if(h === 'proposal'){ page('contact'); app.innerHTML = vProposal(); bindProposal(); }
   else if(h.indexOf('learn') === 0){ page('learn'); app.innerHTML = vLearn(h.split('?')[1] || ''); bindLearn(); }
   else if(/^contact\?type=(online|package)/.test(h)){ nav(routeUrl('learn?t=' + (h.indexOf('package') > 0 ? 'package' : 'group')), true); return; }
+  else if(h.indexOf('login') === 0){ page('login'); app.innerHTML = vLogin(h.split('?')[1] || ''); bindLogin(); }
+  else if(h === 'my'){ page('my'); app.innerHTML = vMy(); bindMy(); }
   else if(h.indexOf('contact') === 0){ page('contact'); app.innerHTML = vContact(h.split('?')[1] || ''); bindContact(); }
   else { page(''); app.innerHTML = '<section class="section"><div class="wrap"><h1 class="h2">페이지를 찾을 수 없어요</h1><p class="lead" style="margin-top:12px"><a href="#home">홈으로 가기</a></p></div></section>'; }
   document.title = (titleFor(h) ? titleFor(h) + ' — ' : '') + 'CHA&I';
@@ -1598,7 +1628,7 @@ function route(){
    화면 코드는 '#workshop'처럼 써도 됨 → pathify가 '/workshop'으로 바꾸고, 클릭은 nav가 처리.
    file:// 로 열 때(검사 스크립트)는 예전처럼 # 주소로 동작. 예전 # 링크로 들어오면 실제 주소로 바꿔 줌. */
 var HASH_MODE = location.protocol === 'file:';
-var ROUTE_RE = /^(intro|home|workshop|program|online|team|contact|proposal|brief|learn|privacy|terms|ai-policy|refund|copyright|day)(\?.*)?$|^[wct]-[a-z0-9-]+$/;
+var ROUTE_RE = /^(intro|home|workshop|program|online|team|contact|proposal|brief|learn|privacy|terms|ai-policy|refund|copyright|day|login|my)(\?.*)?$|^[wct]-[a-z0-9-]+$/;
 function isRoute(t){ return ROUTE_RE.test(t || ''); }
 var BASE = document.documentElement.lang === 'en' ? '/en' : '';
 function routeUrl(t){ return HASH_MODE ? '#' + t : (t === 'intro' ? (BASE || '/') : BASE + '/' + t); }
@@ -1608,7 +1638,7 @@ function curRoute(){
   if(isRoute(hs)){ history.replaceState(null, '', routeUrl(hs)); return hs; }
   var p = decodeURIComponent(location.pathname.replace(/^\/en(?=\/|$)/, '').replace(/^\/+|\/+$/g, '')).replace(/\.html$/, '');
   p = p || 'intro';
-  return /^(learn|contact)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
+  return /^(learn|contact|login)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
 }
 function nav(url, replace){
   if(HASH_MODE){ if(replace) location.replace(url); else location.hash = url.slice(1); return; }
@@ -1649,12 +1679,12 @@ function afterRoute(h){
   var faq = $$('#app .faq details').map(function(d){ var q = d.querySelector('summary'); return q ? {'@type':'Question', name:q.textContent.trim(), acceptedAnswer:{'@type':'Answer', text:d.textContent.replace(q.textContent, '').trim()}} : null; }).filter(Boolean);
   if(faq.length) ld = ld ? [ld, {'@context':'https://schema.org', '@type':'FAQPage', mainEntity:faq}] : {'@context':'https://schema.org', '@type':'FAQPage', mainEntity:faq};
   $('#ldRoute').textContent = ld ? JSON.stringify(ld) : '';
-  var notFound = /페이지를 찾을 수 없어요/.test($('#app').textContent.slice(0, 200)), rb = document.querySelector('meta[name="robots"]');
+  var notFound = /페이지를 찾을 수 없어요/.test($('#app').textContent.slice(0, 200)) || /^(login|my)/.test(h), rb = document.querySelector('meta[name="robots"]');
   if(notFound && !rb){ rb = document.createElement('meta'); rb.name = 'robots'; rb.content = 'noindex'; document.head.appendChild(rb); } else if(!notFound && rb) rb.remove();
   var hsh = location.hash.slice(1); if(!HASH_MODE && hsh && !isRoute(hsh)){ var el = document.getElementById(hsh); if(el) setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60); }
   window.dispatchEvent(new Event('routechange'));
 }
-function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {learn:'온라인 강의 문의', day:'현장 기록', privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'워크샵 문의', proposal:'제안서 받기'}[h.split('?')[0]] || ''; }
+function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {learn:'온라인 강의 문의', day:'현장 기록', privacy:'개인정보처리방침', brief:'결재용 한 페이지', workshop:'워크샵', program:'정기프로그램', online:'온라인강의', team:'강사', contact:'워크샵 문의', proposal:'제안서 받기', login:'로그인', my:'내 학습'}[h.split('?')[0]] || ''; }
 function wById(id){ for(var i = 0; i < W.length; i++) if(W[i].id === id) return W[i]; return null; }
 function cById(id){ for(var i = 0; i < C.length; i++) if(C[i].id === id) return C[i]; return null; }
 function who(keys){ return keys.map(function(k){ return T[k].nm; }).join(' · '); }
@@ -2308,6 +2338,202 @@ function copyDialog(title, txt, extra){
 }
 var CONSENT = '<div class="full pnotice" role="note"><b>개인정보 수집·이용 안내</b><table><tbody><tr><th scope="row">목적</th><td>문의 상담, 견적·제안서 전달, 일정 조율</td></tr><tr><th scope="row">항목</th><td>필수: 회사·기관명, 성함, 이메일 · 선택: 직함, 연락처, 인원, 희망 시기, 문의 내용</td></tr><tr><th scope="row">보유</th><td>접수한 날부터 1년 (매일 자동 삭제)</td></tr></tbody></table><p>보내 주신 요청에 답하기 위한 처리라 별도 동의 없이 진행돼요. 선택 항목은 비워 두셔도 돼요. <a href="#privacy">개인정보처리방침</a></p></div>';
 
+/* ===== 회원: 로그인·가입·내 학습 (Supabase, docs: chaand-ops/docs/site-setup/SETUP-AUTH.md) =====
+   AUTH.url·key는 공개해도 되는 값(publishable). 비밀 키(secret·service_role)는 절대 여기 넣지 않음 → Vercel 환경변수.
+   라이브러리는 로그인·내 학습 화면에서만 불러옴(vendor/supabase-*.js, MIT). */
+var AUTH = { url:'https://mryawowqarptvtpxcwxl.supabase.co', key:'sb_publishable_wC2dVRAITr3Ta5AmIzWpKQ_WyOV0OER', ver:'1.0' };
+var sbc = null, sbLoad = null, PROV = null;
+function sb(){
+  if(sbc) return Promise.resolve(sbc);
+  if(sbLoad) return sbLoad;
+  sbLoad = new Promise(function(res, rej){
+    var s = document.createElement('script'); s.src = (HASH_MODE ? '' : '/') + 'vendor/supabase-2.119.2.js'; s.async = true;
+    s.onload = function(){
+      try {
+        sbc = window.supabase.createClient(AUTH.url, AUTH.key, {auth:{flowType:'pkce', persistSession:true, detectSessionInUrl:true, autoRefreshToken:true}});
+        sbc.auth.onAuthStateChange(function(ev){ if(ev === 'PASSWORD_RECOVERY') window.__recovery = true; setTimeout(authUI, 0); });
+        res(sbc);
+      } catch(e){ sbLoad = null; rej(e); }
+    };
+    s.onerror = function(){ sbLoad = null; rej(new Error('load')); };
+    document.head.appendChild(s);
+  });
+  return sbLoad;
+}
+function hasSession(){ try { return !!localStorage.getItem('sb-' + AUTH.url.split('//')[1].split('.')[0] + '-auth-token'); } catch(e){ return false; } }
+function authUI(){ var on = hasSession(); $$('[data-auth]').forEach(function(a){ a.textContent = on ? '내 학습' : '로그인'; a.setAttribute('href', on ? '#my' : '#login'); }); pathify(document.querySelector('header')); }
+function providers(){
+  if(PROV) return Promise.resolve(PROV);
+  return fetch(AUTH.url + '/auth/v1/settings', {headers:{apikey:AUTH.key}}).then(function(r){ return r.json(); }).then(function(j){ PROV = j.external || {}; return PROV; }, function(){ return {}; });
+}
+function backTo(){ return location.origin + BASE + '/my'; }
+function authErr(m){
+  m = String(m || '');
+  if(/Invalid login/i.test(m)) return '이메일이나 비밀번호가 맞지 않아요';
+  if(/not confirmed/i.test(m)) return '메일 인증을 먼저 마쳐 주세요. 받은 편지함을 확인해 주세요';
+  if(/already registered|already exists/i.test(m)) return '이미 가입한 이메일이에요. 로그인해 주세요';
+  if(/rate limit|too many/i.test(m)) return '요청이 많아요. 잠시 뒤 다시 해 주세요';
+  if(/password/i.test(m)) return '비밀번호는 8자 이상으로 정해 주세요';
+  return '잠시 문제가 생겼어요. 다시 시도해 주세요';
+}
+function consentBox(){
+  return '<fieldset class="cons field"><legend class="sr">약관 동의</legend>' +
+    '<label class="check cons-all"><input type="checkbox" data-allc><span>모두 동의해요</span></label>' +
+    '<label class="check"><input type="checkbox" name="c_age" required><span>(필수) 만 14세 이상이에요</span></label>' +
+    '<label class="check"><input type="checkbox" name="c_terms" required><span>(필수) <a href="#terms" target="_blank" rel="noopener">이용약관</a>에 동의해요</span></label>' +
+    '<label class="check"><input type="checkbox" name="c_priv" required><span>(필수) <a href="#privacy" target="_blank" rel="noopener">개인정보 수집·이용</a>에 동의해요</span></label>' +
+    '<label class="check"><input type="checkbox" name="c_mk"><span>(선택) 새 강의·할인 소식을 메일로 받을게요</span></label>' +
+    '<span class="err">필수 항목에 동의해 주세요</span></fieldset>';
+}
+function bindConsent(f){
+  var all = f.querySelector('[data-allc]'), items = $$('.cons input:not([data-allc])', f);
+  all.addEventListener('change', function(){ items.forEach(function(i){ i.checked = all.checked; }); });
+  items.forEach(function(i){ i.addEventListener('change', function(){ all.checked = items.every(function(x){ return x.checked; }); }); });
+}
+function vLogin(q){
+  var su = /mode=signup/.test(q);
+  var tabs = '<div class="atabs" role="tablist"><a role="tab" href="#login"' + (su ? '' : ' aria-selected="true"') + '>로그인</a><a role="tab" href="#login?mode=signup"' + (su ? ' aria-selected="true"' : '') + '>회원가입</a></div>';
+  var form = su
+    ? '<form class="form one-col" data-form="signup" novalidate>' +
+        '<label class="field">이름<input name="name" required autocomplete="name"><span class="err">이름을 입력해 주세요</span></label>' +
+        '<label class="field">이메일<input name="email" type="email" required autocomplete="email"><span class="err">이메일을 확인해 주세요</span></label>' +
+        '<label class="field">비밀번호<input name="pw" type="password" required minlength="8" autocomplete="new-password"><small class="hint">8자 이상</small><span class="err">비밀번호는 8자 이상으로 정해 주세요</span></label>' +
+        consentBox() +
+        '<button class="btn btn-lime" type="submit">가입하기</button></form>'
+    : '<form class="form one-col" data-form="login" novalidate>' +
+        '<label class="field">이메일<input name="email" type="email" required autocomplete="email"><span class="err">이메일을 확인해 주세요</span></label>' +
+        '<label class="field">비밀번호<input name="pw" type="password" required autocomplete="current-password"><span class="err">비밀번호를 입력해 주세요</span></label>' +
+        '<button class="btn btn-lime" type="submit">로그인</button>' +
+        '<button class="lnk aforgot" type="button" data-forgot>비밀번호를 잊었어요</button></form>';
+  return '<section class="section tight"><div class="wrap auth" style="max-width:480px">' +
+    '<p class="eyebrow">' + (su ? 'Sign up' : 'Log in') + '</p><h1 class="h1 auth-h">' + (su ? '회원가입' : '로그인') + '</h1>' +
+    '<p class="lead auth-lead">산 강의와 진도를 한곳에서 이어 봐요.</p>' + tabs +
+    '<div class="sso"><button type="button" class="btn sso-k" data-sso="kakao">카카오로 계속하기</button><button type="button" class="btn sso-g" data-sso="google">구글로 계속하기</button></div>' +
+    '<p class="muted sso-note">처음 오셨다면 다음 화면에서 약관 동의를 받아요.</p>' +
+    '<p class="or"><span>또는 이메일로</span></p>' + form +
+  '</div></section>';
+}
+function bindLogin(){
+  var ssoBtns = $$('[data-sso]');   /* 가격표를 늦게 받으면 화면을 한 번 더 그리므로, 지금 그린 버튼만 다룸 */
+  providers().then(function(p){
+    ssoBtns.forEach(function(b){ if(p[b.getAttribute('data-sso')] !== true){ b.disabled = true; b.textContent += ' (준비 중)'; } });
+  });
+  ssoBtns.forEach(function(b){ b.addEventListener('click', function(){
+    b.disabled = true;
+    sb().then(function(c){ return c.auth.signInWithOAuth({provider:b.getAttribute('data-sso'), options:{redirectTo:backTo()}}); })
+      .then(function(r){ if(r && r.error) throw r.error; }).catch(function(e){ b.disabled = false; toast(authErr(e && e.message)); });
+  }); });
+  var lf = $('form[data-form="login"]'), sf = $('form[data-form="signup"]');
+  if(lf){
+    bindForm(lf, function(){
+      var btn = lf.querySelector('[type=submit]'); btn.disabled = true;
+      sb().then(function(c){ return c.auth.signInWithPassword({email:lf.elements.email.value.trim(), password:lf.elements.pw.value}); })
+        .then(function(r){ btn.disabled = false; if(r.error) return toast(authErr(r.error.message)); authUI(); nav(routeUrl('my')); }, function(){ btn.disabled = false; toast(authErr()); });
+    });
+    $('[data-forgot]').addEventListener('click', function(){
+      var em = lf.elements.email.value.trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ lf.elements.email.closest('.field').classList.add('bad'); lf.elements.email.focus(); return; }
+      sb().then(function(c){ return c.auth.resetPasswordForEmail(em, {redirectTo:backTo()}); }).then(function(r){
+        if(r.error) return toast(authErr(r.error.message));
+        openDialog('<h2>비밀번호 재설정 메일을 보냈어요</h2><p style="margin:0">' + esc(em) + '로 보낸 메일의 버튼을 누르면 새 비밀번호를 정할 수 있어요.</p><button type="button" class="btn btn-line" data-close>닫기</button>');
+      }, function(){ toast(authErr()); });
+    });
+  }
+  if(sf){
+    bindConsent(sf);
+    bindForm(sf, function(){
+      if(sf.elements.pw.value.length < 8){ sf.elements.pw.closest('.field').classList.add('bad'); sf.elements.pw.focus(); return; }
+      var em = sf.elements.email.value.trim(), btn = sf.querySelector('[type=submit]'); btn.disabled = true;
+      try { localStorage.setItem('chai_consent', JSON.stringify({mk:sf.elements.c_mk.checked, at:Date.now()})); } catch(e){}
+      sb().then(function(c){ return c.auth.signUp({email:em, password:sf.elements.pw.value, options:{data:{name:sf.elements.name.value.trim()}, emailRedirectTo:backTo()}}); })
+        .then(function(r){
+          btn.disabled = false;
+          if(r.error) return toast(authErr(r.error.message));
+          if(r.data && r.data.session){ authUI(); nav(routeUrl('my')); return; }
+          openDialog('<h2>인증 메일을 보냈어요</h2><p style="margin:0">' + esc(em) + '로 보낸 메일의 버튼을 누르면 가입이 끝나요. 메일이 안 보이면 스팸함도 확인해 주세요.</p><button type="button" class="btn btn-line" data-close>닫기</button>');
+        }, function(){ btn.disabled = false; toast(authErr()); });
+    });
+  }
+}
+function vMy(){
+  return '<section class="section tight"><div class="wrap my" style="max-width:800px">' +
+    '<p class="eyebrow">My</p><h1 class="h1 auth-h">내 학습</h1>' +
+    '<div id="myBody" aria-live="polite"><p class="muted">불러오는 중이에요</p></div>' +
+  '</div></section>';
+}
+function myBox(html){ var b = $('#myBody'); if(b) b.innerHTML = html; pathify(b); }
+function bindMy(){
+  var tok = window.__myTok = {};   /* 화면을 다시 그리면 앞선 불러오기는 버림 */
+  sb().then(function(c){
+    return c.auth.getSession().then(function(r){
+      if(tok !== window.__myTok) return;
+      var s = r.data && r.data.session;
+      if(/[?&](code|error)=/.test(location.search) && !HASH_MODE) history.replaceState(null, '', routeUrl('my'));
+      authUI();
+      if(!s){ myBox('<p class="lead">로그인하면 산 강의와 진도를 볼 수 있어요.</p><p class="my-act"><a class="btn btn-lime" href="#login">로그인</a> <a class="btn btn-line" href="#login?mode=signup">회원가입</a></p>'); return; }
+      if(window.__recovery) return myReset(c);
+      return myGate(c, s.user);
+    });
+  }).catch(function(){ myBox('<p class="lead">회원 기능을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>'); });
+}
+function myReset(c){
+  myBox('<form class="form one-col" data-form="reset" novalidate><label class="field">새 비밀번호<input name="pw" type="password" required minlength="8" autocomplete="new-password"><small class="hint">8자 이상</small><span class="err">비밀번호는 8자 이상으로 정해 주세요</span></label><button class="btn btn-lime" type="submit">비밀번호 바꾸기</button></form>');
+  var f = $('form[data-form="reset"]');
+  bindForm(f, function(){
+    if(f.elements.pw.value.length < 8){ f.elements.pw.closest('.field').classList.add('bad'); return; }
+    c.auth.updateUser({password:f.elements.pw.value}).then(function(r){ if(r.error) return toast(authErr(r.error.message)); window.__recovery = false; toast('비밀번호를 바꿨어요'); bindMy(); });
+  });
+}
+function saveConsent(c, uid, mk){
+  var rows = ['age14','terms','privacy'].map(function(k){ return {user_id:uid, kind:k, version:AUTH.ver, agreed:true}; }).concat([{user_id:uid, kind:'marketing', version:AUTH.ver, agreed:!!mk}]);
+  return c.from('consents').insert(rows).then(function(r){
+    if(r.error) throw r.error;
+    return c.from('profiles').update({marketing_ok:!!mk, marketing_at:new Date().toISOString()}).eq('id', uid);
+  });
+}
+function myGate(c, u){
+  return c.from('consents').select('kind').eq('user_id', u.id).then(function(r){
+    var have = (r.data || []).map(function(x){ return x.kind; });
+    if(['age14','terms','privacy'].every(function(k){ return have.indexOf(k) >= 0; })) return myDash(c, u);
+    var pend = null; try { pend = JSON.parse(localStorage.getItem('chai_consent') || 'null'); } catch(e){}
+    if(pend && u.app_metadata && u.app_metadata.provider === 'email') return saveConsent(c, u.id, pend.mk).then(function(){ try { localStorage.removeItem('chai_consent'); } catch(e){} return myDash(c, u); });
+    myBox('<p class="lead">처음 오셨네요. 시작하기 전에 아래 내용에 동의해 주세요.</p><form class="form one-col" data-form="consent" novalidate>' + consentBox() + '<button class="btn btn-lime" type="submit">동의하고 시작하기</button></form>');
+    var f = $('form[data-form="consent"]'); bindConsent(f);
+    bindForm(f, function(){ saveConsent(c, u.id, f.elements.c_mk.checked).then(function(){ myDash(c, u); }, function(){ toast(authErr()); }); });
+  });
+}
+var LOGIN_BY = {email:'이메일', kakao:'카카오', google:'구글'};
+function myDash(c, u){
+  return Promise.all([
+    c.from('profiles').select('name,email,login_method,marketing_ok').eq('id', u.id).maybeSingle(),
+    c.from('enrollments').select('course_id,source,started_at').is('revoked_at', null).order('started_at', {ascending:false}),
+    c.from('orders').select('id,item_id,amount,status,paid_at').neq('status', 'ready').order('created_at', {ascending:false})
+  ]).then(function(rs){
+    var p = rs[0].data || {}, en = rs[1].data || [], od = rs[2].data || [];
+    var d = function(t){ return t ? new Date(t).toLocaleDateString('ko-KR') : ''; };
+    var st = {paid:'결제 완료', partial_refunded:'일부 환불', refunded:'환불 완료', canceled:'취소'};
+    myBox(
+      '<div class="my-who"><p class="my-name ol">' + esc(p.name || u.email) + '</p><p class="muted ol">' + esc(p.email || u.email) + ' · ' + (LOGIN_BY[p.login_method] || '이메일') + ' 로그인</p></div>' +
+      '<h2 class="h3 my-h">수강 중인 강의</h2>' +
+      (en.length ? '<ul class="my-list">' + en.map(function(e){ var cc = cById(e.course_id); return '<li><a href="#c-' + esc(e.course_id) + '"><b class="ol">' + esc(cc ? cc.title : e.course_id) + '</b><span class="muted ol">' + (e.source === 'company' ? '회사 배정' : '직접 구매') + ' · ' + d(e.started_at) + ' 시작</span></a></li>'; }).join('') + '</ul>'
+        : '<p class="muted my-empty">아직 수강 중인 강의가 없어요. <a class="lnk" href="#online">온라인강의 보기</a></p>') +
+      (od.length ? '<h2 class="h3 my-h">주문 내역</h2><ul class="my-list">' + od.map(function(o){ return '<li><div><b class="ol">' + esc(o.item_id) + ' · ' + Number(o.amount).toLocaleString('ko-KR') + '원</b><span class="muted ol">' + (st[o.status] || o.status) + ' · ' + d(o.paid_at) + ' · 주문번호 ' + esc(o.id) + '</span></div></li>'; }).join('') + '</ul>' : '') +
+      '<h2 class="h3 my-h">설정</h2>' +
+      '<label class="check my-mk"><input type="checkbox" data-mk' + (p.marketing_ok ? ' checked' : '') + '><span>새 강의·할인 소식을 메일로 받을게요</span></label>' +
+      '<p class="my-act"><button type="button" class="btn btn-line btn-sm" data-out>로그아웃</button> <button type="button" class="lnk" data-leave>회원 탈퇴</button></p>'
+    );
+    $('[data-mk]').addEventListener('change', function(){
+      var on = this.checked;
+      Promise.all([c.from('profiles').update({marketing_ok:on, marketing_at:new Date().toISOString()}).eq('id', u.id), c.from('consents').insert({user_id:u.id, kind:'marketing', version:AUTH.ver, agreed:on})])
+        .then(function(){ toast(on ? '소식 받기를 켰어요' : '소식 받기를 껐어요'); });
+    });
+    $('[data-out]').addEventListener('click', function(){ c.auth.signOut().then(function(){ authUI(); nav(routeUrl('home')); }); });
+    $('[data-leave]').addEventListener('click', function(){
+      openDialog('<h2>회원 탈퇴</h2><p style="margin:0">탈퇴하면 산 강의와 진도가 모두 사라지고 되돌릴 수 없어요. 환불받을 금액이 있으면 탈퇴 전에 신청해 주세요. 아래 메일로 가입한 이메일을 적어 보내 주시면 바로 처리해 드려요.</p><p style="margin:0">' + contactMail() + '</p><button type="button" class="btn btn-line" data-close>닫기</button>');
+    });
+  });
+}
+
 /* ===== 제안서 받기 (짧은 폼) ===== */
 function vProposal(){
   var L = savedLead() || {};
@@ -2489,12 +2715,13 @@ function bindForm(f, ok){
   if(!f.querySelector('[name=website]')) f.insertAdjacentHTML('beforeend', '<label class="hp" aria-hidden="true">웹사이트<input name="website" tabindex="-1" autocomplete="off"></label>');
   f.addEventListener('submit', function(e){
     e.preventDefault();
-    var bad = null;
+    var bad = null, boxes = [];   /* 한 칸에 필수 체크가 여럿이어도(약관 동의) 하나라도 틀리면 그 칸 표시 */
     $$('[required]', f).forEach(function(el){
       var v = String(el.value || '').trim(), wrong = el.type === 'checkbox' ? !el.checked : (!v || (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)));
-      el.closest('.field').classList.toggle('bad', wrong); el.setAttribute('aria-invalid', String(wrong));
-      if(wrong && !bad) bad = el;
+      el.setAttribute('aria-invalid', String(wrong));
+      if(wrong){ boxes.push(el.closest('.field')); if(!bad) bad = el; }
     });
+    $$('.field', f).forEach(function(b){ b.classList.toggle('bad', boxes.indexOf(b) >= 0); });
     if(bad){ bad.focus(); return; }
     ok();
   });
@@ -2573,6 +2800,7 @@ function animViz(){
 }
 new MutationObserver(function(){ koFix(); animViz(); revealGrids(); pathify(app); }).observe(document.getElementById('app'), {childList:true});
 renderBiz();
+authUI();
 if(HASH_MODE) window.addEventListener('hashchange', route);
 
 if(!/vercel\.app$|(^|\.)chaand\.ai$|^localhost$|^127\.|\.test$|^x\.test$/.test(location.hostname)) $('#pvNote').hidden = false;

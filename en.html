@@ -440,6 +440,33 @@ footer .logo{color:#fff}
 footer .logo .amp{color:var(--lime)}
 footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:14px 20px;border-radius:12px;z-index:90;font-size:15px;max-width:calc(100% - 32px)}
+/* 회원: 로그인·가입·내 학습 */
+.hutil .hauth{display:inline-flex;align-items:center;height:32px;padding:0 10px;margin-right:2px;font-size:14px;font-weight:600;color:inherit;text-decoration:none}
+@media (max-width:900px){.hutil .hauth{display:none}}
+.auth{max-width:440px}.my{max-width:760px}
+.auth-h{font-size:clamp(30px,4vw,44px)}.auth-lead{margin:12px 0 24px}
+.atabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--hair);margin:0 0 24px}
+.atabs a{display:flex;align-items:center;justify-content:center;height:46px;font-weight:700;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+.atabs a[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.sso{display:grid;gap:10px}.sso .btn{width:100%}
+.sso .sso-k{background:#FEE500!important;color:#191919!important;border-color:#FEE500!important}
+.sso .sso-g{background:#fff!important;color:#1F1F1F!important;border:1.5px solid var(--hair)!important}
+.sso .btn:disabled{opacity:.5;cursor:not-allowed}
+.sso-note{font-size:13px;margin:10px 0 0}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin:24px 0}.or::before,.or::after{content:'';flex:1;height:1px;background:var(--hair)}
+.form.one-col{grid-template-columns:minmax(0,1fr)}
+.aforgot{justify-self:center;background:none;border:0;font-size:14px;color:var(--muted);cursor:pointer;padding:6px}
+.cons{border:1px solid var(--hair);border-radius:14px;padding:14px 16px;margin:0;gap:10px}
+.cons .check{font-size:14px;line-height:22px}.cons-all{font-weight:700;padding-bottom:10px;border-bottom:1px solid var(--soft)}
+.my-who{padding:20px 0 4px}.my-name{font-size:20px;font-weight:700;margin:0 0 4px}
+.my-h{margin:36px 0 12px;font-size:18px}
+.my-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.my-list li>a,.my-list li>div{display:grid;gap:4px;padding:16px 18px;border:1px solid var(--hair);border-radius:14px;background:#fff;color:inherit;text-decoration:none}
+.my-list li>a:hover{border-color:var(--ink)}
+.my-list span{font-size:14px}
+.my-empty{margin:0}.my-mk{margin:0 0 20px}
+.my-act{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:8px 0 0}
+.my-act .lnk{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline}
 
 /* soft luxury layer */
 :root{--navy:#2B3A4A;--glass:rgba(255,255,255,.72);--glass-b:rgba(255,255,255,.85);--sh:0 18px 44px rgba(30,42,54,.09);--r:26px;--cream:#F4EADF;--gold:#C9A27E}
@@ -1186,13 +1213,14 @@ html[lang="en"] .plan .pf li.lv{grid-template-columns:8.6em minmax(0,1fr)}html[l
       <li><a href="#day" data-nav="day">In the field</a></li>
     </ul>
     <div class="hutil">
+      <a class="hauth" data-auth href="#login">Log in</a>
       <a class="lang" data-lang href="/" hreflang="ko" lang="ko">KO</a>
       <a class="btn btn-lime btn-sm" id="hdCta" href="#contact">Workshop inquiry</a>
       <button class="burger" type="button" aria-expanded="false" aria-controls="mnav" id="burger"><span class="sr">Menu</span><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="#0E0E0E" stroke-width="2"/></svg></button>
     </div>
   </div>
   <nav class="mnav" id="mnav" aria-label="Mobile menu">
-    <a href="#workshop">Workshops</a><a href="#program">Programs</a><a href="#online">Online courses</a><a href="#team">Hosts</a><a href="#day">Field notes</a><a href="#contact">Workshop inquiry</a><a data-lang href="/" hreflang="ko" lang="ko">한국어</a>
+    <a href="#workshop">Workshops</a><a href="#program">Programs</a><a href="#online">Online courses</a><a href="#team">Hosts</a><a href="#day">Field notes</a><a href="#contact">Workshop inquiry</a><a data-auth href="#login">Log in</a><a data-lang href="/" hreflang="ko" lang="ko">한국어</a>
   </nav>
 </header>
 
@@ -1585,6 +1613,8 @@ function route(){
   else if(h === 'proposal'){ page('contact'); app.innerHTML = vProposal(); bindProposal(); }
   else if(h.indexOf('learn') === 0){ page('learn'); app.innerHTML = vLearn(h.split('?')[1] || ''); bindLearn(); }
   else if(/^contact\?type=(online|package)/.test(h)){ nav(routeUrl('learn?t=' + (h.indexOf('package') > 0 ? 'package' : 'group')), true); return; }
+  else if(h.indexOf('login') === 0){ page('login'); app.innerHTML = vLogin(h.split('?')[1] || ''); bindLogin(); }
+  else if(h === 'my'){ page('my'); app.innerHTML = vMy(); bindMy(); }
   else if(h.indexOf('contact') === 0){ page('contact'); app.innerHTML = vContact(h.split('?')[1] || ''); bindContact(); }
   else { page(''); app.innerHTML = '<section class="section"><div class="wrap"><h1 class="h2">Page not found</h1><p class="lead" style="margin-top:12px"><a href="#home">Go to home</a></p></div></section>'; }
   document.title = (titleFor(h) ? titleFor(h) + ' — ' : '') + 'CHA&I';
@@ -1606,7 +1636,7 @@ function route(){
    화면 코드는 '#workshop'처럼 써도 됨 → pathify가 '/workshop'으로 바꾸고, 클릭은 nav가 처리.
    file:// 로 열 때(검사 스크립트)는 예전처럼 # 주소로 동작. 예전 # 링크로 들어오면 실제 주소로 바꿔 줌. */
 var HASH_MODE = location.protocol === 'file:';
-var ROUTE_RE = /^(intro|home|workshop|program|online|team|contact|proposal|brief|learn|privacy|terms|ai-policy|refund|copyright|day)(\?.*)?$|^[wct]-[a-z0-9-]+$/;
+var ROUTE_RE = /^(intro|home|workshop|program|online|team|contact|proposal|brief|learn|privacy|terms|ai-policy|refund|copyright|day|login|my)(\?.*)?$|^[wct]-[a-z0-9-]+$/;
 function isRoute(t){ return ROUTE_RE.test(t || ''); }
 var BASE = document.documentElement.lang === 'en' ? '/en' : '';
 function routeUrl(t){ return HASH_MODE ? '#' + t : (t === 'intro' ? (BASE || '/') : BASE + '/' + t); }
@@ -1616,7 +1646,7 @@ function curRoute(){
   if(isRoute(hs)){ history.replaceState(null, '', routeUrl(hs)); return hs; }
   var p = decodeURIComponent(location.pathname.replace(/^\/en(?=\/|$)/, '').replace(/^\/+|\/+$/g, '')).replace(/\.html$/, '');
   p = p || 'intro';
-  return /^(learn|contact)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
+  return /^(learn|contact|login)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
 }
 function nav(url, replace){
   if(HASH_MODE){ if(replace) location.replace(url); else location.hash = url.slice(1); return; }
@@ -1657,12 +1687,12 @@ function afterRoute(h){
   var faq = $$('#app .faq details').map(function(d){ var q = d.querySelector('summary'); return q ? {'@type':'Question', name:q.textContent.trim(), acceptedAnswer:{'@type':'Answer', text:d.textContent.replace(q.textContent, '').trim()}} : null; }).filter(Boolean);
   if(faq.length) ld = ld ? [ld, {'@context':'https://schema.org', '@type':'FAQPage', mainEntity:faq}] : {'@context':'https://schema.org', '@type':'FAQPage', mainEntity:faq};
   $('#ldRoute').textContent = ld ? JSON.stringify(ld) : '';
-  var notFound = /Page not found/.test($('#app').textContent.slice(0, 200)), rb = document.querySelector('meta[name="robots"]');
+  var notFound = /Page not found/.test($('#app').textContent.slice(0, 200)) || /^(login|my)/.test(h), rb = document.querySelector('meta[name="robots"]');
   if(notFound && !rb){ rb = document.createElement('meta'); rb.name = 'robots'; rb.content = 'noindex'; document.head.appendChild(rb); } else if(!notFound && rb) rb.remove();
   var hsh = location.hash.slice(1); if(!HASH_MODE && hsh && !isRoute(hsh)){ var el = document.getElementById(hsh); if(el) setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60); }
   window.dispatchEvent(new Event('routechange'));
 }
-function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {learn:'Online course inquiry', day:'Field notes', privacy:'Privacy Policy', brief:'One page for approval', workshop:'Workshops', program:'Programs', online:'Online courses', team:'Hosts', contact:'Workshop inquiry', proposal:'Get the brochure'}[h.split('?')[0]] || ''; }
+function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^c-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {learn:'Online course inquiry', day:'Field notes', privacy:'Privacy Policy', brief:'One page for approval', workshop:'Workshops', program:'Programs', online:'Online courses', team:'Hosts', contact:'Workshop inquiry', proposal:'Get the brochure', login:'Log in', my:'My learning'}[h.split('?')[0]] || ''; }
 function wById(id){ for(var i = 0; i < W.length; i++) if(W[i].id === id) return W[i]; return null; }
 function cById(id){ for(var i = 0; i < C.length; i++) if(C[i].id === id) return C[i]; return null; }
 function who(keys){ return keys.map(function(k){ return T[k].nick || T[k].nm; }).join(' · '); }
@@ -2316,6 +2346,202 @@ function copyDialog(title, txt, extra){
 }
 var CONSENT = '<div class="full pnotice" role="note"><b>Personal information collection and use</b><table><tbody><tr><th scope="row">Purpose</th><td>Responding to inquiries, sending quotes and proposals, scheduling</td></tr><tr><th scope="row">Items</th><td>Required: company or organization, name, email · Optional: title, phone, group size, preferred timing, message</td></tr><tr><th scope="row">Retention</th><td>1 year from receipt (deleted automatically every day)</td></tr></tbody></table><p>This processing is necessary to respond to your request, so no separate consent is required. Optional fields may be left blank. <a href="#privacy">Privacy Policy</a></p></div>';
 
+/* ===== 회원: 로그인·가입·내 학습 (Supabase, docs: chaand-ops/docs/site-setup/SETUP-AUTH.md) =====
+   AUTH.url·key는 공개해도 되는 값(publishable). 비밀 키(secret·service_role)는 절대 여기 넣지 않음 → Vercel 환경변수.
+   라이브러리는 로그인·내 학습 화면에서만 불러옴(vendor/supabase-*.js, MIT). */
+var AUTH = { url:'https://mryawowqarptvtpxcwxl.supabase.co', key:'sb_publishable_wC2dVRAITr3Ta5AmIzWpKQ_WyOV0OER', ver:'1.0' };
+var sbc = null, sbLoad = null, PROV = null;
+function sb(){
+  if(sbc) return Promise.resolve(sbc);
+  if(sbLoad) return sbLoad;
+  sbLoad = new Promise(function(res, rej){
+    var s = document.createElement('script'); s.src = (HASH_MODE ? '' : '/') + 'vendor/supabase-2.119.2.js'; s.async = true;
+    s.onload = function(){
+      try {
+        sbc = window.supabase.createClient(AUTH.url, AUTH.key, {auth:{flowType:'pkce', persistSession:true, detectSessionInUrl:true, autoRefreshToken:true}});
+        sbc.auth.onAuthStateChange(function(ev){ if(ev === 'PASSWORD_RECOVERY') window.__recovery = true; setTimeout(authUI, 0); });
+        res(sbc);
+      } catch(e){ sbLoad = null; rej(e); }
+    };
+    s.onerror = function(){ sbLoad = null; rej(new Error('load')); };
+    document.head.appendChild(s);
+  });
+  return sbLoad;
+}
+function hasSession(){ try { return !!localStorage.getItem('sb-' + AUTH.url.split('//')[1].split('.')[0] + '-auth-token'); } catch(e){ return false; } }
+function authUI(){ var on = hasSession(); $$('[data-auth]').forEach(function(a){ a.textContent = on ? 'My learning' : 'Log in'; a.setAttribute('href', on ? '#my' : '#login'); }); pathify(document.querySelector('header')); }
+function providers(){
+  if(PROV) return Promise.resolve(PROV);
+  return fetch(AUTH.url + '/auth/v1/settings', {headers:{apikey:AUTH.key}}).then(function(r){ return r.json(); }).then(function(j){ PROV = j.external || {}; return PROV; }, function(){ return {}; });
+}
+function backTo(){ return location.origin + BASE + '/my'; }
+function authErr(m){
+  m = String(m || '');
+  if(/Invalid login/i.test(m)) return 'Email or password is incorrect';
+  if(/not confirmed/i.test(m)) return 'Please verify your email first. Check your inbox';
+  if(/already registered|already exists/i.test(m)) return 'This email is already registered. Please log in';
+  if(/rate limit|too many/i.test(m)) return 'Too many requests. Please try again shortly';
+  if(/password/i.test(m)) return 'Use at least 8 characters for your password';
+  return 'Something went wrong. Please try again';
+}
+function consentBox(){
+  return '<fieldset class="cons field"><legend class="sr">Agreements</legend>' +
+    '<label class="check cons-all"><input type="checkbox" data-allc><span>Agree to all</span></label>' +
+    '<label class="check"><input type="checkbox" name="c_age" required><span>(Required) I am 14 or older</span></label>' +
+    '<label class="check"><input type="checkbox" name="c_terms" required><span>(Required) I agree to the <a href="#terms" target="_blank" rel="noopener">Terms of Service</a></span></label>' +
+    '<label class="check"><input type="checkbox" name="c_priv" required><span>(Required) I agree to the <a href="#privacy" target="_blank" rel="noopener">collection and use of personal information</a></span></label>' +
+    '<label class="check"><input type="checkbox" name="c_mk"><span>(Optional) Email me about new courses and offers</span></label>' +
+    '<span class="err">Please agree to the required items</span></fieldset>';
+}
+function bindConsent(f){
+  var all = f.querySelector('[data-allc]'), items = $$('.cons input:not([data-allc])', f);
+  all.addEventListener('change', function(){ items.forEach(function(i){ i.checked = all.checked; }); });
+  items.forEach(function(i){ i.addEventListener('change', function(){ all.checked = items.every(function(x){ return x.checked; }); }); });
+}
+function vLogin(q){
+  var su = /mode=signup/.test(q);
+  var tabs = '<div class="atabs" role="tablist"><a role="tab" href="#login"' + (su ? '' : ' aria-selected="true"') + '>Log in</a><a role="tab" href="#login?mode=signup"' + (su ? ' aria-selected="true"' : '') + '>Sign up</a></div>';
+  var form = su
+    ? '<form class="form one-col" data-form="signup" novalidate>' +
+        '<label class="field">Name<input name="name" required autocomplete="name"><span class="err">Please enter your name</span></label>' +
+        '<label class="field">Email<input name="email" type="email" required autocomplete="email"><span class="err">Please check your email</span></label>' +
+        '<label class="field">Password<input name="pw" type="password" required minlength="8" autocomplete="new-password"><small class="hint">At least 8 characters</small><span class="err">Use at least 8 characters for your password</span></label>' +
+        consentBox() +
+        '<button class="btn btn-lime" type="submit">Sign up</button></form>'
+    : '<form class="form one-col" data-form="login" novalidate>' +
+        '<label class="field">Email<input name="email" type="email" required autocomplete="email"><span class="err">Please check your email</span></label>' +
+        '<label class="field">Password<input name="pw" type="password" required autocomplete="current-password"><span class="err">Please enter your password</span></label>' +
+        '<button class="btn btn-lime" type="submit">Log in</button>' +
+        '<button class="lnk aforgot" type="button" data-forgot>Forgot password</button></form>';
+  return '<section class="section tight"><div class="wrap auth" style="max-width:480px">' +
+    '<p class="eyebrow">' + (su ? 'Sign up' : 'Log in') + '</p><h1 class="h1 auth-h">' + (su ? 'Sign up' : 'Log in') + '</h1>' +
+    '<p class="lead auth-lead">Pick up your courses and progress in one place.</p>' + tabs +
+    '<div class="sso"><button type="button" class="btn sso-k" data-sso="kakao">Continue with Kakao</button><button type="button" class="btn sso-g" data-sso="google">Continue with Google</button></div>' +
+    '<p class="muted sso-note">New here? We will ask for your consent on the next screen.</p>' +
+    '<p class="or"><span>or with email</span></p>' + form +
+  '</div></section>';
+}
+function bindLogin(){
+  var ssoBtns = $$('[data-sso]');   /* 가격표를 늦게 받으면 화면을 한 번 더 그리므로, 지금 그린 버튼만 다룸 */
+  providers().then(function(p){
+    ssoBtns.forEach(function(b){ if(p[b.getAttribute('data-sso')] !== true){ b.disabled = true; b.textContent += ' (coming soon)'; } });
+  });
+  ssoBtns.forEach(function(b){ b.addEventListener('click', function(){
+    b.disabled = true;
+    sb().then(function(c){ return c.auth.signInWithOAuth({provider:b.getAttribute('data-sso'), options:{redirectTo:backTo()}}); })
+      .then(function(r){ if(r && r.error) throw r.error; }).catch(function(e){ b.disabled = false; toast(authErr(e && e.message)); });
+  }); });
+  var lf = $('form[data-form="login"]'), sf = $('form[data-form="signup"]');
+  if(lf){
+    bindForm(lf, function(){
+      var btn = lf.querySelector('[type=submit]'); btn.disabled = true;
+      sb().then(function(c){ return c.auth.signInWithPassword({email:lf.elements.email.value.trim(), password:lf.elements.pw.value}); })
+        .then(function(r){ btn.disabled = false; if(r.error) return toast(authErr(r.error.message)); authUI(); nav(routeUrl('my')); }, function(){ btn.disabled = false; toast(authErr()); });
+    });
+    $('[data-forgot]').addEventListener('click', function(){
+      var em = lf.elements.email.value.trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ lf.elements.email.closest('.field').classList.add('bad'); lf.elements.email.focus(); return; }
+      sb().then(function(c){ return c.auth.resetPasswordForEmail(em, {redirectTo:backTo()}); }).then(function(r){
+        if(r.error) return toast(authErr(r.error.message));
+        openDialog('<h2>Password reset email sent</h2><p style="margin:0">' + esc(em) + ': open the email and tap the button to set a new password.</p><button type="button" class="btn btn-line" data-close>Close</button>');
+      }, function(){ toast(authErr()); });
+    });
+  }
+  if(sf){
+    bindConsent(sf);
+    bindForm(sf, function(){
+      if(sf.elements.pw.value.length < 8){ sf.elements.pw.closest('.field').classList.add('bad'); sf.elements.pw.focus(); return; }
+      var em = sf.elements.email.value.trim(), btn = sf.querySelector('[type=submit]'); btn.disabled = true;
+      try { localStorage.setItem('chai_consent', JSON.stringify({mk:sf.elements.c_mk.checked, at:Date.now()})); } catch(e){}
+      sb().then(function(c){ return c.auth.signUp({email:em, password:sf.elements.pw.value, options:{data:{name:sf.elements.name.value.trim()}, emailRedirectTo:backTo()}}); })
+        .then(function(r){
+          btn.disabled = false;
+          if(r.error) return toast(authErr(r.error.message));
+          if(r.data && r.data.session){ authUI(); nav(routeUrl('my')); return; }
+          openDialog('<h2>Verification email sent</h2><p style="margin:0">' + esc(em) + ': open the email and tap the button to finish signing up. Check your spam folder if you cannot find it.</p><button type="button" class="btn btn-line" data-close>Close</button>');
+        }, function(){ btn.disabled = false; toast(authErr()); });
+    });
+  }
+}
+function vMy(){
+  return '<section class="section tight"><div class="wrap my" style="max-width:800px">' +
+    '<p class="eyebrow">My</p><h1 class="h1 auth-h">My learning</h1>' +
+    '<div id="myBody" aria-live="polite"><p class="muted">Loading</p></div>' +
+  '</div></section>';
+}
+function myBox(html){ var b = $('#myBody'); if(b) b.innerHTML = html; pathify(b); }
+function bindMy(){
+  var tok = window.__myTok = {};   /* 화면을 다시 그리면 앞선 불러오기는 버림 */
+  sb().then(function(c){
+    return c.auth.getSession().then(function(r){
+      if(tok !== window.__myTok) return;
+      var s = r.data && r.data.session;
+      if(/[?&](code|error)=/.test(location.search) && !HASH_MODE) history.replaceState(null, '', routeUrl('my'));
+      authUI();
+      if(!s){ myBox('<p class="lead">Log in to see your courses and progress.</p><p class="my-act"><a class="btn btn-lime" href="#login">Log in</a> <a class="btn btn-line" href="#login?mode=signup">Sign up</a></p>'); return; }
+      if(window.__recovery) return myReset(c);
+      return myGate(c, s.user);
+    });
+  }).catch(function(){ myBox('<p class="lead">We could not load your account. Please try again shortly.</p>'); });
+}
+function myReset(c){
+  myBox('<form class="form one-col" data-form="reset" novalidate><label class="field">New password<input name="pw" type="password" required minlength="8" autocomplete="new-password"><small class="hint">At least 8 characters</small><span class="err">Use at least 8 characters for your password</span></label><button class="btn btn-lime" type="submit">Change password</button></form>');
+  var f = $('form[data-form="reset"]');
+  bindForm(f, function(){
+    if(f.elements.pw.value.length < 8){ f.elements.pw.closest('.field').classList.add('bad'); return; }
+    c.auth.updateUser({password:f.elements.pw.value}).then(function(r){ if(r.error) return toast(authErr(r.error.message)); window.__recovery = false; toast('Password changed'); bindMy(); });
+  });
+}
+function saveConsent(c, uid, mk){
+  var rows = ['age14','terms','privacy'].map(function(k){ return {user_id:uid, kind:k, version:AUTH.ver, agreed:true}; }).concat([{user_id:uid, kind:'marketing', version:AUTH.ver, agreed:!!mk}]);
+  return c.from('consents').insert(rows).then(function(r){
+    if(r.error) throw r.error;
+    return c.from('profiles').update({marketing_ok:!!mk, marketing_at:new Date().toISOString()}).eq('id', uid);
+  });
+}
+function myGate(c, u){
+  return c.from('consents').select('kind').eq('user_id', u.id).then(function(r){
+    var have = (r.data || []).map(function(x){ return x.kind; });
+    if(['age14','terms','privacy'].every(function(k){ return have.indexOf(k) >= 0; })) return myDash(c, u);
+    var pend = null; try { pend = JSON.parse(localStorage.getItem('chai_consent') || 'null'); } catch(e){}
+    if(pend && u.app_metadata && u.app_metadata.provider === 'email') return saveConsent(c, u.id, pend.mk).then(function(){ try { localStorage.removeItem('chai_consent'); } catch(e){} return myDash(c, u); });
+    myBox('<p class="lead">Welcome. Please agree to the items below to get started.</p><form class="form one-col" data-form="consent" novalidate>' + consentBox() + '<button class="btn btn-lime" type="submit">Agree and start</button></form>');
+    var f = $('form[data-form="consent"]'); bindConsent(f);
+    bindForm(f, function(){ saveConsent(c, u.id, f.elements.c_mk.checked).then(function(){ myDash(c, u); }, function(){ toast(authErr()); }); });
+  });
+}
+var LOGIN_BY = {email:'Email', kakao:'Kakao', google:'Google'};
+function myDash(c, u){
+  return Promise.all([
+    c.from('profiles').select('name,email,login_method,marketing_ok').eq('id', u.id).maybeSingle(),
+    c.from('enrollments').select('course_id,source,started_at').is('revoked_at', null).order('started_at', {ascending:false}),
+    c.from('orders').select('id,item_id,amount,status,paid_at').neq('status', 'ready').order('created_at', {ascending:false})
+  ]).then(function(rs){
+    var p = rs[0].data || {}, en = rs[1].data || [], od = rs[2].data || [];
+    var d = function(t){ return t ? new Date(t).toLocaleDateString('ko-KR') : ''; };
+    var st = {paid:'Paid', partial_refunded:'Partly refunded', refunded:'Refunded', canceled:'Canceled'};
+    myBox(
+      '<div class="my-who"><p class="my-name ol">' + esc(p.name || u.email) + '</p><p class="muted ol">' + esc(p.email || u.email) + ' · ' + (LOGIN_BY[p.login_method] || 'Email') + ' Log in</p></div>' +
+      '<h2 class="h3 my-h">My courses</h2>' +
+      (en.length ? '<ul class="my-list">' + en.map(function(e){ var cc = cById(e.course_id); return '<li><a href="#c-' + esc(e.course_id) + '"><b class="ol">' + esc(cc ? cc.title : e.course_id) + '</b><span class="muted ol">' + (e.source === 'company' ? 'Assigned by company' : 'Purchased') + ' · ' + d(e.started_at) + ' Start</span></a></li>'; }).join('') + '</ul>'
+        : '<p class="muted my-empty">No courses yet. <a class="lnk" href="#online">Browse online courses</a></p>') +
+      (od.length ? '<h2 class="h3 my-h">Orders</h2><ul class="my-list">' + od.map(function(o){ return '<li><div><b class="ol">' + esc(o.item_id) + ' · ' + Number(o.amount).toLocaleString('ko-KR') + ' KRW</b><span class="muted ol">' + (st[o.status] || o.status) + ' · ' + d(o.paid_at) + ' · Order no. ' + esc(o.id) + '</span></div></li>'; }).join('') + '</ul>' : '') +
+      '<h2 class="h3 my-h">Settings</h2>' +
+      '<label class="check my-mk"><input type="checkbox" data-mk' + (p.marketing_ok ? ' checked' : '') + '><span>Email me about new courses and offers</span></label>' +
+      '<p class="my-act"><button type="button" class="btn btn-line btn-sm" data-out>Log out</button> <button type="button" class="lnk" data-leave>Close account</button></p>'
+    );
+    $('[data-mk]').addEventListener('change', function(){
+      var on = this.checked;
+      Promise.all([c.from('profiles').update({marketing_ok:on, marketing_at:new Date().toISOString()}).eq('id', u.id), c.from('consents').insert({user_id:u.id, kind:'marketing', version:AUTH.ver, agreed:on})])
+        .then(function(){ toast(on ? 'Updates turned on' : 'Updates turned off'); });
+    });
+    $('[data-out]').addEventListener('click', function(){ c.auth.signOut().then(function(){ authUI(); nav(routeUrl('home')); }); });
+    $('[data-leave]').addEventListener('click', function(){
+      openDialog('<h2>Close account</h2><p style="margin:0">Closing your account removes all your courses and progress for good. If you are owed a refund, request it first. Email us below with the address you signed up with and we will take care of it.</p><p style="margin:0">' + contactMail() + '</p><button type="button" class="btn btn-line" data-close>Close</button>');
+    });
+  });
+}
+
 /* ===== 제안서 받기 (짧은 폼) ===== */
 function vProposal(){
   var L = savedLead() || {};
@@ -2497,12 +2723,13 @@ function bindForm(f, ok){
   if(!f.querySelector('[name=website]')) f.insertAdjacentHTML('beforeend', '<label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>');
   f.addEventListener('submit', function(e){
     e.preventDefault();
-    var bad = null;
+    var bad = null, boxes = [];   /* 한 칸에 필수 체크가 여럿이어도(약관 동의) 하나라도 틀리면 그 칸 표시 */
     $$('[required]', f).forEach(function(el){
       var v = String(el.value || '').trim(), wrong = el.type === 'checkbox' ? !el.checked : (!v || (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)));
-      el.closest('.field').classList.toggle('bad', wrong); el.setAttribute('aria-invalid', String(wrong));
-      if(wrong && !bad) bad = el;
+      el.setAttribute('aria-invalid', String(wrong));
+      if(wrong){ boxes.push(el.closest('.field')); if(!bad) bad = el; }
     });
+    $$('.field', f).forEach(function(b){ b.classList.toggle('bad', boxes.indexOf(b) >= 0); });
     if(bad){ bad.focus(); return; }
     ok();
   });
@@ -2581,6 +2808,7 @@ function animViz(){
 }
 new MutationObserver(function(){ koFix(); animViz(); revealGrids(); pathify(app); }).observe(document.getElementById('app'), {childList:true});
 renderBiz();
+authUI();
 if(HASH_MODE) window.addEventListener('hashchange', route);
 
 if(!/vercel\.app$|(^|\.)chaand\.ai$|^localhost$|^127\.|\.test$|^x\.test$/.test(location.hostname)) $('#pvNote').hidden = false;
