@@ -15,7 +15,8 @@ alter table public.company_assignments enable row level security;
 
 -- 회사 배정 수강권은 묶음(seat)마다 하나씩
 alter table public.enrollments drop constraint if exists enrollments_user_id_course_id_source_key;
-create unique index if not exists enrollments_one_per_source on public.enrollments (user_id, course_id, source, coalesce(seat_id, 0));
+-- 이용 중인 수강권만 하나 (환불·회수된 줄은 여러 개 남을 수 있음 → 다시 사면 새 줄)
+create unique index if not exists enrollments_one_active on public.enrollments (user_id, course_id, source, coalesce(seat_id, 0)) where revoked_at is null;
 
 create or replace function public.claim_orders() returns int
 language plpgsql security definer set search_path = public as $$
@@ -33,7 +34,7 @@ begin
   insert into enrollments (user_id, course_id, source, order_id)
   select uid, o.grants_course, 'purchase', o.id from orders o
    where o.user_id = uid and o.grants_course is not null and o.status = 'paid'
-     and not exists (select 1 from enrollments e where e.user_id = uid and e.course_id = o.grants_course and e.source = 'purchase');
+     and not exists (select 1 from enrollments e where e.user_id = uid and e.course_id = o.grants_course and e.source = 'purchase' and e.revoked_at is null);
   -- 기업 초대
   update company_members set user_id = uid, status = 'active', joined_at = coalesce(joined_at, now())
    where user_id is null and status = 'invited' and lower(email) = lower(em);
