@@ -24,6 +24,7 @@ h2{font-size:17px;margin:28px 0 12px}
 .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
 .bar input[type=search],.bar select{height:40px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:0 12px;min-width:0}
 .bar input[type=search]{flex:1 1 220px}
+.rng{display:inline-flex;align-items:center;gap:6px}.rng input,.bar select{height:40px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:0 10px}.fsum{font-size:13px;color:var(--mut);margin:-4px 0 10px}
 .bar label{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--mut)}
 table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
 th,td{text-align:left;padding:11px 14px;border-top:1px solid var(--line);vertical-align:middle;font-size:14px}
@@ -57,6 +58,9 @@ dialog h3{margin:0 0 14px;font-size:18px}
 .dctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.dctl .ck{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--mut)}
 .seg{display:inline-flex;background:var(--soft);border-radius:999px;padding:3px}.seg button{border:0;background:none;height:32px;min-width:44px;padding:0 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--mut);cursor:pointer}.seg button[aria-selected=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .todo-strip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.todo-strip a{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;background:#FDECEA;color:var(--red);text-decoration:none;font-size:14px;font-weight:600}.todo-strip a.amb{background:#FFF4DB;color:var(--amber)}.sel{height:38px;border:1px solid var(--line);border-radius:999px;background:#fff;padding:0 12px;font-weight:600;font-size:14px}.todo-strip.ok{color:var(--sage);font-size:14px;font-weight:600}
+.brief{margin:0 0 16px;border-color:#D7DED9;background:linear-gradient(180deg,#F7FAF8,#fff)}.bf-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.bf-k{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--sage)}.bf-d{margin:2px 0 0;font-size:18px}.bf-nav{display:flex;gap:6px;align-items:center}
+.bf-h{font-size:17px;font-weight:600;line-height:1.6;margin:12px 0 14px}.bf-g{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px}.bf-g h3{font-size:13px;color:var(--mut);margin:0 0 6px}.bf-g ul{margin:0 0 8px;padding-left:18px;font-size:14px;line-height:1.7}.bf-todo a{color:var(--ink);font-weight:600}
+@media (max-width:800px){.bf-g{grid-template-columns:minmax(0,1fr)}}
 .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .kpi{text-align:left;cursor:pointer;font:inherit;color:inherit;padding:14px 14px 12px}.kpi b{font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kpi.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}.kpi small{display:block;margin-top:2px;font-size:12px}
 .kf{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:6px}.spk{width:64px;height:24px;flex:none}.spk path{fill:none;stroke:var(--sage);stroke-width:1.6}
@@ -113,6 +117,14 @@ function api(r,params){var q=Object.keys(params||{}).map(function(k){return '&'+
   return fetch('/api/admin/data?r='+r+q,{headers:{Authorization:'Bearer '+TOKEN}}).then(function(x){return x.json();});}
 function act(body){return fetch('/api/admin/data',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+TOKEN},body:JSON.stringify(body)}).then(function(x){return x.json();}).then(function(d){
   if(!d.ok){var M={NO_MEMBER:'그 이메일로 가입한 회원이 없어요. 먼저 회원가입을 부탁해 주세요.',NO_SEATS:'남은 수강권이 없어요.',SEAT_EXPIRED:'이용 기간이 끝난 수강권이에요.',TOO_MUCH:'환불 가능 금액보다 많아요.',NOT_REFUNDABLE:'환불할 수 없는 주문이에요.',BAD_REQUEST:'입력값을 확인해 주세요.',BUNNY_NOT_SET:'Bunny Stream이 아직 연결되지 않았어요. Vercel 환경 변수 3개를 넣어 주세요.',MFA_REQUIRED:'2단계 인증이 필요해요. 새로고침해 주세요.',VBANK_REFUND:'환불 받을 은행, 계좌번호, 예금주를 넣어 주세요.',NO_PERM:'이 작업을 할 권한이 없어요.',SELF:'나 자신은 뺄 수 없어요.',LAST_OWNER:'전체 권한 관리자가 한 명은 있어야 해요.',EMAIL_TAKEN:'이미 사이트 회원이나 다른 계정이 쓰는 이메일이에요. 관리자 전용으로 다른 이메일을 써 주세요.',AUTH_CREATE:'계정을 만들거나 바꾸지 못했어요. 잠시 뒤 다시 해 주세요.',PW_CHANGE:'먼저 새 비밀번호를 정해 주세요. 새로고침해 주세요.',STORAGE:'저장소에 연결하지 못했어요.',PG:'토스에서 취소를 거절했어요. 상점관리자에서 확인해 주세요.'};toast(M[d.code]||('처리하지 못했어요 ('+(d.message||d.code||'')+')'));throw new Error(d.code);}return d;});}
+/* 필터 막대 공통: 기간(시작·끝 날짜) + 빠른 선택(오늘·7일·30일·이번 달) */
+function kday(off){return new Date(Date.now()+9*3600e3+(off||0)*864e5).toISOString().slice(0,10);}
+function rangeBox(pre){return '<span class="rng"><input type="date" id="'+pre+'F" aria-label="시작일"><span class="muted">~</span><input type="date" id="'+pre+'T" aria-label="끝일"><select id="'+pre+'Q" aria-label="빠른 기간"><option value="">기간 전체</option><option value="0">오늘</option><option value="7">최근 7일</option><option value="30">최근 30일</option><option value="m">이번 달</option></select></span>';}
+function bindRange(pre,load){var Q=$('#'+pre+'Q');Q.onchange=function(){var v=Q.value;$('#'+pre+'T').value=v===''?'':kday(0);$('#'+pre+'F').value=v===''?'':v==='m'?kday(0).slice(0,8)+'01':kday(v==='0'?0:-(+v-1));load();};
+  $('#'+pre+'F').onchange=function(){Q.value='';load();};$('#'+pre+'T').onchange=function(){Q.value='';load();};}
+function rangeVal(pre){return {from:$('#'+pre+'F').value,to:$('#'+pre+'T').value};}
+function digitsOf(v){return String(v||'').replace(/[^0-9]/g,'');}
+function phoneFmt(v){v=digitsOf(v);return v.length===11?v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7):v.length===10?v.slice(0,3)+'-'+v.slice(3,6)+'-'+v.slice(6):v;}
 function tag(s,c){return '<span class="tag '+(c||'')+'">'+esc(s)+'</span>';}
 function pbar(p){return '<span class="pbar"><i style="width:'+(p||0)+'%"></i></span><span class="small">'+(p||0)+'%</span>';}
 
@@ -216,6 +228,22 @@ var dashResize=null;window.addEventListener('resize',function(){clearTimeout(das
 function listBars(rows,fmt){var mx=Math.max.apply(null,rows.map(function(r){return r.v;}).concat([1]));
   return rows.length?'<ul class="lb">'+rows.map(function(r){return '<li><div class="lbt"><span>'+esc(r.k)+(r.sub?' <small class="muted">'+esc(r.sub)+'</small>':'')+'</span><b>'+fmt(r.v)+'</b></div><span class="lbb"><i style="width:'+(r.v/mx*100).toFixed(1)+'%"></i></span></li>';}).join('')+'</ul>':'<p class="muted small">이 기간에는 아직 없어요.</p>';}
 
+/* 데일리 브리핑 (대시보드 맨 위): 기본은 어제 하루. ◀ ▶ 로 날짜 이동, '오늘'은 지금까지 실시간 */
+var BRF={day:null,cache:{}};
+function briefLoad(host,fresh){if(!host)return;var key=BRF.day||'_';
+  var draw=function(d){var b=d.brief,today=d.today,day=b.day,prev=new Date(Date.parse(day+'T00:00:00Z')-864e5).toISOString().slice(0,10),next=new Date(Date.parse(day+'T00:00:00Z')+864e5).toISOString().slice(0,10);
+    var wd='일월화수목금토'[new Date(day+'T00:00:00Z').getUTCDay()];
+    host.innerHTML='<div class="bf-top"><div><span class="bf-k">데일리 브리핑</span><h2 class="bf-d">'+(b.partial?'오늘 ':'')+day.slice(5).replace('-','/')+' ('+wd+')'+(b.partial?' · 지금까지':'')+'</h2></div><div class="bf-nav"><button class="btn s" data-bd="'+prev+'" aria-label="전날">◀</button>'+(day<today?'<button class="btn s" data-bd="'+next+'" aria-label="다음 날">▶</button>':'')+(day!==today?' <button class="btn s" data-bd="'+today+'">오늘</button>':'')+(b.partial?'':' <button class="btn s" id="bfR" title="데이터가 바뀌었으면 다시 만들어요">다시 만들기</button>')+'</div></div>'+
+      '<p class="bf-h">'+esc(b.headline)+'</p>'+
+      '<div class="bf-g"><div><h3>눈여겨볼 점</h3><ul>'+b.points.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'+
+      '<div><h3>오늘 할 일</h3>'+(b.todos.length?'<ul class="bf-todo">'+b.todos.map(function(x){return '<li><a href="#'+esc(x.go)+'">'+esc(x.t)+'</a></li>';}).join('')+'</ul>':'<p class="muted small">급한 일은 없어요.</p>')+(b.alerts&&b.alerts.length?'<h3>시스템</h3><ul>'+b.alerts.map(function(x){return '<li style="color:var(--red)">'+esc(x)+'</li>';}).join('')+'</ul>':'')+'</div></div>'+
+      '<p class="small muted" style="margin:10px 0 0">'+(b.partial?'오늘 지금까지의 숫자예요. ':'매일 새벽 3시에 전날 브리핑을 만들고 운영자 메일로도 보내요. ')+'만든 시각 '+dt(b.made_at)+' · 테스트 결제 제외</p>';
+    $$('[data-bd]',host).forEach(function(x){x.onclick=function(){BRF.day=x.getAttribute('data-bd');briefLoad(host);};});
+    var r=$('#bfR',host);if(r)r.onclick=function(){r.disabled=true;delete BRF.cache[BRF.day||'_'];briefLoad(host,true);};};
+  if(BRF.cache[key]&&!fresh)return draw(BRF.cache[key]);
+  host.innerHTML='<p class="muted small" style="margin:0">브리핑을 만드는 중이에요</p>';
+  api('brief',Object.assign(BRF.day?{day:BRF.day}:{},fresh?{fresh:'1'}:{})).then(function(d){if(!d||!d.ok){host.innerHTML='<p class="muted small" style="margin:0">브리핑을 불러오지 못했어요</p>';return;}if(!d.brief.partial)BRF.cache[key]=d;draw(d);});
+}
 V.home=function(m){
   var render=function(){var D=DASH.data,g=DASH.g,R=aggregate(D,g),c=R.cur,p=R.prev,t=D.todo,L=R.b.map(function(b){return blabel(b,g);});
     $$('[data-dot]').forEach(function(x){var k=x.getAttribute('data-dot'),n=k==='orders'?t.refunds:k==='ship'?t.ship:0;x.hidden=!n;x.textContent=n;});
@@ -239,6 +267,7 @@ V.home=function(m){
     m.innerHTML='<div class="dhead"><div><h1>대시보드</h1><p class="sub">'+(DASH.cat?CAT[DASH.cat]+' · ':'')+GR[g].range+' · '+GR[g].label+' 단위 · '+GR[g].prev+'과 비교 · 한국 시간 기준'+(tests?' · 테스트 결제 '+tests+'건 '+(DASH.test?'포함':'제외'):'')+'</p></div>'+
       '<div class="dctl"><select id="dCat" class="sel" aria-label="분야"><option value="">전체 분야</option>'+Object.keys(CAT).map(function(k){return '<option value="'+k+'"'+(DASH.cat===k?' selected':'')+'>'+CAT[k]+'</option>';}).join('')+'</select><div class="seg" role="tablist">'+Object.keys(GR).map(function(k){return '<button role="tab" data-g="'+k+'" aria-selected="'+(k===g)+'">'+GR[k].label+'</button>';}).join('')+'</div>'+
       (tests?'<label class="ck"><input type="checkbox" id="dTest"'+(DASH.test?' checked':'')+'> 테스트 포함</label>':'')+'<button class="btn s" id="dRe" title="새로고침">↻</button></div></div>'+
+      '<section class="box brief" id="brief"></section>'+
       ((t.refunds||t.ship||t.shipNoAddr||t.waiting)?'<div class="todo-strip">'+(t.waiting?'<a class="amb" href="#orders/waiting">가상계좌 입금 대기 <b>'+t.waiting+'</b></a>':'')+(t.refunds?'<a href="#orders/requested">환불 신청 대기 <b>'+t.refunds+'</b></a>':'')+(t.ship?'<a href="#ship">차 키트 발송 대기 <b>'+t.ship+'</b></a>':'')+(t.shipNoAddr?'<a href="#ship">배송지 미입력 <b>'+t.shipNoAddr+'</b></a>':'')+'</div>':'<div class="todo-strip ok">처리할 일이 없어요</div>')+
       '<div class="kpis">'+kpi('net',c.net)+kpi('gross',c.gross)+kpi('orders',c.orders)+kpi('aov',c.aov)+kpi('refund',c.refund,true,c.gross?'환불률 '+(c.refund/c.gross*100).toFixed(1)+'%':'')+kpi('signup',c.signup)+'</div>'+
       '<section class="box cbox"><div class="ch"><div><h3>'+mk[0]+' 추이</h3><p class="small muted">'+mk[1]+' · 위 카드를 누르면 지표가 바뀌어요</p></div><b class="tot">'+fmtM(c[DASH.metric],mk[2])+'</b></div><div class="chart" id="cMain"></div></section>'+
@@ -266,6 +295,7 @@ V.home=function(m){
     $('#dCat',m).onchange=function(){DASH.cat=this.value;render();};
     var tb=$('#dTest',m);if(tb)tb.onchange=function(){DASH.test=tb.checked;render();};
     $('#dRe',m).onclick=function(){load();};
+    briefLoad($('#brief',m));
   };
   var load=function(){var pr=DASH.pre||api('dashboard');DASH.pre=null;pr.then(function(d){if(!d||!d.ok){m.innerHTML='<p class="muted">불러오지 못했어요. 새로고침해 주세요.</p>';return;}DASH.data=d;render();});};
   load();
@@ -274,19 +304,21 @@ V.home=function(m){
 /* ── 주문·환불 ── */
 V.orders=function(m,pre){
   m.innerHTML='<div class="dhead"><div><h1>주문·환불</h1><p class="sub" style="margin:0">결제창 결제는 자동으로 들어오고, 기업 워크샵처럼 계좌이체·세금계산서로 받은 돈은 "직접 등록"으로 넣어요.</p></div><div class="dctl"><button class="btn" id="oCsv">엑셀로 내보내기</button><button class="btn p" id="oNew">+ 직접 등록</button></div></div>'+
-    '<div class="bar"><input type="search" id="oq" placeholder="이메일, 이름, 주문번호"><select id="os"><option value="">전체 상태</option><option value="requested">환불 신청 대기</option><option value="waiting">입금 대기 (가상계좌)</option><option value="paid">결제 완료</option><option value="partial_refunded">일부 환불</option><option value="refunded">환불 완료</option><option value="expired">입금 기한 만료</option><option value="manual">직접 등록 거래</option></select><label><input type="checkbox" id="ot"> 테스트 결제 숨기기</label></div><div id="ol"></div>';
+    '<div class="bar"><input type="search" id="oq" placeholder="이메일, 이름, 주문번호, 휴대폰(숫자만 OK), 메모"><select id="os"><option value="">전체 상태</option><option value="requested">환불 신청 대기</option><option value="waiting">입금 대기 (가상계좌)</option><option value="paid">결제 완료</option><option value="partial_refunded">일부 환불</option><option value="refunded">환불 완료</option><option value="expired">입금 기한 만료</option><option value="canceled">취소</option><option value="manual">직접 등록 거래</option></select><select id="oc"><option value="">전체 분야</option>'+Object.keys(CAT).map(function(k){return '<option value="'+k+'">'+CAT[k]+'</option>';}).join('')+'</select><select id="om"><option value="">전체 결제 수단</option></select>'+rangeBox('od')+'<label><input type="checkbox" id="ocp"> 할인 적용만</label><label><input type="checkbox" id="ot"> 테스트 숨기기</label></div><p class="fsum" id="osum"></p><div id="ol"></div>';
   $('#oCsv').onclick=exportCsv;$('#oNew').onclick=function(){manualOrder(load);};if(!can('refund'))$('#oNew').hidden=true;
   if(pre)$('#os').value=pre;
-  var load=function(){api('orders',{q:$('#oq').value,status:$('#os').value,test:$('#ot').checked?'0':''}).then(function(d){
-    var L=d.orders;$('#ol').innerHTML=L.length?'<div class="tw"><table><thead><tr><th>결제일</th><th>상품</th><th>주문자</th><th class="num">금액</th><th>상태</th><th></th></tr></thead><tbody>'+L.map(function(o){
+  var load=function(){api('orders',Object.assign({q:$('#oq').value,status:$('#os').value,test:$('#ot').checked?'0':'',cat:$('#oc').value,method:$('#om').value,coupon:$('#ocp').checked?'1':''},rangeVal('od'))).then(function(d){
+    var L=d.orders,om=$('#om'),cur=om.value;om.innerHTML='<option value="">전체 결제 수단</option>'+(d.methods||[]).map(function(x){return '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>';}).join('');
+    var paidL=L.filter(function(o){return ST[o.status]&&['paid','partial_refunded','refunded'].indexOf(o.status)>=0;});
+    $('#osum').textContent=L.length+'건'+(L.length>=500?' (최근 500건까지)':'')+' · 결제 '+won(paidL.reduce(function(a,o){return a+o.amount;},0))+' · 환불 '+won(L.reduce(function(a,o){return a+(o.refund_amount||0);},0))+' · 순매출 '+won(paidL.reduce(function(a,o){return a+o.amount-(o.refund_amount||0);},0));$('#ol').innerHTML=L.length?'<div class="tw"><table><thead><tr><th>결제일</th><th>상품</th><th>주문자</th><th class="num">금액</th><th>상태</th><th></th></tr></thead><tbody>'+L.map(function(o){
       var left=o.amount-(o.refund_amount||0),s=ST[o.status]||[o.status,''],man=o.source==='manual',vb=o.vbank||null;
       var acts='';
       if(can('refund')&&left>0&&(o.status==='paid'||o.status==='partial_refunded'))acts+='<button class="btn s" data-rf="'+esc(o.id)+'" data-left="'+left+'" data-man="'+(man?1:0)+'" data-vb="'+(o.method==='가상계좌'?1:0)+'">'+(man?'환불 기록':'환불')+'</button>';
       if(can('refund')&&o.status==='waiting')acts+=' <button class="btn s" data-cw="'+esc(o.id)+'">입금 전 취소</button>';
-      if(!man&&!o.is_test)acts+=' <button class="btn s" data-sync="'+esc(o.id)+'" title="토스 상점관리자의 상태와 맞춰요">토스와 맞추기</button>';
+      if(!man&&!o.is_test)acts+=' <button class="btn s" data-sync="'+esc(o.id)+'" title="토스 상점관리자의 상태와 맞춰요">PG와 맞추기</button>';
       acts+=' <button class="btn s" data-memo="'+esc(o.id)+'">메모</button>';
-      return '<tr><td class="nowrap">'+(o.paid_at?day(o.paid_at):'<span class="muted">'+day(o.created_at)+' 주문</span>')+'</td><td>'+esc(itemName(o.item_id))+(o.qty>1?' <span class="muted">· '+o.qty+(SHOP[o.item_id]&&SHOP[o.item_id].head?'명':'개')+'</span>':'')+(o.is_test?' '+tag('테스트'):'')+(man?' '+tag('직접 등록'):'')+'<div class="small muted">'+esc(o.id)+' · '+esc(CAT[catOf(o.item_id)])+'</div>'+(o.memo?'<div class="small">'+esc(o.memo)+'</div>':'')+'</td><td>'+esc(o.buyer_name||'')+'<div class="small muted">'+esc(o.buyer_email)+(o.user_id?'':' · 비회원')+'</div></td>'+
-        '<td class="num">'+won(o.amount)+'<div class="small muted">'+esc(o.method||'')+(o.tax_doc&&o.tax_doc!=='none'?' · '+TAX[o.tax_doc]:'')+'</div>'+(o.refund_amount?'<div class="small muted">환불 '+won(o.refund_amount)+'</div>':'')+'</td><td>'+tag(s[0],s[1])+(o.refund_requested_at&&o.status==='paid'?' '+tag('환불 신청','red'):'')+(o.status==='waiting'&&vb?'<div class="small muted">'+esc(vb.bank)+' '+esc(vb.account)+(o.due_at?' · '+dt(o.due_at)+'까지':'')+'</div>':'')+(o.refund_request_note?'<div class="small muted">'+esc(o.refund_request_note)+'</div>':'')+'</td>'+
+      return '<tr><td class="nowrap">'+(o.paid_at?day(o.paid_at):'<span class="muted">'+day(o.created_at)+' 주문</span>')+'</td><td>'+esc(itemName(o.item_id))+(o.qty>1?' <span class="muted">· '+o.qty+(SHOP[o.item_id]&&SHOP[o.item_id].head?'명':'개')+'</span>':'')+(o.is_test?' '+tag('테스트'):'')+(man?' '+tag('직접 등록'):'')+'<div class="small muted">'+esc(o.id)+' · '+esc(CAT[catOf(o.item_id)])+'</div>'+(o.memo?'<div class="small">'+esc(o.memo)+'</div>':'')+'</td><td>'+esc(o.buyer_name||'')+'<div class="small muted">'+esc(o.buyer_email)+(o.buyer_phone?' · '+phoneFmt(o.buyer_phone):'')+(o.user_id?'':' · 비회원')+'</div></td>'+
+        '<td class="num">'+won(o.amount)+(o.discount?'<div class="small" style="color:var(--red)">할인 '+won(o.discount)+(o.coupon_code?' · '+esc(o.coupon_code):'')+'</div>':'')+'<div class="small muted">'+esc(o.method||'')+(o.tax_doc&&o.tax_doc!=='none'?' · '+TAX[o.tax_doc]:'')+'</div>'+(o.refund_amount?'<div class="small muted">환불 '+won(o.refund_amount)+'</div>':'')+'</td><td>'+tag(s[0],s[1])+(o.refund_requested_at&&o.status==='paid'?' '+tag('환불 신청','red'):'')+(o.status==='waiting'&&vb?'<div class="small muted">'+esc(vb.bank)+' '+esc(vb.account)+(o.due_at?' · '+dt(o.due_at)+'까지':'')+'</div>':'')+(o.refund_request_note?'<div class="small muted">'+esc(o.refund_request_note)+'</div>':'')+'</td>'+
         '<td class="num">'+acts+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">주문이 없어요</div>';
     $$('[data-rf]',m).forEach(function(b){b.onclick=function(){refund(b.getAttribute('data-rf'),+b.getAttribute('data-left'),load,b.getAttribute('data-man')==='1',b.getAttribute('data-vb')==='1');};});
     $$('[data-cw]',m).forEach(function(b){b.onclick=function(){openDlg('<h3>입금 전 취소</h3><p>아직 입금되지 않은 가상계좌 주문을 취소해요. 발급된 계좌로는 더 이상 입금할 수 없게 돼요.</p><div class="acts"><button class="btn" data-close>닫기</button><button class="btn d" id="cwGo">취소하기</button></div>');$('#cwGo').onclick=function(){this.disabled=true;act({action:'cancel_waiting',orderId:b.getAttribute('data-cw')}).then(function(){closeDlg();toast('주문을 취소했어요');load();});};};});
@@ -295,15 +327,15 @@ V.orders=function(m,pre){
       openDlg('<h3>메모·증빙</h3><div class="f"><label>메모 (회사명, 계약 건, 담당자 등)<textarea id="mM" maxlength="300">'+esc(o.memo||'')+'</textarea></label><label>발행한 증빙<select id="mT">'+Object.keys(TAX).map(function(k){return '<option value="'+k+'"'+((o.tax_doc||'none')===k?' selected':'')+'>'+TAX[k]+'</option>';}).join('')+'</select></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="mGo">저장</button></div></div>');
       $('#mGo').onclick=function(){act({action:'order_memo',orderId:o.id,memo:$('#mM').value.trim(),taxDoc:$('#mT').value}).then(function(){closeDlg();toast('저장했어요');load();});};};});
   });};
-  var tm;$('#oq').oninput=function(){clearTimeout(tm);tm=setTimeout(load,300);};$('#os').onchange=load;$('#ot').onchange=load;load();
+  var tm;$('#oq').oninput=function(){clearTimeout(tm);tm=setTimeout(load,300);};['#os','#ot','#oc','#om','#ocp'].forEach(function(x){$(x).onchange=load;});bindRange('od',load);load();
 };
 function manualOrder(done){
   var today=new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
   var groups={};Object.keys(SHOP).forEach(function(k){var c=catOf(k);(groups[c]=groups[c]||[]).push(k);});
-  openDlg('<h3>매출 직접 등록</h3><div class="f"><div class="note">결제창을 거치지 않은 거래(기업 워크샵 계좌이체, 세금계산서 발행 건 등)를 매출에 넣어요. 토스 결제는 자동으로 들어오니 여기 넣지 마세요.</div>'+
+  openDlg('<h3>매출 직접 등록</h3><div class="f"><div class="note">결제창을 거치지 않은 거래(기업 워크샵 계좌이체, 세금계산서 발행 건 등)를 매출에 넣어요. 결제창(PG) 결제는 자동으로 들어오니 여기 넣지 마세요.</div>'+
     '<label>상품<select id="nI">'+['biz','salon','cohort','vod','etc'].filter(function(c){return groups[c];}).map(function(c){return '<optgroup label="'+CAT[c]+'">'+groups[c].map(function(k){return '<option value="'+esc(k)+'">'+esc(itemName(k))+'</option>';}).join('')+'</optgroup>';}).join('')+'</select></label>'+
     '<div class="row"><label>받은 금액(원, 부가세 포함)<input id="nA" inputmode="numeric" placeholder="예: 5500000"></label><label>인원·수량<input id="nQ" inputmode="numeric" value="1"></label></div>'+
-    '<div class="row"><label>회사·주문자 이름<input id="nN" maxlength="80"></label><label>담당자 이메일<input id="nE" type="email" maxlength="100"></label></div>'+
+    '<div class="row"><label>회사·주문자 이름<input id="nN" maxlength="80"></label><label>담당자 이메일<input id="nE" type="email" maxlength="100"></label></div><label>담당자 휴대폰 (선택)<input id="nP" inputmode="tel" maxlength="20"></label>'+
     '<div class="row"><label>받은 날<input id="nD" type="date" value="'+today+'"></label><label>받은 방법<select id="nM"><option>계좌이체</option><option>세금계산서</option><option>현금</option><option>카드(단말기)</option><option>기타</option></select></label></div>'+
     '<label>발행한 증빙<select id="nT">'+Object.keys(TAX).map(function(k){return '<option value="'+k+'"'+(k==='tax_invoice'?' selected':'')+'>'+TAX[k]+'</option>';}).join('')+'</select></label>'+
     '<label>메모<input id="nMemo" maxlength="300" placeholder="예: OO전자 HR팀 11/20 워크샵, 견적서 v2"></label>'+
@@ -312,7 +344,7 @@ function manualOrder(done){
     '<div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="nGo">등록</button></div></div>');
   var I=$('#nI'),A=$('#nA'),fill=function(){var it=SHOP[I.value]||{};if(!A.value||A._auto){A.value=it.price||'';A._auto=true;}};I.onchange=function(){A._auto=true;A.value='';fill();};A.oninput=function(){A._auto=false;};fill();
   $('#nGo').onclick=function(){var amt=parseInt(String(A.value).replace(/[^0-9]/g,''),10);if(!(amt>0)){toast('금액을 넣어 주세요');return;}
-    var b=this;b.disabled=true;act({action:'order_manual',itemId:I.value,amount:amt,qty:parseInt($('#nQ').value,10)||1,name:$('#nN').value.trim(),email:$('#nE').value.trim(),paidAt:$('#nD').value,method:$('#nM').value,taxDoc:$('#nT').value,memo:$('#nMemo').value.trim(),mail:$('#nMail').checked})
+    var b=this;b.disabled=true;act({action:'order_manual',itemId:I.value,amount:amt,qty:parseInt($('#nQ').value,10)||1,name:$('#nN').value.trim(),email:$('#nE').value.trim(),phone:$('#nP').value,paidAt:$('#nD').value,method:$('#nM').value,taxDoc:$('#nT').value,memo:$('#nMemo').value.trim(),mail:$('#nMail').checked})
       .then(function(d){closeDlg();toast('등록했어요 ('+d.id+')'+(d.enrolled?' · 수강권 생성':''));done&&done();},function(){b.disabled=false;});};
 }
 var BANKS=[['06','국민'],['88','신한'],['20','우리'],['81','하나'],['11','농협'],['03','기업'],['90','카카오뱅크'],['92','토스뱅크'],['89','케이뱅크'],['71','우체국'],['23','SC제일'],['27','씨티'],['02','산업'],['07','수협'],['31','대구'],['32','부산'],['34','광주'],['35','제주'],['37','전북'],['39','경남'],['45','새마을금고'],['48','신협'],['50','저축은행']];
@@ -331,12 +363,15 @@ function refund(id,left,done,man,vb){
 /* ── 회원 ── */
 V.members=function(m,id){
   if(id)return memberDetail(m,id);
-  m.innerHTML='<h1>회원</h1><p class="sub">회원을 누르면 수강권·주문을 보고, 수강권을 직접 주거나 회수할 수 있어요.</p><div class="bar"><input type="search" id="mq" placeholder="이름, 이메일"></div><div id="ml"></div>';
-  var load=function(){api('members',{q:$('#mq').value}).then(function(d){var L=d.members;
-    $('#ml').innerHTML=L.length?'<div class="tw"><table><thead><tr><th>이름</th><th>이메일</th><th>로그인</th><th class="num">수강</th><th>소식</th><th>가입일</th></tr></thead><tbody>'+L.map(function(p){
-      return '<tr class="click" data-id="'+p.id+'"><td>'+esc(p.name||'-')+(p.admin?' '+tag('운영자','green'):'')+'</td><td>'+esc(p.email)+'</td><td>'+(LOGIN[p.login_method]||p.login_method)+'</td><td class="num">'+p.courses+'</td><td>'+(p.marketing_ok?'받음':'-')+'</td><td class="nowrap">'+day(p.created_at)+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">회원이 없어요</div>';
+  m.innerHTML='<h1>회원</h1><p class="sub">회원을 누르면 수강권·주문을 보고, 수강권을 직접 주거나 회수할 수 있어요. 휴대폰 번호는 하이픈 없이 넣어도 찾아요(주문할 때 남긴 번호 기준).</p>'+
+    '<div class="bar"><input type="search" id="mq" placeholder="이름, 이메일, 휴대폰 번호"><select id="mv"><option value="">전체 가입 방식</option><option value="email">이메일</option><option value="kakao">카카오</option><option value="google">구글</option></select><select id="ml2"><option value="">수강 전체</option><option value="1">수강 중</option><option value="0">수강 없음</option></select><select id="mc"><option value="">전체 강의</option>'+COURSES.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.title)+'</option>';}).join('')+'</select><select id="mk"><option value="">소식 수신 전체</option><option value="1">받음</option><option value="0">안 받음</option></select>'+rangeBox('mb')+'</div><p class="fsum" id="msum"></p><div id="ml"></div>';
+  if(!COURSES.length)$('#mc').hidden=true;
+  var load=function(){api('members',Object.assign({q:$('#mq').value,via:$('#mv').value,learn:$('#ml2').value,course:$('#mc').value,mk:$('#mk').value},rangeVal('mb'))).then(function(d){var L=d.members;
+    $('#msum').textContent=L.length+'명'+(L.length>=500?' (최근 500명까지)':'');
+    $('#ml').innerHTML=L.length?'<div class="tw"><table><thead><tr><th>이름</th><th>이메일</th><th>휴대폰</th><th>로그인</th><th class="num">수강</th><th>소식</th><th>가입일</th></tr></thead><tbody>'+L.map(function(p){
+      return '<tr class="click" data-id="'+p.id+'"><td>'+esc(p.name||'-')+'</td><td>'+esc(p.email)+'</td><td class="nowrap">'+(p.phone?phoneFmt(p.phone):'-')+'</td><td>'+(LOGIN[p.login_method]||p.login_method)+'</td><td class="num">'+p.courses+'</td><td>'+(p.marketing_ok?'받음':'-')+'</td><td class="nowrap">'+day(p.created_at)+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">조건에 맞는 회원이 없어요</div>';
     $$('tr[data-id]',m).forEach(function(r){r.onclick=function(){location.hash='members/'+r.getAttribute('data-id');};});});};
-  var tm;$('#mq').oninput=function(){clearTimeout(tm);tm=setTimeout(load,300);};load();
+  var tm;$('#mq').oninput=function(){clearTimeout(tm);tm=setTimeout(load,300);};['#mv','#ml2','#mc','#mk'].forEach(function(x){$(x).onchange=load;});bindRange('mb',load);load();
 };
 function memberDetail(m,id){api('member',{id:id}).then(function(d){var p=d.member;if(!p){m.innerHTML='<div class="empty">회원을 찾지 못했어요</div>';return;}
   m.innerHTML='<button class="back" onclick="location.hash=\'members\'">‹ 회원 목록</button><h1>'+esc(p.name||p.email)+'</h1><p class="sub">'+esc(p.email)+' · '+(LOGIN[p.login_method]||'')+' 로그인 · '+day(p.created_at)+' 가입</p>'+
@@ -353,9 +388,10 @@ function confirmTxt(t){return window.confirm(t);}
 V.companies=function(m,id){
   if(id)return companyDetail(m,id);
   api('companies').then(function(d){var L=d.companies;
-    m.innerHTML='<h1>기업</h1><p class="sub">계약한 기업을 등록하고 담당자와 수강권 묶음을 정해요. 담당자는 내 학습의 「기업 관리」에서 구성원을 초대·배정해요.</p><div class="bar"><button class="btn p" id="cNew">기업 등록</button></div>'+
-      (L.length?'<div class="tw"><table><thead><tr><th>회사</th><th>사업자번호</th><th class="num">수강권</th><th class="num">구성원</th><th>등록일</th></tr></thead><tbody>'+L.map(function(c){return '<tr class="click" data-id="'+c.id+'"><td>'+esc(c.name)+'</td><td>'+esc(c.biz_no||'-')+'</td><td class="num">'+c.seats+'</td><td class="num">'+c.members+'</td><td>'+day(c.created_at)+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">등록한 기업이 없어요</div>');
+    m.innerHTML='<h1>기업</h1><p class="sub">계약한 기업을 등록하고 담당자와 수강권 묶음을 정해요. 담당자는 내 학습의 「기업 관리」에서 구성원을 초대·배정해요.</p><div class="bar"><input type="search" id="cq" placeholder="회사명, 사업자번호"><button class="btn p" id="cNew">기업 등록</button></div>'+
+      (L.length?'<div class="tw"><table><thead><tr><th>회사</th><th>사업자번호</th><th class="num">수강권</th><th class="num">구성원</th><th>등록일</th></tr></thead><tbody>'+L.map(function(c){return '<tr class="click" data-id="'+c.id+'" data-s="'+esc((c.name+' '+(c.biz_no||'')+' '+digitsOf(c.biz_no)).toLowerCase())+'"><td>'+esc(c.name)+'</td><td>'+esc(c.biz_no||'-')+'</td><td class="num">'+c.seats+'</td><td class="num">'+c.members+'</td><td>'+day(c.created_at)+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">등록한 기업이 없어요</div>');
     $$('tr[data-id]',m).forEach(function(r){r.onclick=function(){location.hash='companies/'+r.getAttribute('data-id');};});
+    $('#cq').oninput=function(){var q=this.value.trim().toLowerCase();$$('tr[data-s]',m).forEach(function(r){r.hidden=!!q&&r.getAttribute('data-s').indexOf(q)<0;});};
     $('#cNew').onclick=function(){openDlg('<h3>기업 등록</h3><div class="f"><label>회사명<input id="cN" maxlength="80"></label><label>사업자등록번호 (선택)<input id="cB" maxlength="20" placeholder="000-00-00000"></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="cGo">등록</button></div></div>');
       $('#cGo').onclick=function(){var n=$('#cN').value.trim();if(!n){toast('회사명을 넣어 주세요');return;}act({action:'company_create',name:n,bizNo:$('#cB').value}).then(function(d){closeDlg();location.hash='companies/'+d.company.id;});};};
   });
@@ -425,20 +461,31 @@ V.ship=function(m){api('shipments').then(function(d){var L=d.orders;
     '<td>'+(o.ship_addr?esc(o.ship_name)+' · '+esc(o.ship_phone)+'<div class="small">'+esc(o.ship_addr)+'</div>'+(o.ship_memo?'<div class="small muted">'+esc(o.ship_memo)+'</div>':''):tag('배송지 미입력','red'))+'</td>'+
     '<td>'+(o.shipped_at?dt(o.shipped_at)+(o.ship_tracking?'<div class="small muted">'+esc(o.ship_tracking)+'</div>':''):'')+'</td><td class="num">'+(o.shipped_at?'<button class="btn s" data-undo="'+esc(o.id)+'">발송 취소</button>':(o.ship_addr?'<button class="btn s p" data-sh="'+esc(o.id)+'">발송 처리</button>':''))+'</td></tr>';};
   var tbl=function(rows){return rows.length?'<div class="tw"><table><thead><tr><th>결제일</th><th>주문</th><th>배송지</th><th>발송</th><th></th></tr></thead><tbody>'+rows.map(row).join('')+'</tbody></table></div>':'<div class="empty">없어요</div>';};
-  m.innerHTML='<h1>키트 발송</h1><p class="sub">고객은 내 학습 → 주문 내역에서 배송지를 넣어요. 배송 정보는 발송 후 3개월이 지나면 지워 주세요(개인정보처리방침).</p><h2>발송 대기 '+wait.length+'건</h2>'+tbl(wait)+'<h2>발송 완료 '+done.length+'건</h2>'+tbl(done);
-  $$('[data-sh]',m).forEach(function(b){b.onclick=function(){openDlg('<h3>발송 처리</h3><div class="f"><label>택배사·송장번호 (선택)<input id="tN" placeholder="예: CJ 1234-5678-9012"></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="tGo">발송했어요</button></div></div>');
+  m.innerHTML='<h1>키트 발송</h1><p class="sub">고객은 내 학습 → 주문 내역에서 배송지를 넣어요. 배송 정보는 발송 후 90일이 지나면 자동으로 지워져요(개인정보처리방침).</p>'+
+    '<div class="bar"><input type="search" id="sq" placeholder="이름, 휴대폰, 이메일, 주소, 송장"><select id="ss"><option value="">전체</option><option value="wait">발송 대기</option><option value="noaddr">배송지 미입력</option><option value="done">발송 완료</option></select><label><input type="checkbox" id="st"> 테스트 숨기기</label></div><div id="sl"></div>';
+  var all0=L.slice(),shipRender=function(){var q=$('#sq').value.trim().toLowerCase(),dq=digitsOf(q),f=$('#ss').value;
+    var ok=function(o){if($('#st').checked&&o.is_test)return false;if(q){var hay=[o.ship_name,o.buyer_name,o.buyer_email,o.ship_addr,o.ship_tracking,o.id].join(' ').toLowerCase();if(hay.indexOf(q)<0&&!(dq.length>=4&&digitsOf(o.ship_phone).indexOf(dq)>=0))return false;}return true;};
+    var W=wait.filter(ok),D=done.filter(ok);if(f==='noaddr')W=W.filter(function(o){return !o.ship_addr;});
+    $('#sl').innerHTML=(f!=='done'?'<h2>발송 대기 '+W.length+'건</h2>'+tbl(W):'')+(f===''||f==='done'?'<h2>발송 완료 '+D.length+'건</h2>'+tbl(D):'');bindShip();};
+  $('#sq').oninput=shipRender;$('#ss').onchange=shipRender;$('#st').onchange=shipRender;
+  var bindShip=function(){$$('[data-sh]',m).forEach(function(b){b.onclick=function(){openDlg('<h3>발송 처리</h3><div class="f"><label>택배사·송장번호 (선택)<input id="tN" placeholder="예: CJ 1234-5678-9012"></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="tGo">발송했어요</button></div></div>');
     $('#tGo').onclick=function(){act({action:'shipped',orderId:b.getAttribute('data-sh'),tracking:$('#tN').value}).then(function(){closeDlg();toast('발송 처리했어요');V.ship(m);});};};});
-  $$('[data-undo]',m).forEach(function(b){b.onclick=function(){if(!confirmTxt('발송 처리를 취소할까요?'))return;act({action:'shipped',orderId:b.getAttribute('data-undo'),undo:true}).then(function(){V.ship(m);});};});
+  $$('[data-undo]',m).forEach(function(b){b.onclick=function(){if(!confirmTxt('발송 처리를 취소할까요?'))return;act({action:'shipped',orderId:b.getAttribute('data-undo'),undo:true}).then(function(){V.ship(m);});};});};
+  shipRender();
 });};
 
 
 /* ── 작업 기록 ── */
 var ACTN={refund:'환불',grant:'수강권 부여',revoke:'수강권 회수',company_create:'기업 등록',company_admin:'담당자 지정',seat_add:'수강권 묶음 추가',company_invite:'구성원 초대',company_assign:'강의 배정',company_unassign:'배정 회수',company_remove:'구성원 빼기',course_open:'강의 열기·닫기',lesson_save:'편 저장',lesson_delete:'편 삭제',video_init:'영상 업로드',shipped:'발송 처리',order_manual:'매출 직접 등록',order_memo:'주문 메모',cancel_waiting:'입금 전 취소',pg_sync:'PG와 맞추기',pg_webhook:'PG 웹훅 반영',lead_update:'문의 상태 변경',coupon_save:'할인 저장',coupon_toggle:'할인 켜기·멈추기',admin_save:'관리자 권한 저장',admin_remove:'관리자 빼기',kit_upload:'키트 올리기',kit_save:'키트 등록',kit_delete:'키트 삭제',backup_now:'백업',staff_reset:'임시 비밀번호 발급',purge_test:'테스트 주문 삭제',view_member:'회원 상세 열람',view_members:'회원 목록 열람',view_orders_csv:'주문 엑셀 내보내기',view_leads:'문의 접수함 열람',cleanup_shipping:'배송 정보 자동 삭제'};
-V.logs=function(m){api('logs').then(function(d){var L=d.logs;
-  m.innerHTML='<h1>작업 기록</h1><p class="sub">운영자가 한 일과 개인정보를 연 기록이 접속 IP와 함께 자동으로 남아요(1년 이상 보관). 분쟁이 생기면 근거가 돼요.</p>'+(L.length?'<div class="tw"><table><thead><tr><th>시각</th><th>운영자</th><th>작업</th><th>대상</th><th>내용</th></tr></thead><tbody>'+L.map(function(x){
+V.logs=function(m){
+  m.innerHTML='<h1>작업 기록</h1><div class="bar"><select id="ga"><option value="">전체 작업</option>'+Object.keys(ACTN).map(function(k){return '<option value="'+k+'">'+esc(ACTN[k])+'</option>';}).join('')+'</select><input type="search" id="gw" placeholder="운영자 이메일" style="flex:0 1 200px"><input type="search" id="gq" placeholder="대상 (주문번호, 이메일 등)">'+rangeBox('lg')+'</div><div id="gl"></div>';
+  var load=function(){api('logs',Object.assign({action:$('#ga').value,who:$('#gw').value,q:$('#gq').value},rangeVal('lg'))).then(function(d){var L=d.logs,m2=$('#gl');
+  m2.innerHTML='<p class="sub">운영자가 한 일과 개인정보를 연 기록이 접속 IP와 함께 자동으로 남아요(1년 이상 보관). 분쟁이 생기면 근거가 돼요.</p>'+(L.length?'<div class="tw"><table><thead><tr><th>시각</th><th>운영자</th><th>작업</th><th>대상</th><th>내용</th></tr></thead><tbody>'+L.map(function(x){
     var dd=x.detail||{},keys=Object.keys(dd).filter(function(k){return dd[k]!==''&&dd[k]!=null&&typeof dd[k]!=='object';}).slice(0,5);
     return '<tr><td class="nowrap">'+dt(x.created_at)+'</td><td class="small">'+esc(x.email||'자동')+(x.ip?'<div class="muted">'+esc(x.ip)+'</div>':'')+'</td><td>'+tag(ACTN[x.action]||x.action)+'</td><td class="small">'+esc(x.target||'')+'</td><td class="small muted">'+keys.map(function(k){return esc(k)+': '+esc(String(dd[k]).slice(0,60));}).join(' · ')+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">아직 기록이 없어요</div>');
-});};
+  });};
+  var tm;['#gw','#gq'].forEach(function(x){$(x).oninput=function(){clearTimeout(tm);tm=setTimeout(load,300);};});$('#ga').onchange=load;bindRange('lg',load);load();
+};
 /* ── 주문 엑셀(CSV) 내보내기: 세무·정산용 ── */
 function exportCsv(){api('orders_csv').then(function(d){
   var st={paid:'결제 완료',partial_refunded:'일부 환불',refunded:'환불 완료',canceled:'취소',waiting:'입금 대기',expired:'입금 기한 만료'};
@@ -486,20 +533,20 @@ var LST={new:['새 문의','red'],talking:['상담 중','amber'],proposal:['제�
 var LKEY={program:'프로그램',size:'인원',when:'희망 시기',roles:'직무',access:'AI 접속',proposal:'제안서',role:'부서·직책',course:'관심 강의',ask:'궁금한 점',job:'하는 일',level:'AI 경험',slot:'가능 시간',plan:'형태',pay:'결제·증빙',pkg:'패키지',place:'장소',msg:'내용',group:'실습 묶음',tasks:'지난주 한 일',rep:'반복 업무(시간/주)',ontime:'정시 퇴근(일/5)',after:'퇴근 후 확인(번/일)',weekend:'주말 근무(시간)',burden:'AI로 일 늘었다(1~5)',real:'실제 자료'};
 V.leads=function(m,pre){
   m.innerHTML='<h1>문의 접수함</h1><p class="sub">사이트 문의·제안서 요청·오픈 알림·사전 진단이 여기와 구글 시트에 같이 들어와요. 상태를 바꾸면 시트의 \'처리 상태\'도 같이 바뀌어요. 접수 후 1년이 지나면 둘 다 자동으로 지워져요.</p>'+
-    '<div class="bar"><input type="search" id="lq" placeholder="회사, 이름, 이메일"><select id="lsel"><option value="">전체 상태</option>'+Object.keys(LST).map(function(k){return '<option value="'+k+'">'+LST[k][0]+'</option>';}).join('')+'</select><select id="lk"><option value="">전체 종류</option></select></div><div id="lsum" class="todo-strip"></div><div id="ll"></div>';
+    '<div class="bar"><input type="search" id="lq" placeholder="회사, 이름, 이메일, 휴대폰, 메모"><select id="lsel"><option value="">전체 상태</option>'+Object.keys(LST).map(function(k){return '<option value="'+k+'">'+LST[k][0]+'</option>';}).join('')+'</select><select id="lk"><option value="">전체 종류</option></select></div><div id="lsum" class="todo-strip"></div><div id="ll"></div>';
   if(pre)$('#lsel').value=pre;
-  var load=function(){api('leads',{q:$('#lq').value,status:$('#lsel').value,kind:$('#lk').value}).then(function(d){
+  var load=function(){api('leads',Object.assign({q:$('#lq').value,status:$('#lsel').value,kind:$('#lk').value},rangeVal('ld'))).then(function(d){
     var ks=$('#lk'),cur=ks.value;ks.innerHTML='<option value="">전체 종류</option>'+d.kinds.map(function(k){return '<option'+(k===cur?' selected':'')+'>'+esc(k)+'</option>';}).join('');
     $('#lsum').innerHTML=['new','talking','proposal','won'].map(function(k){return '<a href="#" data-ls="'+k+'"'+(k==='new'?'':' class="amb"')+'>'+LST[k][0]+' <b>'+(d.counts[k]||0)+'</b></a>';}).join('');
     $$('[data-ls]',m).forEach(function(a){a.onclick=function(e){e.preventDefault();$('#lsel').value=a.getAttribute('data-ls');load();};});
     var L=d.leads;$('#ll').innerHTML=L.length?'<div class="tw"><table><thead><tr><th>접수</th><th>종류</th><th>회사·이름</th><th>내용</th><th>상태</th></tr></thead><tbody>'+L.map(function(x){var st=LST[x.status]||[x.status,''],dd=x.detail||{},first=Object.keys(dd).filter(function(k){return dd[k];})[0];
-      return '<tr class="click" data-lead="'+x.id+'"><td class="nowrap">'+dt(x.created_at)+'</td><td>'+esc(x.kind)+'</td><td>'+esc(x.company||'')+(x.company&&x.name?' · ':'')+esc(x.name||'')+'<div class="small muted">'+esc(x.email)+(x.phone?' · '+esc(x.phone):'')+'</div></td><td class="small">'+(first?esc((LKEY[first]||first)+': '+String(dd[first]).slice(0,60)):'')+(x.memo?'<div class="muted">메모: '+esc(x.memo.slice(0,40))+'</div>':'')+'</td><td>'+tag(st[0],st[1])+(x.sheet_ok?'':' '+tag('시트 X',''))+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">접수된 문의가 없어요</div>';
+      return '<tr class="click" data-lead="'+x.id+'"><td class="nowrap">'+dt(x.created_at)+'</td><td>'+esc(x.kind)+'</td><td>'+esc(x.company||'')+(x.company&&x.name?' · ':'')+esc(x.name||'')+'<div class="small muted">'+esc(x.email)+(x.phone?' · '+phoneFmt(x.phone):'')+'</div></td><td class="small">'+(first?esc((LKEY[first]||first)+': '+String(dd[first]).slice(0,60)):'')+(x.memo?'<div class="muted">메모: '+esc(x.memo.slice(0,40))+'</div>':'')+'</td><td>'+tag(st[0],st[1])+(x.sheet_ok?'':' '+tag('시트 X',''))+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">접수된 문의가 없어요</div>';
     $$('[data-lead]',m).forEach(function(r){r.onclick=function(){var x=L.find(function(y){return y.id===+r.getAttribute('data-lead');}),dd=x.detail||{};
       openDlg('<h3>'+esc(x.kind)+' · '+esc(x.company||x.name||x.email)+'</h3><dl class="kv" style="margin-bottom:14px"><dt>접수</dt><dd>'+dt(x.created_at)+'</dd><dt>회사</dt><dd>'+esc(x.company||'-')+'</dd><dt>이름</dt><dd>'+esc(x.name||'-')+'</dd><dt>이메일</dt><dd><a href="mailto:'+esc(x.email)+'">'+esc(x.email)+'</a></dd><dt>연락처</dt><dd>'+esc(x.phone||'-')+'</dd>'+Object.keys(dd).map(function(k){return '<dt>'+esc(LKEY[k]||k)+'</dt><dd style="white-space:pre-wrap">'+esc(dd[k])+'</dd>';}).join('')+'<dt>보낸 페이지</dt><dd class="small">'+esc(x.page||'-')+'</dd></dl>'+
         '<div class="f"><label>상태<select id="xS">'+Object.keys(LST).map(function(k){return '<option value="'+k+'"'+(x.status===k?' selected':'')+'>'+LST[k][0]+'</option>';}).join('')+'</select></label><label>담당<input id="xO" value="'+esc(x.owner_email||'')+'" placeholder="담당자 이메일"></label><label>메모<textarea id="xM" maxlength="1000">'+esc(x.memo||'')+'</textarea></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="xGo">저장</button></div></div>');
       $('#xGo').onclick=function(){this.disabled=true;act({action:'lead_update',id:x.id,status:$('#xS').value,memo:$('#xM').value.trim(),owner:$('#xO').value.trim()}).then(function(r){closeDlg();toast(r.sheet?'저장했어요 · 시트에도 반영':'저장했어요 (시트 연동 전이라 시트는 그대로예요)');load();});};};});
   });};
-  var tm;$('#lq').oninput=function(){clearTimeout(tm);tm=setTimeout(load,300);};$('#lsel').onchange=load;$('#lk').onchange=load;load();
+  var tm;$('#lq').oninput=function(){clearTimeout(tm);tm=setTimeout(load,300);};$('#lsel').onchange=load;$('#lk').onchange=load;bindRange('ld',load);load();
 };
 
 /* ── 할인 코드 ── */
@@ -507,9 +554,9 @@ V.coupons=function(m){api('coupons').then(function(d){var L=d.coupons,CT=d.cats;
   var desc=function(c){return (c.kind==='percent'?c.value+'%':won(c.value))+(c.max_discount?' (최대 '+won(c.max_discount)+')':'')+' 할인';};
   var scope=function(c){return c.items&&c.items.length?c.items.map(itemName).join(', '):c.cats&&c.cats.length?c.cats.map(function(k){return CT[k]||k;}).join(', '):'모든 상품';};
   var period=function(c){return (c.starts_at?day(c.starts_at):'지금')+' ~ '+(c.ends_at?day(c.ends_at):'계속');};
-  m.innerHTML='<div class="dhead"><div><h1>할인 코드</h1><p class="sub" style="margin:0">결제 화면에서 코드를 넣으면 서버가 금액을 다시 계산해 적용해요. "자동 할인"은 코드 없이 기간 동안 자동으로 붙어요(얼리버드 연장 등). 여러 할인이 맞으면 가장 큰 하나만 적용돼요.</p></div><div class="dctl"><button class="btn p" id="cNew">+ 새 할인</button></div></div>'+
+  m.innerHTML='<div class="dhead"><div><h1>할인 코드</h1><p class="sub" style="margin:0">결제 화면에서 코드를 넣으면 서버가 금액을 다시 계산해 적용해요. "자동 할인"은 코드 없이 기간 동안 자동으로 붙어요(얼리버드 연장 등). 여러 할인이 맞으면 가장 큰 하나만 적용돼요.</p></div><div class="dctl"><button class="btn p" id="cNew">+ 새 할인</button></div></div><div class="bar"><input type="search" id="kq" placeholder="코드, 이름, 메모"><select id="kf"><option value="">전체</option><option value="on">사용 중</option><option value="off">멈춤·기간 끝</option><option value="auto">자동 할인</option><option value="code">코드 할인</option></select></div>'+
     (L.length?'<div class="tw"><table><thead><tr><th>코드·이름</th><th>할인</th><th>대상</th><th>기간</th><th class="num">사용</th><th>상태</th><th></th></tr></thead><tbody>'+L.map(function(c){var on=c.active&&(!c.ends_at||Date.parse(c.ends_at)>Date.now());
-      return '<tr><td><b>'+esc(c.auto?'(자동) ':'')+esc(c.code)+'</b><div class="small muted">'+esc(c.title)+'</div></td><td>'+desc(c)+(c.min_amount?'<div class="small muted">'+won(c.min_amount)+' 이상</div>':'')+'</td><td class="small">'+esc(scope(c))+'</td><td class="small nowrap">'+period(c)+'</td><td class="num">'+c.used+(c.max_uses?' / '+c.max_uses:'')+(c.per_email?'<div class="small muted">1인 '+c.per_email+'회</div>':'')+'</td><td>'+(on?tag('사용 중','green'):tag(c.active?'기간 끝':'멈춤',''))+'</td><td class="num"><button class="btn s" data-ce="'+esc(c.code)+'">수정</button> <button class="btn s" data-ct="'+esc(c.code)+'" data-v="'+(c.active?0:1)+'">'+(c.active?'멈추기':'다시 켜기')+'</button></td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">아직 할인이 없어요</div>')+
+      return '<tr data-k="'+esc((c.code+' '+c.title+' '+(c.memo||'')).toLowerCase())+'" data-st="'+(on?'on':'off')+' '+(c.auto?'auto':'code')+'"><td><b>'+esc(c.auto?'(자동) ':'')+esc(c.code)+'</b><div class="small muted">'+esc(c.title)+'</div></td><td>'+desc(c)+(c.min_amount?'<div class="small muted">'+won(c.min_amount)+' 이상</div>':'')+'</td><td class="small">'+esc(scope(c))+'</td><td class="small nowrap">'+period(c)+'</td><td class="num">'+c.used+(c.max_uses?' / '+c.max_uses:'')+(c.per_email?'<div class="small muted">1인 '+c.per_email+'회</div>':'')+'</td><td>'+(on?tag('사용 중','green'):tag(c.active?'기간 끝':'멈춤',''))+'</td><td class="num"><button class="btn s" data-ce="'+esc(c.code)+'">수정</button> <button class="btn s" data-ct="'+esc(c.code)+'" data-v="'+(c.active?0:1)+'">'+(c.active?'멈추기':'다시 켜기')+'</button></td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">아직 할인이 없어요</div>')+
     '<p class="small muted" style="margin-top:14px">공유 링크: 결제 주소 끝에 <code>&amp;code=코드</code>를 붙이면 코드가 미리 들어가요. 예) /checkout?item=vibe-web&amp;code=EARLY10</p>';
   var edit=function(c){c=c||{kind:'percent',active:true};var loc=function(t){return t?new Date(Date.parse(t)+9*3600e3).toISOString().slice(0,16):'';};
     openDlg('<h3>'+(c.code?'할인 수정':'새 할인')+'</h3><div class="f">'+
@@ -526,6 +573,8 @@ V.coupons=function(m){api('coupons').then(function(d){var L=d.coupons,CT=d.cats;
     $('#kGo').onclick=function(){var n=function(i){return String($(i).value).replace(/[^0-9]/g,'');},tz=function(v){return v?v+':00+09:00':'';};
       act({action:'coupon_save',code:$('#kC').value,title:$('#kT').value.trim(),auto:$('#kA').checked,kind:$('#kK').value,value:n('#kV'),max_discount:n('#kX'),min_amount:n('#kMin'),cats:$$('.kCat').filter(function(x){return x.checked;}).map(function(x){return x.value;}),items:[].slice.call($('#kI').selectedOptions).map(function(o){return o.value;}),starts_at:tz($('#kS').value),ends_at:tz($('#kE').value),max_uses:n('#kU'),per_email:n('#kP'),memo:$('#kM').value.trim(),active:c.active!==false})
         .then(function(){closeDlg();toast('저장했어요');V.coupons(m);});};};
+  var kfil=function(){var q=$('#kq').value.trim().toLowerCase(),f=$('#kf').value;$$('tr[data-k]',m).forEach(function(r){r.hidden=(q&&r.getAttribute('data-k').indexOf(q)<0)||(f&&r.getAttribute('data-st').split(' ').indexOf(f)<0);});};
+  $('#kq').oninput=kfil;$('#kf').onchange=kfil;
   $('#cNew').onclick=function(){edit();};
   $$('[data-ce]',m).forEach(function(b){b.onclick=function(){edit(L.find(function(c){return c.code===b.getAttribute('data-ce');}));};});
   $$('[data-ct]',m).forEach(function(b){b.onclick=function(){act({action:'coupon_toggle',code:b.getAttribute('data-ct'),active:b.getAttribute('data-v')==='1'}).then(function(){V.coupons(m);});};});

@@ -12,10 +12,15 @@ const MAIL = require('../_mail.js');
 const BK = require('../_backup.js');
 const PGA = require('../_pg');
 const PRICE = require('../_price.js');
+const BR = require('../_brief.js');
 /* 상품 분야: 카탈로그 환불 기준 문구로 나눔 */
 const catOf = id => { const r = String((CATALOG[id] || {}).refund || ''); return /기업/.test(r) ? 'biz' : /살롱|원데이/.test(r) ? 'salon' : /기수|라이브|정기/.test(r) ? 'cohort' : /VOD/.test(r) ? 'vod' : 'etc'; };
 
 const enc = encodeURIComponent;
+const digits = v => String(v || '').replace(/[^0-9]/g, '');
+const DATE = v => /^\d{4}-\d{2}-\d{2}$/.test(String(v || ''));
+const kstFrom = d => new Date(d + 'T00:00:00+09:00').toISOString();
+const kstTo = d => new Date(Date.parse(d + 'T00:00:00+09:00') + 864e5).toISOString();
 const tempPassword = () => { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; const b = require('crypto').randomBytes(14); let s = ''; for (const x of b) s += c[x % c.length]; return s.slice(0, 4) + '-' + s.slice(4, 9) + '-' + s.slice(9, 14); };
 const isKitItem = id => /차 키트/.test(String((CATALOG[id] || {}).note || ''));
 const uuid = v => /^[0-9a-f-]{36}$/i.test(String(v || '')) ? String(v) : '';
@@ -49,7 +54,7 @@ async function notifyOpen(courseId) {
 }
 
 /* 권한: 'all' 이면 전부. 화면·작업마다 필요한 권한 */
-const PERM_READ = { dashboard: 'dash', orders: 'orders', orders_csv: 'orders', members: 'members', member: 'members', companies: 'companies', company: 'companies', courses: 'courses', shipments: 'ship', logs: 'logs', leads: 'leads', coupons: 'coupons', admins: 'admins', backups: 'admins', launch: 'admins', kits: 'courses' };
+const PERM_READ = { brief: 'dash', dashboard: 'dash', orders: 'orders', orders_csv: 'orders', members: 'members', member: 'members', companies: 'companies', company: 'companies', courses: 'courses', shipments: 'ship', logs: 'logs', leads: 'leads', coupons: 'coupons', admins: 'admins', backups: 'admins', launch: 'admins', kits: 'courses' };
 const PERM_ACT = { refund: 'refund', cancel_waiting: 'refund', order_manual: 'refund', pg_sync: 'orders', order_memo: 'orders', grant: 'members', revoke: 'members',
   company_create: 'companies', company_admin: 'companies', seat_add: 'companies', company_invite: 'companies', company_assign: 'companies', company_unassign: 'companies', company_remove: 'companies',
   course_open: 'courses', lesson_save: 'courses', lesson_delete: 'courses', video_init: 'courses', video_status: 'courses', kit_upload: 'courses', kit_save: 'courses', kit_delete: 'courses',
@@ -64,12 +69,24 @@ const PRESETS = {
 const PERM_NAMES = { dash: '대시보드', orders: '주문 보기', refund: '환불·직접 등록', members: '회원', companies: '기업', leads: '문의 접수함', courses: '강의·키트', ship: '키트 발송', coupons: '할인 코드', logs: '작업 기록', admins: '권한·백업·출시 점검' };
 
 const READ = {
+  /* 데일리 브리핑: 지난 날은 저장된 것(없으면 만들어 저장), 오늘은 지금까지 실시간 */
+  async brief(q) {
+    const today = BR.kstDate(Date.now());
+    const day = /^\d{4}-\d{2}-\d{2}$/.test(q.day || '') && q.day <= today ? q.day : BR.kstDate(Date.now() - 864e5);
+    if (day === today) return { brief: await BR.build(day), today };
+    let b = q.fresh === '1' ? null : await BR.saved(day);
+    if (!b) { b = await BR.build(day); await BR.save(b); }
+    return { brief: b, today };
+  },
   async leads(q) {
     let f = 'leads?select=*&order=created_at.desc&limit=300';
     if (/^(new|talking|proposal|won|lost|done|spam)$/.test(q.status || '')) f += '&status=eq.' + q.status;
     if (q.kind) f += '&kind=eq.' + enc(String(q.kind).slice(0, 60));
-    const s2 = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, '');
-    if (s2) f += '&or=(email.ilike.*' + enc(s2) + '*,company.ilike.*' + enc(s2) + '*,name.ilike.*' + enc(s2) + '*)';
+    const s2 = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, ''), d2 = digits(s2);
+    if (s2) f += '&or=(email.ilike.*' + enc(s2) + '*,company.ilike.*' + enc(s2) + '*,name.ilike.*' + enc(s2) + '*,memo.ilike.*' + enc(s2) + '*' + (d2.length >= 4 ? ',phone.ilike.*' + d2 + '*' : '') + ')';
+    if (DATE(q.from)) f += '&created_at=gte.' + enc(kstFrom(q.from));
+    if (DATE(q.to)) f += '&created_at=lt.' + enc(kstTo(q.to));
+    if (q.owner) f += '&owner_email=eq.' + enc(String(q.owner).slice(0, 120));
     const [ls, cnt] = await Promise.all([get(f), get('leads?select=status,kind&limit=5000')]);
     const by = {}; cnt.forEach(x => { by[x.status] = (by[x.status] || 0) + 1; });
     return { leads: ls, counts: by, kinds: [...new Set(cnt.map(x => x.kind))] };
@@ -112,8 +129,12 @@ const READ = {
   },
 
   async logs(q) {
-    let f = 'admin_logs?select=id,email,action,target,detail,created_at,ip&order=created_at.desc&limit=300';
+    let f = 'admin_logs?select=id,email,action,target,detail,created_at,ip&order=created_at.desc&limit=500';
     const a = String(q.action || ''); if (/^[a-z_]{2,30}$/.test(a)) f += '&action=eq.' + a;
+    if (q.who) f += '&email=ilike.*' + enc(String(q.who).replace(/[,()*]/g, '').slice(0, 80)) + '*';
+    if (q.q) f += '&target=ilike.*' + enc(String(q.q).replace(/[,()*]/g, '').slice(0, 80)) + '*';
+    if (DATE(q.from)) f += '&created_at=gte.' + enc(kstFrom(q.from));
+    if (DATE(q.to)) f += '&created_at=lt.' + enc(kstTo(q.to));
     return { logs: await get(f) };
   },
   async orders_csv() {
@@ -142,24 +163,41 @@ const READ = {
     };
   },
   async orders(q) {
-    let f = 'orders?select=id,item_id,qty,amount,refund_amount,status,is_test,buyer_email,buyer_name,paid_at,user_id,refund_requested_at,refund_request_note,refund_reason,shipped_at,method,source,memo,tax_doc,vbank,due_at,created_at&status=neq.ready&order=created_at.desc&limit=200';
+    let f = 'orders?select=id,item_id,qty,amount,list_amount,discount,coupon_code,refund_amount,status,is_test,buyer_email,buyer_name,buyer_phone,paid_at,user_id,refund_requested_at,refund_request_note,refund_reason,shipped_at,method,source,memo,tax_doc,vbank,due_at,created_at&status=neq.ready&order=created_at.desc&limit=500';
     if (q.status === 'requested') f += '&refund_requested_at=not.is.null&status=eq.paid';
     else if (q.status === 'manual') f += '&source=eq.manual';
-    else if (['waiting', 'paid', 'partial_refunded', 'refunded', 'expired'].includes(q.status)) f += '&status=eq.' + q.status;
+    else if (['waiting', 'paid', 'partial_refunded', 'refunded', 'expired', 'canceled'].includes(q.status)) f += '&status=eq.' + q.status;
     if (q.test === '0') f += '&is_test=eq.false';
-    const s = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, '');
-    if (s) f += '&or=(buyer_email.ilike.*' + enc(s) + '*,id.ilike.*' + enc(s) + '*,buyer_name.ilike.*' + enc(s) + '*)';
-    return { orders: await get(f) };
+    if (DATE(q.from)) f += '&created_at=gte.' + enc(kstFrom(q.from));
+    if (DATE(q.to)) f += '&created_at=lt.' + enc(kstTo(q.to));
+    if (q.method) f += '&method=eq.' + enc(String(q.method).slice(0, 30));
+    if (/^(biz|salon|cohort|vod|etc)$/.test(q.cat || '')) { const ids = Object.keys(CATALOG).filter(k => catOf(k) === q.cat); f += '&item_id=in.(' + (ids.length ? ids.map(enc).join(',') : 'none') + ')'; }
+    if (q.coupon === '1') f += '&discount=gt.0';
+    const s = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, ''), dg = digits(s);
+    if (s) f += '&or=(buyer_email.ilike.*' + enc(s) + '*,id.ilike.*' + enc(s) + '*,buyer_name.ilike.*' + enc(s) + '*,memo.ilike.*' + enc(s) + '*' + (dg.length >= 4 ? ',buyer_phone.ilike.*' + dg + '*,ship_phone.ilike.*' + dg + '*' : '') + ')';
+    return { orders: await get(f), methods: [...new Set((await get('orders?select=method&method=not.is.null&limit=2000')).map(o => o.method))] };
   },
   async members(q) {
-    let f = 'profiles?select=id,name,email,login_method,marketing_ok,created_at&order=created_at.desc&limit=200';
-    const s = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, '');
-    if (s) f += '&or=(email.ilike.*' + enc(s) + '*,name.ilike.*' + enc(s) + '*)';
-    const ms = await get(f);
-    const en = ms.length ? await get('enrollments?select=user_id&revoked_at=is.null&user_id=in.(' + ms.map(m => m.id).join(',') + ')') : [];
-    const cnt = {}; en.forEach(e => { cnt[e.user_id] = (cnt[e.user_id] || 0) + 1; });
-    const ad = await get('admins?select=user_id');
-    return { members: ms.map(m => Object.assign(m, { courses: cnt[m.id] || 0, admin: ad.some(a => a.user_id === m.id) })) };
+    let f = 'profiles?select=id,name,email,login_method,marketing_ok,created_at&order=created_at.desc&limit=500';
+    const s = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, ''), dg = digits(s);
+    if (s) {
+      /* 휴대폰 번호(하이픈 있어도 없어도): 주문의 주문자·배송 연락처로 회원을 찾음 */
+      let ids = [];
+      if (dg.length >= 4) { const os = await get('orders?select=user_id,buyer_email&or=(buyer_phone.ilike.*' + dg + '*,ship_phone.ilike.*' + dg + '*)&limit=200'); ids = [...new Set(os.map(o => o.user_id).filter(Boolean))]; }
+      f += '&or=(email.ilike.*' + enc(s) + '*,name.ilike.*' + enc(s) + '*' + (ids.length ? ',id.in.(' + ids.join(',') + ')' : '') + ')';
+    }
+    if (/^(email|kakao|google)$/.test(q.via || '')) f += '&login_method=eq.' + q.via;
+    if (q.mk === '1') f += '&marketing_ok=is.true'; else if (q.mk === '0') f += '&marketing_ok=is.false';
+    if (DATE(q.from)) f += '&created_at=gte.' + enc(kstFrom(q.from));
+    if (DATE(q.to)) f += '&created_at=lt.' + enc(kstTo(q.to));
+    let ms = await get(f);
+    const en = ms.length ? await get('enrollments?select=user_id,course_id&revoked_at=is.null&user_id=in.(' + ms.map(m => m.id).join(',') + ')') : [];
+    const cnt = {}, cs = {}; en.forEach(e => { cnt[e.user_id] = (cnt[e.user_id] || 0) + 1; (cs[e.user_id] = cs[e.user_id] || []).push(e.course_id); });
+    if (q.learn === '1') ms = ms.filter(m => cnt[m.id]); else if (q.learn === '0') ms = ms.filter(m => !cnt[m.id]);
+    if (q.course) ms = ms.filter(m => (cs[m.id] || []).includes(q.course));
+    const ph = ms.length ? await get('orders?select=user_id,buyer_phone,ship_phone&user_id=in.(' + ms.map(m => m.id).join(',') + ')&order=created_at.desc') : [];
+    const phone = {}; ph.forEach(o => { if (!phone[o.user_id] && (o.buyer_phone || o.ship_phone)) phone[o.user_id] = o.buyer_phone || o.ship_phone; });
+    return { members: ms.map(m => Object.assign(m, { courses: cnt[m.id] || 0, phone: phone[m.id] || '' })) };
   },
   async member(q) {
     const id = uuid(q.id); if (!id) throw new Error('BAD_ID');
@@ -221,7 +259,7 @@ const ACT = {
     if (!(amount > 0) || amount > 1e9 || !name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('BAD_REQUEST');
     const [p] = await get('profiles?select=id&email=ilike.' + enc(email));
     const id = 'M' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase();
-    const row = { id, user_id: p ? p.id : null, buyer_email: email, buyer_name: name, item_id: itemId, qty, amount, method, status: 'paid', paid_at: paidAt, source: 'manual', tax_doc: tax, memo: String(b.memo || '').slice(0, 300) || null, grants_course: CATALOG[itemId].grants || null, is_test: false };
+    const row = { id, user_id: p ? p.id : null, buyer_email: email, buyer_name: name, buyer_phone: digits(b.phone).slice(0, 15) || null, item_id: itemId, qty, amount, method, status: 'paid', paid_at: paidAt, source: 'manual', tax_doc: tax, memo: String(b.memo || '').slice(0, 300) || null, grants_course: CATALOG[itemId].grants || null, is_test: false };
     await write('POST', 'orders', row);
     const f = await FF.fulfill(row, { mail: b.mail === true });
     return { id, member: !!p, enrolled: f.enrolled };

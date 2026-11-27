@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     /* 같은 이메일·종류로 1분 안에 다시 들어오면 한 건으로 봄 (두 번 누름 방지) */
     const dup = await S.rest('GET', 'leads?select=id&email=eq.' + encodeURIComponent(email) + '&kind=eq.' + encodeURIComponent(kind) + '&created_at=gt.' + encodeURIComponent(new Date(Date.now() - 60e3).toISOString()));
     if (dup.ok && dup.data.length) return out(200, 'ok');
-    const r = await S.rest('POST', 'leads', { kind, company: clip(d.company, 120) || null, name: clip(d.name, 80) || null, email, phone: clip(d.phone, 40) || null, page: clip(d.page, 300) || null, detail }, 'return=representation');
+    const r = await S.rest('POST', 'leads', { kind, company: clip(d.company, 120) || null, name: clip(d.name, 80) || null, email, phone: clip(d.phone, 40).replace(/[^0-9+]/g, '') || null, page: clip(d.page, 300) || null, detail }, 'return=representation');
     if (r.ok && r.data[0]) id = r.data[0].id; else console.error('lead insert', r.status, r.text);
   } catch (e) { console.error('lead db', e && e.message); }
   const sheetOk = await toSheet(Object.assign({}, d, { email, id: id ? 'L' + id : '' }));

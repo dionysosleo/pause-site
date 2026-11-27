@@ -48,7 +48,7 @@ async function record({ orderId, item, itemId, qty, price, pay, mode, buyer, tok
     /* 가상계좌는 승인 시점엔 '입금 대기'. 입금되면 PG가 웹훅(/api/payments/webhook)으로 알려 줌 */
     const waiting = pay.status === 'WAITING';
     const row = {
-      id: orderId, user_id: u ? u.id : null, buyer_email: email, buyer_name: String(buyer.name || pay.name || '').slice(0, 80),
+      id: orderId, user_id: u ? u.id : null, buyer_email: email, buyer_name: String(buyer.name || pay.name || '').slice(0, 80), buyer_phone: String(buyer.phone || '').replace(/[^0-9]/g, '').slice(0, 15) || null,
       item_id: itemId, qty, amount: price.amount, list_amount: price.list, discount: price.discount, coupon_code: price.coupon ? price.coupon.code : null,
       payment_key: pay.paymentKey || null, method: pay.method || null,
       status: waiting ? 'waiting' : 'paid', paid_at: waiting ? null : (pay.approvedAt || new Date().toISOString()), grants_course: item.grants || null, is_test: mode !== 'live',

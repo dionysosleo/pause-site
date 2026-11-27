@@ -182,7 +182,7 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
     if(!widgets){$('err').textContent='결제 수단을 불러오지 못했어요. 새로고침해 주세요.';return;}
     $('err').textContent='';$('pay').disabled=true;
     if(!price||price.qty!==qty){$('err').textContent='금액을 확인하고 있어요. 잠시 뒤 다시 눌러 주세요.';$('pay').disabled=false;quote();return;}
-    try{sessionStorage.setItem('chai_buyer',JSON.stringify({email:em,name:(co?co+' ':'')+nm}));sessionStorage.setItem('chai_coupon',price.coupon?price.coupon.code:'');}catch(e){}
+    try{sessionStorage.setItem('chai_buyer',JSON.stringify({email:em,name:(co?co+' ':'')+nm,phone:ph}));sessionStorage.setItem('chai_coupon',price.coupon?price.coupon.code:'');}catch(e){}
     widgets.requestPayment({
       orderId:id+'_'+qty+'_'+rid(),
       orderName:(item.name+(item.head?' · '+qty+'명':(qty>1?' × '+qty:''))).slice(0,100),

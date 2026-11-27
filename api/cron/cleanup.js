@@ -3,13 +3,14 @@
    2) 접속 기록·문의 접수: 1년 지나면 지움 (개인정보처리방침)
    3) 가상계좌: 입금 기한이 지난 '입금 대기' 주문을 PG에 다시 조회해 맞춤
    4) PG 대사: 최근 2일 PG 거래 중 우리 DB에 없는 주문을 되살리고 운영자에게 알림
-   5) 어제 요약 메일 (운영자)
+   5) 어제 데일리 브리핑: 저장(대시보드 맨 위) + 운영자 메일
    6) 일요일: 주간 백업 (비공개 저장소, 최근 8개) */
 const S = require('../_sb.js');
 const PG = require('../_pg');
 const W = require('../payments/webhook.js');
 const MAIL = require('../_mail.js');
 const BK = require('../_backup.js');
+const BR = require('../_brief.js');
 const won = n => Number(n || 0).toLocaleString('ko-KR') + '원';
 const iso = t => new Date(t).toISOString();
 const kst = t => new Date(t + 9 * 3600e3).toISOString().slice(0, 19);
@@ -41,22 +42,14 @@ module.exports = async (req, res) => {
     let n = 0; for (const id of ids) if (!set.has(id)) { const r = await W.sync(id); if (r === 'recovered') n++; }
     return n;
   });
-  await step('summary', async () => {
-    const d0 = new Date(now + 9 * 3600e3); d0.setUTCHours(0, 0, 0, 0);
-    const to = iso(d0.getTime() - 9 * 3600e3), from = iso(d0.getTime() - 9 * 3600e3 - 864e5);
-    const [os, rf, ms, ls, todo] = await Promise.all([
-      S.rest('GET', 'orders?select=amount,source,is_test&status=in.(paid,partial_refunded,refunded)&paid_at=gte.' + encodeURIComponent(from) + '&paid_at=lt.' + encodeURIComponent(to)),
-      S.rest('GET', 'orders?select=refund_amount&refunded_at=gte.' + encodeURIComponent(from) + '&refunded_at=lt.' + encodeURIComponent(to) + '&is_test=is.false'),
-      S.rest('GET', 'profiles?select=id&created_at=gte.' + encodeURIComponent(from) + '&created_at=lt.' + encodeURIComponent(to)),
-      S.rest('GET', 'leads?select=kind&created_at=gte.' + encodeURIComponent(from) + '&created_at=lt.' + encodeURIComponent(to)),
-      S.rest('GET', 'orders?select=status,refund_requested_at,shipped_at,item_id&status=in.(paid,waiting)')
-    ]);
-    const real = (os.data || []).filter(o => !o.is_test);
-    const T = todo.data || [], CAT = require('../../shop/catalog.json').items;
-    const rows = [['어제 주문', real.length + '건 · ' + won(real.reduce((s, o) => s + o.amount, 0))], ['어제 환불', won((rf.data || []).reduce((s, o) => s + (o.refund_amount || 0), 0))], ['새 회원', (ms.data || []).length + '명'], ['새 문의', (ls.data || []).length + '건'],
-      ['환불 신청 대기', T.filter(o => o.status === 'paid' && o.refund_requested_at).length + '건'], ['가상계좌 입금 대기', T.filter(o => o.status === 'waiting').length + '건'], ['키트 발송 대기', T.filter(o => o.status === 'paid' && !o.shipped_at && /차 키트/.test(String((CAT[o.item_id] || {}).note || ''))).length + '건']];
-    const m = await MAIL.ops('어제 요약 (' + from.slice(0, 10) + ')', rows, '/admin');
-    return m.sent ? 'sent' : (m.skipped ? 'mail not set' : 'failed');
+  await step('briefing', async () => {
+    /* 어제(한국 날짜) 데일리 브리핑을 만들어 저장하고 운영자에게 메일 */
+    const day = BR.kstDate(now - 864e5);
+    const br = await BR.build(day);
+    await BR.save(br);
+    const rows = [['요약', br.headline]].concat(br.points.map(x => ['', '· ' + x])).concat(br.todos.length ? [['오늘 할 일', br.todos.map(t => '· ' + t.t).join('\n')]] : []);
+    const m = await MAIL.ops('데일리 브리핑 ' + day, rows, '/admin#home');
+    return m.sent ? 'sent' : (m.skipped ? 'saved (mail not set)' : 'saved (mail failed)');
   });
   if (new Date(now + 9 * 3600e3).getUTCDay() === 0 || req.query.backup === '1') await step('backup', () => BK.run('weekly'));
   await S.rest('POST', 'ops_alerts', { kind: 'cron_run', ref: new Date(now).toISOString(), sent: true }, 'return=minimal');
