@@ -100,7 +100,8 @@ function shell(){
 }
 function route(){var h=(location.hash||'#home').slice(1).split('/'),k=h[0]||'home';
   $$('[data-m]').forEach(function(a){if(a.getAttribute('data-m')===k)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-  var m=$('#main');m.innerHTML='<p class="muted">불러오는 중이에요</p>';window.scrollTo(0,0);
+  /* 화면마다 새 칸: 늦게 온 앞 화면 응답이 지금 화면을 덮지 않게 */
+  var m=document.createElement('div');m.innerHTML='<p class="muted">불러오는 중이에요</p>';$('#main').replaceChildren(m);window.scrollTo(0,0);
   (V[k]||V.home)(m,h[1]);}
 window.addEventListener('hashchange',route);
 
