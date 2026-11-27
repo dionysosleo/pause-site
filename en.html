@@ -499,6 +499,8 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .my-r-end{align-items:flex-end;flex:none}
 .my-set li>b{text-align:right;min-width:0}
 .my-note{font-size:14px;margin:12px 0 0}
+.rf-sum li{min-height:48px;padding:12px 18px}.rf-amt span{font-weight:700}.rf-amt b{font-size:20px;color:var(--ink)}
+.rf-rule{margin:0;padding:12px 14px;border-radius:12px;background:var(--soft);font-size:14px}.rf-pol{margin:0;font-size:13px}
 .lv-list{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px}.lv-btns{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.lv-go{background:#B42318!important;color:#fff!important;border-color:#B42318!important}.lv-go:disabled{opacity:.45;cursor:not-allowed}
 .my-r-end .btn-sm{min-height:34px;padding:4px 14px;font-size:13px}
 .my-leave{margin:20px 0 0;text-align:right}.my-leave .lnk{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline}
@@ -2566,7 +2568,7 @@ function myDash(c, u){
   return c.rpc('claim_orders').then(function(){}, function(){}).then(function(){ return Promise.all([
     c.from('profiles').select('name,email,login_method,marketing_ok').eq('id', u.id).maybeSingle(),
     c.from('enrollments').select('course_id,source,started_at').is('revoked_at', null).order('started_at', {ascending:false}),
-    c.from('orders').select('id,item_id,amount,status,paid_at').neq('status', 'ready').order('created_at', {ascending:false}),
+    c.from('orders').select('id,item_id,amount,refund_amount,status,paid_at,refund_requested_at').neq('status', 'ready').order('created_at', {ascending:false}),
     c.from('lessons').select('id,course_id,is_free'),
     c.from('progress').select('lesson_id,completed_at')
   ]); }).then(function(rs){
@@ -2588,8 +2590,8 @@ function myDash(c, u){
           return '<li><a href="#c-' + esc(x.id) + '"><span class="my-tag">' + esc(x.level) + '</span><b class="ol">' + esc(x.title) + '</b><span class="muted ol">' + esc(x.short) + '</span>' + (it ? '<span class="my-price">' + won(it.price) + '</span>' : '') + '</a></li>'; }).join('') + '</ul>';
     var orders = od.length
       ? '<ul class="my-rows">' + od.map(function(o){ var it = SHOP && SHOP[o.item_id];
-          return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + '</b><span class="muted ol">' + d(o.paid_at) + ' · Order no. ' + esc(o.id) + '</span></div><div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + '</span></div></li>'; }).join('') + '</ul>' +
-        '<p class="muted my-note">To request a refund, see the <a href="#refund">Cancellation & Refund Policy</a>and email ' + contactMail() + '.</p>'
+          return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + '</b><span class="muted ol">' + d(o.paid_at) + ' · Order no. ' + esc(o.id) + '</span></div><div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + (o.refund_requested_at && o.status === 'paid' ? ' · Requested' : '') + '</span>' + ((o.status === 'paid' || o.status === 'partial_refunded') ? '<button type="button" class="btn btn-line btn-sm" data-myrf="' + esc(o.id) + '">Request refund</button>' : '') + '</div></li>'; }).join('') + '</ul>' +
+        '<p class="muted my-note">Refund amounts are calculated automatically under the <a href="#refund">Cancellation & Refund Policy</a>. For questions, email ' + contactMail() + '.</p>'
       : '<div class="my-empty"><p class="my-empty-t">No orders yet</p><p class="muted">Your course and kit purchases will appear here.</p></div>';
     var account = '<ul class="my-rows my-set">' +
       '<li><span class="muted">Name</span><b>' + esc(name) + '</b></li>' +
@@ -2619,11 +2621,44 @@ function myDash(c, u){
       Promise.all([c.from('profiles').update({marketing_ok:on, marketing_at:new Date().toISOString()}).eq('id', u.id), c.from('consents').insert({user_id:u.id, kind:'marketing', version:AUTH.ver, agreed:on})])
         .then(function(){ toast(on ? 'Updates turned on' : 'Updates turned off'); });
     });
+    $$('[data-myrf]').forEach(function(b){ b.addEventListener('click', function(){ myRefund(c, b.getAttribute('data-myrf'), function(){ MY_TAB = 'orders'; myDash(c, u); }); }); });
     var pwb = $('[data-pw]'); if(pwb) pwb.addEventListener('click', function(){ myReset(c); });
     $('[data-out]').addEventListener('click', function(){ c.auth.signOut().then(function(){ authUI(); nav(routeUrl('home')); }); });
     $('[data-leave]').addEventListener('click', function(){ myLeave(c); });
     myAdmin(c);
   });
+}
+/* 고객 환불: 서버가 취소·환불정책으로 금액을 계산(/api/refund) → 확인 → 자동 환불 또는 신청 접수 */
+function tokenOf(c){ return c.auth.getSession().then(function(r){ return r.data && r.data.session && r.data.session.access_token; }); }
+function myRefund(c, id, done){
+  tokenOf(c).then(function(t){
+    return fetch('/api/refund?orderId=' + encodeURIComponent(id), {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.json(); }).then(function(q){
+      if(!q || !q.ok){ toast('Could not load the refund amount'); return; }
+      var facts = q.total ? '<li><span class="muted">Usage</span><b>Watched ' + q.watched + '/' + q.total + 'lessons · day ' + q.days + '</b></li>' : '';
+      var amt = q.amount === null ? 'Reviewed by our team' : won(q.amount);
+      var act = q.auto && q.amount > 0
+        ? '<label class="check"><input type="checkbox" id="rfOk"><span>I understand my access to this course ends with the refund</span></label><div class="lv-btns"><button type="button" class="btn btn-line" data-close>Close</button><button type="button" class="btn lv-go" id="rfGo" disabled>' + won(q.amount) + ' refund</button></div>'
+        : q.amount === null && !q.requested
+          ? '<label class="field">Note (optional)<input id="rfNote" maxlength="300" placeholder="e.g. The schedule does not work for me"></label><div class="lv-btns"><button type="button" class="btn btn-line" data-close>Close</button><button type="button" class="btn btn-lime" id="rfReq">Request refund</button></div>'
+          : '<div class="lv-btns"><button type="button" class="btn btn-line" data-close>Close</button></div>';
+      openDialog('<h2>Refunds</h2><ul class="my-rows rf-sum"><li><span class="muted">Paid</span><b>' + won(q.paid) + '</b></li>' + (q.already ? '<li><span class="muted">Already refunded</span><b>' + won(q.already) + '</b></li>' : '') + facts +
+        '<li class="rf-amt"><span>Refund amount</span><b>' + amt + '</b></li></ul><p class="rf-rule">' + esc(q.rule) + '</p>' +
+        (q.requested ? '<p class="muted" style="margin:0">We received your request and will email you after review.</p>' : '') +
+        '<p class="muted rf-pol">Based on: <a href="#refund">Cancellation & Refund Policy</a> · Card refunds can take 3–7 days depending on your card issuer.</p>' + act);
+      pathify($('#dlgBody'));
+      var ok = $('#rfOk'), go = $('#rfGo'), rq = $('#rfReq');
+      if(ok) ok.addEventListener('change', function(){ go.disabled = !ok.checked; });
+      var post = function(body, btn){
+        btn.disabled = true;
+        return fetch('/api/refund', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify(body)}).then(function(x){ return x.json(); }).then(function(d){
+          if(!d || !d.ok){ btn.disabled = false; toast('Refund failed' + (d && d.message ? ' (' + String(d.message).slice(0, 60) + ')' : '')); return; }
+          closeDialog(); toast(d.refunded ? won(d.refunded) + ' refunded' : 'Refund request received'); if(done) done();
+        }, function(){ btn.disabled = false; toast('Refund failed'); });
+      };
+      if(go) go.addEventListener('click', function(){ post({orderId:id}, go); });
+      if(rq) rq.addEventListener('click', function(){ post({orderId:id, note:($('#rfNote').value || '').trim()}, rq); });
+    });
+  }).catch(function(){ toast('Could not load the refund amount'); });
 }
 /* 회원 탈퇴: 서버(/api/account/delete)에서 계정과 수강 기록을 지우고, 주문 기록은 법정 기간 동안 계정과 떼어 보관 */
 function myLeave(c){
@@ -2662,13 +2697,15 @@ function myAdmin(c){
         p.innerHTML = '<p class="muted my-note" style="margin:0 0 12px">Latest 50 orders. Set refund amounts per the refund policy.</p>' + (list.length ? '<ul class="my-rows">' + list.map(function(o){
           var left = o.amount - (o.refund_amount || 0), it = SHOP && SHOP[o.item_id];
           return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + (o.is_test ? ' <span class="my-tag">Test</span>' : '') + '</b><span class="muted ol">' + esc(o.buyer_email) + ' · ' + (o.paid_at ? new Date(o.paid_at).toLocaleDateString('ko-KR') : '-') + ' · ' + esc(o.id) + '</span></div>' +
-            '<div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + '</span>' +
+            '<div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + (o.refund_requested_at && o.status === 'paid' ? ' · Requested' : '') + '</span>' +
             (left > 0 && (o.status === 'paid' || o.status === 'partial_refunded') ? '<button type="button" class="btn btn-line btn-sm" data-rf="' + esc(o.id) + '" data-left="' + left + '">Refunds</button>' : '') + '</div></li>'; }).join('') + '</ul>' : '<div class="my-empty"><p class="my-empty-t">No orders</p></div>');
         $$('[data-rf]', p).forEach(function(b){ b.addEventListener('click', function(){ refundDlg(b.getAttribute('data-rf'), +b.getAttribute('data-left')); }); });
       };
       var refundDlg = function(id, left){
+        fetch('/api/refund?orderId=' + encodeURIComponent(id), {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.json(); }).catch(function(){ return null; }).then(function(q){
+        var sug = q && q.ok && q.amount !== null ? Math.min(q.amount, left) : left;
         openDialog('<h2>Refunds</h2><p class="muted" style="margin:0">Order no. ' + esc(id) + ' · Refundable ' + won(left) + '</p>' +
-          '<form class="form one-col" data-form="refund" novalidate><label class="field">Refund amount (KRW)<input name="amount" inputmode="numeric" required value="' + left + '"><span class="err">Enter 1 to ' + won(left) + '</span></label>' +
+          '<form class="form one-col" data-form="refund" novalidate>' + (q && q.ok ? '<p class="rf-rule">Policy amount: ' + (q.amount === null ? 'needs review' : won(q.amount)) + ' · ' + esc(q.rule) + '</p>' : '') + '<label class="field">Refund amount (KRW)<input name="amount" inputmode="numeric" required value="' + sug + '"><span class="err">Enter 1 to ' + won(left) + '</span></label>' +
           '<label class="field">Reason<input name="reason" required value="Customer request" maxlength="190"><span class="err">Please enter a reason</span></label>' +
           '<label class="check"><input type="checkbox" name="revoke" checked><span>Also revoke course access</span></label>' +
           '<div class="lv-btns"><button type="button" class="btn btn-line" data-close>Canceled</button><button type="submit" class="btn lv-go">Refund</button></div></form>');
@@ -2683,6 +2720,7 @@ function myAdmin(c){
               closeDialog(); toast(won(d.refunded) + ' refunded' + (d.revoked ? ' · access revoked' : ''));
               load().then(function(n){ if(n && n.ok) draw(n.orders); });
             }, function(){ btn.disabled = false; toast('Refund failed'); });
+        });
         });
       };
       draw(d.orders);

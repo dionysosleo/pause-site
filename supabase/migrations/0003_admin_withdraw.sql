@@ -35,3 +35,7 @@ begin
 end $$;
 revoke execute on function public.claim_orders() from public, anon;
 grant execute on function public.claim_orders() to authenticated;
+
+-- 환불 신청(사람이 확인해야 하는 상품)
+alter table public.orders add column if not exists refund_requested_at timestamptz;
+alter table public.orders add column if not exists refund_request_note text;
