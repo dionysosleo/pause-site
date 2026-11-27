@@ -53,7 +53,7 @@ const PERM_READ = { dashboard: 'dash', orders: 'orders', orders_csv: 'orders', m
 const PERM_ACT = { refund: 'refund', cancel_waiting: 'refund', order_manual: 'refund', pg_sync: 'orders', order_memo: 'orders', grant: 'members', revoke: 'members',
   company_create: 'companies', company_admin: 'companies', seat_add: 'companies', company_invite: 'companies', company_assign: 'companies', company_unassign: 'companies', company_remove: 'companies',
   course_open: 'courses', lesson_save: 'courses', lesson_delete: 'courses', video_init: 'courses', video_status: 'courses', kit_upload: 'courses', kit_save: 'courses', kit_delete: 'courses',
-  shipped: 'ship', lead_update: 'leads', coupon_save: 'coupons', coupon_toggle: 'coupons', admin_save: 'admins', admin_remove: 'admins', staff_reset: 'admins', pw_changed: 'self', backup_now: 'admins', backup_get: 'admins', purge_test: 'admins' };
+  shipped: 'ship', lead_update: 'leads', coupon_save: 'coupons', coupon_toggle: 'coupons', admin_save: 'admins', admin_remove: 'admins', convert_self: 'admins', staff_reset: 'admins', pw_changed: 'self', backup_now: 'admins', backup_get: 'admins', purge_test: 'admins' };
 const PRESETS = {
   owner:   { label: '대표 (전체 권한)', perms: ['all'] },
   biz:     { label: '기업강의 관리자', perms: ['dash', 'companies', 'leads', 'members', 'orders', 'coupons'] },
@@ -301,6 +301,23 @@ const ACT = {
     await write('POST', 'admins', { user_id: c.data.id, perms, label, staff: true, added_by: b._by || null });
     return { tempPassword: temp, email };
   },
+  /* 처음 전환용: 지금 들어온 '사이트 회원 계정 관리자'를 같은 이메일의 관리자 전용 계정으로 바꿈
+     회원 계정은 탈퇴와 같은 방식으로 지움(주문은 연결만 끊고 5년 보관). 임시 비밀번호를 한 번 돌려줌 */
+  async convert_self(b) {
+    if (!b._legacy || b.confirm !== 'convert') throw new Error('BAD_REQUEST');
+    const [me] = await get('admins?select=perms,label&user_id=eq.' + b._uid);
+    const email = String(b._by || '').toLowerCase();
+    if (!me || !email) throw new Error('BAD_REQUEST');
+    await write('PATCH', 'orders?user_id=eq.' + b._uid, { user_id: null, detached_at: new Date().toISOString() });
+    const d = await S.deleteAuthUser(b._uid);
+    if (!d.ok) throw new Error('AUTH_CREATE');
+    const temp = tempPassword();
+    const c = await S.authAdmin('POST', 'users', { email, password: temp, email_confirm: true, app_metadata: { role: 'staff', must_change: true }, user_metadata: { name: String(b.name || '').slice(0, 40) } });
+    if (!c.ok || !c.data || !c.data.id) { console.error('convert create', c.status, c.text); throw new Error('AUTH_CREATE'); }
+    await write('POST', 'admins', { user_id: c.data.id, perms: me.perms && me.perms.length ? me.perms : ['all'], label: me.label || '대표 (전체 권한)', staff: true, added_by: email });
+    await S.log({ id: c.data.id, email }, 'convert_self', email, { from: 'site member', to: 'staff' }, null);
+    return { email, tempPassword: temp };
+  },
   async staff_reset(b) {
     const id = uuid(b.userId); if (!id) throw new Error('BAD_REQUEST');
     const [a] = await get('admins?select=staff&user_id=eq.' + id); if (!a || !a.staff) throw new Error('BAD_REQUEST');
@@ -473,10 +490,10 @@ module.exports = async (req, res) => {
     const b = await S.readJson(req, 32000) || {}, fn = ACT[b.action];
     if (!fn) return S.send(res, 400, { ok: false, code: 'BAD_ACTION' });
     if (PERM_ACT[b.action] !== 'self' && !S.can(A, PERM_ACT[b.action] || 'admins')) return S.send(res, 403, { ok: false, code: 'NO_PERM' });
-    b._uid = u.id; b._by = u.email; b._staff = !!A.staff;
+    b._uid = u.id; b._by = u.email; b._staff = !!A.staff; b._legacy = !!A.legacy;
     const out = await fn(b);
-    delete b._uid; delete b._by; delete b._staff;
-    if (!/^(video_status|backup_get|pw_changed)$/.test(b.action)) {
+    delete b._uid; delete b._by; delete b._staff; delete b._legacy;
+    if (!/^(video_status|backup_get|pw_changed|convert_self)$/.test(b.action)) {
       const keep = Object.assign({}, b); delete keep.action;
       if (keep.refundAccount) keep.refundAccount = '(환불 계좌 받음, 저장 안 함)';
       delete keep.password;
