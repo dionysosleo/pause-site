@@ -1,0 +1,187 @@
+/* 관리자 화면(/admin) 서버 — admins 표에 있는 운영자만.
+   GET  ?r=dashboard | orders | members | member&id= | companies | company&id= | courses | shipments
+   POST {action: refund | grant | revoke | company_create | company_admin | seat_add | course_open | lesson_save | lesson_delete | shipped}
+   모든 쓰기는 여기서 서버 키로만 하고, 회원 화면에서는 이 표들을 직접 못 바꿔요. */
+const S = require('../_sb.js');
+const T = require('../_toss.js');
+const CATALOG = require('../../shop/catalog.json').items;
+
+const enc = encodeURIComponent;
+const isKitItem = id => /차 키트/.test(String((CATALOG[id] || {}).note || ''));
+const uuid = v => /^[0-9a-f-]{36}$/i.test(String(v || '')) ? String(v) : '';
+const int = v => (Number.isInteger(Number(v)) ? Number(v) : NaN);
+async function get(path) { const r = await S.rest('GET', path); if (!r.ok) throw new Error('DB ' + r.status + ' ' + r.text); return r.data || []; }
+async function write(method, path, body, prefer) { const r = await S.rest(method, path, body, prefer || 'return=representation'); if (!r.ok) throw new Error('DB ' + r.status + ' ' + r.text); return r.data; }
+function monthStartKST() { const n = new Date(Date.now() + 9 * 3600e3); return new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), 1) - 9 * 3600e3).toISOString(); }
+
+const C = require('../_company.js');
+const progressFor = C.progressFor;
+
+const READ = {
+  async me() { return { admin: true }; },
+  async dashboard() {
+    const since = monthStartKST();
+    const os = await get('orders?select=item_id,amount,refund_amount,status,is_test,paid_at,refund_requested_at,shipped_at,ship_addr&status=neq.ready&order=created_at.desc&limit=2000');
+    const real = os.filter(o => !o.is_test), month = real.filter(o => o.paid_at && o.paid_at >= since);
+    const ps = await get('profiles?select=created_at');
+    return {
+      month: { orders: month.length, sales: month.reduce((s, o) => s + o.amount, 0), refunds: month.reduce((s, o) => s + (o.refund_amount || 0), 0) },
+      all: { orders: real.length, net: real.reduce((s, o) => s + o.amount - (o.refund_amount || 0), 0), tests: os.length - real.length },
+      members: { total: ps.length, month: ps.filter(p => p.created_at >= since).length },
+      todo: {
+        refunds: os.filter(o => o.refund_requested_at && o.status === 'paid').length,
+        ship: os.filter(o => isKitItem(o.item_id) && o.status === 'paid' && !o.shipped_at).length,
+        shipNoAddr: os.filter(o => isKitItem(o.item_id) && o.status === 'paid' && !o.shipped_at && !o.ship_addr).length
+      }
+    };
+  },
+  async orders(q) {
+    let f = 'orders?select=id,item_id,amount,refund_amount,status,is_test,buyer_email,buyer_name,paid_at,user_id,refund_requested_at,refund_request_note,refund_reason,shipped_at&status=neq.ready&order=created_at.desc&limit=200';
+    if (q.status === 'requested') f += '&refund_requested_at=not.is.null&status=eq.paid';
+    else if (['paid', 'partial_refunded', 'refunded'].includes(q.status)) f += '&status=eq.' + q.status;
+    if (q.test === '0') f += '&is_test=eq.false';
+    const s = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, '');
+    if (s) f += '&or=(buyer_email.ilike.*' + enc(s) + '*,id.ilike.*' + enc(s) + '*,buyer_name.ilike.*' + enc(s) + '*)';
+    return { orders: await get(f) };
+  },
+  async members(q) {
+    let f = 'profiles?select=id,name,email,login_method,marketing_ok,created_at&order=created_at.desc&limit=200';
+    const s = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, '');
+    if (s) f += '&or=(email.ilike.*' + enc(s) + '*,name.ilike.*' + enc(s) + '*)';
+    const ms = await get(f);
+    const en = ms.length ? await get('enrollments?select=user_id&revoked_at=is.null&user_id=in.(' + ms.map(m => m.id).join(',') + ')') : [];
+    const cnt = {}; en.forEach(e => { cnt[e.user_id] = (cnt[e.user_id] || 0) + 1; });
+    const ad = await get('admins?select=user_id');
+    return { members: ms.map(m => Object.assign(m, { courses: cnt[m.id] || 0, admin: ad.some(a => a.user_id === m.id) })) };
+  },
+  async member(q) {
+    const id = uuid(q.id); if (!id) throw new Error('BAD_ID');
+    const [p] = await get('profiles?select=id,name,email,login_method,marketing_ok,marketing_at,created_at&id=eq.' + id);
+    if (!p) return { member: null };
+    const en = await get('enrollments?select=id,course_id,source,started_at,revoked_at,order_id,seat_id&user_id=eq.' + id + '&order=started_at.desc');
+    const os = await get('orders?select=id,item_id,amount,refund_amount,status,is_test,paid_at&user_id=eq.' + id + '&order=created_at.desc');
+    const pr = await progressFor([id], [...new Set(en.map(e => e.course_id))]);
+    return { member: p, enrollments: en.map(e => Object.assign(e, pr[id + '|' + e.course_id] || {})), orders: os };
+  },
+  async companies() {
+    const cs = await get('companies?select=id,name,biz_no,created_at&order=created_at.desc');
+    const seats = cs.length ? await get('company_seats?select=company_id,total&company_id=in.(' + cs.map(c => c.id).join(',') + ')') : [];
+    const mem = cs.length ? await get('company_members?select=company_id,status&status=neq.removed&company_id=in.(' + cs.map(c => c.id).join(',') + ')') : [];
+    return { companies: cs.map(c => Object.assign(c, { seats: seats.filter(s => s.company_id === c.id).reduce((a, s) => a + s.total, 0), members: mem.filter(m => m.company_id === c.id).length })) };
+  },
+  async company(q) { const id = uuid(q.id); if (!id) throw new Error('BAD_ID'); return C.detail(id); },
+  async courses() {
+    const cs = await get('courses?select=id,title,is_open,opened_at&order=id');
+    const ls = await get('lessons?select=id,course_id,part,sort,title,is_free,duration_s&order=course_id,sort');
+    const md = ls.length ? await get('lesson_media?select=lesson_id,provider,video_id') : [];
+    const en = await get('enrollments?select=course_id&revoked_at=is.null');
+    return { courses: cs.map(c => Object.assign(c, { students: en.filter(e => e.course_id === c.id).length, lessons: ls.filter(l => l.course_id === c.id).map(l => Object.assign(l, { video_id: (md.find(m => m.lesson_id === l.id) || {}).video_id || '' })) })) };
+  },
+  async shipments() {
+    const os = await get('orders?select=id,item_id,status,is_test,buyer_email,buyer_name,paid_at,ship_name,ship_phone,ship_addr,ship_memo,shipped_at,ship_tracking&status=in.(paid,partial_refunded)&order=created_at.desc&limit=300');
+    return { orders: os.filter(o => isKitItem(o.item_id)) };
+  }
+};
+
+const ACT = {
+  async refund(b) {
+    const orderId = /^[A-Za-z0-9_-]{6,64}$/.test(String(b.orderId || '')) ? b.orderId : '';
+    const amount = int(b.amount), reason = String(b.reason || '').trim().slice(0, 190);
+    if (!orderId || !reason || !(amount > 0)) throw new Error('BAD_REQUEST');
+    const [o] = await get('orders?select=id,amount,refund_amount,status,payment_key&id=eq.' + enc(orderId));
+    if (!o || !o.payment_key || !['paid', 'partial_refunded'].includes(o.status)) throw new Error('NOT_REFUNDABLE');
+    if (amount > o.amount - (o.refund_amount || 0)) throw new Error('TOO_MUCH');
+    const c = await T.cancel(o.payment_key, amount, reason, orderId + '-cancel-' + ((o.refund_amount || 0) + amount));
+    if (!c.ok) { const e = new Error('PG'); e.pg = c.data; throw e; }
+    const st = await T.settle(S, o, amount, reason, b.revoke !== false);
+    return { refunded: amount, total: st.total, full: st.full, revoked: st.revoked };
+  },
+  async grant(b) {
+    const uid = uuid(b.userId), course = String(b.courseId || '');
+    if (!uid || !(await get('courses?select=id&id=eq.' + enc(course))).length) throw new Error('BAD_REQUEST');
+    const ex = await get('enrollments?select=id&revoked_at=is.null&source=eq.grant&user_id=eq.' + uid + '&course_id=eq.' + enc(course));
+    if (!ex.length) await write('POST', 'enrollments', { user_id: uid, course_id: course, source: 'grant' });
+    return { granted: true };
+  },
+  async revoke(b) {
+    const id = int(b.enrollmentId); if (!(id > 0)) throw new Error('BAD_REQUEST');
+    await write('PATCH', 'enrollments?id=eq.' + id, { revoked_at: new Date().toISOString() });
+    return { revoked: true };
+  },
+  async company_create(b) {
+    const name = String(b.name || '').trim().slice(0, 80); if (!name) throw new Error('BAD_REQUEST');
+    const r = await write('POST', 'companies', { name, biz_no: String(b.bizNo || '').replace(/[^0-9-]/g, '').slice(0, 20) || null });
+    return { company: r && r[0] };
+  },
+  async company_admin(b) {
+    const cid = uuid(b.companyId), email = String(b.email || '').trim().toLowerCase();
+    if (!cid || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('BAD_REQUEST');
+    const [p] = await get('profiles?select=id&email=ilike.' + enc(email));
+    if (!p) throw new Error('NO_MEMBER');   // 담당자는 먼저 회원 가입해야 함
+    if (b.remove) await write('DELETE', 'company_admins?company_id=eq.' + cid + '&user_id=eq.' + p.id);
+    else await write('POST', 'company_admins', { company_id: cid, user_id: p.id }, 'resolution=ignore-duplicates,return=minimal');
+    return { ok: true };
+  },
+  async seat_add(b) {
+    const cid = uuid(b.companyId), total = int(b.total), course = String(b.courseId || '');
+    if (!cid || !(total > 0 && total <= 10000) || !(await get('courses?select=id&id=eq.' + enc(course))).length) throw new Error('BAD_REQUEST');
+    const exp = b.expiresAt && /^\d{4}-\d{2}-\d{2}$/.test(b.expiresAt) ? new Date(b.expiresAt + 'T23:59:59+09:00').toISOString() : null;
+    const r = await write('POST', 'company_seats', { company_id: cid, course_id: course, total, expires_at: exp, order_id: String(b.orderId || '').slice(0, 64) || null });
+    return { seat: r && r[0] };
+  },
+  async company_invite(b) { const cid = uuid(b.companyId); if (!cid) throw new Error('BAD_REQUEST'); return C.invite(cid, Array.isArray(b.people) ? b.people : []); },
+  async company_assign(b) { const cid = uuid(b.companyId); if (!cid) throw new Error('BAD_REQUEST'); return C.assign(cid, int(b.memberId), int(b.seatId)); },
+  async company_unassign(b) { const cid = uuid(b.companyId); if (!cid) throw new Error('BAD_REQUEST'); return C.unassign(cid, int(b.memberId), int(b.seatId)); },
+  async company_remove(b) { const cid = uuid(b.companyId); if (!cid) throw new Error('BAD_REQUEST'); return C.removeMember(cid, int(b.memberId)); },
+  async course_open(b) {
+    const id = String(b.courseId || ''); if (!(await get('courses?select=id&id=eq.' + enc(id))).length) throw new Error('BAD_REQUEST');
+    await write('PATCH', 'courses?id=eq.' + enc(id), b.open ? { is_open: true, opened_at: new Date().toISOString() } : { is_open: false });
+    if (b.open) await write('PATCH', 'enrollments?course_id=eq.' + enc(id) + '&revoked_at=is.null', { started_at: new Date().toISOString() });   // 사전 예약: 연 날이 수강 시작일
+    return { ok: true };
+  },
+  async lesson_save(b) {
+    const course = String(b.courseId || ''), title = String(b.title || '').trim().slice(0, 120), sort = int(b.sort);
+    if (!course || !title || !(sort > 0)) throw new Error('BAD_REQUEST');
+    const row = { course_id: course, part: String(b.part || '').trim().slice(0, 60), sort, title, is_free: !!b.isFree, duration_s: Math.max(0, int(b.durationS) || 0) };
+    let id = int(b.id);
+    if (id > 0) await write('PATCH', 'lessons?id=eq.' + id, row);
+    else { const r = await write('POST', 'lessons', row); id = r[0].id; }
+    const vid = String(b.videoId || '').trim().slice(0, 100);
+    if (vid) await write('POST', 'lesson_media', { lesson_id: id, provider: 'bunny', video_id: vid }, 'resolution=merge-duplicates,return=minimal');
+    else await write('DELETE', 'lesson_media?lesson_id=eq.' + id);
+    return { id };
+  },
+  async lesson_delete(b) {
+    const id = int(b.id); if (!(id > 0)) throw new Error('BAD_REQUEST');
+    await write('DELETE', 'lessons?id=eq.' + id);
+    return { ok: true };
+  },
+  async shipped(b) {
+    const id = /^[A-Za-z0-9_-]{6,64}$/.test(String(b.orderId || '')) ? b.orderId : ''; if (!id) throw new Error('BAD_REQUEST');
+    await write('PATCH', 'orders?id=eq.' + enc(id), b.undo ? { shipped_at: null, ship_tracking: null } : { shipped_at: new Date().toISOString(), ship_tracking: String(b.tracking || '').trim().slice(0, 80) || null });
+    return { ok: true };
+  }
+};
+
+module.exports = async (req, res) => {
+  if (!['GET', 'POST'].includes(req.method)) { res.setHeader('Allow', 'GET, POST'); return S.send(res, 405, { ok: false, code: 'METHOD' }); }
+  if (req.method === 'POST' && !S.sameOrigin(req)) return S.send(res, 403, { ok: false, code: 'ORIGIN' });
+  try {
+    const u = await S.user(S.bearer(req));
+    if (!(await S.isAdmin(u))) return S.send(res, 403, { ok: false, code: 'NOT_ADMIN' });
+    if (req.method === 'GET') {
+      const q = req.query || {}, fn = READ[q.r];
+      if (!fn) return S.send(res, 400, { ok: false, code: 'BAD_RESOURCE' });
+      return S.send(res, 200, Object.assign({ ok: true }, await fn(q)));
+    }
+    const b = await S.readJson(req) || {}, fn = ACT[b.action];
+    if (!fn) return S.send(res, 400, { ok: false, code: 'BAD_ACTION' });
+    return S.send(res, 200, Object.assign({ ok: true }, await fn(b)));
+  } catch (e) {
+    const m = String(e && e.message || '');
+    if (e && e.pg) return S.send(res, 402, { ok: false, code: String(e.pg.code || 'PG_REJECTED').slice(0, 60), message: String(e.pg.message || '').slice(0, 200) });
+    if (/^(BAD_REQUEST|BAD_ID|NOT_REFUNDABLE|TOO_MUCH|NO_MEMBER|NO_SEATS|SEAT_EXPIRED)$/.test(m)) return S.send(res, 400, { ok: false, code: m });
+    console.error('admin', m);
+    return S.send(res, 500, { ok: false, code: 'SERVER' });
+  }
+};

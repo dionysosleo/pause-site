@@ -501,6 +501,13 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .my-note{font-size:14px;margin:12px 0 0}
 .rf-sum li{min-height:48px;padding:12px 18px}.rf-amt span{font-weight:700}.rf-amt b{font-size:20px;color:var(--ink)}
 .rf-rule{margin:0;padding:12px 14px;border-radius:12px;background:var(--soft);font-size:14px}.rf-pol{margin:0;font-size:13px}
+.my-rows li{flex-wrap:wrap}.my-rows li>.my-ship{flex-basis:100%;flex-direction:row;display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:14px;padding-top:4px}.my-warn{background:#FDECEA;color:#B42318}
+.my-adm{flex:none}
+.co-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 12px}.co-head p{margin:0}
+.co-seats{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));margin:0 0 16px}.co-seats span{text-align:center;max-width:100%}
+.co-a{display:flex;align-items:center;gap:8px;font-size:13px;margin-top:6px}.co-bar{width:80px;height:5px;flex:none}.co-as{height:34px;border:1px solid var(--hair);border-radius:999px;padding:0 10px;background:#fff;font-size:13px;max-width:200px}
+.co-mem .lnk,.my-ship .lnk{background:none;border:0;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline;padding:0}
+@media (max-width:700px){.co-head{flex-direction:column;align-items:flex-start}.my-adm{display:none}.my-tabs button{font-size:13.5px;white-space:nowrap;gap:4px}.my-tabs small{display:none}}
 .lv-list{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px}.lv-btns{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.lv-go{background:#B42318!important;color:#fff!important;border-color:#B42318!important}.lv-go:disabled{opacity:.45;cursor:not-allowed}
 .my-r-end .btn-sm{min-height:34px;padding:4px 14px;font-size:13px}
 .my-leave{margin:20px 0 0;text-align:right}.my-leave .lnk{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline}
@@ -1706,7 +1713,7 @@ document.addEventListener('click', function(e){
     if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); if(el.focus) el.focus({preventScroll:true}); }
     return;
   }
-  if(/^\/(checkout|pay\/|api\/|shop\/)/.test(href)) return;   /* 결제 경로는 일반 페이지 이동 */
+  if(/^\/(checkout|admin|pay\/|api\/|shop\/)/.test(href)) return;   /* 결제 경로는 일반 페이지 이동 */
   if(!HASH_MODE && href.charAt(0) === '/' && href.charAt(1) !== '/' && !/\.[a-z0-9]+(\?|$)/i.test(href.split('#')[0])){ e.preventDefault(); nav(href); }
 });
 if(!HASH_MODE) window.addEventListener('popstate', route);
@@ -2560,7 +2567,7 @@ function myDash(c, u){
   return c.rpc('claim_orders').then(function(){}, function(){}).then(function(){ return Promise.all([
     c.from('profiles').select('name,email,login_method,marketing_ok').eq('id', u.id).maybeSingle(),
     c.from('enrollments').select('course_id,source,started_at').is('revoked_at', null).order('started_at', {ascending:false}),
-    c.from('orders').select('id,item_id,amount,refund_amount,status,paid_at,refund_requested_at').neq('status', 'ready').order('created_at', {ascending:false}),
+    c.from('orders').select('id,item_id,amount,refund_amount,status,paid_at,refund_requested_at,ship_name,ship_phone,ship_addr,ship_memo,shipped_at,ship_tracking').neq('status', 'ready').order('created_at', {ascending:false}),
     c.from('lessons').select('id,course_id,is_free'),
     c.from('progress').select('lesson_id,completed_at')
   ]); }).then(function(rs){
@@ -2582,7 +2589,7 @@ function myDash(c, u){
           return '<li><a href="#c-' + esc(x.id) + '"><span class="my-tag">' + esc(x.level) + '</span><b class="ol">' + esc(x.title) + '</b><span class="muted ol">' + esc(x.short) + '</span>' + (it ? '<span class="my-price">' + won(it.price) + '</span>' : '') + '</a></li>'; }).join('') + '</ul>';
     var orders = od.length
       ? '<ul class="my-rows">' + od.map(function(o){ var it = SHOP && SHOP[o.item_id];
-          return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + '</b><span class="muted ol">' + d(o.paid_at) + ' · 주문번호 ' + esc(o.id) + '</span></div><div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + (o.refund_requested_at && o.status === 'paid' ? ' · 신청 접수' : '') + '</span>' + ((o.status === 'paid' || o.status === 'partial_refunded') ? '<button type="button" class="btn btn-line btn-sm" data-myrf="' + esc(o.id) + '">환불 신청</button>' : '') + '</div></li>'; }).join('') + '</ul>' +
+          return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + '</b><span class="muted ol">' + d(o.paid_at) + ' · 주문번호 ' + esc(o.id) + '</span></div><div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + (o.refund_requested_at && o.status === 'paid' ? ' · 신청 접수' : '') + '</span>' + ((o.status === 'paid' || o.status === 'partial_refunded') ? '<button type="button" class="btn btn-line btn-sm" data-myrf="' + esc(o.id) + '">환불 신청</button>' : '') + '</div>' + (it && /\uCC28 \uD0A4\uD2B8/.test(it.note || '') && (o.status === 'paid' || o.status === 'partial_refunded') ? '<div class="my-ship">' + (o.shipped_at ? '<span class="muted">차 키트 발송 ' + d(o.shipped_at) + (o.ship_tracking ? ' · ' + esc(o.ship_tracking) : '') + '</span>' : (o.ship_addr ? '<span class="muted ol">배송지: ' + esc(o.ship_addr) + '</span>' : '<span class="my-tag my-warn">차 키트 배송지를 넣어 주세요</span>') + '<button type="button" class="lnk" data-ship="' + esc(o.id) + '">' + (o.ship_addr ? '수정' : '배송지 입력') + '</button>') + '</div>' : '') + '</li>'; }).join('') + '</ul>' +
         '<p class="muted my-note">환불 금액은 <a href="#refund">취소·환불정책</a>에 따라 자동으로 계산돼요. 문의는 ' + contactMail() + '로 해 주세요.</p>'
       : '<div class="my-empty"><p class="my-empty-t">주문 내역이 없어요</p><p class="muted">결제한 강의와 키트가 여기에 쌓여요.</p></div>';
     var account = '<ul class="my-rows my-set">' +
@@ -2591,7 +2598,7 @@ function myDash(c, u){
       '<li><span class="muted">로그인 방식</span><b>' + (LOGIN_BY[p.login_method] || '이메일') + '</b></li>' +
       '<li><span class="muted">새 강의·할인 소식 메일</span><label class="sw"><input type="checkbox" data-mk' + (p.marketing_ok ? ' checked' : '') + '><i aria-hidden="true"></i><span class="sr">소식 받기</span></label></li>' +
       (p.login_method === 'email' || !p.login_method ? '<li><span class="muted">비밀번호</span><button type="button" class="btn btn-line btn-sm" data-pw>바꾸기</button></li>' : '') +
-      '</ul><p class="my-leave"><button type="button" class="lnk" data-leave>회원 탈퇴</button></p>';
+      '<li><span class="muted">기업·단체로 이용하기</span><a class="btn btn-line btn-sm" href="#learn?t=group">단체 수강 문의</a></li>' + '</ul><p class="my-leave"><button type="button" class="lnk" data-leave>회원 탈퇴</button></p>';
     myBox(
       '<div class="my-head"><span class="my-av" aria-hidden="true">' + esc(name.charAt(0).toUpperCase()) + '</span>' +
         '<div class="my-id"><p class="my-name ol">' + esc(name) + '</p><p class="muted ol">' + esc(p.email || u.email) + '</p></div>' +
@@ -2613,6 +2620,7 @@ function myDash(c, u){
       Promise.all([c.from('profiles').update({marketing_ok:on, marketing_at:new Date().toISOString()}).eq('id', u.id), c.from('consents').insert({user_id:u.id, kind:'marketing', version:AUTH.ver, agreed:on})])
         .then(function(){ toast(on ? '소식 받기를 켰어요' : '소식 받기를 껐어요'); });
     });
+    $$('[data-ship]').forEach(function(b){ b.addEventListener('click', function(){ var o = od.filter(function(x){ return x.id === b.getAttribute('data-ship'); })[0]; myShip(c, o, function(){ MY_TAB = 'orders'; myDash(c, u); }); }); });
     $$('[data-myrf]').forEach(function(b){ b.addEventListener('click', function(){ myRefund(c, b.getAttribute('data-myrf'), function(){ MY_TAB = 'orders'; myDash(c, u); }); }); });
     var pwb = $('[data-pw]'); if(pwb) pwb.addEventListener('click', function(){ myReset(c); });
     $('[data-out]').addEventListener('click', function(){ c.auth.signOut().then(function(){ authUI(); nav(routeUrl('home')); }); });
@@ -2671,55 +2679,69 @@ function myLeave(c){
     }).catch(function(){ go.disabled = false; go.textContent = '탈퇴하기'; toast('탈퇴를 처리하지 못했어요. 잠시 뒤 다시 해 주세요'); });
   });
 }
-/* 운영자 전용: 주문 목록과 환불 (admins 표에 있는 계정에만 '관리' 탭이 보임) */
+/* 운영자면 관리자 화면(/admin) 버튼, 기업 담당자면 '기업 관리' 탭 */
 function myAdmin(c){
-  return c.auth.getSession().then(function(r){
-    var t = r.data && r.data.session && r.data.session.access_token;
+  return tokenOf(c).then(function(t){
     if(!t) return;
-    var load = function(){ return fetch('/api/admin/orders', {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.ok ? x.json() : null; }).catch(function(){ return null; }); };
-    return load().then(function(d){
-      if(!d || !d.ok) return;
-      var tabs = $('.my-tabs'); if(!tabs || $('[data-tab="admin"]')) return;
-      tabs.style.gridTemplateColumns = 'repeat(4,minmax(0,1fr))';
-      tabs.insertAdjacentHTML('beforeend', '<button type="button" role="tab" data-tab="admin">관리</button>');
-      $('#myBody').insertAdjacentHTML('beforeend', '<div class="my-panel" data-panel="admin" hidden></div>');
-      var st = {paid:'결제 완료', partial_refunded:'일부 환불', refunded:'환불 완료', canceled:'취소', ready:'대기'};
-      var draw = function(list){
-        var p = $('[data-panel="admin"]'); if(!p) return;
-        p.innerHTML = '<p class="muted my-note" style="margin:0 0 12px">최근 주문 50건. 환불 금액은 취소·환불정책 기준으로 정해 넣어요.</p>' + (list.length ? '<ul class="my-rows">' + list.map(function(o){
-          var left = o.amount - (o.refund_amount || 0), it = SHOP && SHOP[o.item_id];
-          return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + (o.is_test ? ' <span class="my-tag">테스트</span>' : '') + '</b><span class="muted ol">' + esc(o.buyer_email) + ' · ' + (o.paid_at ? new Date(o.paid_at).toLocaleDateString('ko-KR') : '-') + ' · ' + esc(o.id) + '</span></div>' +
-            '<div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + (o.refund_requested_at && o.status === 'paid' ? ' · 신청 접수' : '') + '</span>' +
-            (left > 0 && (o.status === 'paid' || o.status === 'partial_refunded') ? '<button type="button" class="btn btn-line btn-sm" data-rf="' + esc(o.id) + '" data-left="' + left + '">환불</button>' : '') + '</div></li>'; }).join('') + '</ul>' : '<div class="my-empty"><p class="my-empty-t">주문이 없어요</p></div>');
-        $$('[data-rf]', p).forEach(function(b){ b.addEventListener('click', function(){ refundDlg(b.getAttribute('data-rf'), +b.getAttribute('data-left')); }); });
-      };
-      var refundDlg = function(id, left){
-        fetch('/api/refund?orderId=' + encodeURIComponent(id), {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.json(); }).catch(function(){ return null; }).then(function(q){
-        var sug = q && q.ok && q.amount !== null ? Math.min(q.amount, left) : left;
-        openDialog('<h2>환불</h2><p class="muted" style="margin:0">주문번호 ' + esc(id) + ' · 환불 가능 ' + won(left) + '</p>' +
-          '<form class="form one-col" data-form="refund" novalidate>' + (q && q.ok ? '<p class="rf-rule">정책 계산: ' + (q.amount === null ? '사람 확인 필요' : won(q.amount)) + ' · ' + esc(q.rule) + '</p>' : '') + '<label class="field">환불 금액(원)<input name="amount" inputmode="numeric" required value="' + sug + '"><span class="err">1원부터 ' + won(left) + '까지 넣어 주세요</span></label>' +
-          '<label class="field">사유<input name="reason" required value="고객 요청 환불" maxlength="190"><span class="err">사유를 적어 주세요</span></label>' +
-          '<label class="check"><input type="checkbox" name="revoke" checked><span>수강권도 회수해요</span></label>' +
-          '<div class="lv-btns"><button type="button" class="btn btn-line" data-close>취소</button><button type="submit" class="btn lv-go">환불하기</button></div></form>');
-        var f = $('form[data-form="refund"]');
-        bindForm(f, function(){
-          var amt = parseInt(String(f.elements.amount.value).replace(/[^0-9]/g, ''), 10);
-          if(!(amt > 0 && amt <= left)){ f.elements.amount.closest('.field').classList.add('bad'); return; }
-          var btn = f.querySelector('[type=submit]'); btn.disabled = true;
-          fetch('/api/admin/orders', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify({orderId:id, amount:amt, reason:f.elements.reason.value.trim(), revoke:f.elements.revoke.checked})})
-            .then(function(x){ return x.json(); }).then(function(d){
-              if(!d.ok){ btn.disabled = false; toast('환불하지 못했어요 (' + String(d.message || d.code || '').slice(0, 60) + ')'); return; }
-              closeDialog(); toast(won(d.refunded) + ' 환불했어요' + (d.revoked ? ' · 수강권 회수' : ''));
-              load().then(function(n){ if(n && n.ok) draw(n.orders); });
-            }, function(){ btn.disabled = false; toast('환불하지 못했어요'); });
-        });
-        });
-      };
-      draw(d.orders);
-      var b = $('[data-tab="admin"]');
-      b.addEventListener('click', function(){ MY_TAB = 'admin'; $$('[data-tab]').forEach(function(x){ if(x === b) x.setAttribute('aria-selected','true'); else x.removeAttribute('aria-selected'); }); $$('.my-panel').forEach(function(pn){ pn.hidden = pn.getAttribute('data-panel') !== 'admin'; }); });
-      if(MY_TAB === 'admin') b.click();
+    fetch('/api/admin/data?r=me', {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.ok ? x.json() : null; }).catch(function(){ return null; }).then(function(d){
+      if(!d || !d.ok || $('.my-adm')) return;
+      var h = $('.my-outb'); if(h) h.insertAdjacentHTML('beforebegin', '<a class="btn btn-lime btn-sm my-adm" href="/admin">관리자 화면</a>');
+      var st = $('.my-set'); if(st) st.insertAdjacentHTML('afterbegin', '<li><span class="muted">운영자</span><a class="btn btn-line btn-sm" href="/admin">관리자 화면</a></li>');
     });
+    var call = function(body){ return fetch('/api/company', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify(body)}).then(function(x){ return x.json(); }).then(function(d){ if(!d.ok){ toast({NO_SEATS:'남은 수강권이 없어요', SEAT_EXPIRED:'이용 기간이 끝난 수강권이에요'}[d.code] || '처리하지 못했어요'); throw new Error(d.code); } return d; }); };
+    var load = function(id){ return fetch('/api/company' + (id ? '?id=' + encodeURIComponent(id) : ''), {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.ok ? x.json() : null; }).catch(function(){ return null; }); };
+    return load().then(function(d){
+      if(!d || !d.ok || !d.company) return;
+      var tabs = $('.my-tabs'); if(!tabs || $('[data-tab="company"]')) return;
+      tabs.style.gridTemplateColumns = 'repeat(4,minmax(0,1fr))';
+      tabs.insertAdjacentHTML('beforeend', '<button type="button" role="tab" data-tab="company">기업 관리</button>');
+      $('#myBody').insertAdjacentHTML('beforeend', '<div class="my-panel" data-panel="company" hidden></div>');
+      var draw = function(d){
+        var p = $('[data-panel="company"]'), cid = d.company.id, cn = function(id){ var x = cById(id); return x ? x.title : id; };
+        p.innerHTML = (d.list.length > 1 ? '<p><select class="co-sel">' + d.list.map(function(x){ return '<option value="' + x.id + '"' + (x.id === cid ? ' selected' : '') + '>' + esc(x.name) + '</option>'; }).join('') + '</select></p>' : '') +
+          '<div class="co-head"><div><p class="my-name ol">' + esc(d.company.name) + '</p><p class="muted ol">구성원에게는 진도율과 수료 여부만 보여요. 질문·실습 내용은 보이지 않아요.</p></div><button type="button" class="btn btn-lime btn-sm" data-inv>구성원 초대</button></div>' +
+          '<ul class="my-stats co-seats">' + (d.seats.length ? d.seats.map(function(s){ return '<li><b>' + s.used + '/' + s.total + '</b><span class="ol">' + esc(cn(s.course_id)) + (s.expires_at ? ' · ' + new Date(s.expires_at).toLocaleDateString('ko-KR') + '까지' : '') + '</span></li>'; }).join('') : '<li><span>아직 받은 수강권이 없어요</span></li>') + '</ul>' +
+          (d.members.length ? '<ul class="my-rows co-mem">' + d.members.map(function(m){
+            return '<li><div><b class="ol">' + esc(m.name || m.email) + (m.dept ? ' <span class="muted">' + esc(m.dept) + '</span>' : '') + '</b><span class="muted ol">' + esc(m.email) + ' · ' + (m.status === 'active' ? '가입 완료' : '초대함 (가입 전)') + '</span>' +
+              m.assigned.map(function(a){ return '<span class="co-a"><span class="ol">' + esc(cn(a.course_id)) + '</span>' + (m.status === 'active' ? '<span class="my-bar co-bar"><i style="width:' + (a.pct || 0) + '%"></i></span><span class="muted">' + (a.pct || 0) + '%' + (a.done ? ' · 수료' : '') + '</span>' : '') + '<button type="button" class="lnk" data-un="' + m.id + ':' + a.seat_id + '">회수</button></span>'; }).join('') + '</div>' +
+              '<div class="my-r-end"><select class="co-as" data-as="' + m.id + '"><option value="">강의 배정</option>' + d.seats.filter(function(s){ return !m.assigned.some(function(a){ return a.seat_id === s.id; }); }).map(function(s){ return '<option value="' + s.id + '"' + (s.used >= s.total ? ' disabled' : '') + '>' + esc(cn(s.course_id)) + ' (' + (s.total - s.used) + ' 남음)</option>'; }).join('') + '</select><button type="button" class="lnk" data-rm="' + m.id + '">빼기</button></div></li>'; }).join('') + '</ul>'
+            : '<div class="my-empty"><p class="my-empty-t">구성원이 없어요</p><p class="muted">이메일로 초대하면, 같은 이메일로 가입할 때 자동으로 연결돼요.</p></div>');
+        var re = function(){ load(cid).then(function(n){ if(n && n.ok) draw(n); }); };
+        var sel = $('.co-sel', p); if(sel) sel.onchange = function(){ load(sel.value).then(function(n){ if(n && n.ok) draw(n); }); };
+        $('[data-inv]', p).onclick = function(){
+          openDialog('<h2>구성원 초대</h2><form class="form one-col" data-form="inv" novalidate><label class="field">한 줄에 한 명: 이메일, 이름, 부서<textarea name="list" required placeholder="kim@company.com, 김하나, 인사팀"></textarea><span class="err">이메일을 한 줄에 하나씩 넣어 주세요</span></label><p class="muted" style="margin:0;font-size:14px">초대한 이메일로 CHA&amp;I에 가입·로그인하면 자동으로 연결되고, 배정한 강의가 그 사람의 내 학습에 들어가요.</p><button class="btn btn-lime" type="submit">초대하기</button></form>');
+          var f = $('form[data-form="inv"]');
+          bindForm(f, function(){
+            var ppl = f.elements.list.value.split(/\n/).map(function(l){ var x = l.split(/[,\t]/).map(function(v){ return v.trim(); }); return {email:x[0], name:x[1] || '', dept:x[2] || ''}; }).filter(function(x){ return /@/.test(x.email); });
+            if(!ppl.length){ f.elements.list.closest('.field').classList.add('bad'); return; }
+            call({action:'invite', companyId:cid, people:ppl}).then(function(r){ closeDialog(); toast(r.added + '명 초대했어요'); re(); });
+          });
+        };
+        $$('[data-as]', p).forEach(function(s){ s.onchange = function(){ if(!s.value) return; call({action:'assign', companyId:cid, memberId:+s.getAttribute('data-as'), seatId:+s.value}).then(function(){ toast('배정했어요'); re(); }, function(){ s.value = ''; }); }; });
+        $$('[data-un]', p).forEach(function(b){ b.onclick = function(){ var v = b.getAttribute('data-un').split(':'); if(!confirm('이 강의 배정을 회수할까요?')) return; call({action:'unassign', companyId:cid, memberId:+v[0], seatId:+v[1]}).then(function(){ toast('회수했어요'); re(); }); }; });
+        $$('[data-rm]', p).forEach(function(b){ b.onclick = function(){ if(!confirm('구성원에서 뺄까요? 배정된 강의도 모두 회수돼요.')) return; call({action:'remove', companyId:cid, memberId:+b.getAttribute('data-rm')}).then(function(){ toast('뺐어요'); re(); }); }; });
+      };
+      draw(d);
+      var b = $('[data-tab="company"]');
+      b.addEventListener('click', function(){ MY_TAB = 'company'; $$('[data-tab]').forEach(function(x){ if(x === b) x.setAttribute('aria-selected','true'); else x.removeAttribute('aria-selected'); }); $$('.my-panel').forEach(function(pn){ pn.hidden = pn.getAttribute('data-panel') !== 'company'; }); });
+      if(MY_TAB === 'company') b.click();
+    });
+  });
+}
+/* 차 키트 배송지 입력 (발송 전까지 수정 가능) */
+function myShip(c, o, done){
+  openDialog('<h2>차 키트 배송지</h2><form class="form one-col" data-form="ship" novalidate>' +
+    '<label class="field">받는 분<input name="name" required autocomplete="name" value="' + esc(o.ship_name || '') + '"><span class="err">받는 분을 적어 주세요</span></label>' +
+    '<label class="field">휴대폰 번호<input name="phone" required inputmode="numeric" autocomplete="tel" placeholder="01012345678" value="' + esc(o.ship_phone || '') + '"><span class="err">휴대폰 번호를 확인해 주세요</span></label>' +
+    '<label class="field">주소<input name="addr" required autocomplete="street-address" placeholder="도로명 주소와 상세 주소" value="' + esc(o.ship_addr || '') + '"><span class="err">주소를 적어 주세요</span></label>' +
+    '<label class="field">배송 요청 (선택)<input name="memo" maxlength="100" value="' + esc(o.ship_memo || '') + '"></label>' +
+    '<p class="muted" style="margin:0;font-size:14px">배송 정보는 발송 후 3개월 동안만 보관해요.</p><button class="btn btn-lime" type="submit">저장하기</button></form>');
+  var f = $('form[data-form="ship"]');
+  bindForm(f, function(){
+    var ph = f.elements.phone.value.replace(/[^0-9]/g, '');
+    if(!/^01[0-9]{8,9}$/.test(ph)){ f.elements.phone.closest('.field').classList.add('bad'); return; }
+    tokenOf(c).then(function(t){ return fetch('/api/shipping', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify({orderId:o.id, name:f.elements.name.value, phone:ph, addr:f.elements.addr.value, memo:f.elements.memo.value})}).then(function(x){ return x.json(); }); })
+      .then(function(d){ if(!d.ok){ toast(d.code === 'SHIPPED' ? '이미 발송해서 바꿀 수 없어요' : '저장하지 못했어요'); return; } closeDialog(); toast('배송지를 저장했어요'); done(); });
   });
 }
 /* ===== 제안서 받기 (짧은 폼) ===== */

@@ -51,7 +51,8 @@ async function record({ orderId, item, itemId, qty, amount, data, mode, buyer, t
     if (!o.ok) { if (!o.skip) console.error('orders insert', o.status, o.text); return { saved: false }; }
     let enrolled = false;
     if (u && item.grants) {
-      const e = await sbInsert('enrollments', { user_id: u.id, course_id: item.grants, source: 'purchase', order_id: orderId }, 'user_id,course_id,source');
+      const ex = await fetch(SB_URL + '/rest/v1/enrollments?select=id&revoked_at=is.null&source=eq.purchase&user_id=eq.' + u.id + '&course_id=eq.' + encodeURIComponent(item.grants), { headers: { apikey: process.env.SUPABASE_SECRET_KEY, Authorization: 'Bearer ' + process.env.SUPABASE_SECRET_KEY } }).then(r => r.json()).catch(() => []);
+      const e = Array.isArray(ex) && ex.length ? { ok: true } : await sbInsert('enrollments', { user_id: u.id, course_id: item.grants, source: 'purchase', order_id: orderId });
       if (!e.ok) console.error('enrollments insert', e.status, e.text); else enrolled = true;
     }
     return { saved: true, member: !!u, enrolled };
