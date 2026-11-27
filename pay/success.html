@@ -40,7 +40,8 @@ p{margin:0 0 14px}.mut{color:var(--mut);font-size:14px}
   .then(function(d){
     history.replaceState(null,'',location.pathname);   /* 주소창에서 결제 키 지우기 */
     if(d.ok){
-      if(d.mode==='test') show('테스트 결제가 완료됐어요','테스트 모드라 실제로 청구되지 않았어요. 결제 흐름 확인용이에요.'); else show('결제가 완료됐어요','안내 메일과 함께 담당자가 일정을 연락드릴게요.');
+      if(d.waiting){show('입금을 기다리고 있어요','아래 계좌로 기한 안에 입금하면 자동으로 결제가 완료되고 메일로 알려 드려요.');var v=d.vbank||{};var dl0=$('dl');[['입금 은행',v.bank],['계좌번호',v.account],['예금주',v.holder],['입금 기한',v.due?new Date(v.due).toLocaleString('ko-KR'):'']].forEach(function(x){if(!x[1])return;var a=document.createElement('dt');a.textContent=x[0];var b=document.createElement('dd');b.textContent=x[1];dl0.appendChild(a);dl0.appendChild(b);});}
+      else if(d.mode==='test') show('테스트 결제가 완료됐어요','테스트 모드라 실제로 청구되지 않았어요. 결제 흐름 확인용이에요.'); else show('결제가 완료됐어요','안내 메일과 함께 담당자가 일정을 연락드릴게요.');
       var dl=$('dl');[['주문 번호',d.orderId],['상품',d.orderName],['금액',Number(d.amount).toLocaleString('ko-KR')+'원'],['결제 수단',d.method]].forEach(function(x){if(!x[1])return;var a=document.createElement('dt');a.textContent=x[0];var b=document.createElement('dd');b.textContent=x[1];dl.appendChild(a);dl.appendChild(b);});
       $('box').hidden=false;$('n').textContent=(d.grants?(d.enrolled?'수강권이 내 학습에 들어갔어요. ':'같은 이메일로 회원가입·로그인하면 내 학습에서 강의를 볼 수 있어요. '):'')+'취소·환불은 취소·환불정책의 기준을 따라요.';if(d.grants){var bt=document.querySelector('.btns');bt.insertAdjacentHTML('afterbegin','<a class="btn p" href="/my">내 학습으로</a>');bt.children[1].className='btn l';}
     } else if(d.code==='NOT_READY'){

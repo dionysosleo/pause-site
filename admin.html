@@ -45,7 +45,7 @@ tr.click{cursor:pointer}tr.click:hover td{background:#FBFBFA}
 .back{display:inline-flex;align-items:center;gap:4px;color:var(--mut);text-decoration:none;font-size:14px;margin-bottom:10px;cursor:pointer;background:none;border:0;padding:0}
 dialog{border:0;border-radius:20px;padding:24px;width:min(520px,calc(100% - 32px));box-shadow:0 20px 60px rgba(0,0,0,.2)}dialog::backdrop{background:rgba(20,24,28,.45)}
 dialog h3{margin:0 0 14px;font-size:18px}
-.f{display:grid;gap:12px}.f label{display:grid;gap:5px;font-size:14px;font-weight:600}.f label.ck{display:flex;align-items:center;gap:8px;font-weight:400}
+.f{display:grid;gap:12px;min-width:0}.f>*,.f label,.f .row>*{min-width:0}.f input:not([type=checkbox]),.f select,.f textarea{width:100%;min-width:0}.f label{display:grid;gap:5px;font-size:14px;font-weight:600}.f label.ck{display:flex;align-items:center;gap:8px;font-weight:400}
 .f input:not([type=checkbox]),.f select,.f textarea{height:42px;border:1px solid var(--line);border-radius:10px;padding:0 12px;background:#fff;font-weight:400}.f textarea{height:auto;min-height:110px;padding:10px 12px}
 .f .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;flex-wrap:wrap}
@@ -56,7 +56,7 @@ dialog h3{margin:0 0 14px;font-size:18px}
 .dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}.dhead .sub{margin:0}
 .dctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.dctl .ck{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--mut)}
 .seg{display:inline-flex;background:var(--soft);border-radius:999px;padding:3px}.seg button{border:0;background:none;height:32px;min-width:44px;padding:0 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--mut);cursor:pointer}.seg button[aria-selected=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.todo-strip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.todo-strip a{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;background:#FDECEA;color:var(--red);text-decoration:none;font-size:14px;font-weight:600}.todo-strip.ok{color:var(--sage);font-size:14px;font-weight:600}
+.todo-strip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.todo-strip a{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;background:#FDECEA;color:var(--red);text-decoration:none;font-size:14px;font-weight:600}.todo-strip a.amb{background:#FFF4DB;color:var(--amber)}.sel{height:38px;border:1px solid var(--line);border-radius:999px;background:#fff;padding:0 12px;font-weight:600;font-size:14px}.todo-strip.ok{color:var(--sage);font-size:14px;font-weight:600}
 .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .kpi{text-align:left;cursor:pointer;font:inherit;color:inherit;padding:14px 14px 12px}.kpi b{font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kpi.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}.kpi small{display:block;margin-top:2px;font-size:12px}
 .kf{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:6px}.spk{width:64px;height:24px;flex:none}.spk path{fill:none;stroke:var(--sage);stroke-width:1.6}
@@ -95,7 +95,10 @@ var won=function(n){return Number(n||0).toLocaleString('ko-KR')+'원';};
 var day=function(t){return t?new Date(t).toLocaleDateString('ko-KR'):'-';};
 var dt=function(t){return t?new Date(t).toLocaleString('ko-KR',{dateStyle:'short',timeStyle:'short'}):'-';};
 var TOKEN='', ME=null, SHOP={}, COURSES=[];
-var ST={paid:['결제 완료','green'],partial_refunded:['일부 환불','amber'],refunded:['환불 완료',''],canceled:['취소',''],ready:['대기','']};
+var ST={paid:['결제 완료','green'],partial_refunded:['일부 환불','amber'],refunded:['환불 완료',''],canceled:['취소',''],ready:['대기',''],waiting:['입금 대기','amber'],expired:['입금 기한 만료','']};
+var TAX={none:'증빙 없음',tax_invoice:'세금계산서',cash_receipt:'현금영수증',card:'카드 전표'};
+var CAT={biz:'기업 워크샵',salon:'살롱·원데이',cohort:'기수·라이브',vod:'VOD 강의',etc:'기타'};
+function catOf(id){var r=String((SHOP[id]||{}).refund||'');return /기업/.test(r)?'biz':/살롱|원데이/.test(r)?'salon':/기수|라이브|정기/.test(r)?'cohort':/VOD/.test(r)?'vod':'etc';}
 var LOGIN={email:'이메일',kakao:'카카오',google:'구글'};
 var SRC={purchase:'직접 구매',company:'회사 배정',grant:'운영자 부여'};
 var MENU=[['home','대시보드'],['orders','주문·환불'],['members','회원'],['companies','기업'],['courses','강의'],['ship','키트 발송'],['logs','작업 기록']];
@@ -107,7 +110,7 @@ dlg.addEventListener('click',function(e){if(e.target===dlg||e.target.closest('[d
 function api(r,params){var q=Object.keys(params||{}).map(function(k){return '&'+k+'='+encodeURIComponent(params[k]);}).join('');
   return fetch('/api/admin/data?r='+r+q,{headers:{Authorization:'Bearer '+TOKEN}}).then(function(x){return x.json();});}
 function act(body){return fetch('/api/admin/data',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+TOKEN},body:JSON.stringify(body)}).then(function(x){return x.json();}).then(function(d){
-  if(!d.ok){var M={NO_MEMBER:'그 이메일로 가입한 회원이 없어요. 먼저 회원가입을 부탁해 주세요.',NO_SEATS:'남은 수강권이 없어요.',SEAT_EXPIRED:'이용 기간이 끝난 수강권이에요.',TOO_MUCH:'환불 가능 금액보다 많아요.',NOT_REFUNDABLE:'환불할 수 없는 주문이에요.',BAD_REQUEST:'입력값을 확인해 주세요.',BUNNY_NOT_SET:'Bunny Stream이 아직 연결되지 않았어요. Vercel 환경 변수 3개를 넣어 주세요.',MFA_REQUIRED:'2단계 인증이 필요해요. 새로고침해 주세요.'};toast(M[d.code]||('처리하지 못했어요 ('+(d.message||d.code||'')+')'));throw new Error(d.code);}return d;});}
+  if(!d.ok){var M={NO_MEMBER:'그 이메일로 가입한 회원이 없어요. 먼저 회원가입을 부탁해 주세요.',NO_SEATS:'남은 수강권이 없어요.',SEAT_EXPIRED:'이용 기간이 끝난 수강권이에요.',TOO_MUCH:'환불 가능 금액보다 많아요.',NOT_REFUNDABLE:'환불할 수 없는 주문이에요.',BAD_REQUEST:'입력값을 확인해 주세요.',BUNNY_NOT_SET:'Bunny Stream이 아직 연결되지 않았어요. Vercel 환경 변수 3개를 넣어 주세요.',MFA_REQUIRED:'2단계 인증이 필요해요. 새로고침해 주세요.',VBANK_REFUND:'가상계좌 결제는 환불 받을 계좌가 필요해서 토스 상점관리자에서 취소해 주세요. 그 뒤 "토스와 맞추기"를 누르면 여기도 바뀌어요.',PG:'토스에서 취소를 거절했어요. 상점관리자에서 확인해 주세요.'};toast(M[d.code]||('처리하지 못했어요 ('+(d.message||d.code||'')+')'));throw new Error(d.code);}return d;});}
 function tag(s,c){return '<span class="tag '+(c||'')+'">'+esc(s)+'</span>';}
 function pbar(p){return '<span class="pbar"><i style="width:'+(p||0)+'%"></i></span><span class="small">'+(p||0)+'%</span>';}
 
@@ -127,7 +130,8 @@ window.addEventListener('hashchange',route);
 
 var V={};
 /* ── 대시보드: 기간(일·주·월·년) 단위로 매출·주문·회원·학습을 보고, 직전 같은 기간과 비교 ── */
-var DASH={g:'d',test:false,metric:'net',data:null};
+var DASH={g:'d',test:false,metric:'net',cat:'',data:null};
+var REV={paid:1,partial_refunded:1,refunded:1};  /* 매출로 세는 상태 (입금 대기·만료·취소는 뺌) */
 var GR={d:{n:30,label:'일',range:'최근 30일',prev:'직전 30일'},w:{n:12,label:'주',range:'최근 12주',prev:'직전 12주'},m:{n:12,label:'월',range:'최근 12개월',prev:'직전 12개월'},y:{n:5,label:'년',range:'최근 5년',prev:'직전 5년'}};
 var METRIC={net:['순매출','환불을 뺀 금액','won'],gross:['결제 금액','결제된 금액 합계','won'],orders:['주문','결제 완료 건수','cnt'],aov:['객단가','주문 1건 평균 결제 금액','won'],refund:['환불','이 기간에 처리한 환불 금액','won'],signup:['신규 회원','가입한 회원 수','ppl']};
 function kst(t){return new Date(Date.parse(t)+9*3600e3);}
@@ -157,7 +161,7 @@ function aggregate(D,g){
   var n=GR[g].n,all=buckets(g,n*2),cur=all.slice(n),idx={};all.forEach(function(b,i){idx[b.k]=i;});
   var z=function(){return all.map(function(){return 0;});};
   var A={gross:z(),refund:z(),orders:z(),signup:z(),learners:all.map(function(){return {};}),done:z()};
-  var O=D.orders.filter(function(o){return DASH.test||!o.test;});
+  var O=D.orders.filter(function(o){return REV[o.status]&&(DASH.test||!o.test)&&(!DASH.cat||o.cat===DASH.cat);});
   O.forEach(function(o){if(!o.paid)return;var i=idx[bkey(kst(o.paid),g)];if(i!=null){A.gross[i]+=o.amount;A.orders[i]++;}
     if(o.refund){var j=idx[bkey(kst(o.refunded||o.paid),g)];if(j!=null)A.refund[j]+=o.refund;}});
   D.members.forEach(function(p){var i=idx[bkey(kst(p.at),g)];if(i!=null)A.signup[i]++;});
@@ -217,6 +221,8 @@ V.home=function(m){
     var mk=METRIC[DASH.metric];
     /* 상품별·결제수단·강의별 */
     var byItem={},byMethod={};R.orders.forEach(function(o){var it=byItem[o.item]||(byItem[o.item]={k:itemName(o.item),v:0,n:0});it.v+=o.amount-o.refund;it.n++;var mm=o.method||'기타';byMethod[mm]=(byMethod[mm]||0)+o.amount;});
+    var byCat={};D.orders.forEach(function(o){if(!REV[o.status]||(!DASH.test&&o.test)||!o.paid||bkey(kst(o.paid),g)<R.b[0].k)return;byCat[o.cat]=(byCat[o.cat]||0)+o.amount-o.refund;});
+    var cats=Object.keys(byCat).map(function(k){return {k:CAT[k]||k,v:byCat[k],id:k};}).sort(function(a,b){return b.v-a.v;});
     var items=Object.keys(byItem).map(function(k){var x=byItem[k];x.sub=x.n+'건';return x;}).sort(function(a,b){return b.v-a.v;}).slice(0,6);
     var methods=Object.keys(byMethod).map(function(k){return {k:k,v:byMethod[k]};}).sort(function(a,b){return b.v-a.v;});
     var actE=D.enrollments.filter(function(e){return !e.off;}),byCourse={};actE.forEach(function(e){byCourse[e.c]=(byCourse[e.c]||0)+1;});
@@ -227,15 +233,15 @@ V.home=function(m){
     var cum=[],base=D.members.filter(function(x){return bkey(kst(x.at),g)<R.b[0].k;}).length;R.series.signup.forEach(function(v,i){base+=v;cum.push(base);});
     var recentO=D.orders.filter(function(o){return DASH.test||!o.test;}).slice(0,6),recentM=D.members.slice(0,6);
 
-    m.innerHTML='<div class="dhead"><div><h1>대시보드</h1><p class="sub">'+GR[g].range+' · '+GR[g].label+' 단위 · '+GR[g].prev+'과 비교 · 한국 시간 기준'+(tests?' · 테스트 결제 '+tests+'건 '+(DASH.test?'포함':'제외'):'')+'</p></div>'+
-      '<div class="dctl"><div class="seg" role="tablist">'+Object.keys(GR).map(function(k){return '<button role="tab" data-g="'+k+'" aria-selected="'+(k===g)+'">'+GR[k].label+'</button>';}).join('')+'</div>'+
+    m.innerHTML='<div class="dhead"><div><h1>대시보드</h1><p class="sub">'+(DASH.cat?CAT[DASH.cat]+' · ':'')+GR[g].range+' · '+GR[g].label+' 단위 · '+GR[g].prev+'과 비교 · 한국 시간 기준'+(tests?' · 테스트 결제 '+tests+'건 '+(DASH.test?'포함':'제외'):'')+'</p></div>'+
+      '<div class="dctl"><select id="dCat" class="sel" aria-label="분야"><option value="">전체 분야</option>'+Object.keys(CAT).map(function(k){return '<option value="'+k+'"'+(DASH.cat===k?' selected':'')+'>'+CAT[k]+'</option>';}).join('')+'</select><div class="seg" role="tablist">'+Object.keys(GR).map(function(k){return '<button role="tab" data-g="'+k+'" aria-selected="'+(k===g)+'">'+GR[k].label+'</button>';}).join('')+'</div>'+
       (tests?'<label class="ck"><input type="checkbox" id="dTest"'+(DASH.test?' checked':'')+'> 테스트 포함</label>':'')+'<button class="btn s" id="dRe" title="새로고침">↻</button></div></div>'+
-      ((t.refunds||t.ship||t.shipNoAddr)?'<div class="todo-strip">'+(t.refunds?'<a href="#orders/requested">환불 신청 대기 <b>'+t.refunds+'</b></a>':'')+(t.ship?'<a href="#ship">차 키트 발송 대기 <b>'+t.ship+'</b></a>':'')+(t.shipNoAddr?'<a href="#ship">배송지 미입력 <b>'+t.shipNoAddr+'</b></a>':'')+'</div>':'<div class="todo-strip ok">처리할 일이 없어요</div>')+
+      ((t.refunds||t.ship||t.shipNoAddr||t.waiting)?'<div class="todo-strip">'+(t.waiting?'<a class="amb" href="#orders/waiting">가상계좌 입금 대기 <b>'+t.waiting+'</b></a>':'')+(t.refunds?'<a href="#orders/requested">환불 신청 대기 <b>'+t.refunds+'</b></a>':'')+(t.ship?'<a href="#ship">차 키트 발송 대기 <b>'+t.ship+'</b></a>':'')+(t.shipNoAddr?'<a href="#ship">배송지 미입력 <b>'+t.shipNoAddr+'</b></a>':'')+'</div>':'<div class="todo-strip ok">처리할 일이 없어요</div>')+
       '<div class="kpis">'+kpi('net',c.net)+kpi('gross',c.gross)+kpi('orders',c.orders)+kpi('aov',c.aov)+kpi('refund',c.refund,true,c.gross?'환불률 '+(c.refund/c.gross*100).toFixed(1)+'%':'')+kpi('signup',c.signup)+'</div>'+
       '<section class="box cbox"><div class="ch"><div><h3>'+mk[0]+' 추이</h3><p class="small muted">'+mk[1]+' · 위 카드를 누르면 지표가 바뀌어요</p></div><b class="tot">'+fmtM(c[DASH.metric],mk[2])+'</b></div><div class="chart" id="cMain"></div></section>'+
       '<section class="box cbox"><div class="ch"><div><h3>회원 추이</h3><p class="small muted"><i class="lg br"></i>신규 가입 <i class="lg ln"></i>누적 회원(오른쪽 눈금)</p></div><b class="tot">'+tm.toLocaleString('ko-KR')+'명</b></div><div class="chart" id="cMem"></div></section>'+
       '<div class="grid3">'+
-        '<section class="box"><h3>상품별 순매출</h3>'+listBars(items,won)+'</section>'+
+        '<section class="box"><h3>분야별 순매출</h3>'+listBars(cats,won)+'<h4>상품별 순매출'+(DASH.cat?' · '+CAT[DASH.cat]:'')+'</h4>'+listBars(items,won)+'</section>'+
         '<section class="box"><h3>결제 수단</h3>'+listBars(methods,won)+'</section>'+
         '<section class="box"><h3>학습 현황</h3><dl class="kv2"><dt>수강 중인 수강권</dt><dd>'+actE.length+'개</dd><dt>이 기간 학습한 회원</dt><dd>'+c.learners+'명 '+delta(c.learners,p.learners)+'</dd><dt>이 기간 완료한 편</dt><dd>'+c.done+'편 '+delta(c.done,p.done)+'</dd><dt>수강권 경로</dt><dd>'+(Object.keys(src).map(function(k){return (SRC[k]||k)+' '+src[k];}).join(' · ')||'-')+'</dd></dl><h4>강의별 수강생</h4>'+listBars(courses,function(v){return v+'명';})+'</section>'+
       '</div>'+
@@ -254,6 +260,7 @@ V.home=function(m){
     $$('[data-g]',m).forEach(function(b){b.onclick=function(){DASH.g=b.getAttribute('data-g');render();};});
     $$('[data-mt]',m).forEach(function(b){b.onclick=function(){if(b.hasAttribute('data-nochart')){$('#cMem',m).scrollIntoView({behavior:'smooth',block:'center'});return;}DASH.metric=b.getAttribute('data-mt');render();};});
     $$('[data-mem]',m).forEach(function(r){r.onclick=function(){location.hash='members/'+r.getAttribute('data-mem');};});
+    $('#dCat',m).onchange=function(){DASH.cat=this.value;render();};
     var tb=$('#dTest',m);if(tb)tb.onchange=function(){DASH.test=tb.checked;render();};
     $('#dRe',m).onclick=function(){load();};
   };
@@ -263,27 +270,53 @@ V.home=function(m){
 
 /* ── 주문·환불 ── */
 V.orders=function(m,pre){
-  m.innerHTML='<h1>주문·환불</h1><p class="sub">환불 금액은 취소·환불정책으로 계산한 값이 기본으로 들어가요. 운영사 사정이면 전액으로 바꿔도 돼요.</p>'+
-    '<div class="bar"><input type="search" id="oq" placeholder="이메일, 이름, 주문번호"><select id="os"><option value="">전체 상태</option><option value="requested">환불 신청 대기</option><option value="paid">결제 완료</option><option value="partial_refunded">일부 환불</option><option value="refunded">환불 완료</option></select><label><input type="checkbox" id="ot"> 테스트 결제 숨기기</label><button class="btn" id="oCsv" style="margin-left:auto">엑셀로 내보내기</button></div><div id="ol"></div>';
-  $('#oCsv').onclick=exportCsv;
-  if(pre==='requested')$('#os').value='requested';
+  m.innerHTML='<div class="dhead"><div><h1>주문·환불</h1><p class="sub" style="margin:0">결제창 결제는 자동으로 들어오고, 기업 워크샵처럼 계좌이체·세금계산서로 받은 돈은 "직접 등록"으로 넣어요.</p></div><div class="dctl"><button class="btn" id="oCsv">엑셀로 내보내기</button><button class="btn p" id="oNew">+ 직접 등록</button></div></div>'+
+    '<div class="bar"><input type="search" id="oq" placeholder="이메일, 이름, 주문번호"><select id="os"><option value="">전체 상태</option><option value="requested">환불 신청 대기</option><option value="waiting">입금 대기 (가상계좌)</option><option value="paid">결제 완료</option><option value="partial_refunded">일부 환불</option><option value="refunded">환불 완료</option><option value="expired">입금 기한 만료</option><option value="manual">직접 등록 거래</option></select><label><input type="checkbox" id="ot"> 테스트 결제 숨기기</label></div><div id="ol"></div>';
+  $('#oCsv').onclick=exportCsv;$('#oNew').onclick=function(){manualOrder(load);};
+  if(pre)$('#os').value=pre;
   var load=function(){api('orders',{q:$('#oq').value,status:$('#os').value,test:$('#ot').checked?'0':''}).then(function(d){
     var L=d.orders;$('#ol').innerHTML=L.length?'<div class="tw"><table><thead><tr><th>결제일</th><th>상품</th><th>주문자</th><th class="num">금액</th><th>상태</th><th></th></tr></thead><tbody>'+L.map(function(o){
-      var left=o.amount-(o.refund_amount||0),s=ST[o.status]||[o.status,''];
-      return '<tr><td class="nowrap">'+day(o.paid_at)+'</td><td>'+esc(itemName(o.item_id))+(o.is_test?' '+tag('테스트'):'')+'<div class="small muted">'+esc(o.id)+'</div></td><td>'+esc(o.buyer_name||'')+'<div class="small muted">'+esc(o.buyer_email)+(o.user_id?'':' · 비회원')+'</div></td>'+
-        '<td class="num">'+won(o.amount)+(o.refund_amount?'<div class="small muted">환불 '+won(o.refund_amount)+'</div>':'')+'</td><td>'+tag(s[0],s[1])+(o.refund_requested_at&&o.status==='paid'?' '+tag('환불 신청','red'):'')+(o.refund_request_note?'<div class="small muted">'+esc(o.refund_request_note)+'</div>':'')+'</td>'+
-        '<td class="num">'+(left>0&&(o.status==='paid'||o.status==='partial_refunded')?'<button class="btn s" data-rf="'+esc(o.id)+'" data-left="'+left+'">환불</button>':'')+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">주문이 없어요</div>';
-    $$('[data-rf]',m).forEach(function(b){b.onclick=function(){refund(b.getAttribute('data-rf'),+b.getAttribute('data-left'),load);};});
+      var left=o.amount-(o.refund_amount||0),s=ST[o.status]||[o.status,''],man=o.source==='manual',vb=o.vbank||null;
+      var acts='';
+      if(left>0&&(o.status==='paid'||o.status==='partial_refunded'))acts+='<button class="btn s" data-rf="'+esc(o.id)+'" data-left="'+left+'" data-man="'+(man?1:0)+'">'+(man?'환불 기록':'환불')+'</button>';
+      if(!man&&!o.is_test)acts+=' <button class="btn s" data-sync="'+esc(o.id)+'" title="토스 상점관리자의 상태와 맞춰요">토스와 맞추기</button>';
+      acts+=' <button class="btn s" data-memo="'+esc(o.id)+'">메모</button>';
+      return '<tr><td class="nowrap">'+(o.paid_at?day(o.paid_at):'<span class="muted">'+day(o.created_at)+' 주문</span>')+'</td><td>'+esc(itemName(o.item_id))+(o.qty>1?' <span class="muted">· '+o.qty+(SHOP[o.item_id]&&SHOP[o.item_id].head?'명':'개')+'</span>':'')+(o.is_test?' '+tag('테스트'):'')+(man?' '+tag('직접 등록'):'')+'<div class="small muted">'+esc(o.id)+' · '+esc(CAT[catOf(o.item_id)])+'</div>'+(o.memo?'<div class="small">'+esc(o.memo)+'</div>':'')+'</td><td>'+esc(o.buyer_name||'')+'<div class="small muted">'+esc(o.buyer_email)+(o.user_id?'':' · 비회원')+'</div></td>'+
+        '<td class="num">'+won(o.amount)+'<div class="small muted">'+esc(o.method||'')+(o.tax_doc&&o.tax_doc!=='none'?' · '+TAX[o.tax_doc]:'')+'</div>'+(o.refund_amount?'<div class="small muted">환불 '+won(o.refund_amount)+'</div>':'')+'</td><td>'+tag(s[0],s[1])+(o.refund_requested_at&&o.status==='paid'?' '+tag('환불 신청','red'):'')+(o.status==='waiting'&&vb?'<div class="small muted">'+esc(vb.bank)+' '+esc(vb.account)+(o.due_at?' · '+dt(o.due_at)+'까지':'')+'</div>':'')+(o.refund_request_note?'<div class="small muted">'+esc(o.refund_request_note)+'</div>':'')+'</td>'+
+        '<td class="num">'+acts+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">주문이 없어요</div>';
+    $$('[data-rf]',m).forEach(function(b){b.onclick=function(){refund(b.getAttribute('data-rf'),+b.getAttribute('data-left'),load,b.getAttribute('data-man')==='1');};});
+    $$('[data-sync]',m).forEach(function(b){b.onclick=function(){b.disabled=true;act({action:'pg_sync',orderId:b.getAttribute('data-sync')}).then(function(d){var R={paid:'입금 확인 → 결제 완료로 바꿨어요',refunded:'토스 취소 내역을 반영했어요 (전액 환불)',partial_refunded:'토스 부분취소 내역을 반영했어요',expired:'입금 기한이 지나 만료로 바꿨어요',canceled:'취소로 바꿨어요',synced:'토스와 같아요. 바뀐 게 없어요',no_payment:'토스에서 이 결제를 찾지 못했어요 (테스트 키·운영 키가 다른지 확인)',no_order:'주문을 찾지 못했어요'};toast(R[d.result]||d.result);load();},function(){b.disabled=false;});};});
+    $$('[data-memo]',m).forEach(function(b){b.onclick=function(){var o=L.find(function(x){return x.id===b.getAttribute('data-memo');});
+      openDlg('<h3>메모·증빙</h3><div class="f"><label>메모 (회사명, 계약 건, 담당자 등)<textarea id="mM" maxlength="300">'+esc(o.memo||'')+'</textarea></label><label>발행한 증빙<select id="mT">'+Object.keys(TAX).map(function(k){return '<option value="'+k+'"'+((o.tax_doc||'none')===k?' selected':'')+'>'+TAX[k]+'</option>';}).join('')+'</select></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="mGo">저장</button></div></div>');
+      $('#mGo').onclick=function(){act({action:'order_memo',orderId:o.id,memo:$('#mM').value.trim(),taxDoc:$('#mT').value}).then(function(){closeDlg();toast('저장했어요');load();});};};});
   });};
   var tm;$('#oq').oninput=function(){clearTimeout(tm);tm=setTimeout(load,300);};$('#os').onchange=load;$('#ot').onchange=load;load();
 };
-function refund(id,left,done){
+function manualOrder(done){
+  var today=new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
+  var groups={};Object.keys(SHOP).forEach(function(k){var c=catOf(k);(groups[c]=groups[c]||[]).push(k);});
+  openDlg('<h3>매출 직접 등록</h3><div class="f"><div class="note">결제창을 거치지 않은 거래(기업 워크샵 계좌이체, 세금계산서 발행 건 등)를 매출에 넣어요. 토스 결제는 자동으로 들어오니 여기 넣지 마세요.</div>'+
+    '<label>상품<select id="nI">'+['biz','salon','cohort','vod','etc'].filter(function(c){return groups[c];}).map(function(c){return '<optgroup label="'+CAT[c]+'">'+groups[c].map(function(k){return '<option value="'+esc(k)+'">'+esc(itemName(k))+'</option>';}).join('')+'</optgroup>';}).join('')+'</select></label>'+
+    '<div class="row"><label>받은 금액(원, 부가세 포함)<input id="nA" inputmode="numeric" placeholder="예: 5500000"></label><label>인원·수량<input id="nQ" inputmode="numeric" value="1"></label></div>'+
+    '<div class="row"><label>회사·주문자 이름<input id="nN" maxlength="80"></label><label>담당자 이메일<input id="nE" type="email" maxlength="100"></label></div>'+
+    '<div class="row"><label>받은 날<input id="nD" type="date" value="'+today+'"></label><label>받은 방법<select id="nM"><option>계좌이체</option><option>세금계산서</option><option>현금</option><option>카드(단말기)</option><option>기타</option></select></label></div>'+
+    '<label>발행한 증빙<select id="nT">'+Object.keys(TAX).map(function(k){return '<option value="'+k+'"'+(k==='tax_invoice'?' selected':'')+'>'+TAX[k]+'</option>';}).join('')+'</select></label>'+
+    '<label>메모<input id="nMemo" maxlength="300" placeholder="예: OO전자 HR팀 11/20 워크샵, 견적서 v2"></label>'+
+    '<label class="ck"><input type="checkbox" id="nMail"> 주문 확인 메일 보내기</label>'+
+    '<p class="small muted" style="margin:0">이메일이 회원과 같으면 그 회원 주문으로 묶이고, 강의 상품이면 수강권도 바로 생겨요.</p>'+
+    '<div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="nGo">등록</button></div></div>');
+  var I=$('#nI'),A=$('#nA'),fill=function(){var it=SHOP[I.value]||{};if(!A.value||A._auto){A.value=it.price||'';A._auto=true;}};I.onchange=function(){A._auto=true;A.value='';fill();};A.oninput=function(){A._auto=false;};fill();
+  $('#nGo').onclick=function(){var amt=parseInt(String(A.value).replace(/[^0-9]/g,''),10);if(!(amt>0)){toast('금액을 넣어 주세요');return;}
+    var b=this;b.disabled=true;act({action:'order_manual',itemId:I.value,amount:amt,qty:parseInt($('#nQ').value,10)||1,name:$('#nN').value.trim(),email:$('#nE').value.trim(),paidAt:$('#nD').value,method:$('#nM').value,taxDoc:$('#nT').value,memo:$('#nMemo').value.trim(),mail:$('#nMail').checked})
+      .then(function(d){closeDlg();toast('등록했어요 ('+d.id+')'+(d.enrolled?' · 수강권 생성':''));done&&done();},function(){b.disabled=false;});};
+}
+function refund(id,left,done,man){
   fetch('/api/refund?orderId='+encodeURIComponent(id),{headers:{Authorization:'Bearer '+TOKEN}}).then(function(x){return x.json();}).catch(function(){return null;}).then(function(q){
     var sug=q&&q.ok&&q.amount!==null?Math.min(q.amount,left):left;
-    openDlg('<h3>환불</h3><div class="f">'+(q&&q.ok?'<div class="note">정책 계산: <b>'+(q.amount===null?'사람 확인 필요':won(q.amount))+'</b><br>'+esc(q.rule)+(q.total?'<br>시청 '+q.watched+'/'+q.total+'편 · 수강 '+q.days+'일째':'')+'</div>':'')+
+    openDlg('<h3>'+(man?'환불 기록':'환불')+'</h3><div class="f">'+(man?'<div class="note">직접 등록 거래라 돈은 계좌로 따로 돌려주고, 여기서는 기록만 남겨요.</div>':'')+(q&&q.ok?'<div class="note">정책 계산: <b>'+(q.amount===null?'사람 확인 필요':won(q.amount))+'</b><br>'+esc(q.rule)+(q.total?'<br>시청 '+q.watched+'/'+q.total+'편 · 수강 '+q.days+'일째':'')+'</div>':'')+
       '<p class="small muted" style="margin:0">주문번호 '+esc(id)+' · 환불 가능 '+won(left)+'</p>'+
       '<label>환불 금액(원)<input id="rA" inputmode="numeric" value="'+sug+'"></label><label>사유<input id="rR" value="고객 요청 환불" maxlength="190"></label><label class="ck"><input type="checkbox" id="rV" checked> 수강권도 회수해요</label>'+
-      '<div class="acts"><button class="btn" data-close>닫기</button><button class="btn d" id="rGo">환불하기</button></div></div>');
+      '<div class="acts"><button class="btn" data-close>닫기</button><button class="btn d" id="rGo">'+(man?'기록하기':'환불하기')+'</button></div></div>');
     $('#rGo').onclick=function(){var a=parseInt(String($('#rA').value).replace(/[^0-9]/g,''),10);if(!(a>0&&a<=left)){toast('1원부터 '+won(left)+'까지 넣어 주세요');return;}
       this.disabled=true;var b=this;act({action:'refund',orderId:id,amount:a,reason:$('#rR').value.trim()||'운영자 환불',revoke:$('#rV').checked}).then(function(d){closeDlg();toast(won(d.refunded)+' 환불했어요'+(d.revoked?' · 수강권 회수':''));done&&done();},function(){b.disabled=false;});};
   });

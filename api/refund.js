@@ -19,6 +19,9 @@ module.exports = async (req, res) => {
     if (!q.ok) return S.send(res, 404, q);
     const mine = q.order.user_id === u.id;
     if (!mine && !(req.method === 'GET' && await S.isAdminStrict(u, S.bearer(req)))) return S.send(res, 404, { ok: false, code: 'NO_ORDER' });
+    /* 결제창 카드·간편결제만 바로 취소. 가상계좌(환불 계좌 필요)·직접 등록 거래는 신청으로 받아 운영자가 처리 */
+    const po = (await S.rest('GET', 'orders?select=payment_key,method,source&id=eq.' + encodeURIComponent(orderId))).data[0] || {};
+    if (q.auto && (!po.payment_key || po.source === 'manual' || po.method === '가상계좌')) { q.auto = false; q.rule += ' (이 결제 수단은 운영자가 확인 후 환불해요)'; }
     const view = { ok: true, orderId, paid: q.paid, already: q.already, amount: q.amount, auto: q.auto, rule: q.rule, days: q.days, watched: q.watched, total: q.total, requested: !!q.order.refund_requested_at };
     if (req.method === 'GET') return S.send(res, 200, view);
     if (!q.auto) {

@@ -6,6 +6,10 @@ const S = require('../_sb.js');
 const T = require('../_toss.js');
 const CATALOG = require('../../shop/catalog.json').items;
 const B = require('../_bunny.js');
+const W = require('../payments/webhook.js');
+const FF = require('../_fulfill.js');
+/* 상품 분야: 카탈로그 환불 기준 문구로 나눔 */
+const catOf = id => { const r = String((CATALOG[id] || {}).refund || ''); return /기업/.test(r) ? 'biz' : /살롱|원데이/.test(r) ? 'salon' : /기수|라이브|정기/.test(r) ? 'cohort' : /VOD/.test(r) ? 'vod' : 'etc'; };
 
 const enc = encodeURIComponent;
 const isKitItem = id => /차 키트/.test(String((CATALOG[id] || {}).note || ''));
@@ -24,33 +28,35 @@ const READ = {
     return { logs: await get(f) };
   },
   async orders_csv() {
-    return { orders: await get('orders?select=id,paid_at,item_id,qty,amount,refund_amount,status,is_test,buyer_name,buyer_email,method,refunded_at,refund_reason&status=neq.ready&order=paid_at.desc&limit=5000') };
+    return { orders: await get('orders?select=id,paid_at,item_id,qty,amount,refund_amount,status,is_test,buyer_name,buyer_email,method,source,tax_doc,memo,refunded_at,refund_reason&status=neq.ready&order=paid_at.desc&limit=5000') };
   },
   /* 대시보드: 기간별(일·주·월·년) 집계는 화면에서 함. 여기서는 필요한 칸만 가볍게 내려줌 */
   async dashboard() {
     const [os, ps, en, pr] = await Promise.all([
-      get('orders?select=id,item_id,qty,amount,refund_amount,status,is_test,method,paid_at,refunded_at,refund_requested_at,shipped_at,ship_addr,buyer_name,buyer_email,user_id&status=neq.ready&order=paid_at.desc&limit=10000'),
+      get('orders?select=id,item_id,qty,amount,refund_amount,status,is_test,method,source,paid_at,refunded_at,refund_requested_at,shipped_at,ship_addr,buyer_name,buyer_email,user_id,due_at&status=neq.ready&order=created_at.desc&limit=10000'),
       get('profiles?select=id,name,email,login_method,marketing_ok,created_at&order=created_at.desc&limit=20000'),
       get('enrollments?select=user_id,course_id,source,started_at,revoked_at&limit=20000'),
       get('progress?select=user_id,updated_at,completed_at&order=updated_at.desc&limit=50000')
     ]);
     const live = o => o.status === 'paid' || o.status === 'partial_refunded';
     return {
-      orders: os.map(o => ({ id: o.id, item: o.item_id, qty: o.qty, amount: o.amount, refund: o.refund_amount || 0, status: o.status, test: !!o.is_test, method: o.method, paid: o.paid_at, refunded: o.refunded_at, name: o.buyer_name, email: o.buyer_email, member: !!o.user_id })),
+      orders: os.map(o => ({ id: o.id, item: o.item_id, cat: catOf(o.item_id), src: o.source, qty: o.qty, amount: o.amount, refund: o.refund_amount || 0, status: o.status, test: !!o.is_test, method: o.method, paid: o.paid_at, refunded: o.refunded_at, name: o.buyer_name, email: o.buyer_email, member: !!o.user_id })),
       members: ps.map(p => ({ id: p.id, name: p.name, email: p.email, via: p.login_method, mk: !!p.marketing_ok, at: p.created_at })),
       enrollments: en.map(e => ({ u: e.user_id, c: e.course_id, src: e.source, at: e.started_at, off: !!e.revoked_at })),
       progress: pr.map(x => ({ u: x.user_id, at: x.updated_at, done: x.completed_at })),
       todo: {
         refunds: os.filter(o => o.refund_requested_at && o.status === 'paid').length,
         ship: os.filter(o => isKitItem(o.item_id) && live(o) && !o.shipped_at).length,
-        shipNoAddr: os.filter(o => isKitItem(o.item_id) && live(o) && !o.shipped_at && !o.ship_addr).length
+        shipNoAddr: os.filter(o => isKitItem(o.item_id) && live(o) && !o.shipped_at && !o.ship_addr).length,
+        waiting: os.filter(o => o.status === 'waiting').length
       }
     };
   },
   async orders(q) {
-    let f = 'orders?select=id,item_id,amount,refund_amount,status,is_test,buyer_email,buyer_name,paid_at,user_id,refund_requested_at,refund_request_note,refund_reason,shipped_at&status=neq.ready&order=created_at.desc&limit=200';
+    let f = 'orders?select=id,item_id,qty,amount,refund_amount,status,is_test,buyer_email,buyer_name,paid_at,user_id,refund_requested_at,refund_request_note,refund_reason,shipped_at,method,source,memo,tax_doc,vbank,due_at,created_at&status=neq.ready&order=created_at.desc&limit=200';
     if (q.status === 'requested') f += '&refund_requested_at=not.is.null&status=eq.paid';
-    else if (['paid', 'partial_refunded', 'refunded'].includes(q.status)) f += '&status=eq.' + q.status;
+    else if (q.status === 'manual') f += '&source=eq.manual';
+    else if (['waiting', 'paid', 'partial_refunded', 'refunded', 'expired'].includes(q.status)) f += '&status=eq.' + q.status;
     if (q.test === '0') f += '&is_test=eq.false';
     const s = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, '');
     if (s) f += '&or=(buyer_email.ilike.*' + enc(s) + '*,id.ilike.*' + enc(s) + '*,buyer_name.ilike.*' + enc(s) + '*)';
@@ -97,13 +103,43 @@ const ACT = {
     const orderId = /^[A-Za-z0-9_-]{6,64}$/.test(String(b.orderId || '')) ? b.orderId : '';
     const amount = int(b.amount), reason = String(b.reason || '').trim().slice(0, 190);
     if (!orderId || !reason || !(amount > 0)) throw new Error('BAD_REQUEST');
-    const [o] = await get('orders?select=id,amount,refund_amount,status,payment_key&id=eq.' + enc(orderId));
-    if (!o || !o.payment_key || !['paid', 'partial_refunded'].includes(o.status)) throw new Error('NOT_REFUNDABLE');
+    const [o] = await get('orders?select=id,amount,refund_amount,status,payment_key,method,source&id=eq.' + enc(orderId));
+    if (!o || !['paid', 'partial_refunded'].includes(o.status)) throw new Error('NOT_REFUNDABLE');
     if (amount > o.amount - (o.refund_amount || 0)) throw new Error('TOO_MUCH');
-    const c = await T.cancel(o.payment_key, amount, reason, orderId + '-cancel-' + ((o.refund_amount || 0) + amount));
-    if (!c.ok) { const e = new Error('PG'); e.pg = c.data; throw e; }
+    if (o.source !== 'manual') {   /* 직접 등록 거래는 돈을 따로 돌려준 뒤 기록만 */
+      if (o.method === '가상계좌') throw new Error('VBANK_REFUND');   // 환불 받을 계좌가 필요해 토스 상점관리자에서 취소 → '토스와 맞추기'
+      if (!o.payment_key) throw new Error('NOT_REFUNDABLE');
+      const c = await T.cancel(o.payment_key, amount, reason, orderId + '-cancel-' + ((o.refund_amount || 0) + amount));
+      if (!c.ok) { const e = new Error('PG'); e.pg = c.data; throw e; }
+    }
     const st = await T.settle(S, o, amount, reason, b.revoke !== false);
     return { refunded: amount, total: st.total, full: st.full, revoked: st.revoked };
+  },
+  /* 결제창 밖 거래(기업 워크샵 계좌이체·세금계산서 등)를 매출에 넣기 */
+  async order_manual(b) {
+    const itemId = String(b.itemId || ''); if (!CATALOG[itemId]) throw new Error('BAD_REQUEST');
+    const amount = int(b.amount), qty = Math.max(int(b.qty) || 1, 1);
+    const email = String(b.email || '').trim().toLowerCase().slice(0, 100), name = String(b.name || '').trim().slice(0, 80);
+    const paidAt = /^\d{4}-\d{2}-\d{2}$/.test(String(b.paidAt || '')) ? new Date(b.paidAt + 'T12:00:00+09:00').toISOString() : new Date().toISOString();
+    const method = ['계좌이체', '세금계산서', '현금', '카드(단말기)', '기타'].includes(b.method) ? b.method : '계좌이체';
+    const tax = ['none', 'tax_invoice', 'cash_receipt', 'card'].includes(b.taxDoc) ? b.taxDoc : 'none';
+    if (!(amount > 0) || amount > 1e9 || !name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error('BAD_REQUEST');
+    const [p] = await get('profiles?select=id&email=ilike.' + enc(email));
+    const id = 'M' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase();
+    const row = { id, user_id: p ? p.id : null, buyer_email: email, buyer_name: name, item_id: itemId, qty, amount, method, status: 'paid', paid_at: paidAt, source: 'manual', tax_doc: tax, memo: String(b.memo || '').slice(0, 300) || null, grants_course: CATALOG[itemId].grants || null, is_test: false };
+    await write('POST', 'orders', row);
+    const f = await FF.fulfill(row, { mail: b.mail === true });
+    return { id, member: !!p, enrolled: f.enrolled };
+  },
+  async order_memo(b) {
+    const id = String(b.orderId || ''); if (!/^[A-Za-z0-9_-]{6,64}$/.test(id)) throw new Error('BAD_REQUEST');
+    const tax = ['none', 'tax_invoice', 'cash_receipt', 'card'].includes(b.taxDoc) ? b.taxDoc : null;
+    await write('PATCH', 'orders?id=eq.' + enc(id), Object.assign({ memo: String(b.memo || '').slice(0, 300) || null }, tax ? { tax_doc: tax } : {}));
+    return {};
+  },
+  async pg_sync(b) {
+    const id = String(b.orderId || ''); if (!/^[A-Za-z0-9_-]{6,64}$/.test(id)) throw new Error('BAD_REQUEST');
+    return { result: await W.sync(id) };
   },
   async grant(b) {
     const uid = uuid(b.userId), course = String(b.courseId || '');

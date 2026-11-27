@@ -12,7 +12,7 @@ const CATALOG = require('../../shop/catalog.json').items;
 /* 인원제 상품(head): 강사 고정분 + 1인 금액 × 인원(최소 청구 인원 이하는 최소 인원으로). 그 밖에는 단가 × 수량 */
 const total = (item, qty) => item.head ? item.head.base + item.head.per * Math.max(qty, item.head.min) : item.price * qty;
 const KEYS = require('./_keys.js');
-const MAIL = require('../_mail.js');
+const F = require('../_fulfill.js');
 
 const ALLOWED_HOSTS = ['www.chaand.ai', 'chaand.ai'];
 
@@ -44,20 +44,21 @@ async function record({ orderId, item, itemId, qty, amount, data, mode, buyer, t
   try {
     const u = await sbUser(token);
     const email = String((u && u.email) || buyer.email || '').slice(0, 100);
-    const o = await sbInsert('orders', {
+    /* 가상계좌는 승인 시점엔 '입금 대기'. 입금되면 토스가 웹훅(/api/payments/webhook)으로 알려 줌 */
+    const waiting = data.status === 'WAITING_FOR_DEPOSIT';
+    const va = data.virtualAccount || null;
+    const row = {
       id: orderId, user_id: u ? u.id : null, buyer_email: email, buyer_name: String(buyer.name || '').slice(0, 80),
       item_id: itemId, qty, amount, payment_key: data.paymentKey || null, method: data.method || null,
-      status: 'paid', paid_at: data.approvedAt || new Date().toISOString(), grants_course: item.grants || null, is_test: mode !== 'live'
-    }, 'id');
+      status: waiting ? 'waiting' : 'paid', paid_at: waiting ? null : (data.approvedAt || new Date().toISOString()), grants_course: item.grants || null, is_test: mode !== 'live',
+      pg_secret: data.secret || null, source: 'pg'
+    };
+    if (va) { row.vbank = { bank: va.bankCode || va.bank || '', account: va.accountNumber || '', holder: va.customerName || '', due: va.dueDate || '' }; row.due_at = va.dueDate || null; }
+    const o = await sbInsert('orders', row, 'id');
     if (!o.ok) { if (!o.skip) console.error('orders insert', o.status, o.text); return { saved: false }; }
-    let enrolled = false;
-    if (u && item.grants) {
-      const ex = await fetch(SB_URL + '/rest/v1/enrollments?select=id&revoked_at=is.null&source=eq.purchase&user_id=eq.' + u.id + '&course_id=eq.' + encodeURIComponent(item.grants), { headers: { apikey: process.env.SUPABASE_SECRET_KEY, Authorization: 'Bearer ' + process.env.SUPABASE_SECRET_KEY } }).then(r => r.json()).catch(() => []);
-      const e = Array.isArray(ex) && ex.length ? { ok: true } : await sbInsert('enrollments', { user_id: u.id, course_id: item.grants, source: 'purchase', order_id: orderId });
-      if (!e.ok) console.error('enrollments insert', e.status, e.text); else enrolled = true;
-    }
-    await MAIL.orderConfirm({ id: orderId, email, name: item.name + (item.head ? ' · ' + qty + '명' : (qty > 1 ? ' × ' + qty : '')), amount, paidAt: data.approvedAt, method: data.method, course: !!item.grants, kit: /차 키트/.test(String(item.note || '')), refundRule: item.refund ? '취소·환불정책 「' + item.refund + '」' : '', test: mode !== 'live' });
-    return { saved: true, member: !!u, enrolled };
+    if (waiting) return { saved: true, member: !!u, enrolled: false, waiting: true, vbank: row.vbank };
+    const f = await F.fulfill(Object.assign({}, row));
+    return { saved: true, member: !!u, enrolled: f.enrolled };
   } catch (e) { console.error('record', e && e.message); return { saved: false }; }
 }
 
@@ -127,7 +128,7 @@ module.exports = async (req, res) => {
     // 카드번호 등 민감한 값은 돌려주지 않고 확인에 필요한 것만
     const buyer = b && typeof b.buyer === 'object' && b.buyer ? b.buyer : {};
     const rec = await record({ orderId, item, itemId: parts[0], qty, amount, data, mode, buyer, token: b && typeof b.token === 'string' ? b.token : '' });
-    return send(res, 200, { ok: true, mode, saved: rec.saved, member: !!rec.member, enrolled: !!rec.enrolled, grants: !!item.grants, orderId, orderName: item.name + (item.head ? ' · ' + qty + '명' : (qty > 1 ? ' × ' + qty : '')), amount, method: data.method || '', approvedAt: data.approvedAt || '' });
+    return send(res, 200, { ok: true, mode, waiting: !!rec.waiting, vbank: rec.vbank || null, saved: rec.saved, member: !!rec.member, enrolled: !!rec.enrolled, grants: !!item.grants, orderId, orderName: item.name + (item.head ? ' · ' + qty + '명' : (qty > 1 ? ' × ' + qty : '')), amount, method: data.method || '', approvedAt: data.approvedAt || '' });
   } catch (e) {
     return send(res, 504, { ok: false, code: 'PG_TIMEOUT' });
   }
