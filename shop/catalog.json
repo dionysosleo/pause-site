@@ -152,7 +152,8 @@
       "period": "",
       "refund": "VOD 온라인 강의",
       "company": false,
-      "label_en": "8 lessons + setup kit"
+      "label_en": "8 lessons + setup kit",
+      "grants": "ai-onboard"
     },
     "ai-onboard-kit": {
       "name": "AI 입사식 세팅 키트 (파일만)",
@@ -177,7 +178,8 @@
       "period": "",
       "refund": "VOD 온라인 강의",
       "company": false,
-      "label_en": "8 lessons + web templates"
+      "label_en": "8 lessons + web templates",
+      "grants": "vibe-web"
     },
     "vibe-web-4w": {
       "name": "바이브코딩으로 내 웹 만들기 · 4주 기수",
@@ -202,7 +204,8 @@
       "period": "",
       "refund": "VOD 온라인 강의",
       "company": false,
-      "label_en": "8 lessons + agent team kit"
+      "label_en": "8 lessons + agent team kit",
+      "grants": "agent-team"
     },
     "agent-team-6w": {
       "name": "혼자서 팀처럼 일하기 · 6주 기수",
@@ -228,7 +231,8 @@
       "refund": "VOD 온라인 강의 (차 키트 부분은 실물 키트 기준)",
       "note": "차 키트는 결제 후 배송지를 받아 보내 드려요.",
       "company": false,
-      "label_en": "8 lessons + seasonal tea kit"
+      "label_en": "8 lessons + seasonal tea kit",
+      "grants": "tea-brand"
     },
     "tea-brand-live": {
       "name": "하루 한 잔 홈티, 그리고 나만의 차 브랜드 · 창업 라이브 포함",
@@ -241,7 +245,8 @@
       "refund": "정기 프로그램·기수제 과정·라이브 강의 (개인 수강생) (차 키트 부분은 실물 키트 기준)",
       "note": "차 키트는 결제 후 배송지를 받아 보내 드려요.",
       "company": false,
-      "label_en": "Course + tea kit + start-up live"
+      "label_en": "Course + tea kit + start-up live",
+      "grants": "tea-brand"
     }
   },
   "_note": "2026-11-27 임시 가격(주인 확정 전). 강사 단가(공급가): 이유진 1인 7만, 한성희 시간당 65만, 이준혁 시간당 32.5만. 기업 상품 판매가 = 강사비 ÷ 0.8 (영업·운영 수수료 = 판매가의 20%), 화면 가격은 부가세 포함. head 상품(1인 추가 10만, 클럽은 1회 9만) 결제 금액 = base + per × max(인원, min). 클럽·패키지 03·04는 묶음 10% 할인. 살롱 15만·4주 기수 49만은 시장가 기준 조정. 첫 회 파일럿 10% 할인은 상담 시 적용. 2026-11-27: 반나절 680만·숲속 하루 860만으로 확정 제시, 찻자리 클럽은 1회당 가격(495만)으로 판매. 2026-11-27: 온라인 강의를 1차 라인업 4개로 교체(사전 판매 제안가, list=정가)."

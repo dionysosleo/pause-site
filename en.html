@@ -2560,13 +2560,14 @@ function myOut(){
 }
 var MY_TAB = 'learn';
 function myDash(c, u){
-  return Promise.all([
+  /* 비회원으로 결제한 주문을 같은 이메일(인증 완료) 계정에 붙이고 수강권 만들기 */
+  return c.rpc('claim_orders').then(function(){}, function(){}).then(function(){ return Promise.all([
     c.from('profiles').select('name,email,login_method,marketing_ok').eq('id', u.id).maybeSingle(),
     c.from('enrollments').select('course_id,source,started_at').is('revoked_at', null).order('started_at', {ascending:false}),
     c.from('orders').select('id,item_id,amount,status,paid_at').neq('status', 'ready').order('created_at', {ascending:false}),
     c.from('lessons').select('id,course_id,is_free'),
     c.from('progress').select('lesson_id,completed_at')
-  ]).then(function(rs){
+  ]); }).then(function(rs){
     var p = rs[0].data || {}, en = rs[1].data || [], od = rs[2].data || [], ls = rs[3].data || [], pr = rs[4].data || [];
     var done = {}; pr.forEach(function(x){ if(x.completed_at) done[x.lesson_id] = 1; });
     var pct = function(cid){ var all = ls.filter(function(l){ return l.course_id === cid && !l.is_free; }); if(!all.length) return 0; return Math.round(100 * all.filter(function(l){ return done[l.id]; }).length / all.length); };
@@ -2585,7 +2586,7 @@ function myDash(c, u){
           return '<li><a href="#c-' + esc(x.id) + '"><span class="my-tag">' + esc(x.level) + '</span><b class="ol">' + esc(x.title) + '</b><span class="muted ol">' + esc(x.short) + '</span>' + (it ? '<span class="my-price">' + won(it.price) + '</span>' : '') + '</a></li>'; }).join('') + '</ul>';
     var orders = od.length
       ? '<ul class="my-rows">' + od.map(function(o){ var it = SHOP && SHOP[o.item_id];
-          return '<li><div><b class="ol">' + esc(it && it.label ? it.label : o.item_id) + '</b><span class="muted ol">' + d(o.paid_at) + ' · Order no. ' + esc(o.id) + '</span></div><div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + '</span></div></li>'; }).join('') + '</ul>' +
+          return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + '</b><span class="muted ol">' + d(o.paid_at) + ' · Order no. ' + esc(o.id) + '</span></div><div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + '</span></div></li>'; }).join('') + '</ul>' +
         '<p class="muted my-note">To request a refund, see the <a href="#refund">Cancellation & Refund Policy</a>and email ' + contactMail() + '.</p>'
       : '<div class="my-empty"><p class="my-empty-t">No orders yet</p><p class="muted">Your course and kit purchases will appear here.</p></div>';
     var account = '<ul class="my-rows my-set">' +

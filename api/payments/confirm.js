@@ -15,6 +15,49 @@ const KEYS = require('./_keys.js');
 
 const ALLOWED_HOSTS = ['www.chaand.ai', 'chaand.ai'];
 
+/* 회원 DB(Supabase) 기록: 승인된 결제를 orders에 남기고, 로그인한 회원이면 수강권(enrollments)을 바로 만들어요.
+   비밀 키는 Vercel 환경 변수 SUPABASE_SECRET_KEY 에만 둬요. 없으면 기록을 건너뛰고 결제 승인은 그대로 끝나요.
+   비회원 결제는 같은 이메일로 가입·인증하면 내 학습에서 claim_orders()로 연결돼요. */
+const SB_URL = 'https://mryawowqarptvtpxcwxl.supabase.co';
+const SB_PUBLIC = 'sb_publishable_wC2dVRAITr3Ta5AmIzWpKQ_WyOV0OER';
+async function sbUser(token) {
+  if (!token || token.length > 4096) return null;
+  try {
+    const r = await fetch(SB_URL + '/auth/v1/user', { headers: { apikey: SB_PUBLIC, Authorization: 'Bearer ' + token } });
+    if (!r.ok) return null;
+    const u = await r.json();
+    return u && u.id ? u : null;
+  } catch (e) { return null; }
+}
+async function sbInsert(table, row, conflict) {
+  const key = process.env.SUPABASE_SECRET_KEY;
+  if (!key) return { ok: false, skip: true };
+  const r = await fetch(SB_URL + '/rest/v1/' + table + (conflict ? '?on_conflict=' + conflict : ''), {
+    method: 'POST',
+    headers: { apikey: key, Authorization: 'Bearer ' + key, 'Content-Type': 'application/json', Prefer: 'resolution=' + (conflict ? 'ignore-duplicates' : 'merge-duplicates') + ',return=minimal' },
+    body: JSON.stringify(row)
+  });
+  return { ok: r.ok, status: r.status, text: r.ok ? '' : (await r.text()).slice(0, 300) };
+}
+async function record({ orderId, item, itemId, qty, amount, data, mode, buyer, token }) {
+  try {
+    const u = await sbUser(token);
+    const email = String((u && u.email) || buyer.email || '').slice(0, 100);
+    const o = await sbInsert('orders', {
+      id: orderId, user_id: u ? u.id : null, buyer_email: email, buyer_name: String(buyer.name || '').slice(0, 80),
+      item_id: itemId, qty, amount, payment_key: data.paymentKey || null, method: data.method || null,
+      status: 'paid', paid_at: data.approvedAt || new Date().toISOString(), grants_course: item.grants || null, is_test: mode !== 'live'
+    }, 'id');
+    if (!o.ok) { if (!o.skip) console.error('orders insert', o.status, o.text); return { saved: false }; }
+    let enrolled = false;
+    if (u && item.grants) {
+      const e = await sbInsert('enrollments', { user_id: u.id, course_id: item.grants, source: 'purchase', order_id: orderId }, 'user_id,course_id,source');
+      if (!e.ok) console.error('enrollments insert', e.status, e.text); else enrolled = true;
+    }
+    return { saved: true, member: !!u, enrolled };
+  } catch (e) { console.error('record', e && e.message); return { saved: false }; }
+}
+
 function send(res, status, body) {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
@@ -33,7 +76,7 @@ async function readJson(req) {
   if (req.body && typeof req.body === 'object') return req.body;
   if (typeof req.body === 'string') { try { return JSON.parse(req.body); } catch (e) { return null; } }
   const chunks = []; let size = 0;
-  for await (const c of req) { size += c.length; if (size > 4096) return null; chunks.push(c); }
+  for await (const c of req) { size += c.length; if (size > 16384) return null; chunks.push(c); }
   try { return JSON.parse(Buffer.concat(chunks).toString('utf8')); } catch (e) { return null; }
 }
 
@@ -79,7 +122,9 @@ module.exports = async (req, res) => {
     const { ok, data } = await confirmWithPg({ paymentKey, orderId, amount }, secret);
     if (!ok) return send(res, 402, { ok: false, code: String(data.code || 'PG_REJECTED').slice(0, 60), message: String(data.message || '').slice(0, 200) });
     // 카드번호 등 민감한 값은 돌려주지 않고 확인에 필요한 것만
-    return send(res, 200, { ok: true, mode, orderId, orderName: item.name + (item.head ? ' · ' + qty + '명' : (qty > 1 ? ' × ' + qty : '')), amount, method: data.method || '', approvedAt: data.approvedAt || '' });
+    const buyer = b && typeof b.buyer === 'object' && b.buyer ? b.buyer : {};
+    const rec = await record({ orderId, item, itemId: parts[0], qty, amount, data, mode, buyer, token: b && typeof b.token === 'string' ? b.token : '' });
+    return send(res, 200, { ok: true, mode, saved: rec.saved, member: !!rec.member, enrolled: !!rec.enrolled, grants: !!item.grants, orderId, orderName: item.name + (item.head ? ' · ' + qty + '명' : (qty > 1 ? ' × ' + qty : '')), amount, method: data.method || '', approvedAt: data.approvedAt || '' });
   } catch (e) {
     return send(res, 504, { ok: false, code: 'PG_TIMEOUT' });
   }

@@ -161,6 +161,7 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
     if(miss){$('err').textContent=miss[1];$(miss[0]).focus();return;}
     if(!widgets){$('err').textContent='결제 수단을 불러오지 못했어요. 새로고침해 주세요.';return;}
     $('err').textContent='';$('pay').disabled=true;
+    try{sessionStorage.setItem('chai_buyer',JSON.stringify({email:em,name:(co?co+' ':'')+nm}));}catch(e){}
     widgets.requestPayment({
       orderId:id+'_'+qty+'_'+rid(),
       orderName:(item.name+(item.head?' · '+qty+'명':(qty>1?' × '+qty:''))).slice(0,100),
