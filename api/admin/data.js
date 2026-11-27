@@ -83,10 +83,7 @@ const READ = {
   },
   async company(q) { const id = uuid(q.id); if (!id) throw new Error('BAD_ID'); return C.detail(id); },
   async courses() {
-    const cs = await get('courses?select=id,title,is_open,opened_at&order=id');
-    const ls = await get('lessons?select=id,course_id,part,sort,title,is_free,duration_s&order=course_id,sort');
-    const md = ls.length ? await get('lesson_media?select=lesson_id,provider,video_id,status') : [];
-    const en = await get('enrollments?select=course_id&revoked_at=is.null');
+    const [cs, ls, md, en] = await Promise.all([get('courses?select=id,title,is_open,opened_at&order=id'), get('lessons?select=id,course_id,part,sort,title,is_free,duration_s&order=course_id,sort'), get('lesson_media?select=lesson_id,provider,video_id,status'), get('enrollments?select=course_id&revoked_at=is.null')]);
     return { bunny: B.configured(), courses: cs.map(c => Object.assign(c, { students: en.filter(e => e.course_id === c.id).length, lessons: ls.filter(l => l.course_id === c.id).map(l => Object.assign(l, { video_id: (md.find(m => m.lesson_id === l.id) || {}).video_id || '', video_status: (md.find(m => m.lesson_id === l.id) || {}).status })) })) };
   },
   async shipments() {

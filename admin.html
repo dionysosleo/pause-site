@@ -257,7 +257,7 @@ V.home=function(m){
     var tb=$('#dTest',m);if(tb)tb.onchange=function(){DASH.test=tb.checked;render();};
     $('#dRe',m).onclick=function(){load();};
   };
-  var load=function(){api('dashboard').then(function(d){if(!d||!d.ok){m.innerHTML='<p class="muted">불러오지 못했어요. 새로고침해 주세요.</p>';return;}DASH.data=d;render();});};
+  var load=function(){var pr=DASH.pre||api('dashboard');DASH.pre=null;pr.then(function(d){if(!d||!d.ok){m.innerHTML='<p class="muted">불러오지 못했어요. 새로고침해 주세요.</p>';return;}DASH.data=d;render();});};
   load();
 };
 
@@ -442,18 +442,16 @@ function mfaGate(){
 sb.auth.getSession().then(function(r){var s=r.data&&r.data.session;
   if(!s){$('#root').innerHTML='<div class="gate"><h1>관리</h1><p>운영자 계정으로 로그인해 주세요.</p><p><a class="btn p" href="/login">로그인</a></p></div>';return;}
   TOKEN=s.access_token;ME=s.user;
-  return api('me').then(function(me){
+  /* 운영자 확인·강의 목록·상품표를 한 번에 받고, 대시보드라면 그 데이터도 같이 미리 받음 */
+  var home=!location.hash||/^#home/.test(location.hash);
+  if(home)DASH.pre=api('dashboard').catch(function(){return null;});
+  return Promise.all([api('me'),api('courses').catch(function(){return {};}),fetch('/shop/catalog.json').then(function(x){return x.json();}).catch(function(){return {items:{}};})]).then(function(v){var me=v[0];
     if(!me||!me.ok){$('#root').innerHTML='<div class="gate"><h1>관리</h1><p>운영자만 볼 수 있는 화면이에요.</p><p><a class="btn" href="/my">내 학습으로</a></p></div>';return;}
     if(me.mfa&&me.aal!=='aal2')return mfaGate();
-    return start();
+    SHOP=(v[2]&&v[2].items)||{};COURSES=(v[1]&&v[1].courses)||[];shell();route();
   });
 }).catch(function(){$('#root').innerHTML='<div class="gate"><p>불러오지 못했어요. 새로고침해 주세요.</p></div>';});
-function start(){
-  return Promise.all([api('courses'),fetch('/shop/catalog.json').then(function(x){return x.json();}).catch(function(){return {items:{}};}),Promise.resolve(null)]).then(function(v){v[2]=v[0];
-    if(!v[0]||!v[0].ok){$('#root').innerHTML='<div class="gate"><h1>관리</h1><p>운영자만 볼 수 있는 화면이에요.</p><p><a class="btn" href="/my">내 학습으로</a></p></div>';return;}
-    SHOP=(v[1]&&v[1].items)||{};COURSES=(v[2]&&v[2].courses)||[];shell();route();
-  });
-}
+function start(){location.reload();}
 sb.auth.onAuthStateChange(function(ev,s){if(s)TOKEN=s.access_token;});
 })();
 </script></body></html>
