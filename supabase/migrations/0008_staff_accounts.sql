@@ -16,3 +16,15 @@ begin
   );
   return new;
 end $$;
+
+-- Auth 관리 API는 계정을 먼저 만든 뒤 app_metadata 를 채우는 경우가 있어, 'staff' 가 붙는 순간 회원 정보를 지움
+create or replace function public.staff_no_profile() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if coalesce(new.raw_app_meta_data->>'role', '') = 'staff' then delete from public.profiles where id = new.id; end if;
+  return new;
+end $$;
+drop trigger if exists on_auth_user_staff on auth.users;
+create trigger on_auth_user_staff after insert or update of raw_app_meta_data on auth.users
+  for each row execute function public.staff_no_profile();
+delete from public.profiles p using auth.users u where u.id = p.id and u.raw_app_meta_data->>'role' = 'staff';
