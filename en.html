@@ -499,6 +499,8 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .my-r-end{align-items:flex-end;flex:none}
 .my-set li>b{text-align:right;min-width:0}
 .my-note{font-size:14px;margin:12px 0 0}
+.lv-list{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px}.lv-btns{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.lv-go{background:#B42318!important;color:#fff!important;border-color:#B42318!important}.lv-go:disabled{opacity:.45;cursor:not-allowed}
+.my-r-end .btn-sm{min-height:34px;padding:4px 14px;font-size:13px}
 .my-leave{margin:20px 0 0;text-align:right}.my-leave .lnk{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline}
 .sw{position:relative;display:inline-flex;flex:none;cursor:pointer}.sw input{position:absolute;opacity:0;width:1px;height:1px}
 .sw i{width:44px;height:26px;border-radius:999px;background:var(--hair);position:relative;transition:background .15s}
@@ -2619,8 +2621,74 @@ function myDash(c, u){
     });
     var pwb = $('[data-pw]'); if(pwb) pwb.addEventListener('click', function(){ myReset(c); });
     $('[data-out]').addEventListener('click', function(){ c.auth.signOut().then(function(){ authUI(); nav(routeUrl('home')); }); });
-    $('[data-leave]').addEventListener('click', function(){
-      openDialog('<h2>Close account</h2><p style="margin:0">Closing your account removes all your courses and progress for good. If you are owed a refund, request it first. Email us below with the address you signed up with and we will take care of it.</p><p style="margin:0">' + contactMail() + '</p><button type="button" class="btn btn-line" data-close>Close</button>');
+    $('[data-leave]').addEventListener('click', function(){ myLeave(c); });
+    myAdmin(c);
+  });
+}
+/* 회원 탈퇴: 서버(/api/account/delete)에서 계정과 수강 기록을 지우고, 주문 기록은 법정 기간 동안 계정과 떼어 보관 */
+function myLeave(c){
+  openDialog('<h2>Close account</h2><ul class="lv-list"><li>Your courses, progress and access are removed for good.</li><li>Signing up again with the same email will not restore them.</li><li>If you are owed a refund, request it before closing your account.</li><li>Order and payment records are kept separately for 5 years as required by law.</li></ul>' +
+    '<label class="check"><input type="checkbox" id="lvOk"><span>I understand and want to close my account</span></label>' +
+    '<div class="lv-btns"><button type="button" class="btn btn-line" data-close>Canceled</button><button type="button" class="btn lv-go" id="lvGo" disabled>Close account</button></div>');
+  var ok = $('#lvOk'), go = $('#lvGo');
+  ok.addEventListener('change', function(){ go.disabled = !ok.checked; });
+  go.addEventListener('click', function(){
+    go.disabled = true; go.textContent = 'Processing';
+    c.auth.getSession().then(function(r){
+      var t = r.data && r.data.session && r.data.session.access_token;
+      return fetch('/api/account/delete', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify({confirm:'withdraw'})}).then(function(x){ return x.json(); });
+    }).then(function(d){
+      if(!d || !d.ok) throw new Error((d && d.code) || 'FAIL');
+      try { localStorage.removeItem('sb-' + AUTH.url.split('//')[1].split('.')[0] + '-auth-token'); } catch(e){}
+      return c.auth.signOut({scope:'local'}).catch(function(){}).then(function(){ closeDialog(); authUI(); nav(routeUrl('home')); toast('Your account is closed. Thank you'); });
+    }).catch(function(){ go.disabled = false; go.textContent = 'Close account'; toast('We could not close your account. Please try again shortly'); });
+  });
+}
+/* 운영자 전용: 주문 목록과 환불 (admins 표에 있는 계정에만 'Admin' 탭이 보임) */
+function myAdmin(c){
+  return c.auth.getSession().then(function(r){
+    var t = r.data && r.data.session && r.data.session.access_token;
+    if(!t) return;
+    var load = function(){ return fetch('/api/admin/orders', {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.ok ? x.json() : null; }).catch(function(){ return null; }); };
+    return load().then(function(d){
+      if(!d || !d.ok) return;
+      var tabs = $('.my-tabs'); if(!tabs || $('[data-tab="admin"]')) return;
+      tabs.style.gridTemplateColumns = 'repeat(4,minmax(0,1fr))';
+      tabs.insertAdjacentHTML('beforeend', '<button type="button" role="tab" data-tab="admin">Admin</button>');
+      $('#myBody').insertAdjacentHTML('beforeend', '<div class="my-panel" data-panel="admin" hidden></div>');
+      var st = {paid:'Paid', partial_refunded:'Partly refunded', refunded:'Refunded', canceled:'Canceled', ready:'Pending'};
+      var draw = function(list){
+        var p = $('[data-panel="admin"]'); if(!p) return;
+        p.innerHTML = '<p class="muted my-note" style="margin:0 0 12px">Latest 50 orders. Set refund amounts per the refund policy.</p>' + (list.length ? '<ul class="my-rows">' + list.map(function(o){
+          var left = o.amount - (o.refund_amount || 0), it = SHOP && SHOP[o.item_id];
+          return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + (o.is_test ? ' <span class="my-tag">Test</span>' : '') + '</b><span class="muted ol">' + esc(o.buyer_email) + ' · ' + (o.paid_at ? new Date(o.paid_at).toLocaleDateString('ko-KR') : '-') + ' · ' + esc(o.id) + '</span></div>' +
+            '<div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + '</span>' +
+            (left > 0 && (o.status === 'paid' || o.status === 'partial_refunded') ? '<button type="button" class="btn btn-line btn-sm" data-rf="' + esc(o.id) + '" data-left="' + left + '">Refunds</button>' : '') + '</div></li>'; }).join('') + '</ul>' : '<div class="my-empty"><p class="my-empty-t">No orders</p></div>');
+        $$('[data-rf]', p).forEach(function(b){ b.addEventListener('click', function(){ refundDlg(b.getAttribute('data-rf'), +b.getAttribute('data-left')); }); });
+      };
+      var refundDlg = function(id, left){
+        openDialog('<h2>Refunds</h2><p class="muted" style="margin:0">Order no. ' + esc(id) + ' · Refundable ' + won(left) + '</p>' +
+          '<form class="form one-col" data-form="refund" novalidate><label class="field">Refund amount (KRW)<input name="amount" inputmode="numeric" required value="' + left + '"><span class="err">Enter 1 to ' + won(left) + '</span></label>' +
+          '<label class="field">Reason<input name="reason" required value="Customer request" maxlength="190"><span class="err">Please enter a reason</span></label>' +
+          '<label class="check"><input type="checkbox" name="revoke" checked><span>Also revoke course access</span></label>' +
+          '<div class="lv-btns"><button type="button" class="btn btn-line" data-close>Canceled</button><button type="submit" class="btn lv-go">Refund</button></div></form>');
+        var f = $('form[data-form="refund"]');
+        bindForm(f, function(){
+          var amt = parseInt(String(f.elements.amount.value).replace(/[^0-9]/g, ''), 10);
+          if(!(amt > 0 && amt <= left)){ f.elements.amount.closest('.field').classList.add('bad'); return; }
+          var btn = f.querySelector('[type=submit]'); btn.disabled = true;
+          fetch('/api/admin/orders', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify({orderId:id, amount:amt, reason:f.elements.reason.value.trim(), revoke:f.elements.revoke.checked})})
+            .then(function(x){ return x.json(); }).then(function(d){
+              if(!d.ok){ btn.disabled = false; toast('Refund failed (' + String(d.message || d.code || '').slice(0, 60) + ')'); return; }
+              closeDialog(); toast(won(d.refunded) + ' refunded' + (d.revoked ? ' · access revoked' : ''));
+              load().then(function(n){ if(n && n.ok) draw(n.orders); });
+            }, function(){ btn.disabled = false; toast('Refund failed'); });
+        });
+      };
+      draw(d.orders);
+      var b = $('[data-tab="admin"]');
+      b.addEventListener('click', function(){ MY_TAB = 'admin'; $$('[data-tab]').forEach(function(x){ if(x === b) x.setAttribute('aria-selected','true'); else x.removeAttribute('aria-selected'); }); $$('.my-panel').forEach(function(pn){ pn.hidden = pn.getAttribute('data-panel') !== 'admin'; }); });
+      if(MY_TAB === 'admin') b.click();
     });
   });
 }

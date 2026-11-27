@@ -499,6 +499,8 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .my-r-end{align-items:flex-end;flex:none}
 .my-set li>b{text-align:right;min-width:0}
 .my-note{font-size:14px;margin:12px 0 0}
+.lv-list{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px}.lv-btns{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.lv-go{background:#B42318!important;color:#fff!important;border-color:#B42318!important}.lv-go:disabled{opacity:.45;cursor:not-allowed}
+.my-r-end .btn-sm{min-height:34px;padding:4px 14px;font-size:13px}
 .my-leave{margin:20px 0 0;text-align:right}.my-leave .lnk{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline}
 .sw{position:relative;display:inline-flex;flex:none;cursor:pointer}.sw input{position:absolute;opacity:0;width:1px;height:1px}
 .sw i{width:44px;height:26px;border-radius:999px;background:var(--hair);position:relative;transition:background .15s}
@@ -2611,8 +2613,74 @@ function myDash(c, u){
     });
     var pwb = $('[data-pw]'); if(pwb) pwb.addEventListener('click', function(){ myReset(c); });
     $('[data-out]').addEventListener('click', function(){ c.auth.signOut().then(function(){ authUI(); nav(routeUrl('home')); }); });
-    $('[data-leave]').addEventListener('click', function(){
-      openDialog('<h2>회원 탈퇴</h2><p style="margin:0">탈퇴하면 산 강의와 진도가 모두 사라지고 되돌릴 수 없어요. 환불받을 금액이 있으면 탈퇴 전에 신청해 주세요. 아래 메일로 가입한 이메일을 적어 보내 주시면 바로 처리해 드려요.</p><p style="margin:0">' + contactMail() + '</p><button type="button" class="btn btn-line" data-close>닫기</button>');
+    $('[data-leave]').addEventListener('click', function(){ myLeave(c); });
+    myAdmin(c);
+  });
+}
+/* 회원 탈퇴: 서버(/api/account/delete)에서 계정과 수강 기록을 지우고, 주문 기록은 법정 기간 동안 계정과 떼어 보관 */
+function myLeave(c){
+  openDialog('<h2>회원 탈퇴</h2><ul class="lv-list"><li>산 강의, 진도, 수강권이 모두 사라지고 되돌릴 수 없어요.</li><li>같은 이메일로 다시 가입해도 예전 강의는 돌아오지 않아요.</li><li>환불받을 금액이 있으면 탈퇴 전에 먼저 신청해 주세요.</li><li>주문·결제 기록은 법에 따라 5년 동안 따로 보관해요.</li></ul>' +
+    '<label class="check"><input type="checkbox" id="lvOk"><span>안내를 확인했고 탈퇴할게요</span></label>' +
+    '<div class="lv-btns"><button type="button" class="btn btn-line" data-close>취소</button><button type="button" class="btn lv-go" id="lvGo" disabled>탈퇴하기</button></div>');
+  var ok = $('#lvOk'), go = $('#lvGo');
+  ok.addEventListener('change', function(){ go.disabled = !ok.checked; });
+  go.addEventListener('click', function(){
+    go.disabled = true; go.textContent = '처리 중이에요';
+    c.auth.getSession().then(function(r){
+      var t = r.data && r.data.session && r.data.session.access_token;
+      return fetch('/api/account/delete', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify({confirm:'withdraw'})}).then(function(x){ return x.json(); });
+    }).then(function(d){
+      if(!d || !d.ok) throw new Error((d && d.code) || 'FAIL');
+      try { localStorage.removeItem('sb-' + AUTH.url.split('//')[1].split('.')[0] + '-auth-token'); } catch(e){}
+      return c.auth.signOut({scope:'local'}).catch(function(){}).then(function(){ closeDialog(); authUI(); nav(routeUrl('home')); toast('탈퇴했어요. 그동안 고마웠어요'); });
+    }).catch(function(){ go.disabled = false; go.textContent = '탈퇴하기'; toast('탈퇴를 처리하지 못했어요. 잠시 뒤 다시 해 주세요'); });
+  });
+}
+/* 운영자 전용: 주문 목록과 환불 (admins 표에 있는 계정에만 '관리' 탭이 보임) */
+function myAdmin(c){
+  return c.auth.getSession().then(function(r){
+    var t = r.data && r.data.session && r.data.session.access_token;
+    if(!t) return;
+    var load = function(){ return fetch('/api/admin/orders', {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.ok ? x.json() : null; }).catch(function(){ return null; }); };
+    return load().then(function(d){
+      if(!d || !d.ok) return;
+      var tabs = $('.my-tabs'); if(!tabs || $('[data-tab="admin"]')) return;
+      tabs.style.gridTemplateColumns = 'repeat(4,minmax(0,1fr))';
+      tabs.insertAdjacentHTML('beforeend', '<button type="button" role="tab" data-tab="admin">관리</button>');
+      $('#myBody').insertAdjacentHTML('beforeend', '<div class="my-panel" data-panel="admin" hidden></div>');
+      var st = {paid:'결제 완료', partial_refunded:'일부 환불', refunded:'환불 완료', canceled:'취소', ready:'대기'};
+      var draw = function(list){
+        var p = $('[data-panel="admin"]'); if(!p) return;
+        p.innerHTML = '<p class="muted my-note" style="margin:0 0 12px">최근 주문 50건. 환불 금액은 취소·환불정책 기준으로 정해 넣어요.</p>' + (list.length ? '<ul class="my-rows">' + list.map(function(o){
+          var left = o.amount - (o.refund_amount || 0), it = SHOP && SHOP[o.item_id];
+          return '<li><div><b class="ol">' + esc(it ? (it.name || it.label) : o.item_id) + (o.is_test ? ' <span class="my-tag">테스트</span>' : '') + '</b><span class="muted ol">' + esc(o.buyer_email) + ' · ' + (o.paid_at ? new Date(o.paid_at).toLocaleDateString('ko-KR') : '-') + ' · ' + esc(o.id) + '</span></div>' +
+            '<div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + (o.refund_amount ? ' ' + won(o.refund_amount) : '') + '</span>' +
+            (left > 0 && (o.status === 'paid' || o.status === 'partial_refunded') ? '<button type="button" class="btn btn-line btn-sm" data-rf="' + esc(o.id) + '" data-left="' + left + '">환불</button>' : '') + '</div></li>'; }).join('') + '</ul>' : '<div class="my-empty"><p class="my-empty-t">주문이 없어요</p></div>');
+        $$('[data-rf]', p).forEach(function(b){ b.addEventListener('click', function(){ refundDlg(b.getAttribute('data-rf'), +b.getAttribute('data-left')); }); });
+      };
+      var refundDlg = function(id, left){
+        openDialog('<h2>환불</h2><p class="muted" style="margin:0">주문번호 ' + esc(id) + ' · 환불 가능 ' + won(left) + '</p>' +
+          '<form class="form one-col" data-form="refund" novalidate><label class="field">환불 금액(원)<input name="amount" inputmode="numeric" required value="' + left + '"><span class="err">1원부터 ' + won(left) + '까지 넣어 주세요</span></label>' +
+          '<label class="field">사유<input name="reason" required value="고객 요청 환불" maxlength="190"><span class="err">사유를 적어 주세요</span></label>' +
+          '<label class="check"><input type="checkbox" name="revoke" checked><span>수강권도 회수해요</span></label>' +
+          '<div class="lv-btns"><button type="button" class="btn btn-line" data-close>취소</button><button type="submit" class="btn lv-go">환불하기</button></div></form>');
+        var f = $('form[data-form="refund"]');
+        bindForm(f, function(){
+          var amt = parseInt(String(f.elements.amount.value).replace(/[^0-9]/g, ''), 10);
+          if(!(amt > 0 && amt <= left)){ f.elements.amount.closest('.field').classList.add('bad'); return; }
+          var btn = f.querySelector('[type=submit]'); btn.disabled = true;
+          fetch('/api/admin/orders', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify({orderId:id, amount:amt, reason:f.elements.reason.value.trim(), revoke:f.elements.revoke.checked})})
+            .then(function(x){ return x.json(); }).then(function(d){
+              if(!d.ok){ btn.disabled = false; toast('환불하지 못했어요 (' + String(d.message || d.code || '').slice(0, 60) + ')'); return; }
+              closeDialog(); toast(won(d.refunded) + ' 환불했어요' + (d.revoked ? ' · 수강권 회수' : ''));
+              load().then(function(n){ if(n && n.ok) draw(n.orders); });
+            }, function(){ btn.disabled = false; toast('환불하지 못했어요'); });
+        });
+      };
+      draw(d.orders);
+      var b = $('[data-tab="admin"]');
+      b.addEventListener('click', function(){ MY_TAB = 'admin'; $$('[data-tab]').forEach(function(x){ if(x === b) x.setAttribute('aria-selected','true'); else x.removeAttribute('aria-selected'); }); $$('.my-panel').forEach(function(pn){ pn.hidden = pn.getAttribute('data-panel') !== 'admin'; }); });
+      if(MY_TAB === 'admin') b.click();
     });
   });
 }
