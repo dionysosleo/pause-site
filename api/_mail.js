@@ -47,4 +47,17 @@ function companyInvite(p) {
   const foot = '<p style="margin:16px 0 0"><a href="' + SITE + '/login?mode=signup" style="display:inline-block;background:#26313D;color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px">가입하고 시작하기</a></p><p style="font-size:13px;color:#6B727A">회사에는 강의별 진도율과 수료 여부만 보여요. 질문·실습 내용은 보이지 않아요.</p>';
   return send(p.email, '[CHA&I] ' + p.company + '에서 강의에 초대했어요', wrap('강의에 초대받았어요', [], body, foot), text(p.company + '에서 CHA&I 강의에 초대했어요', [], [SITE + '/login?mode=signup']));
 }
-module.exports = { ready, orderConfirm, refundDone, companyInvite };
+/* 4) 강의 오픈 알림 */
+function courseOpen(p) {
+  const body = '<p style="margin:0">' + (p.buyer ? '사전 예약하신 강의가 열렸어요. 오늘부터 내 학습에서 바로 볼 수 있어요.' : '알림을 신청하신 강의가 열렸어요.') + '</p>';
+  const foot = '<p style="margin:16px 0 0"><a href="' + SITE + (p.buyer ? '/my' : '/learn') + '" style="display:inline-block;background:#26313D;color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px">' + (p.buyer ? '내 학습으로' : '강의 보러 가기') + '</a></p>' + (p.buyer ? '<p style="font-size:13px;color:#6B727A">수강 시작일은 오늘이에요. 취소·환불은 오늘부터 정책 기준을 따라요.</p>' : '<p style="font-size:13px;color:#6B727A">알림 신청에 따라 한 번만 보내는 안내예요.</p>');
+  return send(p.email, '[CHA&I] ' + p.course + ' 강의가 열렸어요', wrap(p.course + ' 강의가 열렸어요', [], body, foot), text(p.course + ' 강의가 열렸어요', [], [SITE + (p.buyer ? '/my' : '/learn')]));
+}
+/* 5) 운영자 알림 (OPS_EMAIL, 없으면 보내는 계정으로) */
+function ops(subject, lines, link) {
+  const to = process.env.OPS_EMAIL || process.env.SMTP_USER;
+  const rows = (lines || []).map(l => Array.isArray(l) ? l : ['', l]);
+  const foot = '<p style="margin:16px 0 0"><a href="' + SITE + (link || '/admin') + '">관리자 화면에서 보기</a></p>';
+  return send(to, '[CHA&I 운영] ' + subject, wrap(subject, rows, '', foot), text(subject, rows, [SITE + (link || '/admin')]));
+}
+module.exports = { ready, send, orderConfirm, refundDone, companyInvite, courseOpen, ops };

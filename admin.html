@@ -94,14 +94,15 @@ var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){r
 var won=function(n){return Number(n||0).toLocaleString('ko-KR')+'원';};
 var day=function(t){return t?new Date(t).toLocaleDateString('ko-KR'):'-';};
 var dt=function(t){return t?new Date(t).toLocaleString('ko-KR',{dateStyle:'short',timeStyle:'short'}):'-';};
-var TOKEN='', ME=null, SHOP={}, COURSES=[];
+var TOKEN='', ME=null, ME_LABEL='', SHOP={}, COURSES=[];
 var ST={paid:['결제 완료','green'],partial_refunded:['일부 환불','amber'],refunded:['환불 완료',''],canceled:['취소',''],ready:['대기',''],waiting:['입금 대기','amber'],expired:['입금 기한 만료','']};
 var TAX={none:'증빙 없음',tax_invoice:'세금계산서',cash_receipt:'현금영수증',card:'카드 전표'};
 var CAT={biz:'기업 워크샵',salon:'살롱·원데이',cohort:'기수·라이브',vod:'VOD 강의',etc:'기타'};
 function catOf(id){var r=String((SHOP[id]||{}).refund||'');return /기업/.test(r)?'biz':/살롱|원데이/.test(r)?'salon':/기수|라이브|정기/.test(r)?'cohort':/VOD/.test(r)?'vod':'etc';}
 var LOGIN={email:'이메일',kakao:'카카오',google:'구글'};
 var SRC={purchase:'직접 구매',company:'회사 배정',grant:'운영자 부여'};
-var MENU=[['home','대시보드'],['orders','주문·환불'],['members','회원'],['companies','기업'],['courses','강의'],['ship','키트 발송'],['logs','작업 기록']];
+var MENU=[['home','대시보드','dash'],['orders','주문·환불','orders'],['leads','문의 접수함','leads'],['members','회원','members'],['companies','기업','companies'],['courses','강의·키트','courses'],['ship','키트 발송','ship'],['coupons','할인 코드','coupons'],['logs','작업 기록','logs'],['settings','설정','admins']];
+var PERMS=[];function can(p){return PERMS.indexOf('all')>=0||PERMS.indexOf(p)>=0;}function menu(){return MENU.filter(function(x){return can(x[2]);});}
 function itemName(id){var it=SHOP[id];return it?(it.name||it.label||id):id;}
 function courseName(id){var c=COURSES.find(function(x){return x.id===id;});return c?c.title:id;}
 function toast(m){var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove();},2600);}
@@ -110,18 +111,18 @@ dlg.addEventListener('click',function(e){if(e.target===dlg||e.target.closest('[d
 function api(r,params){var q=Object.keys(params||{}).map(function(k){return '&'+k+'='+encodeURIComponent(params[k]);}).join('');
   return fetch('/api/admin/data?r='+r+q,{headers:{Authorization:'Bearer '+TOKEN}}).then(function(x){return x.json();});}
 function act(body){return fetch('/api/admin/data',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+TOKEN},body:JSON.stringify(body)}).then(function(x){return x.json();}).then(function(d){
-  if(!d.ok){var M={NO_MEMBER:'그 이메일로 가입한 회원이 없어요. 먼저 회원가입을 부탁해 주세요.',NO_SEATS:'남은 수강권이 없어요.',SEAT_EXPIRED:'이용 기간이 끝난 수강권이에요.',TOO_MUCH:'환불 가능 금액보다 많아요.',NOT_REFUNDABLE:'환불할 수 없는 주문이에요.',BAD_REQUEST:'입력값을 확인해 주세요.',BUNNY_NOT_SET:'Bunny Stream이 아직 연결되지 않았어요. Vercel 환경 변수 3개를 넣어 주세요.',MFA_REQUIRED:'2단계 인증이 필요해요. 새로고침해 주세요.',VBANK_REFUND:'환불 받을 은행, 계좌번호, 예금주를 넣어 주세요.',PG:'토스에서 취소를 거절했어요. 상점관리자에서 확인해 주세요.'};toast(M[d.code]||('처리하지 못했어요 ('+(d.message||d.code||'')+')'));throw new Error(d.code);}return d;});}
+  if(!d.ok){var M={NO_MEMBER:'그 이메일로 가입한 회원이 없어요. 먼저 회원가입을 부탁해 주세요.',NO_SEATS:'남은 수강권이 없어요.',SEAT_EXPIRED:'이용 기간이 끝난 수강권이에요.',TOO_MUCH:'환불 가능 금액보다 많아요.',NOT_REFUNDABLE:'환불할 수 없는 주문이에요.',BAD_REQUEST:'입력값을 확인해 주세요.',BUNNY_NOT_SET:'Bunny Stream이 아직 연결되지 않았어요. Vercel 환경 변수 3개를 넣어 주세요.',MFA_REQUIRED:'2단계 인증이 필요해요. 새로고침해 주세요.',VBANK_REFUND:'환불 받을 은행, 계좌번호, 예금주를 넣어 주세요.',NO_PERM:'이 작업을 할 권한이 없어요.',SELF:'나 자신은 뺄 수 없어요.',LAST_OWNER:'전체 권한 관리자가 한 명은 있어야 해요.',STORAGE:'저장소에 연결하지 못했어요.',PG:'토스에서 취소를 거절했어요. 상점관리자에서 확인해 주세요.'};toast(M[d.code]||('처리하지 못했어요 ('+(d.message||d.code||'')+')'));throw new Error(d.code);}return d;});}
 function tag(s,c){return '<span class="tag '+(c||'')+'">'+esc(s)+'</span>';}
 function pbar(p){return '<span class="pbar"><i style="width:'+(p||0)+'%"></i></span><span class="small">'+(p||0)+'%</span>';}
 
 /* ── 틀 ── */
 function shell(){
-  $('#root').innerHTML='<div class="app"><aside class="side"><a class="logo" href="/">CHA&amp;I <small>관리</small></a><nav class="nav">'+MENU.map(function(m){return '<a href="#'+m[0]+'" data-m="'+m[0]+'">'+m[1]+'<span class="dot" data-dot="'+m[0]+'" hidden></span></a>';}).join('')+'</nav>'+
-    '<div class="who">'+esc(ME.email)+'<br><a href="/my">내 학습으로</a> · <a href="#" id="out">로그아웃</a></div></aside>'+
-    '<div><nav class="mtabs">'+MENU.map(function(m){return '<a href="#'+m[0]+'" data-m="'+m[0]+'">'+m[1]+'</a>';}).join('')+'</nav><main id="main"></main></div></div>';
+  $('#root').innerHTML='<div class="app"><aside class="side"><a class="logo" href="/">CHA&amp;I <small>관리</small></a><nav class="nav">'+menu().map(function(m){return '<a href="#'+m[0]+'" data-m="'+m[0]+'">'+m[1]+'<span class="dot" data-dot="'+m[0]+'" hidden></span></a>';}).join('')+'</nav>'+
+    '<div class="who">'+esc(ME.email)+(ME_LABEL?'<br><span class="small">'+esc(ME_LABEL)+'</span>':'')+'<br><a href="/my">내 학습으로</a> · <a href="#" id="out">로그아웃</a></div></aside>'+
+    '<div><nav class="mtabs">'+menu().map(function(m){return '<a href="#'+m[0]+'" data-m="'+m[0]+'">'+m[1]+'</a>';}).join('')+'</nav><main id="main"></main></div></div>';
   $('#out').onclick=function(e){e.preventDefault();sb.auth.signOut().then(function(){location.href='/';});};
 }
-function route(){var h=(location.hash||'#home').slice(1).split('/'),k=h[0]||'home';
+function route(){var h=(location.hash||'').slice(1).split('/'),k=h[0];var ok=menu().map(function(x){return x[0];});if(ok.indexOf(k)<0)k=ok[0]||'home';
   $$('[data-m]').forEach(function(a){if(a.getAttribute('data-m')===k)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
   /* 화면마다 새 칸: 늦게 온 앞 화면 응답이 지금 화면을 덮지 않게 */
   var m=document.createElement('div');m.innerHTML='<p class="muted">불러오는 중이에요</p>';$('#main').replaceChildren(m);window.scrollTo(0,0);
@@ -272,14 +273,14 @@ V.home=function(m){
 V.orders=function(m,pre){
   m.innerHTML='<div class="dhead"><div><h1>주문·환불</h1><p class="sub" style="margin:0">결제창 결제는 자동으로 들어오고, 기업 워크샵처럼 계좌이체·세금계산서로 받은 돈은 "직접 등록"으로 넣어요.</p></div><div class="dctl"><button class="btn" id="oCsv">엑셀로 내보내기</button><button class="btn p" id="oNew">+ 직접 등록</button></div></div>'+
     '<div class="bar"><input type="search" id="oq" placeholder="이메일, 이름, 주문번호"><select id="os"><option value="">전체 상태</option><option value="requested">환불 신청 대기</option><option value="waiting">입금 대기 (가상계좌)</option><option value="paid">결제 완료</option><option value="partial_refunded">일부 환불</option><option value="refunded">환불 완료</option><option value="expired">입금 기한 만료</option><option value="manual">직접 등록 거래</option></select><label><input type="checkbox" id="ot"> 테스트 결제 숨기기</label></div><div id="ol"></div>';
-  $('#oCsv').onclick=exportCsv;$('#oNew').onclick=function(){manualOrder(load);};
+  $('#oCsv').onclick=exportCsv;$('#oNew').onclick=function(){manualOrder(load);};if(!can('refund'))$('#oNew').hidden=true;
   if(pre)$('#os').value=pre;
   var load=function(){api('orders',{q:$('#oq').value,status:$('#os').value,test:$('#ot').checked?'0':''}).then(function(d){
     var L=d.orders;$('#ol').innerHTML=L.length?'<div class="tw"><table><thead><tr><th>결제일</th><th>상품</th><th>주문자</th><th class="num">금액</th><th>상태</th><th></th></tr></thead><tbody>'+L.map(function(o){
       var left=o.amount-(o.refund_amount||0),s=ST[o.status]||[o.status,''],man=o.source==='manual',vb=o.vbank||null;
       var acts='';
-      if(left>0&&(o.status==='paid'||o.status==='partial_refunded'))acts+='<button class="btn s" data-rf="'+esc(o.id)+'" data-left="'+left+'" data-man="'+(man?1:0)+'" data-vb="'+(o.method==='가상계좌'?1:0)+'">'+(man?'환불 기록':'환불')+'</button>';
-      if(o.status==='waiting')acts+=' <button class="btn s" data-cw="'+esc(o.id)+'">입금 전 취소</button>';
+      if(can('refund')&&left>0&&(o.status==='paid'||o.status==='partial_refunded'))acts+='<button class="btn s" data-rf="'+esc(o.id)+'" data-left="'+left+'" data-man="'+(man?1:0)+'" data-vb="'+(o.method==='가상계좌'?1:0)+'">'+(man?'환불 기록':'환불')+'</button>';
+      if(can('refund')&&o.status==='waiting')acts+=' <button class="btn s" data-cw="'+esc(o.id)+'">입금 전 취소</button>';
       if(!man&&!o.is_test)acts+=' <button class="btn s" data-sync="'+esc(o.id)+'" title="토스 상점관리자의 상태와 맞춰요">토스와 맞추기</button>';
       acts+=' <button class="btn s" data-memo="'+esc(o.id)+'">메모</button>';
       return '<tr><td class="nowrap">'+(o.paid_at?day(o.paid_at):'<span class="muted">'+day(o.created_at)+' 주문</span>')+'</td><td>'+esc(itemName(o.item_id))+(o.qty>1?' <span class="muted">· '+o.qty+(SHOP[o.item_id]&&SHOP[o.item_id].head?'명':'개')+'</span>':'')+(o.is_test?' '+tag('테스트'):'')+(man?' '+tag('직접 등록'):'')+'<div class="small muted">'+esc(o.id)+' · '+esc(CAT[catOf(o.item_id)])+'</div>'+(o.memo?'<div class="small">'+esc(o.memo)+'</div>':'')+'</td><td>'+esc(o.buyer_name||'')+'<div class="small muted">'+esc(o.buyer_email)+(o.user_id?'':' · 비회원')+'</div></td>'+
@@ -392,8 +393,12 @@ function inviteDlg(send,done){
 V.courses=function(m){api('courses').then(function(d){COURSES=d.courses;
   m.innerHTML='<h1>강의</h1><p class="sub">강의를 열면(사전 예약 → 오픈) 그날이 수강 시작일이 되고, 환불 계산도 그날부터 해요.</p>'+(d.bunny?'':'<div class="note" style="margin:0 0 16px"><b>영상 연결 전</b> · Bunny Stream에 가입하고 Vercel 환경 변수(BUNNY_LIBRARY_ID, BUNNY_STREAM_API_KEY, BUNNY_TOKEN_KEY)를 넣으면 여기서 바로 영상을 올릴 수 있어요. 그 전에는 편 목록만 만들어 둘 수 있어요.</div>')+d.courses.map(function(c){
     return '<div class="box" style="margin:0 0 16px"><div class="bar" style="justify-content:space-between;margin:0 0 10px"><div><b>'+esc(c.title)+'</b> '+(c.is_open?tag('오픈 '+day(c.opened_at),'green'):tag('사전 예약','amber'))+' <span class="small muted">수강 '+c.students+'명 · '+c.lessons.length+'편</span></div><div><button class="btn s" data-open="'+esc(c.id)+'" data-v="'+(c.is_open?0:1)+'">'+(c.is_open?'닫기':'강의 열기')+'</button> <button class="btn s p" data-add="'+esc(c.id)+'">편 추가</button></div></div>'+
-      (c.lessons.length?'<div class="tw"><table><thead><tr><th class="num">순서</th><th>단계</th><th>제목</th><th>맛보기</th><th>영상</th><th class="num">길이</th><th></th></tr></thead><tbody>'+c.lessons.map(function(l){return '<tr><td class="num">'+l.sort+'</td><td>'+esc(l.part)+'</td><td>'+esc(l.title)+'</td><td>'+(l.is_free?tag('무료','green'):'')+'</td><td>'+(l.video_id?(l.video_status===4?tag('재생 가능','green'):l.video_status===5?tag('변환 오류','red'):tag('처리 중','amber'))+(d.bunny&&l.video_status!==4?' <button class="btn s" data-vs="'+esc(l.video_id)+'">상태 확인</button>':''):tag('없음','red'))+'</td><td class="num">'+(l.duration_s?Math.round(l.duration_s/60)+'분':'-')+'</td><td class="num"><button class="btn s" data-ed="'+l.id+'">수정</button></td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">편이 없어요. 영상이 준비되면 편을 추가해 주세요.</div>')+'</div>';}).join('');
-  $$('[data-open]',m).forEach(function(b){b.onclick=function(){var o=b.getAttribute('data-v')==='1';if(!confirmTxt(o?'강의를 열까요? 오늘이 이 강의 수강생 모두의 수강 시작일이 돼요.':'강의를 닫을까요? 수강생이 볼 수 없게 돼요.'))return;act({action:'course_open',courseId:b.getAttribute('data-open'),open:o}).then(function(){toast(o?'강의를 열었어요':'강의를 닫았어요');V.courses(m);});};});
+      (c.lessons.length?'<div class="tw"><table><thead><tr><th class="num">순서</th><th>단계</th><th>제목</th><th>맛보기</th><th>영상</th><th class="num">길이</th><th></th></tr></thead><tbody>'+c.lessons.map(function(l){return '<tr><td class="num">'+l.sort+'</td><td>'+esc(l.part)+'</td><td>'+esc(l.title)+'</td><td>'+(l.is_free?tag('무료','green'):'')+'</td><td>'+(l.video_id?(l.video_status===4?tag('재생 가능','green'):l.video_status===5?tag('변환 오류','red'):tag('처리 중','amber'))+(d.bunny&&l.video_status!==4?' <button class="btn s" data-vs="'+esc(l.video_id)+'">상태 확인</button>':''):tag('없음','red'))+'</td><td class="num">'+(l.duration_s?Math.round(l.duration_s/60)+'분':'-')+'</td><td class="num"><button class="btn s" data-ed="'+l.id+'">수정</button></td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">편이 없어요. 영상이 준비되면 편을 추가해 주세요.</div>')+'<div data-kits="'+esc(c.id)+'"></div></div>';}).join('');
+  $$('[data-open]',m).forEach(function(b){b.onclick=function(){var o=b.getAttribute('data-v')==='1';var cid=b.getAttribute('data-open');
+    if(!o){if(!confirmTxt('강의를 닫을까요? 수강생이 볼 수 없게 돼요.'))return;act({action:'course_open',courseId:cid,open:false}).then(function(){toast('강의를 닫았어요');V.courses(m);});return;}
+    openDlg('<h3>강의 열기</h3><div class="f"><p style="margin:0">오늘이 이 강의 수강생 모두의 수강 시작일이 되고, 환불 계산도 오늘부터 해요.</p><label class="ck"><input type="checkbox" id="oN" checked> 사전 예약 구매자와 오픈 알림 신청자에게 메일 보내기</label><p class="small muted" style="margin:0">한 사람에게 한 번만 가요. 한 번에 150명까지 보내고, 남으면 다시 열기를 누르면 이어서 보내요.</p><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="oGo">강의 열기</button></div></div>');
+    $('#oGo').onclick=function(){this.disabled=true;act({action:'course_open',courseId:cid,open:true,notify:$('#oN').checked}).then(function(r){closeDlg();toast('강의를 열었어요'+($('#oN')&&r.mail===false?' · 메일 설정 전이라 알림은 못 보냈어요':(r.notified?' · 알림 '+r.notified+'명':''))+(r.left?' · 남은 '+r.left+'명은 다시 눌러 주세요':''));V.courses(m);});};};});
+  kitSection(m,d.courses);
   var all=[];d.courses.forEach(function(c){all=all.concat(c.lessons);});
   var edit=function(cid,l){l=l||{};var next=1;d.courses.forEach(function(c){if(c.id===cid)next=c.lessons.length+1;});
     openDlg('<h3>'+(l.id?'편 수정':'편 추가')+'</h3><div class="f"><div class="row"><label>순서<input id="lS" inputmode="numeric" value="'+(l.sort||next)+'"></label><label>단계<input id="lP" value="'+esc(l.part||'')+'" placeholder="예: 1단계 세팅"></label></div><label>제목<input id="lT" value="'+esc(l.title||'')+'" maxlength="120"></label><div class="row"><label>Bunny Video ID<input id="lV" value="'+esc(l.video_id||'')+'"'+(d.bunny?'':' placeholder="Bunny 연결 뒤 업로드"')+'></label><label>길이(분)<input id="lD" inputmode="numeric" value="'+(l.duration_s?Math.round(l.duration_s/60):'')+'"></label></div>'+(d.bunny?'<label>영상 파일 올리기 (선택)<input id="lFile" type="file" accept="video/*"></label><div id="lProg" class="small muted"></div>':'')+'<label class="ck"><input type="checkbox" id="lF"'+(l.is_free?' checked':'')+'> 맛보기 (누구나 볼 수 있고, 환불 계산에서 빼요)</label>'+
@@ -426,16 +431,16 @@ V.ship=function(m){api('shipments').then(function(d){var L=d.orders;
 
 
 /* ── 작업 기록 ── */
-var ACTN={refund:'환불',grant:'수강권 부여',revoke:'수강권 회수',company_create:'기업 등록',company_admin:'담당자 지정',seat_add:'수강권 묶음 추가',company_invite:'구성원 초대',company_assign:'강의 배정',company_unassign:'배정 회수',company_remove:'구성원 빼기',course_open:'강의 열기·닫기',lesson_save:'편 저장',lesson_delete:'편 삭제',video_init:'영상 업로드',shipped:'발송 처리'};
+var ACTN={refund:'환불',grant:'수강권 부여',revoke:'수강권 회수',company_create:'기업 등록',company_admin:'담당자 지정',seat_add:'수강권 묶음 추가',company_invite:'구성원 초대',company_assign:'강의 배정',company_unassign:'배정 회수',company_remove:'구성원 빼기',course_open:'강의 열기·닫기',lesson_save:'편 저장',lesson_delete:'편 삭제',video_init:'영상 업로드',shipped:'발송 처리',order_manual:'매출 직접 등록',order_memo:'주문 메모',cancel_waiting:'입금 전 취소',pg_sync:'PG와 맞추기',pg_webhook:'PG 웹훅 반영',lead_update:'문의 상태 변경',coupon_save:'할인 저장',coupon_toggle:'할인 켜기·멈추기',admin_save:'관리자 권한 저장',admin_remove:'관리자 빼기',kit_upload:'키트 올리기',kit_save:'키트 등록',kit_delete:'키트 삭제',backup_now:'백업',purge_test:'테스트 주문 삭제',view_member:'회원 상세 열람',view_members:'회원 목록 열람',view_orders_csv:'주문 엑셀 내보내기',view_leads:'문의 접수함 열람',cleanup_shipping:'배송 정보 자동 삭제'};
 V.logs=function(m){api('logs').then(function(d){var L=d.logs;
-  m.innerHTML='<h1>작업 기록</h1><p class="sub">운영자가 한 일(환불, 수강권, 기업, 강의, 발송)이 자동으로 남아요. 분쟁이 생기면 근거가 돼요.</p>'+(L.length?'<div class="tw"><table><thead><tr><th>시각</th><th>운영자</th><th>작업</th><th>대상</th><th>내용</th></tr></thead><tbody>'+L.map(function(x){
+  m.innerHTML='<h1>작업 기록</h1><p class="sub">운영자가 한 일과 개인정보를 연 기록이 접속 IP와 함께 자동으로 남아요(1년 이상 보관). 분쟁이 생기면 근거가 돼요.</p>'+(L.length?'<div class="tw"><table><thead><tr><th>시각</th><th>운영자</th><th>작업</th><th>대상</th><th>내용</th></tr></thead><tbody>'+L.map(function(x){
     var dd=x.detail||{},keys=Object.keys(dd).filter(function(k){return dd[k]!==''&&dd[k]!=null&&typeof dd[k]!=='object';}).slice(0,5);
-    return '<tr><td class="nowrap">'+dt(x.created_at)+'</td><td class="small">'+esc(x.email||'')+'</td><td>'+tag(ACTN[x.action]||x.action)+'</td><td class="small">'+esc(x.target||'')+'</td><td class="small muted">'+keys.map(function(k){return esc(k)+': '+esc(String(dd[k]).slice(0,60));}).join(' · ')+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">아직 기록이 없어요</div>');
+    return '<tr><td class="nowrap">'+dt(x.created_at)+'</td><td class="small">'+esc(x.email||'자동')+(x.ip?'<div class="muted">'+esc(x.ip)+'</div>':'')+'</td><td>'+tag(ACTN[x.action]||x.action)+'</td><td class="small">'+esc(x.target||'')+'</td><td class="small muted">'+keys.map(function(k){return esc(k)+': '+esc(String(dd[k]).slice(0,60));}).join(' · ')+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">아직 기록이 없어요</div>');
 });};
 /* ── 주문 엑셀(CSV) 내보내기: 세무·정산용 ── */
 function exportCsv(){api('orders_csv').then(function(d){
-  var st={paid:'결제 완료',partial_refunded:'일부 환불',refunded:'환불 완료',canceled:'취소'};
-  var rows=[['결제일','주문번호','상품','수량','결제 금액','환불 금액','순매출','상태','테스트','주문자','이메일','결제 수단','환불일','환불 사유']].concat(d.orders.map(function(o){return [o.paid_at?new Date(o.paid_at).toLocaleString('ko-KR'):'',o.id,itemName(o.item_id),o.qty,o.amount,o.refund_amount||0,o.amount-(o.refund_amount||0),st[o.status]||o.status,o.is_test?'예':'',o.buyer_name||'',o.buyer_email,o.method||'',o.refunded_at?new Date(o.refunded_at).toLocaleString('ko-KR'):'',o.refund_reason||''];}));
+  var st={paid:'결제 완료',partial_refunded:'일부 환불',refunded:'환불 완료',canceled:'취소',waiting:'입금 대기',expired:'입금 기한 만료'};
+  var rows=[['결제일','주문번호','상품','분야','수량','정가','할인','할인 코드','결제 금액','환불 금액','순매출','상태','테스트','주문자','이메일','결제 수단','출처','증빙','메모','환불일','환불 사유']].concat(d.orders.map(function(o){return [o.paid_at?new Date(o.paid_at).toLocaleString('ko-KR'):'',o.id,itemName(o.item_id),CAT[catOf(o.item_id)],o.qty,o.list_amount||o.amount,o.discount||0,o.coupon_code||'',o.amount,o.refund_amount||0,o.amount-(o.refund_amount||0),st[o.status]||o.status,o.is_test?'예':'',o.buyer_name||'',o.buyer_email,o.method||'',o.source==='manual'?'직접 등록':'결제창',TAX[o.tax_doc]||'',o.memo||'',o.refunded_at?new Date(o.refunded_at).toLocaleString('ko-KR'):'',o.refund_reason||''];}));
   var csv='﻿'+rows.map(function(r){return r.map(function(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}).join(',');}).join('\r\n');
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='chaand-orders-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove();toast(d.orders.length+'건을 내보냈어요');
 });}
@@ -474,16 +479,114 @@ function mfaGate(){
     });
   }).catch(function(){$('#root').innerHTML='<div class="gate"><h1>2단계 인증</h1><p>인증 화면을 불러오지 못했어요. Supabase에서 MFA(TOTP)가 켜져 있는지 확인해 주세요.</p></div>';});
 }
+/* ── 문의 접수함 (구글 시트와 같이 저장, 상태는 여기서 바꾸면 시트에도 반영) ── */
+var LST={new:['새 문의','red'],talking:['상담 중','amber'],proposal:['제안·견적','amber'],won:['계약','green'],lost:['보류·무산',''],done:['처리 완료',''],spam:['스팸','']};
+var LKEY={program:'프로그램',size:'인원',when:'희망 시기',roles:'직무',access:'AI 접속',proposal:'제안서',role:'부서·직책',course:'관심 강의',ask:'궁금한 점',job:'하는 일',level:'AI 경험',slot:'가능 시간',plan:'형태',pay:'결제·증빙',pkg:'패키지',place:'장소',msg:'내용',group:'실습 묶음',tasks:'지난주 한 일',rep:'반복 업무(시간/주)',ontime:'정시 퇴근(일/5)',after:'퇴근 후 확인(번/일)',weekend:'주말 근무(시간)',burden:'AI로 일 늘었다(1~5)',real:'실제 자료'};
+V.leads=function(m,pre){
+  m.innerHTML='<h1>문의 접수함</h1><p class="sub">사이트 문의·제안서 요청·오픈 알림·사전 진단이 여기와 구글 시트에 같이 들어와요. 상태를 바꾸면 시트의 \'처리 상태\'도 같이 바뀌어요. 접수 후 1년이 지나면 둘 다 자동으로 지워져요.</p>'+
+    '<div class="bar"><input type="search" id="lq" placeholder="회사, 이름, 이메일"><select id="lsel"><option value="">전체 상태</option>'+Object.keys(LST).map(function(k){return '<option value="'+k+'">'+LST[k][0]+'</option>';}).join('')+'</select><select id="lk"><option value="">전체 종류</option></select></div><div id="lsum" class="todo-strip"></div><div id="ll"></div>';
+  if(pre)$('#lsel').value=pre;
+  var load=function(){api('leads',{q:$('#lq').value,status:$('#lsel').value,kind:$('#lk').value}).then(function(d){
+    var ks=$('#lk'),cur=ks.value;ks.innerHTML='<option value="">전체 종류</option>'+d.kinds.map(function(k){return '<option'+(k===cur?' selected':'')+'>'+esc(k)+'</option>';}).join('');
+    $('#lsum').innerHTML=['new','talking','proposal','won'].map(function(k){return '<a href="#" data-ls="'+k+'"'+(k==='new'?'':' class="amb"')+'>'+LST[k][0]+' <b>'+(d.counts[k]||0)+'</b></a>';}).join('');
+    $$('[data-ls]',m).forEach(function(a){a.onclick=function(e){e.preventDefault();$('#lsel').value=a.getAttribute('data-ls');load();};});
+    var L=d.leads;$('#ll').innerHTML=L.length?'<div class="tw"><table><thead><tr><th>접수</th><th>종류</th><th>회사·이름</th><th>내용</th><th>상태</th></tr></thead><tbody>'+L.map(function(x){var st=LST[x.status]||[x.status,''],dd=x.detail||{},first=Object.keys(dd).filter(function(k){return dd[k];})[0];
+      return '<tr class="click" data-lead="'+x.id+'"><td class="nowrap">'+dt(x.created_at)+'</td><td>'+esc(x.kind)+'</td><td>'+esc(x.company||'')+(x.company&&x.name?' · ':'')+esc(x.name||'')+'<div class="small muted">'+esc(x.email)+(x.phone?' · '+esc(x.phone):'')+'</div></td><td class="small">'+(first?esc((LKEY[first]||first)+': '+String(dd[first]).slice(0,60)):'')+(x.memo?'<div class="muted">메모: '+esc(x.memo.slice(0,40))+'</div>':'')+'</td><td>'+tag(st[0],st[1])+(x.sheet_ok?'':' '+tag('시트 X',''))+'</td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">접수된 문의가 없어요</div>';
+    $$('[data-lead]',m).forEach(function(r){r.onclick=function(){var x=L.find(function(y){return y.id===+r.getAttribute('data-lead');}),dd=x.detail||{};
+      openDlg('<h3>'+esc(x.kind)+' · '+esc(x.company||x.name||x.email)+'</h3><dl class="kv" style="margin-bottom:14px"><dt>접수</dt><dd>'+dt(x.created_at)+'</dd><dt>회사</dt><dd>'+esc(x.company||'-')+'</dd><dt>이름</dt><dd>'+esc(x.name||'-')+'</dd><dt>이메일</dt><dd><a href="mailto:'+esc(x.email)+'">'+esc(x.email)+'</a></dd><dt>연락처</dt><dd>'+esc(x.phone||'-')+'</dd>'+Object.keys(dd).map(function(k){return '<dt>'+esc(LKEY[k]||k)+'</dt><dd style="white-space:pre-wrap">'+esc(dd[k])+'</dd>';}).join('')+'<dt>보낸 페이지</dt><dd class="small">'+esc(x.page||'-')+'</dd></dl>'+
+        '<div class="f"><label>상태<select id="xS">'+Object.keys(LST).map(function(k){return '<option value="'+k+'"'+(x.status===k?' selected':'')+'>'+LST[k][0]+'</option>';}).join('')+'</select></label><label>담당<input id="xO" value="'+esc(x.owner_email||'')+'" placeholder="담당자 이메일"></label><label>메모<textarea id="xM" maxlength="1000">'+esc(x.memo||'')+'</textarea></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="xGo">저장</button></div></div>');
+      $('#xGo').onclick=function(){this.disabled=true;act({action:'lead_update',id:x.id,status:$('#xS').value,memo:$('#xM').value.trim(),owner:$('#xO').value.trim()}).then(function(r){closeDlg();toast(r.sheet?'저장했어요 · 시트에도 반영':'저장했어요 (시트 연동 전이라 시트는 그대로예요)');load();});};};});
+  });};
+  var tm;$('#lq').oninput=function(){clearTimeout(tm);tm=setTimeout(load,300);};$('#lsel').onchange=load;$('#lk').onchange=load;load();
+};
+
+/* ── 할인 코드 ── */
+V.coupons=function(m){api('coupons').then(function(d){var L=d.coupons,CT=d.cats;
+  var desc=function(c){return (c.kind==='percent'?c.value+'%':won(c.value))+(c.max_discount?' (최대 '+won(c.max_discount)+')':'')+' 할인';};
+  var scope=function(c){return c.items&&c.items.length?c.items.map(itemName).join(', '):c.cats&&c.cats.length?c.cats.map(function(k){return CT[k]||k;}).join(', '):'모든 상품';};
+  var period=function(c){return (c.starts_at?day(c.starts_at):'지금')+' ~ '+(c.ends_at?day(c.ends_at):'계속');};
+  m.innerHTML='<div class="dhead"><div><h1>할인 코드</h1><p class="sub" style="margin:0">결제 화면에서 코드를 넣으면 서버가 금액을 다시 계산해 적용해요. "자동 할인"은 코드 없이 기간 동안 자동으로 붙어요(얼리버드 연장 등). 여러 할인이 맞으면 가장 큰 하나만 적용돼요.</p></div><div class="dctl"><button class="btn p" id="cNew">+ 새 할인</button></div></div>'+
+    (L.length?'<div class="tw"><table><thead><tr><th>코드·이름</th><th>할인</th><th>대상</th><th>기간</th><th class="num">사용</th><th>상태</th><th></th></tr></thead><tbody>'+L.map(function(c){var on=c.active&&(!c.ends_at||Date.parse(c.ends_at)>Date.now());
+      return '<tr><td><b>'+esc(c.auto?'(자동) ':'')+esc(c.code)+'</b><div class="small muted">'+esc(c.title)+'</div></td><td>'+desc(c)+(c.min_amount?'<div class="small muted">'+won(c.min_amount)+' 이상</div>':'')+'</td><td class="small">'+esc(scope(c))+'</td><td class="small nowrap">'+period(c)+'</td><td class="num">'+c.used+(c.max_uses?' / '+c.max_uses:'')+(c.per_email?'<div class="small muted">1인 '+c.per_email+'회</div>':'')+'</td><td>'+(on?tag('사용 중','green'):tag(c.active?'기간 끝':'멈춤',''))+'</td><td class="num"><button class="btn s" data-ce="'+esc(c.code)+'">수정</button> <button class="btn s" data-ct="'+esc(c.code)+'" data-v="'+(c.active?0:1)+'">'+(c.active?'멈추기':'다시 켜기')+'</button></td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">아직 할인이 없어요</div>')+
+    '<p class="small muted" style="margin-top:14px">공유 링크: 결제 주소 끝에 <code>&amp;code=코드</code>를 붙이면 코드가 미리 들어가요. 예) /checkout?item=vibe-web&amp;code=EARLY10</p>';
+  var edit=function(c){c=c||{kind:'percent',active:true};var loc=function(t){return t?new Date(Date.parse(t)+9*3600e3).toISOString().slice(0,16):'';};
+    openDlg('<h3>'+(c.code?'할인 수정':'새 할인')+'</h3><div class="f">'+
+      '<div class="row"><label>코드 (영문·숫자)<input id="kC" value="'+esc(c.code||'')+'"'+(c.code?' readonly':'')+' placeholder="예: OOCORP20"></label><label>이름 (결제 화면에 보여요)<input id="kT" value="'+esc(c.title||'')+'" placeholder="예: OO전자 단체 할인"></label></div>'+
+      '<label class="ck"><input type="checkbox" id="kA"'+(c.auto?' checked':'')+'> 자동 할인 (코드 없이 기간 안에 자동 적용)</label>'+
+      '<div class="row"><label>방식<select id="kK"><option value="percent"'+(c.kind==='percent'?' selected':'')+'>정률 (%)</option><option value="amount"'+(c.kind==='amount'?' selected':'')+'>정액 (원)</option></select></label><label>값<input id="kV" inputmode="numeric" value="'+(c.value||'')+'" placeholder="예: 20 또는 30000"></label></div>'+
+      '<div class="row"><label>최대 할인 금액 (정률일 때, 선택)<input id="kX" inputmode="numeric" value="'+(c.max_discount||'')+'"></label><label>최소 결제 금액 (선택)<input id="kMin" inputmode="numeric" value="'+(c.min_amount||'')+'"></label></div>'+
+      '<label>적용 분야 (비우면 전체)<div class="bar" style="margin:4px 0 0">'+Object.keys(CT).map(function(k){return '<label class="ck"><input type="checkbox" class="kCat" value="'+k+'"'+((c.cats||[]).indexOf(k)>=0?' checked':'')+'> '+CT[k]+'</label>';}).join('')+'</div></label>'+
+      '<label>적용 상품 (비우면 위 분야 전체 · Ctrl/⌘로 여러 개)<select id="kI" multiple size="6">'+Object.keys(SHOP).map(function(k){return '<option value="'+esc(k)+'"'+((c.items||[]).indexOf(k)>=0?' selected':'')+'>'+esc(itemName(k))+'</option>';}).join('')+'</select></label>'+
+      '<div class="row"><label>시작 (선택)<input id="kS" type="datetime-local" value="'+loc(c.starts_at)+'"></label><label>끝 (선택)<input id="kE" type="datetime-local" value="'+loc(c.ends_at)+'"></label></div>'+
+      '<div class="row"><label>전체 사용 한도 (선택)<input id="kU" inputmode="numeric" value="'+(c.max_uses||'')+'"></label><label>이메일당 한도 (선택)<input id="kP" inputmode="numeric" value="'+(c.per_email||'')+'"></label></div>'+
+      '<label>메모<input id="kM" value="'+esc(c.memo||'')+'"></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="kGo">저장</button></div></div>');
+    $('#kI').style.height='auto';
+    $('#kGo').onclick=function(){var n=function(i){return String($(i).value).replace(/[^0-9]/g,'');},tz=function(v){return v?v+':00+09:00':'';};
+      act({action:'coupon_save',code:$('#kC').value,title:$('#kT').value.trim(),auto:$('#kA').checked,kind:$('#kK').value,value:n('#kV'),max_discount:n('#kX'),min_amount:n('#kMin'),cats:$$('.kCat').filter(function(x){return x.checked;}).map(function(x){return x.value;}),items:[].slice.call($('#kI').selectedOptions).map(function(o){return o.value;}),starts_at:tz($('#kS').value),ends_at:tz($('#kE').value),max_uses:n('#kU'),per_email:n('#kP'),memo:$('#kM').value.trim(),active:c.active!==false})
+        .then(function(){closeDlg();toast('저장했어요');V.coupons(m);});};};
+  $('#cNew').onclick=function(){edit();};
+  $$('[data-ce]',m).forEach(function(b){b.onclick=function(){edit(L.find(function(c){return c.code===b.getAttribute('data-ce');}));};});
+  $$('[data-ct]',m).forEach(function(b){b.onclick=function(){act({action:'coupon_toggle',code:b.getAttribute('data-ct'),active:b.getAttribute('data-v')==='1'}).then(function(){V.coupons(m);});};});
+});};
+
+/* ── 설정: 권한 · 출시 점검 · 백업 ── */
+V.settings=function(m,sub){sub=sub||'launch';
+  m.innerHTML='<h1>설정</h1><div class="seg" style="margin:0 0 18px">'+[['launch','출시 점검'],['admins','관리자 권한'],['backup','백업']].map(function(t){return '<button data-st="'+t[0]+'" aria-selected="'+(t[0]===sub)+'">'+t[1]+'</button>';}).join('')+'</div><div id="sv"></div>';
+  $$('[data-st]',m).forEach(function(b){b.onclick=function(){location.hash='settings/'+b.getAttribute('data-st');};});
+  var box=$('#sv',m);
+  if(sub==='admins')return api('admins').then(function(d){var P=d.presets,N=d.names;
+    box.innerHTML='<p class="sub">관리자마다 볼 수 있는 메뉴와 할 수 있는 일을 정해요. 먼저 사이트에 회원으로 가입한 이메일이어야 해요. 고객사 담당자(HR)는 여기가 아니라 기업 메뉴의 "담당자 지정"으로 넣어요.</p>'+
+      '<div class="tw"><table><thead><tr><th>관리자</th><th>역할</th><th>권한</th><th></th></tr></thead><tbody>'+d.admins.map(function(a){var all=(a.perms||[]).indexOf('all')>=0;
+        return '<tr><td>'+esc(a.name||'')+'<div class="small muted">'+esc(a.email||a.user_id)+'</div></td><td>'+esc(a.label||(all?'대표 (전체 권한)':''))+'</td><td class="small">'+(all?'전체':(a.perms||[]).map(function(p){return N[p]||p;}).join(', '))+'</td><td class="num"><button class="btn s" data-ae="'+esc(a.email||'')+'">바꾸기</button> '+(a.user_id===ME.id?'':'<button class="btn s" data-ar="'+a.user_id+'">빼기</button>')+'</td></tr>';}).join('')+'</tbody></table></div>'+
+      '<p style="margin-top:14px"><button class="btn p" id="aNew">+ 관리자 추가</button></p>'+
+      '<h2>역할 안내</h2><dl class="kv">'+Object.keys(P).map(function(k){return '<dt>'+esc(P[k].label)+'</dt><dd class="small">'+(P[k].perms[0]==='all'?'모든 메뉴와 권한 관리':P[k].perms.map(function(p){return N[p];}).join(', '))+'</dd>';}).join('')+'</dl>';
+    var edit=function(a){a=a||{};var cur=a.perms||[];
+      openDlg('<h3>'+(a.email?'권한 바꾸기':'관리자 추가')+'</h3><div class="f"><label>회원 이메일<input id="aE" type="email" value="'+esc(a.email||'')+'"'+(a.email?' readonly':'')+'></label>'+
+        '<label>역할<select id="aP"><option value="">직접 고르기</option>'+Object.keys(P).map(function(k){return '<option value="'+k+'"'+(a.label===P[k].label?' selected':'')+'>'+esc(P[k].label)+'</option>';}).join('')+'</select></label>'+
+        '<div id="aBox" class="bar">'+Object.keys(N).map(function(p){return '<label class="ck"><input type="checkbox" class="aC" value="'+p+'"'+(cur.indexOf(p)>=0||cur.indexOf('all')>=0?' checked':'')+'> '+N[p]+'</label>';}).join('')+'</div>'+
+        '<label>표시 이름 (선택)<input id="aL" value="'+esc(a.label||'')+'" placeholder="예: 기업강의 담당 · 한성희"></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="aGo">저장</button></div></div>');
+      var sync=function(){var k=$('#aP').value;if(!k)return;var ps=P[k].perms;$$('.aC').forEach(function(c){c.checked=ps[0]==='all'||ps.indexOf(c.value)>=0;});if(!$('#aL').value||Object.keys(P).some(function(x){return P[x].label===$('#aL').value;}))$('#aL').value=P[k].label;};
+      $('#aP').onchange=sync;
+      $('#aGo').onclick=function(){var k=$('#aP').value,ps=$$('.aC').filter(function(c){return c.checked;}).map(function(c){return c.value;});
+        if(k==='owner')ps=['all'];act({action:'admin_save',email:$('#aE').value.trim(),perms:ps,label:$('#aL').value.trim()}).then(function(){closeDlg();toast('저장했어요');V.settings(m,'admins');});};};
+    $('#aNew').onclick=function(){edit();};
+    $$('[data-ae]',box).forEach(function(b){b.onclick=function(){edit(d.admins.find(function(a){return a.email===b.getAttribute('data-ae');}));};});
+    $$('[data-ar]',box).forEach(function(b){b.onclick=function(){if(!confirmTxt('이 관리자를 뺄까요? 관리자 화면에 들어올 수 없게 돼요.'))return;act({action:'admin_remove',userId:b.getAttribute('data-ar')}).then(function(){toast('뺐어요');V.settings(m,'admins');});};});
+  });
+  if(sub==='backup')return api('backups').then(function(d){
+    box.innerHTML='<p class="sub">매주 일요일 새벽에 주요 표(회원·주문·수강권·기업·문의·할인 등)를 묶어 비공개 저장소에 자동으로 백업하고, 최근 8개만 남겨요. 같은 Supabase 안에 있으니 한 달에 한 번은 내려받아 따로 보관해 주세요.</p><p><button class="btn p" id="bNow">지금 백업하기</button></p>'+
+      (d.backups.length?'<div class="tw"><table><thead><tr><th>파일</th><th>만든 때</th><th class="num">크기</th><th></th></tr></thead><tbody>'+d.backups.map(function(x){return '<tr><td>'+esc(x.name)+'</td><td>'+dt(x.at)+'</td><td class="num">'+(x.size?Math.max(1,Math.round(x.size/1024))+'KB':'')+'</td><td class="num"><button class="btn s" data-bg="'+esc(x.name)+'">내려받기</button></td></tr>';}).join('')+'</tbody></table></div>':'<div class="empty">아직 백업이 없어요</div>');
+    $('#bNow').onclick=function(){var b=this;b.disabled=true;b.textContent='백업하는 중이에요';act({action:'backup_now'}).then(function(r){toast('백업했어요 ('+Math.round(r.bytes/1024)+'KB)');V.settings(m,'backup');},function(){b.disabled=false;b.textContent='지금 백업하기';});};
+    $$('[data-bg]',box).forEach(function(b){b.onclick=function(){act({action:'backup_get',name:b.getAttribute('data-bg')}).then(function(r){if(r.url)location.href=r.url;});};});
+  });
+  return api('launch').then(function(d){var G={};d.checks.forEach(function(c){(G[c.group]=G[c.group]||[]).push(c);});var ok=d.checks.filter(function(c){return c.ok;}).length;
+    box.innerHTML='<p class="sub">실서버로 열기 전에 하나씩 초록색으로 만들어 주세요. '+ok+'/'+d.checks.length+' 준비됨.</p>'+Object.keys(G).map(function(g){return '<h2>'+esc(g)+'</h2><ul class="rl box">'+G[g].map(function(c){return '<li><div><b>'+(c.ok?'✓ ':'· ')+esc(c.name)+'</b><div class="small muted">'+esc(c.note)+'</div></div><div>'+tag(c.ok?'준비됨':'확인 필요',c.ok?'green':'amber')+'</div></li>';}).join('')+'</ul>';}).join('')+
+      '<h2>테스트 데이터 정리</h2><div class="box"><p class="small" style="margin-top:0">테스트 결제로 생긴 주문과 그 주문의 수강권을 지워요. 실제 결제는 지우지 않아요. 운영 키로 바꾼 뒤, 출시 직전에 한 번 눌러 주세요.</p><button class="btn d" id="pT">테스트 주문 지우기</button></div>';
+    $('#pT').onclick=function(){if(!confirmTxt('테스트 결제 주문과 그 수강권을 모두 지울까요? 되돌릴 수 없어요.'))return;act({action:'purge_test',confirm:'delete-test'}).then(function(r){toast(r.deleted+'건 지웠어요');V.settings(m,'launch');});};
+  });
+};
+/* ── 강의별 파일 키트 (비공개 저장소, 수강생·키트 구매자만 내려받기) ── */
+function kitSection(m,courses){api('kits').then(function(d){
+  courses.forEach(function(c){var host=$('[data-kits="'+c.id+'"]',m);if(!host)return;var ks=d.kits.filter(function(k){return k.course_id===c.id;});
+    host.innerHTML='<div class="bar" style="justify-content:space-between;margin:14px 0 6px"><b class="small">키트 파일 '+ks.length+'개</b><label class="btn s">파일 올리기<input type="file" hidden data-kup="'+esc(c.id)+'"></label></div>'+(ks.length?'<ul class="rl">'+ks.map(function(k){return '<li><div>'+esc(k.title)+'<div class="small muted">'+esc(k.file_name||'')+(k.size_b?' · '+Math.max(1,Math.round(k.size_b/1024))+'KB':'')+'</div></div><button class="btn s" data-kdel="'+k.id+'">지우기</button></li>';}).join('')+'</ul>':'<p class="small muted" style="margin:0">아직 없어요. 수강생은 내 학습과 강의 화면에서 내려받아요.</p>');});
+  $$('[data-kup]',m).forEach(function(inp){inp.onchange=function(){var f=inp.files[0];if(!f)return;if(f.size>500*1048576){toast('500MB까지 올릴 수 있어요');return;}
+    var cid=inp.getAttribute('data-kup'),title=window.prompt('수강생에게 보일 이름',f.name.replace(/\.[^.]+$/,''));if(title===null)return;
+    toast('올리는 중이에요');act({action:'kit_upload',courseId:cid,fileName:f.name}).then(function(u){
+      return fetch(u.url,{method:'PUT',headers:{'Content-Type':f.type||'application/octet-stream','x-upsert':'false'},body:f}).then(function(r){if(!r.ok)throw new Error('upload');
+        return act({action:'kit_save',courseId:cid,path:u.path,title:title||f.name,fileName:f.name,size:f.size});});
+    }).then(function(){toast('올렸어요');kitSection(m,courses);},function(){toast('올리지 못했어요. 다시 해 주세요.');});};});
+  $$('[data-kdel]',m).forEach(function(b){b.onclick=function(){if(!confirmTxt('이 키트 파일을 지울까요? 수강생도 더 이상 받을 수 없어요.'))return;act({action:'kit_delete',id:+b.getAttribute('data-kdel')}).then(function(){toast('지웠어요');kitSection(m,courses);});};});
+});}
+
 /* ── 시작: 로그인·운영자 확인 ── */
 sb.auth.getSession().then(function(r){var s=r.data&&r.data.session;
   if(!s){$('#root').innerHTML='<div class="gate"><h1>관리</h1><p>운영자 계정으로 로그인해 주세요.</p><p><a class="btn p" href="/login">로그인</a></p></div>';return;}
   TOKEN=s.access_token;ME=s.user;
   /* 운영자 확인·강의 목록·상품표를 한 번에 받고, 대시보드라면 그 데이터도 같이 미리 받음 */
-  var home=!location.hash||/^#home/.test(location.hash);
-  if(home)DASH.pre=api('dashboard').catch(function(){return null;});
   return Promise.all([api('me'),api('courses').catch(function(){return {};}),fetch('/shop/catalog.json').then(function(x){return x.json();}).catch(function(){return {items:{}};})]).then(function(v){var me=v[0];
     if(!me||!me.ok){$('#root').innerHTML='<div class="gate"><h1>관리</h1><p>운영자만 볼 수 있는 화면이에요.</p><p><a class="btn" href="/my">내 학습으로</a></p></div>';return;}
     if(me.mfa&&me.aal!=='aal2')return mfaGate();
+    PERMS=me.perms||[];ME_LABEL=me.label||'';
     SHOP=(v[2]&&v[2].items)||{};COURSES=(v[1]&&v[1].courses)||[];shell();route();
   });
 }).catch(function(){$('#root').innerHTML='<div class="gate"><p>불러오지 못했어요. 새로고침해 주세요.</p></div>';});

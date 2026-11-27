@@ -124,8 +124,9 @@ function payload(nm,em){
 /* 시트가 'ok'를 돌려줄 때만 성공. 응답을 못 읽거나 15초 안에 답이 없으면 실패로 봄 */
 async function send(d){
   const ctl=('AbortController' in window)?new AbortController():null; const tm=ctl&&setTimeout(()=>ctl.abort(),15000);
-  try{const r=await fetch(EP,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d),signal:ctl&&ctl.signal});
-    return r.ok&&(await r.text()).trim()==='ok';}
+  /* 우리 서버가 DB·시트에 같이 저장, 안 되면 시트로 바로 */
+  const post=async u=>{const r=await fetch(u,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d),signal:ctl&&ctl.signal});return r.ok&&(await r.text()).trim()==='ok';};
+  try{return (await post('/api/lead').catch(()=>false))||await post(EP);}
   catch(e){return false;} finally{if(tm)clearTimeout(tm);}
 }
 function sendMsg(cls,txt){const m=$('sendMsg');m.className='send '+cls;m.textContent=txt;}

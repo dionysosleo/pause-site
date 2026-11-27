@@ -1,0 +1,29 @@
+# 장애 감시 (무료): 5분마다 사이트와 결제 연결을 확인해요.
+# 실패하면 GitHub가 저장소 주인 메일로 "Run failed" 알림을 보내요 (GitHub → Settings → Notifications → Actions 에서 켜 두기).
+# 예약 실행은 기본 브랜치(main)에서만 돌아요 → 실서버에 적용하면 시작돼요. 공개 저장소라 실행 시간은 무료예요.
+# 저장소에 60일 동안 변경이 없으면 GitHub가 예약 실행을 멈추니, 그때는 Actions 탭에서 다시 켜 주세요.
+name: monitor
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: 사이트 첫 화면
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://www.chaand.ai/)
+          echo "home $code"; test "$code" = "200"
+      - name: 서버·DB·결제 연결 (/api/me?r=health)
+        run: |
+          for i in 1 2; do
+            code=$(curl -s -o /tmp/h.json -w '%{http_code}' --max-time 25 'https://www.chaand.ai/api/me?r=health'); cat /tmp/h.json; echo
+            if [ "$code" = "404" ]; then echo "상태 점검 주소가 아직 실서버에 없어요 (건너뜀)"; exit 0; fi
+            if [ "$code" = "200" ]; then exit 0; fi
+            sleep 20
+          done
+          exit 1

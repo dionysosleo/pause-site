@@ -28,7 +28,7 @@ label.f input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1p
 .agree.all{font-weight:700;border-bottom:1px solid var(--line);padding-bottom:12px}
 details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{border-collapse:collapse;margin-top:6px}details td,details th{border:1px solid var(--line);padding:4px 8px;text-align:left;font-weight:400}
 .sum{position:sticky;top:20px}
-.row{display:flex;justify-content:space-between;font-size:15px;margin:6px 0}.row.tot{font-size:20px;font-weight:700;border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.row{display:flex;justify-content:space-between;font-size:15px;margin:6px 0}.row.disc{color:#B42318}.cpn{margin:12px 0 0;font-size:14px}.cpn summary{cursor:pointer;color:var(--mut,#6B727A)}.cpn-in{display:flex;gap:6px;margin-top:8px}.cpn-in input{flex:1;min-width:0;height:40px;border:1px solid var(--line,#E3E6EA);border-radius:10px;padding:0 12px;font:inherit;text-transform:uppercase}.cpn-in button{height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line,#E3E6EA);background:#fff;font:inherit;font-weight:600;cursor:pointer}.row.tot{font-size:20px;font-weight:700;border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
 .pay{width:100%;min-height:54px;border:0;border-radius:999px;background:var(--ink);color:#fff;font:inherit;font-weight:700;font-size:17px;cursor:pointer;margin-top:16px}
 .pay:disabled{opacity:.45;cursor:not-allowed}
 .err{color:var(--bad);font-size:14px;min-height:1.2em;margin:8px 0 0}
@@ -93,7 +93,13 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
       <h2>결제 금액</h2>
       <div class="row"><span id="sUnitL">상품 금액</span><span id="sUnit"></span></div>
       <div class="row"><span id="sQtyL">수량</span><span id="sQty">1</span></div>
+      <div class="row" id="sListRow" hidden><span>할인 전 금액</span><span id="sList"></span></div>
+      <div class="row disc" id="sDiscRow" hidden><span id="sDiscL">할인</span><span id="sDisc"></span></div>
       <div class="row tot"><span>총 결제 금액</span><span id="sTot"></span></div>
+      <details class="cpn" id="cpnBox"><summary>할인 코드가 있어요</summary>
+        <div class="cpn-in"><input id="cpn" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" placeholder="코드 입력" aria-label="할인 코드"><button type="button" id="cpnGo">적용</button></div>
+        <p class="mut" id="cpnMsg" role="status" style="margin:6px 0 0"></p>
+      </details>
       <p class="mut" style="margin:10px 0 0">부가세 포함 금액이에요.</p>
       <button type="button" class="pay" id="pay" disabled>결제하기</button>
       <p class="err" id="err" role="alert"></p>
@@ -111,9 +117,16 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
 (function(){
   var $=function(i){return document.getElementById(i)};
   var q=new URLSearchParams(location.search), id=(q.get('item')||'').replace(/[^a-z0-9-]/g,'');
-  var item=null, qty=1, cfg=null, widgets=null;
+  var item=null, qty=1, cfg=null, widgets=null, price=null, code=(q.get('code')||'').toUpperCase(), seq=0;
   function won(n){return Number(n).toLocaleString('ko-KR')+'원';}
-  function total(){var h=item.head;return h?h.base+h.per*Math.max(qty,h.min):item.price*qty;}
+  function listTotal(){var h=item.head;return h?h.base+h.per*Math.max(qty,h.min):item.price*qty;}
+  /* 실제 결제 금액은 서버가 계산 (할인 코드·자동 할인 포함). 서버 답을 받기 전에는 정가 */
+  function total(){return price&&price.qty===qty?price.amount:listTotal();}
+  function quote(){var my=++seq,em=($('em')&&$('em').value.trim())||'';
+    return fetch('/api/payments/config?item='+encodeURIComponent(id)+'&qty='+qty+'&code='+encodeURIComponent(code)+'&email='+encodeURIComponent(em),{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+      if(my!==seq||!d||!d.price||!d.price.ok)return;price=d.price;render();if(widgets)widgets.setAmount({currency:'KRW',value:total()});
+      var m=$('cpnMsg');if(code){m.textContent=price.codeMessage||(price.coupon&&price.coupon.code===code?'‘'+price.coupon.title+'’ 할인이 적용됐어요.':'');m.style.color=price.codeMessage?'#B42318':'';}else m.textContent='';
+    }).catch(function(){});}
   function none(){$('main').hidden=true;$('none').hidden=false;}
   function render(){
     $('iName').textContent=item.name;
@@ -127,11 +140,17 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
     $('qVal').textContent=h?qty+'명':qty; $('sQtyL').textContent=h?'인원':'수량'; $('sQty').textContent=h?qty+'명'+(qty<h.min?' ('+h.min+'명 기준 청구)':''):qty;
     $('sUnitL').textContent=h?'강사 진행비':'상품 금액'; $('sUnit').textContent=won(h?h.base:item.price);
     if(h){$('qNote').hidden=false;$('qNote').textContent='강사 진행비 '+won(h.base)+' + 1인 '+won(h.per)+' × 인원. 최소 '+h.min+'명 기준으로 진행해요 ('+h.min+'명보다 적어도 '+h.min+'명 금액). '+mx+'명을 넘으면 문의해 주세요.';}
+    var dc=price&&price.qty===qty?price.discount:0;
+    $('sListRow').hidden=!dc;$('sDiscRow').hidden=!dc;
+    if(dc){$('sList').textContent=won(price.list);$('sDisc').textContent='−'+won(dc);$('sDiscL').textContent=price.coupon?price.coupon.title:'할인';}
     $('sTot').textContent=won(total());
     $('pay').textContent=won(total())+' 결제하기';
     document.title='주문·결제 — '+item.name+' — CHA&I';
   }
-  function setQty(n){qty=n;render();if(widgets)widgets.setAmount({currency:'KRW',value:total()});}
+  function setQty(n){qty=n;render();if(widgets)widgets.setAmount({currency:'KRW',value:total()});quote();}
+  $('cpnGo').onclick=function(){code=$('cpn').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'');quote();};
+  $('cpn').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('cpnGo').click();}});
+  $('em').addEventListener('change',function(){if(code)quote();});
   $('qMinus').onclick=function(){if(qty>1)setQty(qty-1);};
   $('qPlus').onclick=function(){if(qty<(item.qtyMax||1))setQty(qty+1);};
   var boxes=[].slice.call(document.querySelectorAll('input.a'));
@@ -146,7 +165,8 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
     if(!it||!it.price){none();return;}
     item=it;cfg=v[1];qty=Math.min(Math.max(1,parseInt(q.get('qty')||(it.head?String(it.head.ref):'1'),10)||1),item.qtyMax||1);
     if(cfg&&cfg.mode!=='live')$('testNote').hidden=false;
-    render();check();
+    if(code){$('cpn').value=code;$('cpnBox').open=true;}
+    render();check();quote();
     if(!cfg||typeof TossPayments!=='function'){$('err').textContent='결제창을 불러오지 못했어요. 잠시 뒤 새로고침해 주세요.';return;}
     var ck=(crypto.randomUUID?crypto.randomUUID():rid()+'-'+rid()+'-'+rid());
     widgets=TossPayments(cfg.clientKey).widgets({customerKey:ck});
@@ -161,7 +181,8 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
     if(miss){$('err').textContent=miss[1];$(miss[0]).focus();return;}
     if(!widgets){$('err').textContent='결제 수단을 불러오지 못했어요. 새로고침해 주세요.';return;}
     $('err').textContent='';$('pay').disabled=true;
-    try{sessionStorage.setItem('chai_buyer',JSON.stringify({email:em,name:(co?co+' ':'')+nm}));}catch(e){}
+    if(!price||price.qty!==qty){$('err').textContent='금액을 확인하고 있어요. 잠시 뒤 다시 눌러 주세요.';$('pay').disabled=false;quote();return;}
+    try{sessionStorage.setItem('chai_buyer',JSON.stringify({email:em,name:(co?co+' ':'')+nm}));sessionStorage.setItem('chai_coupon',price.coupon?price.coupon.code:'');}catch(e){}
     widgets.requestPayment({
       orderId:id+'_'+qty+'_'+rid(),
       orderName:(item.name+(item.head?' · '+qty+'명':(qty>1?' × '+qty:''))).slice(0,100),

@@ -1,19 +1,8 @@
-/* 토스 결제 취소 (전액·부분) */
-const KEYS = require('./payments/_keys.js');
-const MAIL = require('./_mail.js');
-const CATALOG = require('../shop/catalog.json').items;
+/* 결제 취소 (전액·부분) — 실제 호출은 api/_pg (PG사별) */
+const PG = require('./_pg');
 async function cancel(paymentKey, amount, reason, idem, refundAccount) {
-  const { secret } = KEYS();
-  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 10000);
-  try {
-    const r = await fetch('https://api.tosspayments.com/v1/payments/' + encodeURIComponent(paymentKey) + '/cancel', {
-      method: 'POST',
-      headers: { Authorization: 'Basic ' + Buffer.from(secret + ':').toString('base64'), 'Content-Type': 'application/json', 'Idempotency-Key': idem },
-      body: JSON.stringify(Object.assign({ cancelReason: reason, cancelAmount: amount }, refundAccount ? { refundReceiveAccount: refundAccount } : {})), signal: ctl.signal
-    });
-    const data = await r.json().catch(() => ({}));
-    return { ok: r.ok, data };
-  } finally { clearTimeout(t); }
+  const r = await PG.cancel({ paymentKey, amount, reason, idem, refundAccount });
+  return { ok: r.ok, data: r.ok ? r.pay : { code: r.code, message: r.message } };
 }
 /* 취소 성공 뒤 주문·수강권 갱신 */
 async function settle(S, o, amount, reason, revoke) {

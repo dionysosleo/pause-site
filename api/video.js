@@ -24,6 +24,7 @@ module.exports = async (req, res) => {
       }
     }
     if (u && !admin) {
+      await S.rest('POST', 'access_logs', { user_id: u.id, ip: S.ip(req), ua: String(req.headers['user-agent'] || '').slice(0, 200), kind: 'play' }, 'return=minimal');
       const dev = String(req.headers['x-device'] || '').replace(/[^A-Za-z0-9-]/g, '').slice(0, 64);
       if (!dev) return S.send(res, 400, { ok: false, code: 'NO_DEVICE' });
       const label = String(req.headers['user-agent'] || '').replace(/[^\x20-\x7E]/g, '').slice(0, 120);

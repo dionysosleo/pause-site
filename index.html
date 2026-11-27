@@ -516,6 +516,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .play-msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;text-align:center}.play-msg p{margin:0}.play-msg .muted{color:#BDB8AF}
 .play-wm{position:absolute;pointer-events:none;color:rgba(255,255,255,.32);font-size:13px;font-weight:600;transition:left 1.2s,top 1.2s;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.4)}
 .play-info{padding:14px 2px}.play-info p{margin:0}.play-now{font-size:18px;font-weight:700}.play-sub{font-size:14px;margin-top:2px!important}
+.kit-box{margin-top:22px}.kit-box .my-sub{margin-top:0}
 .play-side{border:1px solid var(--hair);border-radius:18px;background:#fff;padding:16px;max-height:calc(100vh - 140px);overflow:auto;position:sticky;top:96px}
 .play-sum{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;padding:0 4px 14px;border-bottom:1px solid var(--soft)}.play-sum .my-bar{grid-column:1/-1}.play-sum span{font-size:13px}
 .play-part{font-weight:700;font-size:14px;margin:16px 4px 6px}
@@ -2388,8 +2389,9 @@ var LEAD_CONFIG = { endpoint: 'https://script.google.com/macros/s/AKfycbznjt7abx
 function sendLead(data){
   data.at = new Date().toISOString(); data.page = location.href;
   $$('form [name=website]').forEach(function(hp){ if(hp.value) data.website = hp.value; });
-  if(!LEAD_CONFIG.endpoint) return Promise.resolve(false);
-  return fetch(LEAD_CONFIG.endpoint, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).then(function(r){ return r.ok ? r.text().then(function(t){ return String(t).trim() === 'ok'; }) : false; }).catch(function(){ return false; }); /* success only when the sheet replies ok */
+  /* 우리 서버(/api/lead)가 DB와 구글 시트에 같이 저장. 서버가 안 되면 시트로 바로 보냄 */
+  var post = function(url){ return fetch(url, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(data)}).then(function(r){ return r.ok ? r.text().then(function(t){ return String(t).trim() === 'ok'; }) : false; }).catch(function(){ return false; }); };
+  return post('/api/lead').then(function(ok){ return ok || (LEAD_CONFIG.endpoint ? post(LEAD_CONFIG.endpoint) : false); });
 }
 function savedLead(){ return null; }
 try { localStorage.removeItem('pause_lead'); } catch(e){} /* 예전 버전이 남긴 문의 정보 정리 */
@@ -2652,8 +2654,30 @@ function myDash(c, u){
     $('[data-out]').addEventListener('click', function(){ c.auth.signOut().then(function(){ authUI(); nav(routeUrl('home')); }); });
     $('[data-leave]').addEventListener('click', function(){ myLeave(c); });
     myAdmin(c);
+    var lp = $('[data-panel="learn"]'); if(lp){ var kh = document.createElement('div'); lp.appendChild(kh); myKits(c, kh); }
+    myPing(c, 'visit');
   });
 }
+/* 파일 키트: 내가 받을 수 있는 키트 목록 → 내려받기(서버가 2분짜리 주소를 줌, 첫 내려받기는 기록 → 환불 계산 기준) */
+function kitSize(b){ return !b ? '' : b > 1048576 ? (Math.round(b / 104857.6) / 10) + 'MB' : Math.max(1, Math.round(b / 1024)) + 'KB'; }
+function myKits(c, host, onlyCourse){
+  if(!host) return;
+  tokenOf(c).then(function(t){ return fetch('/api/me?r=kits', {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.json(); }); }).then(function(d){
+    var ks = (d && d.kits || []).filter(function(k){ return !onlyCourse || k.course_id === onlyCourse; });
+    if(!ks.length){ host.innerHTML = ''; return; }
+    host.innerHTML = '<div class="kit-box"><p class="my-sub">키트 파일</p><ul class="my-rows">' + ks.map(function(k){ var cc = cById(k.course_id);
+      return '<li><div><b class="ol">' + esc(k.title) + '</b><span class="muted ol">' + (onlyCourse ? '' : esc(cc ? cc.title : k.course_id) + ' · ') + esc(k.file_name || '') + (k.size_b ? ' · ' + kitSize(k.size_b) : '') + (k.downloaded ? ' · 받음' : '') + '</span></div><button type="button" class="btn btn-line btn-sm" data-kit="' + k.id + '" data-first="' + (k.downloaded ? '' : 1) + '">내려받기</button></li>'; }).join('') + '</ul></div>';
+    $$('[data-kit]', host).forEach(function(b){ b.addEventListener('click', function(){
+      var go = function(){ b.disabled = true; tokenOf(c).then(function(t){ return fetch('/api/me?r=kit&id=' + b.getAttribute('data-kit'), {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.json(); }); }).then(function(r){ b.disabled = false; if(r && r.url){ location.href = r.url; b.setAttribute('data-first', ''); } else toast(r && r.code === 'NOT_OPEN' ? '강의가 열리면 받을 수 있어요' : '내려받지 못했어요. 잠시 뒤 다시 해 주세요.'); }, function(){ b.disabled = false; toast('내려받지 못했어요. 잠시 뒤 다시 해 주세요.'); }); };
+      if(!b.getAttribute('data-first')) return go();
+      /* 청약철회 제한 고지: 결제 전 화면과 같은 기준 (취소·환불정책) */
+      openDialog('<h3 class="h3">키트를 내려받을까요?</h3><p>키트 파일을 내려받으면 결제 후 7일 이내 전액 환불(청약철회)이 제한되고, 남은 환불은 <a href="#refund">취소·환불정책</a>의 기준을 따라요.</p><div class="row" style="gap:8px;justify-content:flex-end;margin-top:14px"><button type="button" class="btn btn-line btn-sm" data-close>닫기</button><button type="button" class="btn btn-lime btn-sm" data-kity>내려받기</button></div>');
+      $('[data-kity]').addEventListener('click', function(){ closeDialog(); go(); });
+    }); });
+  }).catch(function(){});
+}
+/* 접속 기록 (IP·일시, 30분에 한 번, 1년 보관) — 개인정보처리방침 */
+function myPing(c, kind){ tokenOf(c).then(function(t){ if(t) fetch('/api/me', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify({action:'ping', kind:kind || 'visit'})}).catch(function(){}); }); }
 /* 고객 환불: 서버가 취소·환불정책으로 금액을 계산(/api/refund) → 확인 → 자동 환불 또는 신청 접수 */
 function tokenOf(c){ return c.auth.getSession().then(function(r){ return r.data && r.data.session && r.data.session.access_token; }); }
 function myRefund(c, id, done){
@@ -2766,7 +2790,7 @@ function myShip(c, o, done){
   bindForm(f, function(){
     var ph = f.elements.phone.value.replace(/[^0-9]/g, '');
     if(!/^01[0-9]{8,9}$/.test(ph)){ f.elements.phone.closest('.field').classList.add('bad'); return; }
-    tokenOf(c).then(function(t){ return fetch('/api/shipping', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify({orderId:o.id, name:f.elements.name.value, phone:ph, addr:f.elements.addr.value, memo:f.elements.memo.value})}).then(function(x){ return x.json(); }); })
+    tokenOf(c).then(function(t){ return fetch('/api/me', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify({action:'ship', orderId:o.id, name:f.elements.name.value, phone:ph, addr:f.elements.addr.value, memo:f.elements.memo.value})}).then(function(x){ return x.json(); }); })
       .then(function(d){ if(!d.ok){ toast(d.code === 'SHIPPED' ? '이미 발송해서 바꿀 수 없어요' : '저장하지 못했어요'); return; } closeDialog(); toast('배송지를 저장했어요'); done(); });
   });
 }
@@ -2779,7 +2803,7 @@ function vPlay(cid){
   return '<section class="section tight play-pg"><div class="wrap" style="max-width:1200px">' +
     '<p class="play-top"><a class="lnk" href="#my">‹ 내 학습</a></p><h1 class="h2 play-title">' + esc(c ? c.title : cid) + '</h1>' +
     '<div class="play"><div class="play-main"><div class="play-box" id="pBox"><div class="play-msg"><p>불러오는 중이에요</p></div></div>' +
-    '<div class="play-info"><p class="play-now ol" id="pNow"></p><p class="muted play-sub" id="pSub"></p></div></div>' +
+    '<div class="play-info"><p class="play-now ol" id="pNow"></p><p class="muted play-sub" id="pSub"></p></div><div id="pKits"></div></div>' +
     '<aside class="play-side" id="pSide" aria-label="강의 목차"></aside></div>' +
   '</div></section>';
 }
@@ -2790,6 +2814,7 @@ function bindPlay(cid){
     return c.auth.getSession().then(function(r){
       var s = r.data && r.data.session; if(!live()) return;
       if(!s){ msg('로그인하면 강의를 볼 수 있어요', '<a class="btn btn-lime btn-sm" href="#login">로그인</a>'); pathify($('#pBox')); return; }
+      myKits(c, $('#pKits'), cid);
       return Promise.all([
         c.from('courses').select('id,title,is_open').eq('id', cid).maybeSingle(),
         c.from('lessons').select('id,part,sort,title,is_free,duration_s').eq('course_id', cid).order('sort'),

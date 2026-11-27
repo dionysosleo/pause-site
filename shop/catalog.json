@@ -165,7 +165,8 @@
       "period": "",
       "refund": "VOD 온라인 강의",
       "company": false,
-      "label_en": "Setup kit files only"
+      "label_en": "Setup kit files only",
+      "kit": "ai-onboard"
     },
     "vibe-web": {
       "name": "바이브코딩으로 내 웹 만들기 (얼리버드)",

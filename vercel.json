@@ -105,5 +105,13 @@
   ],
   "regions": [
     "icn1"
-  ]
+  ],
+  "functions": {
+    "api/cron/cleanup.js": {
+      "maxDuration": 60
+    },
+    "api/admin/data.js": {
+      "maxDuration": 60
+    }
+  }
 }

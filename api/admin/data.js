@@ -3,11 +3,15 @@
    POST {action: refund | grant | revoke | company_create | company_admin | seat_add | course_open | lesson_save | lesson_delete | shipped}
    모든 쓰기는 여기서 서버 키로만 하고, 회원 화면에서는 이 표들을 직접 못 바꿔요. */
 const S = require('../_sb.js');
-const T = require('../_toss.js');
+const T = require('../_cancel.js');
 const CATALOG = require('../../shop/catalog.json').items;
 const B = require('../_bunny.js');
 const W = require('../payments/webhook.js');
 const FF = require('../_fulfill.js');
+const MAIL = require('../_mail.js');
+const BK = require('../_backup.js');
+const PGA = require('../_pg');
+const PRICE = require('../_price.js');
 /* 상품 분야: 카탈로그 환불 기준 문구로 나눔 */
 const catOf = id => { const r = String((CATALOG[id] || {}).refund || ''); return /기업/.test(r) ? 'biz' : /살롱|원데이/.test(r) ? 'salon' : /기수|라이브|정기/.test(r) ? 'cohort' : /VOD/.test(r) ? 'vod' : 'etc'; };
 
@@ -21,14 +25,91 @@ async function write(method, path, body, prefer) { const r = await S.rest(method
 const C = require('../_company.js');
 const progressFor = C.progressFor;
 
+/* 강의 오픈 알림: 수강권 있는 회원 + '오픈 알림' 신청자. 한 사람에게 한 번만 (ops_alerts 로 기록), 한 번에 150명까지 → 남으면 다시 누르면 이어서 */
+async function notifyOpen(courseId) {
+  const [c] = await get('courses?select=id,title&id=eq.' + enc(courseId));
+  const it = CATALOG[courseId] || {}, names = [c && c.title, it.name].filter(Boolean).map(x => String(x).replace(/\s*\(.*?\)\s*/g, '').trim());
+  const en = await get('enrollments?select=user_id&course_id=eq.' + enc(courseId) + '&revoked_at=is.null');
+  const ps = en.length ? await get('profiles?select=email&id=in.(' + [...new Set(en.map(e => e.user_id))].join(',') + ')') : [];
+  const ls = await get('leads?select=email,detail&kind=eq.' + enc('오픈 알림'));
+  const subs = ls.filter(l => { const t = String((l.detail || {}).course || ''); return names.some(n => n && (t.includes(n) || n.includes(t.replace(/\s*\(.*?\)\s*/g, '').trim()))); });
+  const list = [...ps.map(p => ({ email: p.email, buyer: true })), ...subs.map(l => ({ email: l.email, buyer: false }))];
+  const seen = new Set(), todo = [];
+  for (const x of list) { const e = String(x.email || '').toLowerCase(); if (e && !seen.has(e)) { seen.add(e); todo.push(Object.assign(x, { email: e })); } }
+  let sent = 0, left = 0;
+  for (const x of todo) {
+    const r = await S.rest('POST', 'ops_alerts?on_conflict=kind,ref', { kind: 'open_notify', ref: courseId + ':' + x.email }, 'resolution=ignore-duplicates,return=representation');
+    if (!(r.ok && r.data.length)) continue;   // 이미 보냄
+    if (sent >= 150) { await S.rest('DELETE', 'ops_alerts?kind=eq.open_notify&ref=eq.' + enc(courseId + ':' + x.email)); left++; continue; }
+    const m = await MAIL.courseOpen({ email: x.email, course: (c && c.title) || it.name || courseId, buyer: x.buyer });
+    if (m.sent) sent++; else { await S.rest('DELETE', 'ops_alerts?kind=eq.open_notify&ref=eq.' + enc(courseId + ':' + x.email)); left++; }
+  }
+  return { sent, left };
+}
+
+/* 권한: 'all' 이면 전부. 화면·작업마다 필요한 권한 */
+const PERM_READ = { dashboard: 'dash', orders: 'orders', orders_csv: 'orders', members: 'members', member: 'members', companies: 'companies', company: 'companies', courses: 'courses', shipments: 'ship', logs: 'logs', leads: 'leads', coupons: 'coupons', admins: 'admins', backups: 'admins', launch: 'admins', kits: 'courses' };
+const PERM_ACT = { refund: 'refund', cancel_waiting: 'refund', order_manual: 'refund', pg_sync: 'orders', order_memo: 'orders', grant: 'members', revoke: 'members',
+  company_create: 'companies', company_admin: 'companies', seat_add: 'companies', company_invite: 'companies', company_assign: 'companies', company_unassign: 'companies', company_remove: 'companies',
+  course_open: 'courses', lesson_save: 'courses', lesson_delete: 'courses', video_init: 'courses', video_status: 'courses', kit_upload: 'courses', kit_save: 'courses', kit_delete: 'courses',
+  shipped: 'ship', lead_update: 'leads', coupon_save: 'coupons', coupon_toggle: 'coupons', admin_save: 'admins', admin_remove: 'admins', backup_now: 'admins', backup_get: 'admins', purge_test: 'admins' };
+const PRESETS = {
+  owner:   { label: '대표 (전체 권한)', perms: ['all'] },
+  biz:     { label: '기업강의 관리자', perms: ['dash', 'companies', 'leads', 'members', 'orders', 'coupons'] },
+  content: { label: '강의 관리자', perms: ['courses'] },
+  ops:     { label: '운영·발송', perms: ['orders', 'ship', 'members', 'leads'] },
+  finance: { label: '정산·환불', perms: ['dash', 'orders', 'refund', 'coupons', 'logs'] }
+};
+const PERM_NAMES = { dash: '대시보드', orders: '주문 보기', refund: '환불·직접 등록', members: '회원', companies: '기업', leads: '문의 접수함', courses: '강의·키트', ship: '키트 발송', coupons: '할인 코드', logs: '작업 기록', admins: '권한·백업·출시 점검' };
+
 const READ = {
+  async leads(q) {
+    let f = 'leads?select=*&order=created_at.desc&limit=300';
+    if (/^(new|talking|proposal|won|lost|done|spam)$/.test(q.status || '')) f += '&status=eq.' + q.status;
+    if (q.kind) f += '&kind=eq.' + enc(String(q.kind).slice(0, 60));
+    const s2 = String(q.q || '').trim().slice(0, 80).replace(/[,()*]/g, '');
+    if (s2) f += '&or=(email.ilike.*' + enc(s2) + '*,company.ilike.*' + enc(s2) + '*,name.ilike.*' + enc(s2) + '*)';
+    const [ls, cnt] = await Promise.all([get(f), get('leads?select=status,kind&limit=5000')]);
+    const by = {}; cnt.forEach(x => { by[x.status] = (by[x.status] || 0) + 1; });
+    return { leads: ls, counts: by, kinds: [...new Set(cnt.map(x => x.kind))] };
+  },
+  async coupons() { return { coupons: await get('coupons?select=*&order=created_at.desc'), cats: { biz: '기업 워크샵', salon: '살롱·원데이', cohort: '기수·라이브', vod: 'VOD 강의' } }; },
+  async admins() {
+    const as = await get('admins?select=user_id,perms,label,added_by,created_at');
+    const ps = as.length ? await get('profiles?select=id,email,name&id=in.(' + as.map(a => a.user_id).join(',') + ')') : [];
+    return { admins: as.map(a => Object.assign(a, { email: (ps.find(p => p.id === a.user_id) || {}).email, name: (ps.find(p => p.id === a.user_id) || {}).name })), presets: PRESETS, names: PERM_NAMES };
+  },
+  async backups() { return { backups: await BK.list() }; },
+  async kits() { return { kits: await get('kit_files?select=id,course_id,title,file_name,size_b,sort,created_at&order=course_id,sort,id') }; },
+  /* 출시 점검: 환경 변수·연결 상태·남은 테스트 데이터 */
+  async launch() {
+    const env = k => !!process.env[k];
+    const [tests, cron, hooks, waiting] = await Promise.all([
+      get('orders?select=id&is_test=is.true'), get('ops_alerts?select=at&kind=eq.cron_run&order=at.desc&limit=1'),
+      get('admin_logs?select=created_at&action=eq.pg_webhook&order=created_at.desc&limit=1'), get('orders?select=id&status=eq.waiting')
+    ]);
+    const pgOk = await PGA.health();
+    return { checks: [
+      ['결제', 'PG 운영 키', PGA.mode() === 'live', PGA.mode() === 'live' ? PGA.label + ' 운영 키 사용 중' : '테스트 키 사용 중 (실제 청구 없음)'],
+      ['결제', 'PG 연결', pgOk, pgOk ? '정상' : 'PG API에 연결하지 못했어요'],
+      ['결제', '웹훅 수신', hooks.length > 0, hooks.length ? '마지막 ' + hooks[0].created_at.slice(0, 16).replace('T', ' ') : '아직 받은 적 없어요 (PG 개발자센터에 웹훅 주소 등록)'],
+      ['결제', '테스트 주문 정리', tests.length === 0, tests.length ? '테스트 주문 ' + tests.length + '건 남아 있어요' : '없음'],
+      ['메일', '메일 발송 (SMTP)', env('SMTP_USER') && env('SMTP_PASS'), env('SMTP_USER') ? process.env.SMTP_USER : 'SMTP_USER·SMTP_PASS 없음 → 주문·환불·알림 메일이 안 나가요'],
+      ['메일', '운영자 알림 주소', env('OPS_EMAIL') || env('SMTP_USER'), process.env.OPS_EMAIL || process.env.SMTP_USER || '없음'],
+      ['운영', '예약 작업 (매일 새벽)', env('CRON_SECRET') && cron.length > 0, !env('CRON_SECRET') ? 'CRON_SECRET 없음 → 정리·대사·요약·백업이 안 돌아요' : cron.length ? '마지막 실행 ' + cron[0].at.slice(0, 16).replace('T', ' ') : '아직 실행 기록 없음'],
+      ['운영', '문의 시트 상태 연동', env('LEADS_SECRET'), env('LEADS_SECRET') ? '설정됨' : 'LEADS_SECRET 없음 → 접수함 상태가 시트에 안 바뀌어요 (접수는 됨)'],
+      ['강의', '영상 (Bunny Stream)', B.configured(), B.configured() ? '연결됨' : '영상 만든 뒤 연결 예정'],
+      ['보안', '관리자 2단계 인증', S.mfaOn(), S.mfaOn() ? '켜짐' : '꺼짐 (ADMIN_MFA=on 으로 켤 수 있어요)']
+    ].map(c => ({ group: c[0], name: c[1], ok: !!c[2], note: c[3] })), waiting: waiting.length };
+  },
+
   async logs(q) {
-    let f = 'admin_logs?select=id,email,action,target,detail,created_at&order=created_at.desc&limit=300';
+    let f = 'admin_logs?select=id,email,action,target,detail,created_at,ip&order=created_at.desc&limit=300';
     const a = String(q.action || ''); if (/^[a-z_]{2,30}$/.test(a)) f += '&action=eq.' + a;
     return { logs: await get(f) };
   },
   async orders_csv() {
-    return { orders: await get('orders?select=id,paid_at,item_id,qty,amount,refund_amount,status,is_test,buyer_name,buyer_email,method,source,tax_doc,memo,refunded_at,refund_reason&status=neq.ready&order=paid_at.desc&limit=5000') };
+    return { orders: await get('orders?select=id,paid_at,item_id,qty,amount,refund_amount,status,is_test,buyer_name,buyer_email,method,source,tax_doc,memo,refunded_at,refund_reason,list_amount,discount,coupon_code&status=neq.ready&order=paid_at.desc&limit=5000') };
   },
   /* 대시보드: 기간별(일·주·월·년) 집계는 화면에서 함. 여기서는 필요한 칸만 가볍게 내려줌 */
   async dashboard() {
@@ -157,6 +238,92 @@ const ACT = {
     const id = String(b.orderId || ''); if (!/^[A-Za-z0-9_-]{6,64}$/.test(id)) throw new Error('BAD_REQUEST');
     return { result: await W.sync(id) };
   },
+  async lead_update(b) {
+    const id = int(b.id); if (!(id > 0)) throw new Error('BAD_REQUEST');
+    const patch = { updated_at: new Date().toISOString() };
+    if (/^(new|talking|proposal|won|lost|done|spam)$/.test(b.status || '')) patch.status = b.status;
+    if (typeof b.memo === 'string') patch.memo = b.memo.slice(0, 1000) || null;
+    if (typeof b.owner === 'string') patch.owner_email = b.owner.slice(0, 120) || null;
+    await write('PATCH', 'leads?id=eq.' + id, patch);
+    /* 구글 시트의 '처리 상태'·'메모' 칸도 같이 바꿈 (LEADS_SECRET 이 있을 때) */
+    let sheet = false;
+    if (process.env.LEADS_SECRET) {
+      const L = { new: '새 문의', talking: '상담 중', proposal: '제안·견적', won: '계약', lost: '보류·무산', done: '처리 완료', spam: '스팸' };
+      try {
+        const r = await fetch(process.env.LEADS_SHEET_URL || 'https://script.google.com/macros/s/AKfycbznjt7abxus2cE7sAse9CBHc6JzKfrYzUArrwLGUFwMfaYk4YkSanxEbp8voRDcYoaPbA/exec', { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
+          body: JSON.stringify({ action: 'status', secret: process.env.LEADS_SECRET, id: 'L' + id, status: patch.status ? L[patch.status] : undefined, memo: patch.memo }) });
+        sheet = r.ok && (await r.text()).trim() === 'ok';
+      } catch (e) {}
+    }
+    return { sheet };
+  },
+  async coupon_save(b) {
+    const code = PRICE.cleanCode(b.code); if (code.length < 3) throw new Error('BAD_REQUEST');
+    const kind = b.kind === 'amount' ? 'amount' : 'percent', value = int(b.value);
+    if (!(value > 0) || (kind === 'percent' && value > 100)) throw new Error('BAD_REQUEST');
+    const arr = (v, re) => Array.isArray(v) ? v.map(String).filter(x => re.test(x)).slice(0, 50) : null;
+    const opt = v => (v === '' || v == null) ? null : int(v);
+    const dt = v => v ? new Date(v).toISOString() : null;
+    const row = { code, title: String(b.title || code).slice(0, 80), kind, value, auto: !!b.auto, items: arr(b.items, /^[a-z0-9-]{2,40}$/), cats: arr(b.cats, /^(biz|salon|cohort|vod)$/),
+      min_amount: opt(b.min_amount) || 0, max_discount: opt(b.max_discount), starts_at: dt(b.starts_at), ends_at: dt(b.ends_at), max_uses: opt(b.max_uses), per_email: opt(b.per_email), active: b.active !== false, memo: String(b.memo || '').slice(0, 300) || null };
+    if (row.items && !row.items.length) row.items = null; if (row.cats && !row.cats.length) row.cats = null;
+    await write('POST', 'coupons?on_conflict=code', row, 'resolution=merge-duplicates,return=minimal');
+    return { code };
+  },
+  async coupon_toggle(b) { const code = PRICE.cleanCode(b.code); await write('PATCH', 'coupons?code=eq.' + enc(code), { active: !!b.active }); return {}; },
+  async admin_save(b) {
+    const email = String(b.email || '').trim().toLowerCase();
+    const [p] = await get('profiles?select=id,email&email=ilike.' + enc(email));
+    if (!p) throw new Error('NO_MEMBER');
+    let perms = Array.isArray(b.perms) ? b.perms.filter(x => x === 'all' || PERM_NAMES[x]) : [];
+    if (b.preset && PRESETS[b.preset]) perms = PRESETS[b.preset].perms;
+    if (!perms.length) throw new Error('BAD_REQUEST');
+    await write('POST', 'admins?on_conflict=user_id', { user_id: p.id, perms, label: String(b.label || (PRESETS[b.preset] || {}).label || '').slice(0, 40) || null, added_by: b._by || null }, 'resolution=merge-duplicates,return=minimal');
+    return {};
+  },
+  async admin_remove(b) {
+    const id = uuid(b.userId); if (!id) throw new Error('BAD_REQUEST');
+    if (id === b._uid) throw new Error('SELF');
+    const all = await get('admins?select=user_id,perms');
+    if (all.filter(a => a.user_id !== id && (a.perms || []).includes('all')).length === 0) throw new Error('LAST_OWNER');
+    await write('DELETE', 'admins?user_id=eq.' + id);
+    return {};
+  },
+  async kit_upload(b) {
+    const course = String(b.courseId || ''); if (!(await get('courses?select=id&id=eq.' + enc(course))).length) throw new Error('BAD_REQUEST');
+    const name = String(b.fileName || 'kit').replace(/[^\w.\-가-힣 ]/g, '_').slice(0, 120);
+    const path = course + '/' + Date.now().toString(36) + '-' + name.replace(/\s+/g, '_');
+    const url = await S.signedPut('kits', path);
+    if (!url) throw new Error('STORAGE');
+    return { url, path };
+  },
+  async kit_save(b) {
+    const course = String(b.courseId || ''), path = String(b.path || '');
+    if (!course || !path.startsWith(course + '/')) throw new Error('BAD_REQUEST');
+    const row = { course_id: course, title: String(b.title || b.fileName || '키트').slice(0, 120), storage_path: path, file_name: String(b.fileName || '').slice(0, 120) || null, size_b: int(b.size) || null, sort: int(b.sort) || 0 };
+    const r = await write('POST', 'kit_files', row);
+    return { id: r && r[0] && r[0].id };
+  },
+  async kit_delete(b) {
+    const id = int(b.id); if (!(id > 0)) throw new Error('BAD_REQUEST');
+    const [k] = await get('kit_files?select=storage_path&id=eq.' + id);
+    if (!k) throw new Error('BAD_REQUEST');
+    await write('DELETE', 'kit_files?id=eq.' + id);
+    await S.storage('DELETE', 'object/kits', { prefixes: [k.storage_path] });
+    return {};
+  },
+  async backup_now() { return await BK.run('manual'); },
+  async backup_get(b) { const n = String(b.name || ''); if (!/^chaand-[\w-]+\.json\.gz$/.test(n)) throw new Error('BAD_REQUEST'); return { url: await S.signedGet('backups', n, 120, n) }; },
+  /* 출시 직전: 테스트 결제 주문과 그 주문으로 생긴 수강권 지우기 */
+  async purge_test(b) {
+    if (b.confirm !== 'delete-test') throw new Error('BAD_REQUEST');
+    const ts = await get('orders?select=id&is_test=is.true');
+    if (!ts.length) return { deleted: 0 };
+    const ids = ts.map(o => enc(o.id)).join(',');
+    await write('DELETE', 'enrollments?order_id=in.(' + ids + ')');
+    await write('DELETE', 'orders?id=in.(' + ids + ')');
+    return { deleted: ts.length };
+  },
   async grant(b) {
     const uid = uuid(b.userId), course = String(b.courseId || '');
     if (!uid || !(await get('courses?select=id&id=eq.' + enc(course))).length) throw new Error('BAD_REQUEST');
@@ -198,7 +365,9 @@ const ACT = {
     const id = String(b.courseId || ''); if (!(await get('courses?select=id&id=eq.' + enc(id))).length) throw new Error('BAD_REQUEST');
     await write('PATCH', 'courses?id=eq.' + enc(id), b.open ? { is_open: true, opened_at: new Date().toISOString() } : { is_open: false });
     if (b.open) await write('PATCH', 'enrollments?course_id=eq.' + enc(id) + '&revoked_at=is.null', { started_at: new Date().toISOString() });   // 사전 예약: 연 날이 수강 시작일
-    return { ok: true };
+    let notified = 0, left = 0;
+    if (b.open && b.notify) { const n = await notifyOpen(id); notified = n.sent; left = n.left; }
+    return { ok: true, notified, left, mail: MAIL.ready() };
   },
   async lesson_save(b) {
     const course = String(b.courseId || ''), title = String(b.title || '').trim().slice(0, 120), sort = int(b.sort);
@@ -240,28 +409,34 @@ module.exports = async (req, res) => {
   if (!['GET', 'POST'].includes(req.method)) { res.setHeader('Allow', 'GET, POST'); return S.send(res, 405, { ok: false, code: 'METHOD' }); }
   if (req.method === 'POST' && !S.sameOrigin(req)) return S.send(res, 403, { ok: false, code: 'ORIGIN' });
   try {
-    const tok = S.bearer(req), u = await S.user(tok);
-    if (!(await S.isAdmin(u))) return S.send(res, 403, { ok: false, code: 'NOT_ADMIN' });
-    if (req.method === 'GET' && (req.query || {}).r === 'me') return S.send(res, 200, { ok: true, admin: true, aal: S.aal(tok), mfa: S.mfaOn() });
+    const tok = S.bearer(req), u = await S.user(tok), A = await S.isAdmin(u), ip = S.ip(req);
+    if (!A) return S.send(res, 403, { ok: false, code: 'NOT_ADMIN' });
+    if (req.method === 'GET' && (req.query || {}).r === 'me') return S.send(res, 200, { ok: true, admin: true, aal: S.aal(tok), mfa: S.mfaOn(), perms: A.perms, label: A.label, names: PERM_NAMES });
     if (S.mfaOn() && S.aal(tok) !== 'aal2') return S.send(res, 403, { ok: false, code: 'MFA_REQUIRED' });   // 운영 작업은 2단계 인증 뒤에만
     if (req.method === 'GET') {
       const q = req.query || {}, fn = READ[q.r];
       if (!fn) return S.send(res, 400, { ok: false, code: 'BAD_RESOURCE' });
+      if (!S.can(A, PERM_READ[q.r] || 'admins')) return S.send(res, 403, { ok: false, code: 'NO_PERM' });
+      /* 개인정보를 여는 화면은 열람 기록을 남김 (접속기록 1년 이상 보관) */
+      if (['member', 'orders_csv', 'leads', 'members'].includes(q.r)) await S.log(u, 'view_' + q.r, q.id || q.q || null, null, ip);
       return S.send(res, 200, Object.assign({ ok: true }, await fn(q)));
     }
-    const b = await S.readJson(req) || {}, fn = ACT[b.action];
+    const b = await S.readJson(req, 32000) || {}, fn = ACT[b.action];
     if (!fn) return S.send(res, 400, { ok: false, code: 'BAD_ACTION' });
+    if (!S.can(A, PERM_ACT[b.action] || 'admins')) return S.send(res, 403, { ok: false, code: 'NO_PERM' });
+    b._uid = u.id; b._by = u.email;
     const out = await fn(b);
-    if (!/^video_status$/.test(b.action)) {
+    delete b._uid; delete b._by;
+    if (!/^(video_status|backup_get)$/.test(b.action)) {
       const keep = Object.assign({}, b); delete keep.action;
       if (keep.refundAccount) keep.refundAccount = '(환불 계좌 받음, 저장 안 함)';
-      await S.log(u, b.action, b.orderId || b.userId || b.enrollmentId || b.companyId || b.courseId || b.id || null, keep);
+      await S.log(u, b.action, b.orderId || b.userId || b.enrollmentId || b.companyId || b.courseId || b.code || b.email || b.id || null, keep, ip);
     }
     return S.send(res, 200, Object.assign({ ok: true }, out));
   } catch (e) {
     const m = String(e && e.message || '');
     if (e && e.pg) return S.send(res, 402, { ok: false, code: String(e.pg.code || 'PG_REJECTED').slice(0, 60), message: String(e.pg.message || '').slice(0, 200) });
-    if (/^(BAD_REQUEST|BAD_ID|NOT_REFUNDABLE|TOO_MUCH|NO_MEMBER|NO_SEATS|SEAT_EXPIRED|BUNNY_NOT_SET)$/.test(m)) return S.send(res, 400, { ok: false, code: m });
+    if (/^(BAD_REQUEST|BAD_ID|NOT_REFUNDABLE|TOO_MUCH|NO_MEMBER|NO_SEATS|SEAT_EXPIRED|BUNNY_NOT_SET|VBANK_REFUND|SELF|LAST_OWNER|STORAGE)$/.test(m)) return S.send(res, 400, { ok: false, code: m });
     console.error('admin', m);
     return S.send(res, 500, { ok: false, code: 'SERVER' });
   }
