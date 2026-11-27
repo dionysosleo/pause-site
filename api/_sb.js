@@ -48,4 +48,13 @@ async function isAdmin(u) {
   const r = await rest('GET', 'admins?select=user_id&user_id=eq.' + encodeURIComponent(u.id));
   return r.ok && Array.isArray(r.data) && r.data.length > 0;
 }
-module.exports = { send, sameOrigin, bearer, readJson, user, rest, deleteAuthUser, isAdmin };
+/* 2단계 인증 여부: 토큰은 user()에서 Supabase가 이미 확인함. 여기서는 안의 aal 값만 읽음 */
+function aal(token) {
+  try { const p = JSON.parse(Buffer.from(String(token).split('.')[1].replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8')); return p.aal || 'aal1'; } catch (e) { return 'aal1'; }
+}
+/* 운영자 권한은 2단계 인증(aal2)을 마친 세션에서만 */
+async function isAdminStrict(u, token) { return aal(token) === 'aal2' && await isAdmin(u); }
+async function log(u, action, target, detail) {
+  try { await rest('POST', 'admin_logs', { user_id: u && u.id, email: u && u.email, action, target: target ? String(target).slice(0, 120) : null, detail: detail || null }, 'return=minimal'); } catch (e) { console.error('log', e && e.message); }
+}
+module.exports = { send, sameOrigin, bearer, readJson, user, rest, deleteAuthUser, isAdmin, isAdminStrict, aal, log };

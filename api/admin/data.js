@@ -5,6 +5,7 @@
 const S = require('../_sb.js');
 const T = require('../_toss.js');
 const CATALOG = require('../../shop/catalog.json').items;
+const B = require('../_bunny.js');
 
 const enc = encodeURIComponent;
 const isKitItem = id => /차 키트/.test(String((CATALOG[id] || {}).note || ''));
@@ -18,7 +19,14 @@ const C = require('../_company.js');
 const progressFor = C.progressFor;
 
 const READ = {
-  async me() { return { admin: true }; },
+  async logs(q) {
+    let f = 'admin_logs?select=id,email,action,target,detail,created_at&order=created_at.desc&limit=300';
+    const a = String(q.action || ''); if (/^[a-z_]{2,30}$/.test(a)) f += '&action=eq.' + a;
+    return { logs: await get(f) };
+  },
+  async orders_csv() {
+    return { orders: await get('orders?select=id,paid_at,item_id,qty,amount,refund_amount,status,is_test,buyer_name,buyer_email,method,refunded_at,refund_reason&status=neq.ready&order=paid_at.desc&limit=5000') };
+  },
   async dashboard() {
     const since = monthStartKST();
     const os = await get('orders?select=item_id,amount,refund_amount,status,is_test,paid_at,refund_requested_at,shipped_at,ship_addr&status=neq.ready&order=created_at.desc&limit=2000');
@@ -73,9 +81,9 @@ const READ = {
   async courses() {
     const cs = await get('courses?select=id,title,is_open,opened_at&order=id');
     const ls = await get('lessons?select=id,course_id,part,sort,title,is_free,duration_s&order=course_id,sort');
-    const md = ls.length ? await get('lesson_media?select=lesson_id,provider,video_id') : [];
+    const md = ls.length ? await get('lesson_media?select=lesson_id,provider,video_id,status') : [];
     const en = await get('enrollments?select=course_id&revoked_at=is.null');
-    return { courses: cs.map(c => Object.assign(c, { students: en.filter(e => e.course_id === c.id).length, lessons: ls.filter(l => l.course_id === c.id).map(l => Object.assign(l, { video_id: (md.find(m => m.lesson_id === l.id) || {}).video_id || '' })) })) };
+    return { bunny: B.configured(), courses: cs.map(c => Object.assign(c, { students: en.filter(e => e.course_id === c.id).length, lessons: ls.filter(l => l.course_id === c.id).map(l => Object.assign(l, { video_id: (md.find(m => m.lesson_id === l.id) || {}).video_id || '', video_status: (md.find(m => m.lesson_id === l.id) || {}).status })) })) };
   },
   async shipments() {
     const os = await get('orders?select=id,item_id,status,is_test,buyer_email,buyer_name,paid_at,ship_name,ship_phone,ship_addr,ship_memo,shipped_at,ship_tracking&status=in.(paid,partial_refunded)&order=created_at.desc&limit=300');
@@ -156,6 +164,18 @@ const ACT = {
     await write('DELETE', 'lessons?id=eq.' + id);
     return { ok: true };
   },
+  async video_init(b) {
+    if (!B.configured()) throw new Error('BUNNY_NOT_SET');
+    return B.createUpload(String(b.title || 'lesson'));
+  },
+  async video_status(b) {
+    if (!B.configured()) throw new Error('BUNNY_NOT_SET');
+    const id = String(b.videoId || ''); if (!/^[0-9a-f-]{20,64}$/i.test(id)) throw new Error('BAD_REQUEST');
+    const st = await B.status(id);
+    await write('PATCH', 'lesson_media?video_id=eq.' + enc(id), { status: st.status, length_s: st.length || null }, 'return=minimal');
+    if (st.length) { const lm = await get('lesson_media?select=lesson_id&video_id=eq.' + enc(id)); for (const x of lm) await write('PATCH', 'lessons?id=eq.' + x.lesson_id + '&duration_s=eq.0', { duration_s: st.length }, 'return=minimal'); }
+    return st;
+  },
   async shipped(b) {
     const id = /^[A-Za-z0-9_-]{6,64}$/.test(String(b.orderId || '')) ? b.orderId : ''; if (!id) throw new Error('BAD_REQUEST');
     await write('PATCH', 'orders?id=eq.' + enc(id), b.undo ? { shipped_at: null, ship_tracking: null } : { shipped_at: new Date().toISOString(), ship_tracking: String(b.tracking || '').trim().slice(0, 80) || null });
@@ -167,8 +187,10 @@ module.exports = async (req, res) => {
   if (!['GET', 'POST'].includes(req.method)) { res.setHeader('Allow', 'GET, POST'); return S.send(res, 405, { ok: false, code: 'METHOD' }); }
   if (req.method === 'POST' && !S.sameOrigin(req)) return S.send(res, 403, { ok: false, code: 'ORIGIN' });
   try {
-    const u = await S.user(S.bearer(req));
+    const tok = S.bearer(req), u = await S.user(tok);
     if (!(await S.isAdmin(u))) return S.send(res, 403, { ok: false, code: 'NOT_ADMIN' });
+    if (req.method === 'GET' && (req.query || {}).r === 'me') return S.send(res, 200, { ok: true, admin: true, aal: S.aal(tok) });
+    if (S.aal(tok) !== 'aal2') return S.send(res, 403, { ok: false, code: 'MFA_REQUIRED' });   // 운영 작업은 2단계 인증 뒤에만
     if (req.method === 'GET') {
       const q = req.query || {}, fn = READ[q.r];
       if (!fn) return S.send(res, 400, { ok: false, code: 'BAD_RESOURCE' });
@@ -176,11 +198,16 @@ module.exports = async (req, res) => {
     }
     const b = await S.readJson(req) || {}, fn = ACT[b.action];
     if (!fn) return S.send(res, 400, { ok: false, code: 'BAD_ACTION' });
-    return S.send(res, 200, Object.assign({ ok: true }, await fn(b)));
+    const out = await fn(b);
+    if (!/^video_status$/.test(b.action)) {
+      const keep = Object.assign({}, b); delete keep.action;
+      await S.log(u, b.action, b.orderId || b.userId || b.enrollmentId || b.companyId || b.courseId || b.id || null, keep);
+    }
+    return S.send(res, 200, Object.assign({ ok: true }, out));
   } catch (e) {
     const m = String(e && e.message || '');
     if (e && e.pg) return S.send(res, 402, { ok: false, code: String(e.pg.code || 'PG_REJECTED').slice(0, 60), message: String(e.pg.message || '').slice(0, 200) });
-    if (/^(BAD_REQUEST|BAD_ID|NOT_REFUNDABLE|TOO_MUCH|NO_MEMBER|NO_SEATS|SEAT_EXPIRED)$/.test(m)) return S.send(res, 400, { ok: false, code: m });
+    if (/^(BAD_REQUEST|BAD_ID|NOT_REFUNDABLE|TOO_MUCH|NO_MEMBER|NO_SEATS|SEAT_EXPIRED|BUNNY_NOT_SET)$/.test(m)) return S.send(res, 400, { ok: false, code: m });
     console.error('admin', m);
     return S.send(res, 500, { ok: false, code: 'SERVER' });
   }

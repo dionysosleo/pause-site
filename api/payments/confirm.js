@@ -12,6 +12,7 @@ const CATALOG = require('../../shop/catalog.json').items;
 /* 인원제 상품(head): 강사 고정분 + 1인 금액 × 인원(최소 청구 인원 이하는 최소 인원으로). 그 밖에는 단가 × 수량 */
 const total = (item, qty) => item.head ? item.head.base + item.head.per * Math.max(qty, item.head.min) : item.price * qty;
 const KEYS = require('./_keys.js');
+const MAIL = require('../_mail.js');
 
 const ALLOWED_HOSTS = ['www.chaand.ai', 'chaand.ai'];
 
@@ -55,6 +56,7 @@ async function record({ orderId, item, itemId, qty, amount, data, mode, buyer, t
       const e = Array.isArray(ex) && ex.length ? { ok: true } : await sbInsert('enrollments', { user_id: u.id, course_id: item.grants, source: 'purchase', order_id: orderId });
       if (!e.ok) console.error('enrollments insert', e.status, e.text); else enrolled = true;
     }
+    await MAIL.orderConfirm({ id: orderId, email, name: item.name + (item.head ? ' · ' + qty + '명' : (qty > 1 ? ' × ' + qty : '')), amount, paidAt: data.approvedAt, method: data.method, course: !!item.grants, kit: /차 키트/.test(String(item.note || '')), refundRule: item.refund ? '취소·환불정책 「' + item.refund + '」' : '', test: mode !== 'live' });
     return { saved: true, member: !!u, enrolled };
   } catch (e) { console.error('record', e && e.message); return { saved: false }; }
 }

@@ -1,0 +1,8 @@
+{
+  "name": "pause-site",
+  "private": true,
+  "description": "CHA&I 사이트 서버 함수용 의존성 (메일 발송)",
+  "dependencies": {
+    "nodemailer": "^6.10.1"
+  }
+}

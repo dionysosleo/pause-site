@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     const q = await R.quote(orderId);
     if (!q.ok) return S.send(res, 404, q);
     const mine = q.order.user_id === u.id;
-    if (!mine && !(req.method === 'GET' && await S.isAdmin(u))) return S.send(res, 404, { ok: false, code: 'NO_ORDER' });
+    if (!mine && !(req.method === 'GET' && await S.isAdminStrict(u, S.bearer(req)))) return S.send(res, 404, { ok: false, code: 'NO_ORDER' });
     const view = { ok: true, orderId, paid: q.paid, already: q.already, amount: q.amount, auto: q.auto, rule: q.rule, days: q.days, watched: q.watched, total: q.total, requested: !!q.order.refund_requested_at };
     if (req.method === 'GET') return S.send(res, 200, view);
     if (!q.auto) {

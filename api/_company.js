@@ -1,5 +1,6 @@
 /* 기업 계정 공용: 진도 계산, 기업 상세(운영자·담당자 화면 공통), 배정·회수 */
 const S = require('./_sb.js');
+const MAIL = require('./_mail.js');
 const enc = encodeURIComponent;
 async function get(path) { const r = await S.rest('GET', path); if (!r.ok) throw new Error('DB ' + r.status + ' ' + r.text); return r.data || []; }
 async function write(method, path, body, prefer) { const r = await S.rest(method, path, body, prefer || 'return=representation'); if (!r.ok) throw new Error('DB ' + r.status + ' ' + r.text); return r.data; }
@@ -47,7 +48,10 @@ async function invite(companyId, list) {
   if (fresh.length) await write('POST', 'company_members', fresh, 'return=minimal');
   const back = ex.filter(e => e.status === 'removed');
   for (const e of back) await write('PATCH', 'company_members?id=eq.' + e.id, { status: 'invited', user_id: null, joined_at: null }, 'return=minimal');
-  return { added: fresh.length + back.length, existed: ex.length - back.length };
+  const [co] = await get('companies?select=name&id=eq.' + companyId);
+  let mailed = 0;
+  for (const r of fresh.concat(back.map(b => ({ email: b.email })))) { const m = await MAIL.companyInvite({ email: r.email, company: co ? co.name : '회사' }); if (m.sent) mailed++; }
+  return { added: fresh.length + back.length, existed: ex.length - back.length, mailed, mail: MAIL.ready() };
 }
 
 async function assign(companyId, memberId, seatId) {
