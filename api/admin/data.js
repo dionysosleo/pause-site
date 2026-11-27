@@ -54,10 +54,10 @@ async function notifyOpen(courseId) {
 }
 
 /* 권한: 'all' 이면 전부. 화면·작업마다 필요한 권한 */
-const PERM_READ = { brief: 'dash', dashboard: 'dash', orders: 'orders', orders_csv: 'orders', members: 'members', member: 'members', companies: 'companies', company: 'companies', courses: 'courses', shipments: 'ship', logs: 'logs', leads: 'leads', coupons: 'coupons', admins: 'admins', backups: 'admins', launch: 'admins', kits: 'courses' };
+const PERM_READ = { voices: 'courses', brief: 'dash', dashboard: 'dash', orders: 'orders', orders_csv: 'orders', members: 'members', member: 'members', companies: 'companies', company: 'companies', courses: 'courses', shipments: 'ship', logs: 'logs', leads: 'leads', coupons: 'coupons', admins: 'admins', backups: 'admins', launch: 'admins', kits: 'courses' };
 const PERM_ACT = { refund: 'refund', cancel_waiting: 'refund', order_manual: 'refund', pg_sync: 'orders', order_memo: 'orders', grant: 'members', revoke: 'members',
   company_create: 'companies', company_admin: 'companies', seat_add: 'companies', company_invite: 'companies', company_assign: 'companies', company_unassign: 'companies', company_remove: 'companies',
-  course_open: 'courses', lesson_save: 'courses', lesson_delete: 'courses', lesson_publish: 'courses', video_init: 'courses', video_status: 'courses', kit_upload: 'courses', kit_save: 'courses', kit_delete: 'courses',
+  course_open: 'courses', lesson_save: 'courses', lesson_delete: 'courses', lesson_publish: 'courses', voice_save: 'courses', voice_delete: 'courses', media_upload: 'courses', video_init: 'courses', video_status: 'courses', kit_upload: 'courses', kit_save: 'courses', kit_delete: 'courses',
   shipped: 'ship', lead_update: 'leads', coupon_save: 'coupons', coupon_toggle: 'coupons', admin_save: 'admins', admin_remove: 'admins', convert_self: 'admins', staff_reset: 'admins', pw_changed: 'self', backup_now: 'admins', backup_get: 'admins', purge_test: 'admins' };
 const PRESETS = {
   owner:   { label: '대표 (전체 권한)', perms: ['all'] },
@@ -69,6 +69,7 @@ const PRESETS = {
 const PERM_NAMES = { dash: '대시보드', orders: '주문 보기', refund: '환불·직접 등록', members: '회원', companies: '기업', leads: '문의 접수함', courses: '강의·키트', ship: '키트 발송', coupons: '할인 코드', logs: '작업 기록', admins: '권한·백업·출시 점검' };
 
 const READ = {
+  async voices() { return { voices: await get('testimonials?select=*&order=sort,id') }; },
   /* 데일리 브리핑: 지난 날은 저장된 것(없으면 만들어 저장), 오늘은 지금까지 실시간 */
   async brief(q) {
     const today = BR.kstDate(Date.now());
@@ -477,6 +478,24 @@ const ACT = {
   },
   /* 편 공개 켜기·끄기 (목록에서 바로) */
   async lesson_publish(b) { const id = int(b.id); if (!(id > 0)) throw new Error('BAD_REQUEST'); await write('PATCH', 'lessons?id=eq.' + id, { published: !!b.on, publish_at: null }); return {}; },
+  /* 후기·레퍼런스 */
+  async voice_save(b) {
+    const quote = String(b.quote || '').trim().slice(0, 400); if (!quote) throw new Error('BAD_REQUEST');
+    const t = v => String(v || '').trim().slice(0, 80) || null;
+    const row = { quote, name: t(b.name), role: t(b.role), company: t(b.company), program: t(b.program), photo_url: /^https:\/\/mryawowqarptvtpxcwxl\.supabase\.co\/storage\/v1\/object\/public\/media\//.test(String(b.photo || '')) ? String(b.photo).slice(0, 400) : null, published: !!b.published, consent: !!b.consent, sort: int(b.sort) || 0 };
+    if (row.published && !row.consent) throw new Error('NO_CONSENT');
+    const id = int(b.id);
+    if (id > 0) await write('PATCH', 'testimonials?id=eq.' + id, row); else await write('POST', 'testimonials', row);
+    return {};
+  },
+  async voice_delete(b) { const id = int(b.id); if (!(id > 0)) throw new Error('BAD_REQUEST'); await write('DELETE', 'testimonials?id=eq.' + id); return {}; },
+  /* 사이트에 보일 사진 올리기 (공개 저장소 media). 경로는 영문만 */
+  async media_upload(b) {
+    const ext = ((String(b.fileName || '').match(/\.(jpe?g|png|webp)$/i) || [])[1] || 'jpg').toLowerCase();
+    const path = 'voices/' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8) + '.' + ext;
+    const url = await S.signedPut('media', path); if (!url) throw new Error('STORAGE');
+    return { url, publicUrl: 'https://mryawowqarptvtpxcwxl.supabase.co/storage/v1/object/public/media/' + path };
+  },
   async lesson_delete(b) {
     const id = int(b.id); if (!(id > 0)) throw new Error('BAD_REQUEST');
     await write('DELETE', 'lessons?id=eq.' + id);
@@ -543,7 +562,7 @@ module.exports = async (req, res) => {
   } catch (e) {
     const m = String(e && e.message || '');
     if (e && e.pg) return S.send(res, 402, { ok: false, code: String(e.pg.code || 'PG_REJECTED').slice(0, 60), message: String(e.pg.message || '').slice(0, 200) });
-    if (/^(BAD_REQUEST|BAD_ID|NOT_REFUNDABLE|TOO_MUCH|NO_MEMBER|NO_SEATS|SEAT_EXPIRED|BUNNY_NOT_SET|VBANK_REFUND|SELF|LAST_OWNER|STORAGE|EMAIL_TAKEN|AUTH_CREATE)$/.test(m)) return S.send(res, 400, { ok: false, code: m });
+    if (/^(BAD_REQUEST|BAD_ID|NOT_REFUNDABLE|TOO_MUCH|NO_MEMBER|NO_SEATS|SEAT_EXPIRED|BUNNY_NOT_SET|VBANK_REFUND|SELF|LAST_OWNER|STORAGE|EMAIL_TAKEN|AUTH_CREATE|NO_CONSENT)$/.test(m)) return S.send(res, 400, { ok: false, code: m });
     console.error('admin', m);
     return S.send(res, 500, { ok: false, code: 'SERVER' });
   }

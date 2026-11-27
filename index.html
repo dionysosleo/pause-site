@@ -27,7 +27,6 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.chaand.ai/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://images.unsplash.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Noto+Serif+KR:wght@400;500&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1D1D1B;--ink2:#3A3A36;--muted:#6F6A63;--taupe:#8A847C;--hair:#DEDBD3;--soft:#ECE9E2;--paper:#F0EDE6;--bg:#F5F3EE;--lime:#DBDED8;--lime-t:#E6EAE3;--green:#546C5D;--red:#B42318;--max:1240px;--en:'Cormorant Garamond',Georgia,serif}
@@ -516,6 +515,8 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .play-msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;text-align:center}.play-msg p{margin:0}.play-msg .muted{color:#BDB8AF}
 .play-wm{position:absolute;pointer-events:none;color:rgba(255,255,255,.32);font-size:13px;font-weight:600;transition:left 1.2s,top 1.2s;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.4)}
 .play-info{padding:14px 2px}.play-info p{margin:0}.play-now{font-size:18px;font-weight:700}.play-sub{font-size:14px;margin-top:2px!important}
+.voices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.voice{margin:0;background:#fff;border:1px solid var(--hair);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:14px}.voice img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px}.voice blockquote{margin:0;font-size:16px;line-height:1.7}.voice figcaption{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:14px;color:var(--muted,#6B727A);margin-top:auto}.voice figcaption b{color:inherit;font-weight:600}
+@media (max-width:900px){.voices{grid-template-columns:minmax(0,1fr)}}
 .kit-box{margin-top:22px}.kit-box .my-sub{margin-top:0}
 .play-side{border:1px solid var(--hair);border-radius:18px;background:#fff;padding:16px;max-height:calc(100vh - 140px);overflow:auto;position:sticky;top:96px}
 .play-sum{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;padding:0 4px 14px;border-bottom:1px solid var(--soft)}.play-sum .my-bar{grid-column:1/-1}.play-sum span{font-size:13px}
@@ -1344,7 +1345,8 @@ var PH = {
   teapot:   {id:'1629440404898-4a527437484f', alt:'나무 테이블 위 갈색 도자기 다관', by:'jay huang'},
   manLaptop:{id:'1573183205228-df337e65dab0', alt:'테이블에서 노트북으로 일하는 사람', by:'Miguel Dominguez'}
 };
-function src(k, w){ if(PH[k].local) return PH[k].local; return 'https://images.unsplash.com/photo-' + PH[k].id + '?auto=format&fit=crop&w=' + (w || 1200) + '&q=70'; }
+/* 사진은 사이트 안(img/u/, WebP)에서. 작은 칸은 800px, 큰 칸은 1600px 파일 (원본: Unsplash, 사진가 표기는 PH.by) */
+function src(k, w){ if(PH[k].local) return PH[k].local; return 'img/u/' + k + '-' + ((w || 1200) <= 800 ? 800 : 1600) + '.webp'; }
 function tph(t, w, cls){ return t.img ? '<div class="photo portrait' + (cls ? ' ' + cls : '') + '"><img src="' + esc(t.img) + '" alt="' + esc(t.nm) + ' 사진" loading="lazy"></div>' : ph(t.pic, w, cls); }
 function ph(k, w, cls, eager){
   var p = PH[k];
@@ -1740,7 +1742,10 @@ if(!HASH_MODE) window.addEventListener('popstate', route);
 /* 주소마다 제목·설명·대표 주소·구조화 정보 맞추기 */
 function afterRoute(h){
   pathify(document);
-  var base = 'https://www.chaand.ai', url = base + (h === 'intro' ? '/' : '/' + h.replace(/\?.*$/, ''));
+  /* 영문 페이지는 /en 아래 주소가 대표 주소. 한·영 짝 주소(hreflang)도 주소마다 맞춤 */
+  var base = 'https://www.chaand.ai', isEn = document.documentElement.lang === 'en', tail = h === 'intro' ? '' : '/' + h.replace(/\?.*$/, '');
+  var koUrl = base + (tail || '/'), enUrl = base + '/en' + tail, url = isEn ? enUrl : koUrl;
+  $$('link[rel="alternate"][hreflang]').forEach(function(l){ var g = l.getAttribute('hreflang'); l.setAttribute('href', g === 'en' ? enUrl : koUrl); });
   var lead = $('#app .lead'), desc = lead ? lead.textContent.trim().slice(0, 150) : '';
   var md = document.querySelector('meta[name="description"]'); if(!md.dataset.base) md.dataset.base = md.content;
   md.content = desc || md.dataset.base;
@@ -1912,7 +1917,7 @@ function vHome(){
   '<section class="section dark"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">Hosts</p><h2 class="h2">세 강사가 함께 들어가요</h2></div><a class="btn btn-line btn-sm" href="#team">강사 소개</a></div>' +
     '<div class="trio">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<a class="tch" href="#team">' + tph(t, 800, 'tpic') + '<span class="role">' + t.role + '</span><span class="nm">' + t.nm + '</span><p>' + esc(t.line) + '</p><p style="color:#fff">' + esc(t.proofS || t.proof) + '</p></a>'; }).join('') + '</div>' +
-  '</div></section>' + faqSection() +
+  '</div></section>' + '<div id="voices"></div>' + faqSection() +
 
   '<section class="section"><div class="wrap split">' +
     '<div style="display:flex;flex-direction:column;gap:18px">' +
@@ -2577,6 +2582,17 @@ function myGate(c, u){
 }
 var LOGIN_BY = {email:'이메일', kakao:'카카오', google:'구글'};
 /* 무료 강의 수강 등록 (/enroll?item=…): 로그인 → 서버가 수강권을 만들고 → 바로 재생 화면 */
+/* 후기·레퍼런스: 관리자 화면에서 공개한 것만 (하나도 없으면 칸을 만들지 않음) */
+var VOICES = null;
+function loadVoices(){
+  var host = $('#voices'); if(!host) return;
+  var draw = function(L){ if(!L || !L.length || !document.body.contains(host)){ host.innerHTML = ''; return; }
+    host.innerHTML = '<section class="section"><div class="wrap"><div class="sec-head"><div><p class="eyebrow">Voices</p><h2 class="h2">함께한 분들의 이야기</h2></div></div><div class="voices">' +
+      L.map(function(v){ return '<figure class="voice">' + (v.photo_url ? '<img src="' + esc(v.photo_url) + '" alt="' + esc((v.program || '현장') + ' 사진') + '" loading="lazy" decoding="async">' : '') + '<blockquote>' + esc(v.quote) + '</blockquote><figcaption><b>' + esc([v.name, v.role].filter(Boolean).join(' · ')) + '</b>' + (v.company ? '<span>' + esc(v.company) + '</span>' : '') + (v.program ? '<span class="badge ln">' + esc(v.program) + '</span>' : '') + '</figcaption></figure>'; }).join('') + '</div></div></section>'; };
+  if(VOICES) return draw(VOICES);
+  fetch(AUTH.url + '/rest/v1/testimonials?select=quote,name,role,company,program,photo_url&order=sort,id&limit=9', {headers:{apikey:AUTH.key}}).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }).then(function(L){ VOICES = L; draw(L); });
+}
+window.addEventListener('routechange', loadVoices);
 function vEnroll(){ return '<section class="section tight"><div class="wrap" style="max-width:560px;text-align:center"><h1 class="h2">수강 등록</h1><p class="lead" id="enMsg" style="margin-top:12px">잠시만 기다려 주세요</p></div></section>'; }
 function bindEnroll(q){
   var id = (new URLSearchParams(q).get('item') || '').replace(/[^a-z0-9-]/g, ''), msg = function(t){ var e = $('#enMsg'); if(e) e.innerHTML = t; pathify($('#enMsg')); };
