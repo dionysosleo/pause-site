@@ -458,15 +458,58 @@ footer nav{display:flex;flex-wrap:wrap;gap:18px}
 .aforgot{justify-self:center;background:none;border:0;font-size:14px;color:var(--muted);cursor:pointer;padding:6px}
 .cons{border:1px solid var(--hair);border-radius:14px;padding:14px 16px;margin:0;gap:10px}
 .cons .check{font-size:14px;line-height:22px}.cons-all{font-weight:700;padding-bottom:10px;border-bottom:1px solid var(--soft)}
-.my-who{padding:20px 0 4px}.my-name{font-size:20px;font-weight:700;margin:0 0 4px}
-.my-h{margin:36px 0 12px;font-size:18px}
-.my-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.my-list li>a,.my-list li>div{display:grid;gap:4px;padding:16px 18px;border:1px solid var(--hair);border-radius:14px;background:#fff;color:inherit;text-decoration:none}
-.my-list li>a:hover{border-color:var(--ink)}
-.my-list span{font-size:14px}
-.my-empty{margin:0}.my-mk{margin:0 0 20px}
-.my-act{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:8px 0 0}
-.my-act .lnk{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline}
+/* 내 학습 (마이페이지) */
+.my-title{margin:0 0 28px}
+.my-skel{height:180px;border-radius:20px;background:linear-gradient(90deg,var(--soft),#fff,var(--soft));background-size:200% 100%;animation:mySk 1.2s linear infinite}
+@keyframes mySk{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.my-skel{animation:none}}
+.my-gate{border:1px solid var(--hair);border-radius:24px;background:#fff;padding:48px 24px;text-align:center}
+.my-gate-t{font-size:20px;font-weight:700;margin:0 0 8px}.my-gate-s{margin:0 0 24px}
+.my-gate-b{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:0}
+.my-head{display:flex;align-items:center;gap:16px;padding:20px 24px;border:1px solid var(--hair);border-radius:24px;background:#fff}
+.my-av{flex:none;display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--green,#546C5D);color:#fff;font-size:22px;font-weight:700;line-height:1}
+.my-id{min-width:0;flex:1}.my-id p{margin:0}.my-name{font-size:18px;font-weight:700}.my-id .muted{font-size:14px;margin-top:2px}
+.my-chip{flex:none;display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:999px;background:var(--soft);font-size:13px;font-weight:600}
+.my-outb{flex:none}
+.my-stats{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.my-stats li{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:18px 8px;border:1px solid var(--hair);border-radius:18px;background:#fff}
+.my-stats b{font-size:26px;line-height:1;font-variant-numeric:lining-nums tabular-nums}.my-stats span{font-size:13px;color:var(--muted)}
+.my-tabs{margin:36px 0 20px}
+.my-tabs button{display:flex;align-items:center;justify-content:center;gap:6px;height:46px;font:inherit;font-weight:700;color:var(--muted);background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer}
+.my-tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.my-tabs small{font-size:12px;font-weight:600;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--soft);display:inline-flex;align-items:center;justify-content:center;font-variant-numeric:lining-nums}
+.atabs.my-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.my-tag{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;background:var(--soft);font-size:12px;font-weight:600;color:var(--ink2,#3A3A36)}
+.my-courses{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.my-course{display:flex;flex-direction:column;gap:12px;padding:20px;border:1px solid var(--hair);border-radius:20px;background:#fff}
+.my-c-top,.my-c-bot{display:flex;align-items:center;justify-content:space-between;gap:8px}.my-c-d{font-size:13px}
+.my-c-t{margin:0;font-size:16px;font-weight:700}
+.my-bar{height:6px;border-radius:999px;background:var(--soft);overflow:hidden}.my-bar i{display:block;height:100%;background:var(--green,#546C5D);border-radius:inherit}
+.my-empty{border:1px dashed var(--hair);border-radius:20px;padding:32px 20px;text-align:center;background:#fff}
+.my-empty p{margin:0}.my-empty-t{font-weight:700;font-size:17px;margin-bottom:6px!important}
+.my-sub{font-weight:700;margin:32px 0 12px}
+.my-reco{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.my-reco a{display:flex;flex-direction:column;align-items:flex-start;gap:6px;height:100%;padding:18px 20px;border:1px solid var(--hair);border-radius:20px;background:#fff;color:inherit;text-decoration:none;transition:border-color .15s}
+.my-reco a:hover{border-color:var(--ink)}.my-reco b{font-size:15px;max-width:100%}.my-reco .muted{font-size:14px;max-width:100%}
+.my-price{margin-top:auto;padding-top:6px;font-weight:700;font-variant-numeric:lining-nums}
+.my-rows{list-style:none;margin:0;padding:0;border:1px solid var(--hair);border-radius:20px;background:#fff;overflow:hidden}
+.my-rows li{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-top:1px solid var(--soft);min-height:60px}
+.my-rows li:first-child{border-top:0}
+.my-rows li>div{display:flex;flex-direction:column;gap:2px;min-width:0}.my-rows .muted{font-size:14px}
+.my-r-end{align-items:flex-end;flex:none}
+.my-set li>b{text-align:right;min-width:0}
+.my-note{font-size:14px;margin:12px 0 0}
+.my-leave{margin:20px 0 0;text-align:right}.my-leave .lnk{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;text-decoration:underline}
+.sw{position:relative;display:inline-flex;flex:none;cursor:pointer}.sw input{position:absolute;opacity:0;width:1px;height:1px}
+.sw i{width:44px;height:26px;border-radius:999px;background:var(--hair);position:relative;transition:background .15s}
+.sw i::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .15s}
+.sw input:checked+i{background:var(--green,#546C5D)}.sw input:checked+i::after{transform:translateX(18px)}
+.sw input:focus-visible+i{outline:2px solid var(--ink);outline-offset:2px}
+@media (max-width:700px){
+  .my-head{padding:16px;gap:12px}.my-av{width:48px;height:48px;font-size:19px}.my-chip{display:none}
+  .my-courses,.my-reco{grid-template-columns:minmax(0,1fr)}
+  .my-stats b{font-size:22px}
+}
 
 /* soft luxury layer */
 :root{--navy:#2B3A4A;--glass:rgba(255,255,255,.72);--glass-b:rgba(255,255,255,.85);--sh:0 18px 44px rgba(30,42,54,.09);--r:26px;--cream:#F4EADF;--gold:#C9A27E}
@@ -2455,12 +2498,6 @@ function bindLogin(){
     });
   }
 }
-function vMy(){
-  return '<section class="section tight"><div class="wrap my" style="max-width:800px">' +
-    '<p class="eyebrow">My</p><h1 class="h1 auth-h">내 학습</h1>' +
-    '<div id="myBody" aria-live="polite"><p class="muted">불러오는 중이에요</p></div>' +
-  '</div></section>';
-}
 function myBox(html){ var b = $('#myBody'); if(b) b.innerHTML = html; pathify(b); }
 function bindMy(){
   var tok = window.__myTok = {};   /* 화면을 다시 그리면 앞선 불러오기는 버림 */
@@ -2470,7 +2507,7 @@ function bindMy(){
       var s = r.data && r.data.session;
       if(/[?&](code|error)=/.test(location.search) && !HASH_MODE) history.replaceState(null, '', routeUrl('my'));
       authUI();
-      if(!s){ myBox('<p class="lead">로그인하면 산 강의와 진도를 볼 수 있어요.</p><p class="my-act"><a class="btn btn-lime" href="#login">로그인</a> <a class="btn btn-line" href="#login?mode=signup">회원가입</a></p>'); return; }
+      if(!s){ myBox(myOut()); return; }
       if(window.__recovery) return myReset(c);
       return myGate(c, s.user);
     });
@@ -2503,37 +2540,81 @@ function myGate(c, u){
   });
 }
 var LOGIN_BY = {email:'이메일', kakao:'카카오', google:'구글'};
+function vMy(){
+  return '<section class="section tight my-pg"><div class="wrap" style="max-width:960px">' +
+    '<p class="eyebrow">My</p><h1 class="h2 my-title">내 학습</h1>' +
+    '<div id="myBody" aria-live="polite"><div class="my-skel" aria-hidden="true"></div><p class="sr">불러오는 중이에요</p></div>' +
+  '</div></section>';
+}
+function myOut(){
+  return '<div class="my-gate"><p class="my-gate-t">로그인하고 내 강의를 이어 보세요</p><p class="muted my-gate-s">산 강의와 진도, 주문 내역을 한곳에서 봐요.</p>' +
+    '<p class="my-gate-b"><a class="btn btn-lime" href="#login">로그인</a><a class="btn btn-line" href="#login?mode=signup">회원가입</a></p></div>';
+}
+var MY_TAB = 'learn';
 function myDash(c, u){
   return Promise.all([
     c.from('profiles').select('name,email,login_method,marketing_ok').eq('id', u.id).maybeSingle(),
     c.from('enrollments').select('course_id,source,started_at').is('revoked_at', null).order('started_at', {ascending:false}),
-    c.from('orders').select('id,item_id,amount,status,paid_at').neq('status', 'ready').order('created_at', {ascending:false})
+    c.from('orders').select('id,item_id,amount,status,paid_at').neq('status', 'ready').order('created_at', {ascending:false}),
+    c.from('lessons').select('id,course_id,is_free'),
+    c.from('progress').select('lesson_id,completed_at')
   ]).then(function(rs){
-    var p = rs[0].data || {}, en = rs[1].data || [], od = rs[2].data || [];
-    var d = function(t){ return t ? new Date(t).toLocaleDateString('ko-KR') : ''; };
+    var p = rs[0].data || {}, en = rs[1].data || [], od = rs[2].data || [], ls = rs[3].data || [], pr = rs[4].data || [];
+    var done = {}; pr.forEach(function(x){ if(x.completed_at) done[x.lesson_id] = 1; });
+    var pct = function(cid){ var all = ls.filter(function(l){ return l.course_id === cid && !l.is_free; }); if(!all.length) return 0; return Math.round(100 * all.filter(function(l){ return done[l.id]; }).length / all.length); };
+    var d = function(t){ return t ? new Date(t).toLocaleDateString('ko-KR') : '-'; };
     var st = {paid:'결제 완료', partial_refunded:'일부 환불', refunded:'환불 완료', canceled:'취소'};
+    var name = p.name || (u.email || '').split('@')[0], fin = en.filter(function(e){ return pct(e.course_id) === 100; }).length;
+    var tabs = [['learn','내 강의', en.length], ['orders','주문 내역', od.length], ['account','계정 설정', '']];
+    var learn = en.length
+      ? '<ul class="my-courses">' + en.map(function(e){ var cc = cById(e.course_id), v = pct(e.course_id);
+          return '<li class="my-course"><div class="my-c-top"><span class="my-tag">' + (e.source === 'company' ? '회사 배정' : '직접 구매') + '</span><span class="muted my-c-d">' + d(e.started_at) + ' 시작</span></div>' +
+            '<p class="my-c-t ol">' + esc(cc ? cc.title : e.course_id) + '</p>' +
+            '<div class="my-bar" role="progressbar" aria-valuenow="' + v + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + v + '%"></i></div>' +
+            '<div class="my-c-bot"><span class="muted">진도 ' + v + '%</span><a class="btn btn-lime btn-sm" href="#c-' + esc(e.course_id) + '">' + (v ? '이어 보기' : '시작하기') + '</a></div></li>'; }).join('') + '</ul>'
+      : '<div class="my-empty"><p class="my-empty-t">아직 수강 중인 강의가 없어요</p><p class="muted">강의를 사면 여기에서 바로 이어 볼 수 있어요.</p></div>' +
+        '<p class="my-sub">이런 강의가 있어요</p><ul class="my-reco">' + C.map(function(x){ var it = sale(x.opts[0]);
+          return '<li><a href="#c-' + esc(x.id) + '"><span class="my-tag">' + esc(x.level) + '</span><b class="ol">' + esc(x.title) + '</b><span class="muted ol">' + esc(x.short) + '</span>' + (it ? '<span class="my-price">' + won(it.price) + '</span>' : '') + '</a></li>'; }).join('') + '</ul>';
+    var orders = od.length
+      ? '<ul class="my-rows">' + od.map(function(o){ var it = SHOP && SHOP[o.item_id];
+          return '<li><div><b class="ol">' + esc(it && it.label ? it.label : o.item_id) + '</b><span class="muted ol">' + d(o.paid_at) + ' · 주문번호 ' + esc(o.id) + '</span></div><div class="my-r-end"><b>' + won(o.amount) + '</b><span class="my-tag">' + (st[o.status] || esc(o.status)) + '</span></div></li>'; }).join('') + '</ul>' +
+        '<p class="muted my-note">환불은 <a href="#refund">취소·환불정책</a>에 따라 ' + contactMail() + '로 신청해 주세요.</p>'
+      : '<div class="my-empty"><p class="my-empty-t">주문 내역이 없어요</p><p class="muted">결제한 강의와 키트가 여기에 쌓여요.</p></div>';
+    var account = '<ul class="my-rows my-set">' +
+      '<li><span class="muted">이름</span><b>' + esc(name) + '</b></li>' +
+      '<li><span class="muted">이메일</span><b class="ol">' + esc(p.email || u.email) + '</b></li>' +
+      '<li><span class="muted">로그인 방식</span><b>' + (LOGIN_BY[p.login_method] || '이메일') + '</b></li>' +
+      '<li><span class="muted">새 강의·할인 소식 메일</span><label class="sw"><input type="checkbox" data-mk' + (p.marketing_ok ? ' checked' : '') + '><i aria-hidden="true"></i><span class="sr">소식 받기</span></label></li>' +
+      (p.login_method === 'email' || !p.login_method ? '<li><span class="muted">비밀번호</span><button type="button" class="btn btn-line btn-sm" data-pw>바꾸기</button></li>' : '') +
+      '</ul><p class="my-leave"><button type="button" class="lnk" data-leave>회원 탈퇴</button></p>';
     myBox(
-      '<div class="my-who"><p class="my-name ol">' + esc(p.name || u.email) + '</p><p class="muted ol">' + esc(p.email || u.email) + ' · ' + (LOGIN_BY[p.login_method] || '이메일') + ' 로그인</p></div>' +
-      '<h2 class="h3 my-h">수강 중인 강의</h2>' +
-      (en.length ? '<ul class="my-list">' + en.map(function(e){ var cc = cById(e.course_id); return '<li><a href="#c-' + esc(e.course_id) + '"><b class="ol">' + esc(cc ? cc.title : e.course_id) + '</b><span class="muted ol">' + (e.source === 'company' ? '회사 배정' : '직접 구매') + ' · ' + d(e.started_at) + ' 시작</span></a></li>'; }).join('') + '</ul>'
-        : '<p class="muted my-empty">아직 수강 중인 강의가 없어요. <a class="lnk" href="#online">온라인강의 보기</a></p>') +
-      (od.length ? '<h2 class="h3 my-h">주문 내역</h2><ul class="my-list">' + od.map(function(o){ return '<li><div><b class="ol">' + esc(o.item_id) + ' · ' + Number(o.amount).toLocaleString('ko-KR') + '원</b><span class="muted ol">' + (st[o.status] || o.status) + ' · ' + d(o.paid_at) + ' · 주문번호 ' + esc(o.id) + '</span></div></li>'; }).join('') + '</ul>' : '') +
-      '<h2 class="h3 my-h">설정</h2>' +
-      '<label class="check my-mk"><input type="checkbox" data-mk' + (p.marketing_ok ? ' checked' : '') + '><span>새 강의·할인 소식을 메일로 받을게요</span></label>' +
-      '<p class="my-act"><button type="button" class="btn btn-line btn-sm" data-out>로그아웃</button> <button type="button" class="lnk" data-leave>회원 탈퇴</button></p>'
+      '<div class="my-head"><span class="my-av" aria-hidden="true">' + esc(name.charAt(0).toUpperCase()) + '</span>' +
+        '<div class="my-id"><p class="my-name ol">' + esc(name) + '</p><p class="muted ol">' + esc(p.email || u.email) + '</p></div>' +
+        '<span class="my-chip">' + (LOGIN_BY[p.login_method] || '이메일') + '</span>' +
+        '<button type="button" class="btn btn-line btn-sm my-outb" data-out>로그아웃</button></div>' +
+      '<ul class="my-stats"><li><b>' + en.length + '</b><span>수강 중</span></li><li><b>' + fin + '</b><span>완료</span></li><li><b>' + od.length + '</b><span>주문</span></li></ul>' +
+      '<div class="atabs my-tabs" role="tablist">' + tabs.map(function(t){ return '<button type="button" role="tab" data-tab="' + t[0] + '"' + (t[0] === MY_TAB ? ' aria-selected="true"' : '') + '>' + t[1] + (t[2] !== '' ? ' <small>' + t[2] + '</small>' : '') + '</button>'; }).join('') + '</div>' +
+      '<div class="my-panel" data-panel="learn"' + (MY_TAB === 'learn' ? '' : ' hidden') + '>' + learn + '</div>' +
+      '<div class="my-panel" data-panel="orders"' + (MY_TAB === 'orders' ? '' : ' hidden') + '>' + orders + '</div>' +
+      '<div class="my-panel" data-panel="account"' + (MY_TAB === 'account' ? '' : ' hidden') + '>' + account + '</div>'
     );
+    $$('[data-tab]').forEach(function(b){ b.addEventListener('click', function(){
+      MY_TAB = b.getAttribute('data-tab');
+      $$('[data-tab]').forEach(function(x){ if(x === b) x.setAttribute('aria-selected','true'); else x.removeAttribute('aria-selected'); });
+      $$('.my-panel').forEach(function(pn){ pn.hidden = pn.getAttribute('data-panel') !== MY_TAB; });
+    }); });
     $('[data-mk]').addEventListener('change', function(){
       var on = this.checked;
       Promise.all([c.from('profiles').update({marketing_ok:on, marketing_at:new Date().toISOString()}).eq('id', u.id), c.from('consents').insert({user_id:u.id, kind:'marketing', version:AUTH.ver, agreed:on})])
         .then(function(){ toast(on ? '소식 받기를 켰어요' : '소식 받기를 껐어요'); });
     });
+    var pwb = $('[data-pw]'); if(pwb) pwb.addEventListener('click', function(){ myReset(c); });
     $('[data-out]').addEventListener('click', function(){ c.auth.signOut().then(function(){ authUI(); nav(routeUrl('home')); }); });
     $('[data-leave]').addEventListener('click', function(){
       openDialog('<h2>회원 탈퇴</h2><p style="margin:0">탈퇴하면 산 강의와 진도가 모두 사라지고 되돌릴 수 없어요. 환불받을 금액이 있으면 탈퇴 전에 신청해 주세요. 아래 메일로 가입한 이메일을 적어 보내 주시면 바로 처리해 드려요.</p><p style="margin:0">' + contactMail() + '</p><button type="button" class="btn btn-line" data-close>닫기</button>');
     });
   });
 }
-
 /* ===== 제안서 받기 (짧은 폼) ===== */
 function vProposal(){
   var L = savedLead() || {};
