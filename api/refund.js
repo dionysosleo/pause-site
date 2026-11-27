@@ -10,15 +10,15 @@ const OPS = require('./_ops.js');
 module.exports = async (req, res) => {
   if (!['GET', 'POST'].includes(req.method)) { res.setHeader('Allow', 'GET, POST'); return S.send(res, 405, { ok: false, code: 'METHOD' }); }
   if (req.method === 'POST' && !S.sameOrigin(req)) return S.send(res, 403, { ok: false, code: 'ORIGIN' });
-  const u = await S.user(S.bearer(req));
-  if (!u) return S.send(res, 401, { ok: false, code: 'AUTH' });
+  const u = await S.user(S.bearer(req), { staff: true });   // 관리자 전용 계정은 금액 조회(GET)만
+  if (!u || (S.isStaff(u) && req.method !== 'GET')) return S.send(res, 401, { ok: false, code: 'AUTH' });
   const b = req.method === 'POST' ? (await S.readJson(req) || {}) : {};
   const orderId = String(req.method === 'GET' ? (req.query && req.query.orderId) || '' : b.orderId || '');
   if (!/^[A-Za-z0-9_-]{6,64}$/.test(orderId)) return S.send(res, 400, { ok: false, code: 'BAD_REQUEST' });
   try {
     const q = await R.quote(orderId);
     if (!q.ok) return S.send(res, 404, q);
-    const mine = q.order.user_id === u.id;
+    const mine = !S.isStaff(u) && q.order.user_id === u.id;
     if (!mine && !(req.method === 'GET' && await S.isAdminStrict(u, S.bearer(req)))) return S.send(res, 404, { ok: false, code: 'NO_ORDER' });
     /* 결제창 카드·간편결제만 바로 취소. 가상계좌(환불 계좌 필요)·직접 등록 거래는 신청으로 받아 운영자가 처리 */
     const po = (await S.rest('GET', 'orders?select=payment_key,method,source&id=eq.' + encodeURIComponent(orderId))).data[0] || {};

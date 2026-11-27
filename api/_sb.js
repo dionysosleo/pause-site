@@ -19,12 +19,17 @@ async function readJson(req, max) {
   for await (const c of req) { size += c.length; if (size > (max || 8192)) return null; chunks.push(c); }
   try { return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}'); } catch (e) { return null; }
 }
-/* 로그인한 회원 확인 (토큰 → 회원 정보) */
-async function user(token) {
+/* 로그인한 사람 확인 (토큰 → 계정 정보)
+   관리자 전용 계정(app_metadata.role = 'staff')은 사이트 회원 기능에 쓸 수 없어서, 기본으로는 없는 사람으로 봄.
+   관리자 화면 서버만 { staff: true } 로 불러요. */
+const isStaff = u => !!(u && u.app_metadata && u.app_metadata.role === 'staff');
+async function user(token, opt) {
   if (!token) return null;
   try {
     const r = await fetch(URL_ + '/auth/v1/user', { headers: { apikey: PUBLIC, Authorization: 'Bearer ' + token } });
-    if (!r.ok) return null; const u = await r.json(); return u && u.id ? u : null;
+    if (!r.ok) return null; const u = await r.json(); if (!u || !u.id) return null;
+    if (isStaff(u) && !(opt && opt.staff)) return null;
+    return u;
   } catch (e) { return null; }
 }
 function secret() { const k = process.env.SUPABASE_SECRET_KEY; if (!k) throw new Error('NO_SECRET'); return k; }
@@ -56,17 +61,37 @@ async function signedPut(bucket, path) {
   if (!r.ok || !r.data || !r.data.url) return null;
   return URL_ + '/storage/v1' + r.data.url;
 }
+/* 관리자 전용 계정 만들기·바꾸기 (Supabase Auth 관리 API) */
+async function authAdmin(method, path, body) {
+  const k = secret();
+  const r = await fetch(URL_ + '/auth/v1/admin/' + path, { method, headers: { apikey: k, Authorization: 'Bearer ' + k, 'Content-Type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) });
+  const txt = await r.text(); let data = null; try { data = txt ? JSON.parse(txt) : null; } catch (e) {}
+  return { ok: r.ok, status: r.status, data, text: r.ok ? '' : txt.slice(0, 300) };
+}
 async function deleteAuthUser(id) {
   const k = secret();
   const r = await fetch(URL_ + '/auth/v1/admin/users/' + encodeURIComponent(id), { method: 'DELETE', headers: { apikey: k, Authorization: 'Bearer ' + k } });
   return { ok: r.ok, status: r.status, text: r.ok ? '' : (await r.text()).slice(0, 300) };
 }
-/* 운영자면 { perms } 를, 아니면 false. perms 에 'all' 이 있으면 전체 권한 */
-async function isAdmin(u) {
+/* 운영자면 { perms, staff } 를, 아니면 false. perms 에 'all' 이 있으면 전체 권한
+   - 관리자 전용 계정(staff): admins 에 있고, 이메일·비밀번호로 로그인한 토큰이어야 함 (카카오·구글로 연결된 로그인은 거부)
+   - 예전 방식(사이트 회원 계정에 관리자 표시): 전체 권한 관리자 전용 계정이 아직 하나도 없을 때만 (처음 전환용) */
+function amr(token) {
+  try { const p = JSON.parse(Buffer.from(String(token).split('.')[1].replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8')); return (p.amr || []).map(x => x.method); } catch (e) { return []; }
+}
+async function isAdmin(u, token) {
   if (!u) return false;
-  const r = await rest('GET', 'admins?select=user_id,perms,label&user_id=eq.' + encodeURIComponent(u.id));
+  const r = await rest('GET', 'admins?select=user_id,perms,label,staff&user_id=eq.' + encodeURIComponent(u.id));
   const a = r.ok && Array.isArray(r.data) && r.data[0];
-  return a ? { perms: a.perms && a.perms.length ? a.perms : ['all'], label: a.label || '' } : false;
+  if (!a) return false;
+  const perms = a.perms && a.perms.length ? a.perms : ['all'];
+  if (isStaff(u)) {
+    if (token && !amr(token).some(m => m === 'password' || m === 'totp')) return false;
+    return { perms, label: a.label || '', staff: true, mustChange: !!(u.app_metadata && u.app_metadata.must_change) };
+  }
+  const owners = await rest('GET', 'admins?select=user_id&staff=is.true&perms=cs.{all}&limit=1');
+  if (owners.ok && owners.data.length) return false;   // 전용 계정이 생긴 뒤에는 회원 계정 관리자 권한은 끝
+  return { perms, label: a.label || '', staff: false, legacy: true };
 }
 const can = (a, p) => !!a && (a.perms.includes('all') || a.perms.includes(p));
 /* 접속한 곳의 IP (Vercel이 넣어 주는 헤더) */
@@ -77,8 +102,8 @@ function aal(token) {
 }
 /* 2단계 인증은 선택: Vercel 환경 변수 ADMIN_MFA=on 일 때만 요구 (기본은 비밀번호 로그인만) */
 function mfaOn() { return process.env.ADMIN_MFA === 'on'; }
-async function isAdminStrict(u, token) { return (!mfaOn() || aal(token) === 'aal2') ? await isAdmin(u) : false; }
+async function isAdminStrict(u, token) { return (!mfaOn() || aal(token) === 'aal2') ? await isAdmin(u, token) : false; }
 async function log(u, action, target, detail, ipAddr) {
   try { await rest('POST', 'admin_logs', { user_id: u && u.id, email: u && u.email, action, target: target ? String(target).slice(0, 120) : null, detail: detail || null, ip: ipAddr || null }, 'return=minimal'); } catch (e) { console.error('log', e && e.message); }
 }
-module.exports = { send, sameOrigin, bearer, readJson, user, rest, deleteAuthUser, isAdmin, isAdminStrict, can, ip, storage, signedGet, signedPut, aal, mfaOn, log };
+module.exports = { send, sameOrigin, bearer, readJson, user, isStaff, amr, authAdmin, rest, deleteAuthUser, isAdmin, isAdminStrict, can, ip, storage, signedGet, signedPut, aal, mfaOn, log };

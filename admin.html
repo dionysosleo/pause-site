@@ -88,7 +88,8 @@ dialog h3{margin:0 0 14px;font-size:18px}
 (function(){
 'use strict';
 var SB_URL='https://mryawowqarptvtpxcwxl.supabase.co', SB_KEY='sb_publishable_wC2dVRAITr3Ta5AmIzWpKQ_WyOV0OER';
-var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+/* 관리자 로그인은 사이트 로그인과 따로 저장 (storageKey) → 사이트에서 로그인·로그아웃해도 관리자 화면과 상관없음 */
+var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'chai-admin-auth',flowType:'pkce'}});
 var $=function(s,r){return (r||document).querySelector(s);}, $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s));};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
 var won=function(n){return Number(n||0).toLocaleString('ko-KR')+'원';};
@@ -111,16 +112,17 @@ dlg.addEventListener('click',function(e){if(e.target===dlg||e.target.closest('[d
 function api(r,params){var q=Object.keys(params||{}).map(function(k){return '&'+k+'='+encodeURIComponent(params[k]);}).join('');
   return fetch('/api/admin/data?r='+r+q,{headers:{Authorization:'Bearer '+TOKEN}}).then(function(x){return x.json();});}
 function act(body){return fetch('/api/admin/data',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+TOKEN},body:JSON.stringify(body)}).then(function(x){return x.json();}).then(function(d){
-  if(!d.ok){var M={NO_MEMBER:'그 이메일로 가입한 회원이 없어요. 먼저 회원가입을 부탁해 주세요.',NO_SEATS:'남은 수강권이 없어요.',SEAT_EXPIRED:'이용 기간이 끝난 수강권이에요.',TOO_MUCH:'환불 가능 금액보다 많아요.',NOT_REFUNDABLE:'환불할 수 없는 주문이에요.',BAD_REQUEST:'입력값을 확인해 주세요.',BUNNY_NOT_SET:'Bunny Stream이 아직 연결되지 않았어요. Vercel 환경 변수 3개를 넣어 주세요.',MFA_REQUIRED:'2단계 인증이 필요해요. 새로고침해 주세요.',VBANK_REFUND:'환불 받을 은행, 계좌번호, 예금주를 넣어 주세요.',NO_PERM:'이 작업을 할 권한이 없어요.',SELF:'나 자신은 뺄 수 없어요.',LAST_OWNER:'전체 권한 관리자가 한 명은 있어야 해요.',STORAGE:'저장소에 연결하지 못했어요.',PG:'토스에서 취소를 거절했어요. 상점관리자에서 확인해 주세요.'};toast(M[d.code]||('처리하지 못했어요 ('+(d.message||d.code||'')+')'));throw new Error(d.code);}return d;});}
+  if(!d.ok){var M={NO_MEMBER:'그 이메일로 가입한 회원이 없어요. 먼저 회원가입을 부탁해 주세요.',NO_SEATS:'남은 수강권이 없어요.',SEAT_EXPIRED:'이용 기간이 끝난 수강권이에요.',TOO_MUCH:'환불 가능 금액보다 많아요.',NOT_REFUNDABLE:'환불할 수 없는 주문이에요.',BAD_REQUEST:'입력값을 확인해 주세요.',BUNNY_NOT_SET:'Bunny Stream이 아직 연결되지 않았어요. Vercel 환경 변수 3개를 넣어 주세요.',MFA_REQUIRED:'2단계 인증이 필요해요. 새로고침해 주세요.',VBANK_REFUND:'환불 받을 은행, 계좌번호, 예금주를 넣어 주세요.',NO_PERM:'이 작업을 할 권한이 없어요.',SELF:'나 자신은 뺄 수 없어요.',LAST_OWNER:'전체 권한 관리자가 한 명은 있어야 해요.',EMAIL_TAKEN:'이미 사이트 회원이나 다른 계정이 쓰는 이메일이에요. 관리자 전용으로 다른 이메일을 써 주세요.',AUTH_CREATE:'계정을 만들거나 바꾸지 못했어요. 잠시 뒤 다시 해 주세요.',PW_CHANGE:'먼저 새 비밀번호를 정해 주세요. 새로고침해 주세요.',STORAGE:'저장소에 연결하지 못했어요.',PG:'토스에서 취소를 거절했어요. 상점관리자에서 확인해 주세요.'};toast(M[d.code]||('처리하지 못했어요 ('+(d.message||d.code||'')+')'));throw new Error(d.code);}return d;});}
 function tag(s,c){return '<span class="tag '+(c||'')+'">'+esc(s)+'</span>';}
 function pbar(p){return '<span class="pbar"><i style="width:'+(p||0)+'%"></i></span><span class="small">'+(p||0)+'%</span>';}
 
 /* ── 틀 ── */
 function shell(){
   $('#root').innerHTML='<div class="app"><aside class="side"><a class="logo" href="/">CHA&amp;I <small>관리</small></a><nav class="nav">'+menu().map(function(m){return '<a href="#'+m[0]+'" data-m="'+m[0]+'">'+m[1]+'<span class="dot" data-dot="'+m[0]+'" hidden></span></a>';}).join('')+'</nav>'+
-    '<div class="who">'+esc(ME.email)+(ME_LABEL?'<br><span class="small">'+esc(ME_LABEL)+'</span>':'')+'<br><a href="/my">내 학습으로</a> · <a href="#" id="out">로그아웃</a></div></aside>'+
+    '<div class="who">'+esc(ME.email)+(ME_LABEL?'<br><span class="small">'+esc(ME_LABEL)+'</span>':'')+'<br><a href="#" id="pw">비밀번호 바꾸기</a> · <a href="#" id="out">로그아웃</a></div></aside>'+
     '<div><nav class="mtabs">'+menu().map(function(m){return '<a href="#'+m[0]+'" data-m="'+m[0]+'">'+m[1]+'</a>';}).join('')+'</nav><main id="main"></main></div></div>';
-  $('#out').onclick=function(e){e.preventDefault();sb.auth.signOut().then(function(){location.href='/';});};
+  $('#out').onclick=function(e){e.preventDefault();sb.auth.signOut({scope:'local'}).then(function(){location.reload();});};
+  $('#pw').onclick=function(e){e.preventDefault();pwChange(false);};
 }
 function route(){var h=(location.hash||'').slice(1).split('/'),k=h[0];var ok=menu().map(function(x){return x[0];});if(ok.indexOf(k)<0)k=ok[0]||'home';
   $$('[data-m]').forEach(function(a){if(a.getAttribute('data-m')===k)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
@@ -431,7 +433,7 @@ V.ship=function(m){api('shipments').then(function(d){var L=d.orders;
 
 
 /* ── 작업 기록 ── */
-var ACTN={refund:'환불',grant:'수강권 부여',revoke:'수강권 회수',company_create:'기업 등록',company_admin:'담당자 지정',seat_add:'수강권 묶음 추가',company_invite:'구성원 초대',company_assign:'강의 배정',company_unassign:'배정 회수',company_remove:'구성원 빼기',course_open:'강의 열기·닫기',lesson_save:'편 저장',lesson_delete:'편 삭제',video_init:'영상 업로드',shipped:'발송 처리',order_manual:'매출 직접 등록',order_memo:'주문 메모',cancel_waiting:'입금 전 취소',pg_sync:'PG와 맞추기',pg_webhook:'PG 웹훅 반영',lead_update:'문의 상태 변경',coupon_save:'할인 저장',coupon_toggle:'할인 켜기·멈추기',admin_save:'관리자 권한 저장',admin_remove:'관리자 빼기',kit_upload:'키트 올리기',kit_save:'키트 등록',kit_delete:'키트 삭제',backup_now:'백업',purge_test:'테스트 주문 삭제',view_member:'회원 상세 열람',view_members:'회원 목록 열람',view_orders_csv:'주문 엑셀 내보내기',view_leads:'문의 접수함 열람',cleanup_shipping:'배송 정보 자동 삭제'};
+var ACTN={refund:'환불',grant:'수강권 부여',revoke:'수강권 회수',company_create:'기업 등록',company_admin:'담당자 지정',seat_add:'수강권 묶음 추가',company_invite:'구성원 초대',company_assign:'강의 배정',company_unassign:'배정 회수',company_remove:'구성원 빼기',course_open:'강의 열기·닫기',lesson_save:'편 저장',lesson_delete:'편 삭제',video_init:'영상 업로드',shipped:'발송 처리',order_manual:'매출 직접 등록',order_memo:'주문 메모',cancel_waiting:'입금 전 취소',pg_sync:'PG와 맞추기',pg_webhook:'PG 웹훅 반영',lead_update:'문의 상태 변경',coupon_save:'할인 저장',coupon_toggle:'할인 켜기·멈추기',admin_save:'관리자 권한 저장',admin_remove:'관리자 빼기',kit_upload:'키트 올리기',kit_save:'키트 등록',kit_delete:'키트 삭제',backup_now:'백업',staff_reset:'임시 비밀번호 발급',purge_test:'테스트 주문 삭제',view_member:'회원 상세 열람',view_members:'회원 목록 열람',view_orders_csv:'주문 엑셀 내보내기',view_leads:'문의 접수함 열람',cleanup_shipping:'배송 정보 자동 삭제'};
 V.logs=function(m){api('logs').then(function(d){var L=d.logs;
   m.innerHTML='<h1>작업 기록</h1><p class="sub">운영자가 한 일과 개인정보를 연 기록이 접속 IP와 함께 자동으로 남아요(1년 이상 보관). 분쟁이 생기면 근거가 돼요.</p>'+(L.length?'<div class="tw"><table><thead><tr><th>시각</th><th>운영자</th><th>작업</th><th>대상</th><th>내용</th></tr></thead><tbody>'+L.map(function(x){
     var dd=x.detail||{},keys=Object.keys(dd).filter(function(k){return dd[k]!==''&&dd[k]!=null&&typeof dd[k]!=='object';}).slice(0,5);
@@ -535,23 +537,29 @@ V.settings=function(m,sub){sub=sub||'launch';
   $$('[data-st]',m).forEach(function(b){b.onclick=function(){location.hash='settings/'+b.getAttribute('data-st');};});
   var box=$('#sv',m);
   if(sub==='admins')return api('admins').then(function(d){var P=d.presets,N=d.names;
-    box.innerHTML='<p class="sub">관리자마다 볼 수 있는 메뉴와 할 수 있는 일을 정해요. 먼저 사이트에 회원으로 가입한 이메일이어야 해요. 고객사 담당자(HR)는 여기가 아니라 기업 메뉴의 "담당자 지정"으로 넣어요.</p>'+
-      '<div class="tw"><table><thead><tr><th>관리자</th><th>역할</th><th>권한</th><th></th></tr></thead><tbody>'+d.admins.map(function(a){var all=(a.perms||[]).indexOf('all')>=0;
-        return '<tr><td>'+esc(a.name||'')+'<div class="small muted">'+esc(a.email||a.user_id)+'</div></td><td>'+esc(a.label||(all?'대표 (전체 권한)':''))+'</td><td class="small">'+(all?'전체':(a.perms||[]).map(function(p){return N[p]||p;}).join(', '))+'</td><td class="num"><button class="btn s" data-ae="'+esc(a.email||'')+'">바꾸기</button> '+(a.user_id===ME.id?'':'<button class="btn s" data-ar="'+a.user_id+'">빼기</button>')+'</td></tr>';}).join('')+'</tbody></table></div>'+
-      '<p style="margin-top:14px"><button class="btn p" id="aNew">+ 관리자 추가</button></p>'+
+    box.innerHTML='<p class="sub">관리자는 사이트 회원과 따로, <b>관리자 전용 계정</b>으로만 들어와요. 여기서 이메일과 역할을 정하면 계정이 만들어지고 임시 비밀번호가 한 번 보여요. 처음 로그인할 때 본인이 새 비밀번호로 바꿔요. 사이트 회원으로 쓰는 이메일은 쓸 수 없고, 카카오·구글 로그인도 막혀 있어요. 고객사 담당자(HR)는 여기가 아니라 기업 메뉴의 "담당자 지정"으로 넣어요.</p>'+
+      '<div class="tw"><table><thead><tr><th>관리자</th><th>역할</th><th>권한</th><th>마지막 로그인</th><th></th></tr></thead><tbody>'+d.admins.map(function(a){var all=(a.perms||[]).indexOf('all')>=0;
+        return '<tr><td>'+esc(a.name||'')+' '+(a.staff?'':tag('사이트 회원 계정 · 전환 필요','amber'))+(a.mustChange?' '+tag('첫 로그인 전',''):'')+'<div class="small muted">'+esc(a.email||a.user_id)+'</div></td><td>'+esc(a.label||(all?'대표 (전체 권한)':''))+'</td><td class="small">'+(all?'전체':(a.perms||[]).map(function(p){return N[p]||p;}).join(', '))+'</td><td class="small">'+(a.last?dt(a.last):'-')+'</td><td class="num nowrap"><button class="btn s" data-ae="'+a.user_id+'">권한</button> '+(a.staff?'<button class="btn s" data-rp="'+a.user_id+'">임시 비밀번호</button> ':'')+(a.user_id===ME.id?'':'<button class="btn s" data-ar="'+a.user_id+'">빼기</button>')+'</td></tr>';}).join('')+'</tbody></table></div>'+
+      '<p style="margin-top:14px"><button class="btn p" id="aNew">+ 관리자 전용 계정 만들기</button></p>'+
+      (d.admins.some(function(a){return !a.staff;})?'<div class="note" style="margin-top:12px"><b>전환 순서</b> · ① 대표용 관리자 전용 계정을 "대표 (전체 권한)"으로 만들고 ② 로그아웃 후 그 계정으로 로그인해 새 비밀번호를 정한 다음 ③ 여기서 "사이트 회원 계정" 줄을 빼 주세요. 전용 대표 계정이 생기는 순간부터 사이트 회원 계정은 관리자 화면에 들어올 수 없어요.</div>':'')+
       '<h2>역할 안내</h2><dl class="kv">'+Object.keys(P).map(function(k){return '<dt>'+esc(P[k].label)+'</dt><dd class="small">'+(P[k].perms[0]==='all'?'모든 메뉴와 권한 관리':P[k].perms.map(function(p){return N[p];}).join(', '))+'</dd>';}).join('')+'</dl>';
-    var edit=function(a){a=a||{};var cur=a.perms||[];
-      openDlg('<h3>'+(a.email?'권한 바꾸기':'관리자 추가')+'</h3><div class="f"><label>회원 이메일<input id="aE" type="email" value="'+esc(a.email||'')+'"'+(a.email?' readonly':'')+'></label>'+
-        '<label>역할<select id="aP"><option value="">직접 고르기</option>'+Object.keys(P).map(function(k){return '<option value="'+k+'"'+(a.label===P[k].label?' selected':'')+'>'+esc(P[k].label)+'</option>';}).join('')+'</select></label>'+
-        '<div id="aBox" class="bar">'+Object.keys(N).map(function(p){return '<label class="ck"><input type="checkbox" class="aC" value="'+p+'"'+(cur.indexOf(p)>=0||cur.indexOf('all')>=0?' checked':'')+'> '+N[p]+'</label>';}).join('')+'</div>'+
-        '<label>표시 이름 (선택)<input id="aL" value="'+esc(a.label||'')+'" placeholder="예: 기업강의 담당 · 한성희"></label><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="aGo">저장</button></div></div>');
-      var sync=function(){var k=$('#aP').value;if(!k)return;var ps=P[k].perms;$$('.aC').forEach(function(c){c.checked=ps[0]==='all'||ps.indexOf(c.value)>=0;});if(!$('#aL').value||Object.keys(P).some(function(x){return P[x].label===$('#aL').value;}))$('#aL').value=P[k].label;};
-      $('#aP').onchange=sync;
-      $('#aGo').onclick=function(){var k=$('#aP').value,ps=$$('.aC').filter(function(c){return c.checked;}).map(function(c){return c.value;});
-        if(k==='owner')ps=['all'];act({action:'admin_save',email:$('#aE').value.trim(),perms:ps,label:$('#aL').value.trim()}).then(function(){closeDlg();toast('저장했어요');V.settings(m,'admins');});};};
-    $('#aNew').onclick=function(){edit();};
-    $$('[data-ae]',box).forEach(function(b){b.onclick=function(){edit(d.admins.find(function(a){return a.email===b.getAttribute('data-ae');}));};});
-    $$('[data-ar]',box).forEach(function(b){b.onclick=function(){if(!confirmTxt('이 관리자를 뺄까요? 관리자 화면에 들어올 수 없게 돼요.'))return;act({action:'admin_remove',userId:b.getAttribute('data-ar')}).then(function(){toast('뺐어요');V.settings(m,'admins');});};});
+    var showTemp=function(email,pw){openDlg('<h3>임시 비밀번호</h3><div class="f"><div class="note">이 창을 닫으면 다시 볼 수 없어요. 본인에게 직접(메신저·전화) 전해 주세요.</div><dl class="kv"><dt>로그인 주소</dt><dd>'+esc(location.origin)+'/'+(location.pathname.indexOf('/admin')===0?'admin':'')+'</dd><dt>이메일</dt><dd>'+esc(email)+'</dd><dt>임시 비밀번호</dt><dd><b style="font-size:18px;letter-spacing:.04em">'+esc(pw)+'</b></dd></dl><div class="acts"><button class="btn" id="tpC">복사</button><button class="btn p" data-close>확인했어요</button></div></div>');
+      $('#tpC').onclick=function(){try{navigator.clipboard.writeText(pw).then(function(){toast('복사했어요');});}catch(e){}};};
+    var perms=function(cur,lbl){return '<label>역할<select id="aP"><option value="">직접 고르기</option>'+Object.keys(P).map(function(k){return '<option value="'+k+'"'+(lbl===P[k].label?' selected':'')+'>'+esc(P[k].label)+'</option>';}).join('')+'</select></label>'+
+      '<div id="aBox" class="bar">'+Object.keys(N).map(function(p){return '<label class="ck"><input type="checkbox" class="aC" value="'+p+'"'+(cur.indexOf(p)>=0||cur.indexOf('all')>=0?' checked':'')+'> '+N[p]+'</label>';}).join('')+'</div>'+
+      '<label>표시 이름 (선택)<input id="aL" value="'+esc(lbl||'')+'" placeholder="예: 기업강의 담당"></label>';};
+    var bindPerms=function(){$('#aP').onchange=function(){var k=$('#aP').value;if(!k)return;var ps=P[k].perms;$$('.aC').forEach(function(c){c.checked=ps[0]==='all'||ps.indexOf(c.value)>=0;});$('#aL').value=P[k].label;};};
+    var picked=function(){var k=$('#aP').value;return k==='owner'?['all']:$$('.aC').filter(function(c){return c.checked;}).map(function(c){return c.value;});};
+    $('#aNew').onclick=function(){
+      openDlg('<h3>관리자 전용 계정 만들기</h3><div class="f"><div class="row"><label>이름<input id="aN" maxlength="40" placeholder="예: 한성희"></label><label>관리자용 이메일<input id="aE" type="email" placeholder="예: admin-han@chaand.ai"></label></div>'+perms([],'')+'<p class="small muted" style="margin:0">사이트에서 수강할 때 쓰는 이메일과 다른 주소여야 해요.</p><div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="aGo">만들기</button></div></div>');
+      bindPerms();
+      $('#aGo').onclick=function(){var b=this;b.disabled=true;act({action:'admin_save',name:$('#aN').value.trim(),email:$('#aE').value.trim(),perms:picked(),label:$('#aL').value.trim(),preset:$('#aP').value||undefined}).then(function(r){V.settings(m,'admins');showTemp(r.email,r.tempPassword);},function(){b.disabled=false;});};};
+    $$('[data-ae]',box).forEach(function(b){b.onclick=function(){var a=d.admins.find(function(x){return x.user_id===b.getAttribute('data-ae');});
+      openDlg('<h3>권한 바꾸기 · '+esc(a.name||a.email||'')+'</h3><div class="f">'+perms(a.perms||[],a.label||'')+'<div class="acts"><button class="btn" data-close>닫기</button><button class="btn p" id="aGo">저장</button></div></div>');bindPerms();
+      $('#aGo').onclick=function(){act({action:'admin_save',userId:a.user_id,perms:picked(),label:$('#aL').value.trim(),preset:$('#aP').value||undefined}).then(function(){closeDlg();toast('저장했어요');V.settings(m,'admins');});};};});
+    $$('[data-rp]',box).forEach(function(b){b.onclick=function(){var a=d.admins.find(function(x){return x.user_id===b.getAttribute('data-rp');});if(!confirmTxt((a.name||a.email)+'님의 비밀번호를 임시 비밀번호로 바꿀까요? 지금 비밀번호는 더 이상 안 돼요.'))return;
+      act({action:'staff_reset',userId:a.user_id}).then(function(r){V.settings(m,'admins');showTemp(a.email,r.tempPassword);});};});
+    $$('[data-ar]',box).forEach(function(b){b.onclick=function(){if(!confirmTxt('이 관리자를 뺄까요? 관리자 전용 계정이면 계정도 지워져요.'))return;act({action:'admin_remove',userId:b.getAttribute('data-ar')}).then(function(){toast('뺐어요');V.settings(m,'admins');});};});
   });
   if(sub==='backup')return api('backups').then(function(d){
     box.innerHTML='<p class="sub">매주 일요일 새벽에 주요 표(회원·주문·수강권·기업·문의·할인 등)를 묶어 비공개 저장소에 자동으로 백업하고, 최근 8개만 남겨요. 같은 Supabase 안에 있으니 한 달에 한 번은 내려받아 따로 보관해 주세요.</p><p><button class="btn p" id="bNow">지금 백업하기</button></p>'+
@@ -579,18 +587,47 @@ function kitSection(m,courses){api('kits').then(function(d){
 });}
 
 /* ── 시작: 로그인·운영자 확인 ── */
-sb.auth.getSession().then(function(r){var s=r.data&&r.data.session;
-  if(!s){$('#root').innerHTML='<div class="gate"><h1>관리</h1><p>운영자 계정으로 로그인해 주세요.</p><p><a class="btn p" href="/login">로그인</a></p></div>';return;}
-  TOKEN=s.access_token;ME=s.user;
-  /* 운영자 확인·강의 목록·상품표를 한 번에 받고, 대시보드라면 그 데이터도 같이 미리 받음 */
-  return Promise.all([api('me'),api('courses').catch(function(){return {};}),fetch('/shop/catalog.json').then(function(x){return x.json();}).catch(function(){return {items:{}};})]).then(function(v){var me=v[0];
-    if(!me||!me.ok){$('#root').innerHTML='<div class="gate"><h1>관리</h1><p>운영자만 볼 수 있는 화면이에요.</p><p><a class="btn" href="/my">내 학습으로</a></p></div>';return;}
-    if(me.mfa&&me.aal!=='aal2')return mfaGate();
-    PERMS=me.perms||[];ME_LABEL=me.label||'';
-    SHOP=(v[2]&&v[2].items)||{};COURSES=(v[1]&&v[1].courses)||[];shell();route();
-  });
-}).catch(function(){$('#root').innerHTML='<div class="gate"><p>불러오지 못했어요. 새로고침해 주세요.</p></div>';});
-function start(){location.reload();}
+/* ── 관리자 로그인 (관리자 전용 계정: 이메일·비밀번호만) ── */
+function loginGate(msg){
+  $('#root').innerHTML='<div class="gate" style="text-align:left"><h1 style="text-align:center">CHA&amp;I 관리</h1><p style="text-align:center">관리자 전용 계정으로 로그인해 주세요.<br><span class="small">사이트 회원 계정이나 카카오·구글 로그인은 쓸 수 없어요.</span></p>'+
+    '<form class="f box" id="lg" autocomplete="on"><label>이메일<input id="lgE" type="email" autocomplete="username" required></label><label>비밀번호<input id="lgP" type="password" autocomplete="current-password" required></label><p class="small" id="lgM" style="margin:0;color:var(--red)">'+esc(msg||'')+'</p><button class="btn p" id="lgGo">로그인</button></form>'+
+    '<p class="small muted" style="text-align:center">비밀번호를 잊었으면 대표 관리자에게 임시 비밀번호를 다시 받아 주세요.</p></div>';
+  $('#lg').onsubmit=function(e){e.preventDefault();var b=$('#lgGo');b.disabled=true;$('#lgM').textContent='';
+    sb.auth.signInWithPassword({email:$('#lgE').value.trim(),password:$('#lgP').value}).then(function(r){
+      if(r.error){b.disabled=false;$('#lgM').textContent='이메일 또는 비밀번호가 맞지 않아요.';return;}
+      boot();});};
+}
+function pwChange(first){
+  var html='<h3>'+(first?'새 비밀번호 정하기':'비밀번호 바꾸기')+'</h3><div class="f">'+(first?'<p style="margin:0">임시 비밀번호로 처음 로그인했어요. 다른 곳에서 쓰지 않는 새 비밀번호를 정해 주세요.</p>':'')+
+    '<label>새 비밀번호 (12자 이상)<input id="np1" type="password" autocomplete="new-password"></label><label>한 번 더<input id="np2" type="password" autocomplete="new-password"></label><div class="acts">'+(first?'':'<button class="btn" data-close>닫기</button>')+'<button class="btn p" id="npGo">바꾸기</button></div></div>';
+  if(first){$('#root').innerHTML='<div class="gate" style="text-align:left"><div class="box">'+html+'</div></div>';}else openDlg(html);
+  $('#npGo').onclick=function(){var a=$('#np1').value,b2=$('#np2').value;if(a.length<12){toast('12자 이상으로 정해 주세요');return;}if(a!==b2){toast('두 번 넣은 비밀번호가 달라요');return;}
+    var btn=this;btn.disabled=true;sb.auth.updateUser({password:a}).then(function(r){if(r.error){btn.disabled=false;toast(/same/i.test(r.error.message)?'임시 비밀번호와 다른 비밀번호로 정해 주세요':'바꾸지 못했어요 ('+r.error.message+')');return;}
+      return act({action:'pw_changed'}).then(function(){return sb.auth.refreshSession();}).then(function(){toast('비밀번호를 바꿨어요');if(first)boot();else closeDlg();});});};
+}
+function boot(){
+  return sb.auth.getSession().then(function(r){var s=r.data&&r.data.session;
+    if(!s)return loginGate();
+    TOKEN=s.access_token;ME=s.user;
+    return api('me').then(function(me){
+      if(me&&me.code==='WRONG_HOST'&&me.host){location.replace('https://'+me.host+'/');return;}
+      if(!me||!me.ok){return sb.auth.signOut({scope:'local'}).then(function(){loginGate('관리자 전용 계정이 아니에요. 관리자 화면은 관리자 전용 계정으로만 들어올 수 있어요.');});}
+      if(me.mustChange)return pwChange(true);
+      if(me.mfa&&me.aal!=='aal2')return mfaGate();
+      PERMS=me.perms||[];ME_LABEL=(me.name?me.name+' · ':'')+(me.label||'')+(me.legacy?' (임시: 사이트 회원 계정)':'');
+      return Promise.all([can('courses')?api('courses').catch(function(){return {};}):Promise.resolve({}),fetch('/shop/catalog.json').then(function(x){return x.json();}).catch(function(){return {items:{}};})]).then(function(v){
+        SHOP=(v[1]&&v[1].items)||{};COURSES=(v[0]&&v[0].courses)||[];shell();route();
+        if(me.legacy)toast('지금은 사이트 회원 계정으로 들어왔어요. 설정 → 관리자 권한에서 관리자 전용 계정을 만들어 주세요.');
+      });
+    });
+  }).catch(function(){$('#root').innerHTML='<div class="gate"><p>불러오지 못했어요. 새로고침해 주세요.</p></div>';});
+}
+/* admin.chaand.ai 를 쓰기 시작했으면 본 사이트의 /admin 은 그쪽으로 보냄 */
+fetch('/api/payments/config',{cache:'no-store'}).then(function(x){return x.json();}).catch(function(){return {};}).then(function(c){
+  if(c&&c.adminHost&&location.host!==c.adminHost&&/(^|\.)chaand\.ai$/.test(location.host)){location.replace('https://'+c.adminHost+'/');return;}
+  boot();
+});
+function start(){boot();}
 sb.auth.onAuthStateChange(function(ev,s){if(s)TOKEN=s.access_token;});
 })();
 </script></body></html>

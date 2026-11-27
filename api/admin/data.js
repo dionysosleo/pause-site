@@ -16,6 +16,7 @@ const PRICE = require('../_price.js');
 const catOf = id => { const r = String((CATALOG[id] || {}).refund || ''); return /기업/.test(r) ? 'biz' : /살롱|원데이/.test(r) ? 'salon' : /기수|라이브|정기/.test(r) ? 'cohort' : /VOD/.test(r) ? 'vod' : 'etc'; };
 
 const enc = encodeURIComponent;
+const tempPassword = () => { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; const b = require('crypto').randomBytes(14); let s = ''; for (const x of b) s += c[x % c.length]; return s.slice(0, 4) + '-' + s.slice(4, 9) + '-' + s.slice(9, 14); };
 const isKitItem = id => /차 키트/.test(String((CATALOG[id] || {}).note || ''));
 const uuid = v => /^[0-9a-f-]{36}$/i.test(String(v || '')) ? String(v) : '';
 const int = v => (Number.isInteger(Number(v)) ? Number(v) : NaN);
@@ -52,7 +53,7 @@ const PERM_READ = { dashboard: 'dash', orders: 'orders', orders_csv: 'orders', m
 const PERM_ACT = { refund: 'refund', cancel_waiting: 'refund', order_manual: 'refund', pg_sync: 'orders', order_memo: 'orders', grant: 'members', revoke: 'members',
   company_create: 'companies', company_admin: 'companies', seat_add: 'companies', company_invite: 'companies', company_assign: 'companies', company_unassign: 'companies', company_remove: 'companies',
   course_open: 'courses', lesson_save: 'courses', lesson_delete: 'courses', video_init: 'courses', video_status: 'courses', kit_upload: 'courses', kit_save: 'courses', kit_delete: 'courses',
-  shipped: 'ship', lead_update: 'leads', coupon_save: 'coupons', coupon_toggle: 'coupons', admin_save: 'admins', admin_remove: 'admins', backup_now: 'admins', backup_get: 'admins', purge_test: 'admins' };
+  shipped: 'ship', lead_update: 'leads', coupon_save: 'coupons', coupon_toggle: 'coupons', admin_save: 'admins', admin_remove: 'admins', staff_reset: 'admins', pw_changed: 'self', backup_now: 'admins', backup_get: 'admins', purge_test: 'admins' };
 const PRESETS = {
   owner:   { label: '대표 (전체 권한)', perms: ['all'] },
   biz:     { label: '기업강의 관리자', perms: ['dash', 'companies', 'leads', 'members', 'orders', 'coupons'] },
@@ -75,9 +76,16 @@ const READ = {
   },
   async coupons() { return { coupons: await get('coupons?select=*&order=created_at.desc'), cats: { biz: '기업 워크샵', salon: '살롱·원데이', cohort: '기수·라이브', vod: 'VOD 강의' } }; },
   async admins() {
-    const as = await get('admins?select=user_id,perms,label,added_by,created_at');
+    const as = await get('admins?select=user_id,perms,label,staff,added_by,created_at');
     const ps = as.length ? await get('profiles?select=id,email,name&id=in.(' + as.map(a => a.user_id).join(',') + ')') : [];
-    return { admins: as.map(a => Object.assign(a, { email: (ps.find(p => p.id === a.user_id) || {}).email, name: (ps.find(p => p.id === a.user_id) || {}).name })), presets: PRESETS, names: PERM_NAMES };
+    const out = [];
+    for (const a of as) {
+      const p = ps.find(x => x.id === a.user_id);
+      let email = p && p.email, name = p && p.name, last = null, must = false;
+      if (a.staff) { const r = await S.authAdmin('GET', 'users/' + a.user_id); if (r.ok && r.data) { email = r.data.email; name = (r.data.user_metadata || {}).name || ''; last = r.data.last_sign_in_at; must = !!(r.data.app_metadata || {}).must_change; } }
+      out.push(Object.assign(a, { email, name, last, mustChange: must }));
+    }
+    return { admins: out, presets: PRESETS, names: PERM_NAMES };
   },
   async backups() { return { backups: await BK.list() }; },
   async kits() { return { kits: await get('kit_files?select=id,course_id,title,file_name,size_b,sort,created_at&order=course_id,sort,id') }; },
@@ -271,22 +279,52 @@ const ACT = {
     return { code };
   },
   async coupon_toggle(b) { const code = PRICE.cleanCode(b.code); await write('PATCH', 'coupons?code=eq.' + enc(code), { active: !!b.active }); return {}; },
+  /* 관리자 추가 = 관리자 전용 계정 만들기 (사이트 회원 이메일은 못 씀). 임시 비밀번호는 한 번만 보여 줌 */
   async admin_save(b) {
-    const email = String(b.email || '').trim().toLowerCase();
-    const [p] = await get('profiles?select=id,email&email=ilike.' + enc(email));
-    if (!p) throw new Error('NO_MEMBER');
     let perms = Array.isArray(b.perms) ? b.perms.filter(x => x === 'all' || PERM_NAMES[x]) : [];
     if (b.preset && PRESETS[b.preset]) perms = PRESETS[b.preset].perms;
     if (!perms.length) throw new Error('BAD_REQUEST');
-    await write('POST', 'admins?on_conflict=user_id', { user_id: p.id, perms, label: String(b.label || (PRESETS[b.preset] || {}).label || '').slice(0, 40) || null, added_by: b._by || null }, 'resolution=merge-duplicates,return=minimal');
+    const label = String(b.label || (PRESETS[b.preset] || {}).label || '').slice(0, 40) || null;
+    if (b.userId) {   // 권한만 바꾸기
+      const id = uuid(b.userId); if (!id) throw new Error('BAD_REQUEST');
+      if (id === b._uid && !perms.includes('all')) throw new Error('SELF');
+      await write('PATCH', 'admins?user_id=eq.' + id, { perms, label });
+      return {};
+    }
+    const email = String(b.email || '').trim().toLowerCase();
+    const name = String(b.name || '').trim().slice(0, 40);
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !name) throw new Error('BAD_REQUEST');
+    if ((await get('profiles?select=id&email=ilike.' + enc(email))).length) throw new Error('EMAIL_TAKEN');
+    const temp = tempPassword();
+    const c = await S.authAdmin('POST', 'users', { email, password: temp, email_confirm: true, app_metadata: { role: 'staff', must_change: true }, user_metadata: { name } });
+    if (!c.ok || !c.data || !c.data.id) { if (c.status === 422) throw new Error('EMAIL_TAKEN'); throw new Error('AUTH_CREATE'); }
+    await write('POST', 'admins', { user_id: c.data.id, perms, label, staff: true, added_by: b._by || null });
+    return { tempPassword: temp, email };
+  },
+  async staff_reset(b) {
+    const id = uuid(b.userId); if (!id) throw new Error('BAD_REQUEST');
+    const [a] = await get('admins?select=staff&user_id=eq.' + id); if (!a || !a.staff) throw new Error('BAD_REQUEST');
+    const temp = tempPassword();
+    const r = await S.authAdmin('PUT', 'users/' + id, { password: temp, app_metadata: { role: 'staff', must_change: true } });
+    if (!r.ok) throw new Error('AUTH_CREATE');
+    return { tempPassword: temp };
+  },
+  /* 첫 로그인 비밀번호 변경 뒤 (본인) */
+  async pw_changed(b) {
+    if (!b._staff) return {};
+    const r = await S.authAdmin('PUT', 'users/' + b._uid, { app_metadata: { role: 'staff', must_change: false } });
+    if (!r.ok) throw new Error('AUTH_CREATE');
     return {};
   },
   async admin_remove(b) {
     const id = uuid(b.userId); if (!id) throw new Error('BAD_REQUEST');
     if (id === b._uid) throw new Error('SELF');
-    const all = await get('admins?select=user_id,perms');
-    if (all.filter(a => a.user_id !== id && (a.perms || []).includes('all')).length === 0) throw new Error('LAST_OWNER');
+    const all = await get('admins?select=user_id,perms,staff');
+    const me = all.find(a => a.user_id === id);
+    if (!me) throw new Error('BAD_REQUEST');
+    if ((me.perms || []).includes('all') && all.filter(a => a.user_id !== id && (a.perms || []).includes('all')).length === 0) throw new Error('LAST_OWNER');
     await write('DELETE', 'admins?user_id=eq.' + id);
+    if (me.staff) await S.authAdmin('DELETE', 'users/' + id);   // 관리자 전용 계정은 계정째 지움
     return {};
   },
   async kit_upload(b) {
@@ -410,9 +448,19 @@ module.exports = async (req, res) => {
   if (!['GET', 'POST'].includes(req.method)) { res.setHeader('Allow', 'GET, POST'); return S.send(res, 405, { ok: false, code: 'METHOD' }); }
   if (req.method === 'POST' && !S.sameOrigin(req)) return S.send(res, 403, { ok: false, code: 'ORIGIN' });
   try {
-    const tok = S.bearer(req), u = await S.user(tok), A = await S.isAdmin(u), ip = S.ip(req);
+    /* admin.chaand.ai 를 쓰기 시작하면(ADMIN_HOST) 본 사이트 주소로 들어온 관리자 요청은 막음 */
+    const host = String(req.headers.host || '').toLowerCase();
+    if (process.env.ADMIN_HOST && /(^|\.)chaand\.ai$/.test(host) && host !== process.env.ADMIN_HOST) return S.send(res, 403, { ok: false, code: 'WRONG_HOST', host: process.env.ADMIN_HOST });
+    const tok = S.bearer(req), u = await S.user(tok, { staff: true }), A = await S.isAdmin(u, tok), ip = S.ip(req);
     if (!A) return S.send(res, 403, { ok: false, code: 'NOT_ADMIN' });
-    if (req.method === 'GET' && (req.query || {}).r === 'me') return S.send(res, 200, { ok: true, admin: true, aal: S.aal(tok), mfa: S.mfaOn(), perms: A.perms, label: A.label, names: PERM_NAMES });
+    /* 첫 로그인: 임시 비밀번호를 바꾸기 전에는 다른 일을 못 함 */
+    const qr = (req.query || {}).r;
+    if (A.mustChange && !(req.method === 'GET' && qr === 'me')) {
+      const bb = req.method === 'POST' ? (await S.readJson(req) || {}) : {};
+      if (bb.action !== 'pw_changed') return S.send(res, 403, { ok: false, code: 'PW_CHANGE' });
+      req.body = bb;
+    }
+    if (req.method === 'GET' && (req.query || {}).r === 'me') return S.send(res, 200, { ok: true, admin: true, aal: S.aal(tok), mfa: S.mfaOn(), perms: A.perms, label: A.label, names: PERM_NAMES, staff: A.staff, legacy: !!A.legacy, mustChange: !!A.mustChange, email: u.email, name: (u.user_metadata || {}).name || '' });
     if (S.mfaOn() && S.aal(tok) !== 'aal2') return S.send(res, 403, { ok: false, code: 'MFA_REQUIRED' });   // 운영 작업은 2단계 인증 뒤에만
     if (req.method === 'GET') {
       const q = req.query || {}, fn = READ[q.r];
@@ -424,20 +472,21 @@ module.exports = async (req, res) => {
     }
     const b = await S.readJson(req, 32000) || {}, fn = ACT[b.action];
     if (!fn) return S.send(res, 400, { ok: false, code: 'BAD_ACTION' });
-    if (!S.can(A, PERM_ACT[b.action] || 'admins')) return S.send(res, 403, { ok: false, code: 'NO_PERM' });
-    b._uid = u.id; b._by = u.email;
+    if (PERM_ACT[b.action] !== 'self' && !S.can(A, PERM_ACT[b.action] || 'admins')) return S.send(res, 403, { ok: false, code: 'NO_PERM' });
+    b._uid = u.id; b._by = u.email; b._staff = !!A.staff;
     const out = await fn(b);
-    delete b._uid; delete b._by;
-    if (!/^(video_status|backup_get)$/.test(b.action)) {
+    delete b._uid; delete b._by; delete b._staff;
+    if (!/^(video_status|backup_get|pw_changed)$/.test(b.action)) {
       const keep = Object.assign({}, b); delete keep.action;
       if (keep.refundAccount) keep.refundAccount = '(환불 계좌 받음, 저장 안 함)';
+      delete keep.password;
       await S.log(u, b.action, b.orderId || b.userId || b.enrollmentId || b.companyId || b.courseId || b.code || b.email || b.id || null, keep, ip);
     }
     return S.send(res, 200, Object.assign({ ok: true }, out));
   } catch (e) {
     const m = String(e && e.message || '');
     if (e && e.pg) return S.send(res, 402, { ok: false, code: String(e.pg.code || 'PG_REJECTED').slice(0, 60), message: String(e.pg.message || '').slice(0, 200) });
-    if (/^(BAD_REQUEST|BAD_ID|NOT_REFUNDABLE|TOO_MUCH|NO_MEMBER|NO_SEATS|SEAT_EXPIRED|BUNNY_NOT_SET|VBANK_REFUND|SELF|LAST_OWNER|STORAGE)$/.test(m)) return S.send(res, 400, { ok: false, code: m });
+    if (/^(BAD_REQUEST|BAD_ID|NOT_REFUNDABLE|TOO_MUCH|NO_MEMBER|NO_SEATS|SEAT_EXPIRED|BUNNY_NOT_SET|VBANK_REFUND|SELF|LAST_OWNER|STORAGE|EMAIL_TAKEN|AUTH_CREATE)$/.test(m)) return S.send(res, 400, { ok: false, code: m });
     console.error('admin', m);
     return S.send(res, 500, { ok: false, code: 'SERVER' });
   }

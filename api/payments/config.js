@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
   const q = req.query || {};
-  const out = { clientKey: PG.clientKey(), mode: PG.mode(), provider: PG.name };
+  const out = { clientKey: PG.clientKey(), mode: PG.mode(), provider: PG.name, adminHost: process.env.ADMIN_HOST || '' };
   if (q.item) out.price = await P.quote({ itemId: String(q.item).replace(/[^a-z0-9-]/g, ''), qty: parseInt(q.qty, 10) || 1, code: q.code, email: q.email });
   res.status(200).end(JSON.stringify(out));
 };

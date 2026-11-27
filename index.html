@@ -2434,6 +2434,8 @@ function sb(){
   });
   return sbLoad;
 }
+/* 관리자 전용 계정은 사이트(수강)에서 쓰지 않음 → 바로 로그아웃하고 안내 */
+function staffOut(u){ if(!(u && u.app_metadata && u.app_metadata.role === 'staff')) return false; sb().then(function(c){ return c.auth.signOut({scope:'local'}); }).then(function(){ authUI(); nav(routeUrl('home')); toast('관리자 전용 계정은 사이트에서 쓸 수 없어요. 수강은 개인 계정으로 해 주세요.'); }); return true; }
 function hasSession(){ try { return !!localStorage.getItem('sb-' + AUTH.url.split('//')[1].split('.')[0] + '-auth-token'); } catch(e){ return false; } }
 function authUI(){ var on = hasSession(); $$('[data-auth]').forEach(function(a){ a.textContent = on ? '내 학습' : '로그인'; a.setAttribute('href', on ? '#my' : '#login'); }); pathify(document.querySelector('header')); }
 function providers(){
@@ -2502,7 +2504,7 @@ function bindLogin(){
     bindForm(lf, function(){
       var btn = lf.querySelector('[type=submit]'); btn.disabled = true;
       sb().then(function(c){ return c.auth.signInWithPassword({email:lf.elements.email.value.trim(), password:lf.elements.pw.value}); })
-        .then(function(r){ btn.disabled = false; if(r.error) return toast(authErr(r.error.message)); authUI(); nav(routeUrl('my')); }, function(){ btn.disabled = false; toast(authErr()); });
+        .then(function(r){ btn.disabled = false; if(r.error) return toast(authErr(r.error.message)); if(staffOut(r.data && r.data.user)) return; authUI(); nav(routeUrl('my')); }, function(){ btn.disabled = false; toast(authErr()); });
     });
     $('[data-forgot]').addEventListener('click', function(){
       var em = lf.elements.email.value.trim();
@@ -2583,6 +2585,7 @@ function myOut(){
 }
 var MY_TAB = 'learn';
 function myDash(c, u){
+  if(staffOut(u)) return Promise.resolve();
   /* 비회원으로 결제한 주문을 같은 이메일(인증 완료) 계정에 붙이고 수강권 만들기 */
   return c.rpc('claim_orders').then(function(){}, function(){}).then(function(){ return Promise.all([
     c.from('profiles').select('name,email,login_method,marketing_ok').eq('id', u.id).maybeSingle(),
@@ -2733,11 +2736,7 @@ function myLeave(c){
 function myAdmin(c){
   return tokenOf(c).then(function(t){
     if(!t) return;
-    fetch('/api/admin/data?r=me', {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.ok ? x.json() : null; }).catch(function(){ return null; }).then(function(d){
-      if(!d || !d.ok || $('.my-adm')) return;
-      var h = $('.my-outb'); if(h) h.insertAdjacentHTML('beforebegin', '<a class="btn btn-lime btn-sm my-adm" href="/admin">관리자 화면</a>');
-      var st = $('.my-set'); if(st) st.insertAdjacentHTML('afterbegin', '<li><span class="muted">운영자</span><a class="btn btn-line btn-sm" href="/admin">관리자 화면</a></li>');
-    });
+    /* 관리자 화면은 관리자 전용 계정으로만 (사이트 회원 계정에는 버튼을 두지 않음) */
     var call = function(body){ return fetch('/api/company', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + t}, body:JSON.stringify(body)}).then(function(x){ return x.json(); }).then(function(d){ if(!d.ok){ toast({NO_SEATS:'남은 수강권이 없어요', SEAT_EXPIRED:'이용 기간이 끝난 수강권이에요'}[d.code] || '처리하지 못했어요'); throw new Error(d.code); } return d; }); };
     var load = function(id){ return fetch('/api/company' + (id ? '?id=' + encodeURIComponent(id) : ''), {headers:{Authorization:'Bearer ' + t}}).then(function(x){ return x.ok ? x.json() : null; }).catch(function(){ return null; }); };
     return load().then(function(d){

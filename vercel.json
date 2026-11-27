@@ -15,6 +15,16 @@
   ],
   "rewrites": [
     {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "admin.chaand.ai"
+        }
+      ],
+      "destination": "/admin"
+    },
+    {
       "source": "/en/(.*)",
       "destination": "/en"
     },
@@ -24,6 +34,25 @@
     }
   ],
   "headers": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "admin.chaand.ai"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [

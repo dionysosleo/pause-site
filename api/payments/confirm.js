@@ -28,7 +28,7 @@ async function sbUser(token) {
     const r = await fetch(SB_URL + '/auth/v1/user', { headers: { apikey: SB_PUBLIC, Authorization: 'Bearer ' + token } });
     if (!r.ok) return null;
     const u = await r.json();
-    return u && u.id ? u : null;
+    return u && u.id && !(u.app_metadata && u.app_metadata.role === 'staff') ? u : null;   // 관리자 전용 계정은 구매자로 묶지 않음
   } catch (e) { return null; }
 }
 async function sbInsert(table, row, conflict) {
