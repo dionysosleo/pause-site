@@ -308,7 +308,7 @@ sb.auth.getSession().then(function(r){var s=r.data&&r.data.session;
   TOKEN=s.access_token;ME=s.user;
   return api('me').then(function(me){
     if(!me||!me.ok){$('#root').innerHTML='<div class="gate"><h1>관리</h1><p>운영자만 볼 수 있는 화면이에요.</p><p><a class="btn" href="/my">내 학습으로</a></p></div>';return;}
-    if(me.aal!=='aal2')return mfaGate();
+    if(me.mfa&&me.aal!=='aal2')return mfaGate();
     return start();
   });
 }).catch(function(){$('#root').innerHTML='<div class="gate"><p>불러오지 못했어요. 새로고침해 주세요.</p></div>';});

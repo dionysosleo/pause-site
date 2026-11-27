@@ -52,9 +52,10 @@ async function isAdmin(u) {
 function aal(token) {
   try { const p = JSON.parse(Buffer.from(String(token).split('.')[1].replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8')); return p.aal || 'aal1'; } catch (e) { return 'aal1'; }
 }
-/* 운영자 권한은 2단계 인증(aal2)을 마친 세션에서만 */
-async function isAdminStrict(u, token) { return aal(token) === 'aal2' && await isAdmin(u); }
+/* 2단계 인증은 선택: Vercel 환경 변수 ADMIN_MFA=on 일 때만 요구 (기본은 비밀번호 로그인만) */
+function mfaOn() { return process.env.ADMIN_MFA === 'on'; }
+async function isAdminStrict(u, token) { return (!mfaOn() || aal(token) === 'aal2') && await isAdmin(u); }
 async function log(u, action, target, detail) {
   try { await rest('POST', 'admin_logs', { user_id: u && u.id, email: u && u.email, action, target: target ? String(target).slice(0, 120) : null, detail: detail || null }, 'return=minimal'); } catch (e) { console.error('log', e && e.message); }
 }
-module.exports = { send, sameOrigin, bearer, readJson, user, rest, deleteAuthUser, isAdmin, isAdminStrict, aal, log };
+module.exports = { send, sameOrigin, bearer, readJson, user, rest, deleteAuthUser, isAdmin, isAdminStrict, aal, mfaOn, log };

@@ -189,8 +189,8 @@ module.exports = async (req, res) => {
   try {
     const tok = S.bearer(req), u = await S.user(tok);
     if (!(await S.isAdmin(u))) return S.send(res, 403, { ok: false, code: 'NOT_ADMIN' });
-    if (req.method === 'GET' && (req.query || {}).r === 'me') return S.send(res, 200, { ok: true, admin: true, aal: S.aal(tok) });
-    if (S.aal(tok) !== 'aal2') return S.send(res, 403, { ok: false, code: 'MFA_REQUIRED' });   // 운영 작업은 2단계 인증 뒤에만
+    if (req.method === 'GET' && (req.query || {}).r === 'me') return S.send(res, 200, { ok: true, admin: true, aal: S.aal(tok), mfa: S.mfaOn() });
+    if (S.mfaOn() && S.aal(tok) !== 'aal2') return S.send(res, 403, { ok: false, code: 'MFA_REQUIRED' });   // 운영 작업은 2단계 인증 뒤에만
     if (req.method === 'GET') {
       const q = req.query || {}, fn = READ[q.r];
       if (!fn) return S.send(res, 400, { ok: false, code: 'BAD_RESOURCE' });
