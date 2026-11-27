@@ -25,9 +25,12 @@ async function sync(orderId, callbackSecret) {
   const p = await tossGet('orders/' + encodeURIComponent(orderId));
   if (!p || p.orderId !== o.id || Number(p.totalAmount) !== o.amount) return 'no_payment';
   const now = new Date().toISOString(), patch = { pg_synced_at: now };
-  let fulfil = false, revoke = false;
+  let fulfil = false, revoke = false;   // revoke 는 아래 분기에서 쓰므로 먼저 선언
   if (p.status === 'DONE' && o.status === 'waiting') { patch.status = 'paid'; patch.paid_at = p.approvedAt || now; fulfil = true; }
   else if ((p.status === 'EXPIRED' || p.status === 'ABORTED') && o.status === 'waiting') patch.status = 'expired';
+  /* 입금 확인 뒤 은행에서 입금이 취소된 경우: 다시 입금 대기로 돌리고 수강권 회수 */
+  else if (p.status === 'WAITING_FOR_DEPOSIT' && (o.status === 'paid') && o.method === '가상계좌') { patch.status = 'waiting'; patch.paid_at = null; revoke = true; }
+  else if (p.status === 'WAITING_FOR_DEPOSIT' && o.status === 'waiting' && p.virtualAccount && p.virtualAccount.dueDate) patch.due_at = p.virtualAccount.dueDate;
   else if (p.status === 'CANCELED' && o.status === 'waiting') patch.status = 'canceled';
   else if (p.status === 'CANCELED' || p.status === 'PARTIAL_CANCELED') {
     const cs = Array.isArray(p.cancels) ? p.cancels : [];

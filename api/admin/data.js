@@ -107,9 +107,15 @@ const ACT = {
     if (!o || !['paid', 'partial_refunded'].includes(o.status)) throw new Error('NOT_REFUNDABLE');
     if (amount > o.amount - (o.refund_amount || 0)) throw new Error('TOO_MUCH');
     if (o.source !== 'manual') {   /* 직접 등록 거래는 돈을 따로 돌려준 뒤 기록만 */
-      if (o.method === '가상계좌') throw new Error('VBANK_REFUND');   // 환불 받을 계좌가 필요해 토스 상점관리자에서 취소 → '토스와 맞추기'
       if (!o.payment_key) throw new Error('NOT_REFUNDABLE');
-      const c = await T.cancel(o.payment_key, amount, reason, orderId + '-cancel-' + ((o.refund_amount || 0) + amount));
+      /* 입금을 마친 가상계좌는 환불 받을 계좌가 필요함 (입금자 명의). 은행 코드·계좌번호·예금주는 저장하지 않고 이번 요청에만 씀 */
+      let acct = null;
+      if (o.method === '가상계좌') {
+        const a = b.refundAccount || {};
+        if (!/^\d{2,3}$/.test(String(a.bank || '')) || !/^\d{6,20}$/.test(String(a.number || '').replace(/-/g, '')) || !String(a.holder || '').trim()) throw new Error('VBANK_REFUND');
+        acct = { bank: String(a.bank), accountNumber: String(a.number).replace(/-/g, ''), holderName: String(a.holder).trim().slice(0, 60) };
+      }
+      const c = await T.cancel(o.payment_key, amount, reason, orderId + '-cancel-' + ((o.refund_amount || 0) + amount), acct);
       if (!c.ok) { const e = new Error('PG'); e.pg = c.data; throw e; }
     }
     const st = await T.settle(S, o, amount, reason, b.revoke !== false);
@@ -135,6 +141,16 @@ const ACT = {
     const id = String(b.orderId || ''); if (!/^[A-Za-z0-9_-]{6,64}$/.test(id)) throw new Error('BAD_REQUEST');
     const tax = ['none', 'tax_invoice', 'cash_receipt', 'card'].includes(b.taxDoc) ? b.taxDoc : null;
     await write('PATCH', 'orders?id=eq.' + enc(id), Object.assign({ memo: String(b.memo || '').slice(0, 300) || null }, tax ? { tax_doc: tax } : {}));
+    return {};
+  },
+  /* 입금 전 가상계좌 주문 취소 (돌려줄 돈이 없어 계좌 정보 없이 전액 취소만 가능) */
+  async cancel_waiting(b) {
+    const id = String(b.orderId || ''); if (!/^[A-Za-z0-9_-]{6,64}$/.test(id)) throw new Error('BAD_REQUEST');
+    const [o] = await get('orders?select=id,amount,status,payment_key&id=eq.' + enc(id));
+    if (!o || o.status !== 'waiting' || !o.payment_key) throw new Error('NOT_REFUNDABLE');
+    const c = await T.cancel(o.payment_key, o.amount, String(b.reason || '입금 전 주문 취소').slice(0, 190), id + '-cancel-waiting');
+    if (!c.ok) { const e = new Error('PG'); e.pg = c.data; throw e; }
+    await write('PATCH', 'orders?id=eq.' + enc(id), { status: 'canceled', pg_synced_at: new Date().toISOString() });
     return {};
   },
   async pg_sync(b) {
@@ -238,6 +254,7 @@ module.exports = async (req, res) => {
     const out = await fn(b);
     if (!/^video_status$/.test(b.action)) {
       const keep = Object.assign({}, b); delete keep.action;
+      if (keep.refundAccount) keep.refundAccount = '(환불 계좌 받음, 저장 안 함)';
       await S.log(u, b.action, b.orderId || b.userId || b.enrollmentId || b.companyId || b.courseId || b.id || null, keep);
     }
     return S.send(res, 200, Object.assign({ ok: true }, out));

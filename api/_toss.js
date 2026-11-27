@@ -2,14 +2,14 @@
 const KEYS = require('./payments/_keys.js');
 const MAIL = require('./_mail.js');
 const CATALOG = require('../shop/catalog.json').items;
-async function cancel(paymentKey, amount, reason, idem) {
+async function cancel(paymentKey, amount, reason, idem, refundAccount) {
   const { secret } = KEYS();
   const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 10000);
   try {
     const r = await fetch('https://api.tosspayments.com/v1/payments/' + encodeURIComponent(paymentKey) + '/cancel', {
       method: 'POST',
       headers: { Authorization: 'Basic ' + Buffer.from(secret + ':').toString('base64'), 'Content-Type': 'application/json', 'Idempotency-Key': idem },
-      body: JSON.stringify({ cancelReason: reason, cancelAmount: amount }), signal: ctl.signal
+      body: JSON.stringify(Object.assign({ cancelReason: reason, cancelAmount: amount }, refundAccount ? { refundReceiveAccount: refundAccount } : {})), signal: ctl.signal
     });
     const data = await r.json().catch(() => ({}));
     return { ok: r.ok, data };
