@@ -2342,7 +2342,7 @@ function vProgram(){
   return '<section class="hero lite">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">We partner with one company for a full year</h1>' +
     '<p class="lead ol">Not a one-off lecture — until AI becomes the way the team works.</p>' + pathChips([['1','Diagnose','Start of quarter'],['2','Build','Team agents'],['3','Demo','Share internally'],['4','Results','Quarterly report']]) + '' +
-    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="#contact?type=annual">Quote & 1-year program inquiry</a><a class="btn btn-line" href="' + buyHref('annual') + '">Pay by card · ' + priceTxt(sale('annual')) + '</a><a class="btn btn-line" href="#proposal">Get the brochure</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">Once a quarter · ' + esc(headLine(sale('annual'))) + ' · VAT incl.</p>' : '<a class="btn btn-lime" href="#contact?type=annual">One-year program consultation</a><a class="btn btn-line" href="#proposal">Get the brochure</a>') + '</div></div>' +
+    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="#contact?type=annual">Quote & 1-year program inquiry</a><a class="btn btn-line" href="' + buyHref('annual') + '">Pay by card · ' + priceTxt(sale('annual')) + '</a><a class="btn btn-line" href="#proposal">Get the brochure</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">Once a quarter · ' + esc(headLine(sale('annual'))) + ' · VAT incl.</p>' : '<a class="btn btn-lime" href="#contact?type=annual">Get a quote · 1-year program</a><a class="btn btn-line" href="#proposal">Get the brochure</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">We design it with each company based on the diagnosis, and quote the agreed plan.</p>') + '</div></div>' +
     ph('team', 1600, '', true) +
   '</section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -2537,7 +2537,7 @@ function bindTeam(){
 var OPERATOR = { name:'', ceo:'', regNo:'', mailOrder:'', address:'', email:'help@chaandai.com', phone:'', cpo:'Junhyuck Lee', cpoDept:'', host:'Vercel Inc.' }; /* host = 호스팅 서비스 제공자 (전자상거래법 사이버몰 표시) */
 /* ===== 판매 상품 (shop/catalog.json — 가격이 0보다 큰 상품만 결제 경로가 열림) ===== */
 var SHOP = {};
-function sale(id){ var it = SHOP && SHOP[id]; return it && (it.price > 0 || it.free) ? it : null; }
+function sale(id){ var it = SHOP && SHOP[id]; return it && !it.quoteOnly && (it.price > 0 || it.free) ? it : null; }
 /* 고액(100만 원 이상) 상품: 기업은 견적서·세금계산서로 결재하는 경우가 많아 'Get a quote'를 앞에, 카드 결제는 뒤에 */
 function bigTicket(it){ return !!(it && !it.free && it.price >= 1000000); }
 /* 무료 강의(catalog free:true): 가격 대신 'Free', 결제 대신 바로 수강 등록 */
