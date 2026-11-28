@@ -97,9 +97,10 @@ const READ = {
     if (DATE(q.from)) f += '&created_at=gte.' + enc(kstFrom(q.from));
     if (DATE(q.to)) f += '&created_at=lt.' + enc(kstTo(q.to));
     if (q.owner) f += '&owner_email=eq.' + enc(String(q.owner).slice(0, 120));
-    const [ls, cnt] = await Promise.all([get(f), get('leads?select=status,kind&limit=5000')]);
-    const by = {}; cnt.forEach(x => { by[x.status] = (by[x.status] || 0) + 1; });
-    return { leads: ls, counts: by, kinds: [...new Set(cnt.map(x => x.kind))] };
+    const [ls, cnt] = await Promise.all([get(f), get('leads?select=status,kind,amount,event_date&limit=5000')]);
+    const by = {}, sum = {}; let month = 0, monthN = 0; const ym = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 7);
+    cnt.forEach(x => { by[x.status] = (by[x.status] || 0) + 1; if (x.amount) sum[x.status] = (sum[x.status] || 0) + Number(x.amount); if ((x.status === 'won' || x.status === 'done') && x.event_date && String(x.event_date).slice(0, 7) === ym) { month += Number(x.amount || 0); monthN++; } });
+    return { leads: ls, counts: by, sums: sum, month: { ym, amount: month, n: monthN }, kinds: [...new Set(cnt.map(x => x.kind))] };
   },
   async coupons() { return { coupons: await get('coupons?select=*&order=created_at.desc'), cats: { biz: '기업 워크샵', salon: '살롱·원데이', cohort: '기수·라이브', vod: 'VOD 강의' } }; },
   async admins() {
@@ -300,11 +301,13 @@ const ACT = {
     if (/^(new|talking|proposal|won|lost|done|spam)$/.test(b.status || '')) patch.status = b.status;
     if (typeof b.memo === 'string') patch.memo = b.memo.slice(0, 1000) || null;
     if (typeof b.owner === 'string') patch.owner_email = b.owner.slice(0, 120) || null;
+    if (b.amount !== undefined) { const n = parseInt(String(b.amount).replace(/[^0-9]/g, ''), 10); patch.amount = n > 0 && n < 1e10 ? n : null; }
+    if (b.event_date !== undefined) patch.event_date = /^\d{4}-\d{2}-\d{2}$/.test(b.event_date || '') ? b.event_date : null;
     await write('PATCH', 'leads?id=eq.' + id, patch);
     /* 구글 시트의 '처리 상태'·'메모' 칸도 같이 바꿈 (LEADS_SECRET 이 있을 때) */
     let sheet = false;
     if (process.env.LEADS_SECRET) {
-      const L = { new: '새 문의', talking: '상담 중', proposal: '제안·견적', won: '계약', lost: '보류·무산', done: '처리 완료', spam: '스팸' };
+      const L = { new: '새 문의', talking: '상담 중', proposal: '견적 발송', won: '계약·일정 확정', lost: '보류·무산', done: '진행 완료', spam: '스팸' };
       try {
         const r = await fetch(process.env.LEADS_SHEET_URL || 'https://script.google.com/macros/s/AKfycbznjt7abxus2cE7sAse9CBHc6JzKfrYzUArrwLGUFwMfaYk4YkSanxEbp8voRDcYoaPbA/exec', { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
           body: JSON.stringify({ action: 'status', secret: process.env.LEADS_SECRET, id: 'L' + id, status: patch.status ? L[patch.status] : undefined, memo: patch.memo }) });
