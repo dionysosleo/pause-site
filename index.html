@@ -1072,20 +1072,33 @@ a.pchip:hover{border-color:#667866;box-shadow:0 8px 20px rgba(94,111,94,.14)}
 .hero.lite .photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 @media (max-width:900px){.hero.lite{grid-template-columns:minmax(0,1fr);gap:20px;padding-top:20px}.hero.lite .photo{order:-1;height:auto}}
 /* R17 워크샵 목록: 세로 카드 그리드 */
-.wlist{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;flex-direction:initial}
-.wcard2{display:flex;flex-direction:column;text-decoration:none;color:#26313D;border-radius:22px;transition:transform .35s}
-.wc-ph{position:relative;aspect-ratio:4/3;border-radius:20px;overflow:hidden;background:#F1F3F1}
+.wlist{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 22px;align-items:stretch;flex-direction:initial}
+.wcard2{display:flex;flex-direction:column;height:100%;text-decoration:none;color:#26313D;background:#fff;border:1px solid rgba(38,49,61,.08);border-radius:20px;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s}
+.wcard2:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(40,50,64,.10);border-color:rgba(38,49,61,.12)}
+.wcard2.hi{border-color:rgba(102,120,102,.45)}
+.wc-ph{position:relative;aspect-ratio:16/10;overflow:hidden;background:#F1F3F1}
 .wc-ph .photo,.wc-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.25,.7,.2,1)}
 .wcard2:hover .wc-ph img{transform:scale(1.04)}
-.wc-badge{position:absolute;left:14px;top:14px;font-size:12.5px;font-weight:700;color:#26313D;background:rgba(255,255,255,.94);border-radius:999px;padding:5px 11px;box-shadow:0 4px 12px rgba(0,0,0,.10)}
-.wcard2.hi .wc-badge{background:#667866;color:#fff}
-.wc-body{padding:14px 4px 0;display:flex;flex-direction:column;gap:4px}
-.wc-body h2{margin:0;font-size:18px;font-weight:700;line-height:1.4;color:#26313D}
-.wc-hook{margin:0;font-size:14.5px;color:#4A5460}
-.wc-meta{margin:4px 0 0;font-size:14px;color:#6B727A;display:flex;align-items:center;gap:6px;font-variant-numeric:lining-nums}
-.wc-meta b{color:#26313D;font-weight:800;font-family:'Pretendard','Noto Sans KR',sans-serif}
-.wc-meta i{font-style:normal;color:#C5CCC5}
-.wc-who{margin:0;font-size:13px;color:#8A9098}
+.wc-ph .photo,.wc-ph img{border-radius:0!important}
+html[lang=en] .wc-title,html[lang=en] .wc-hook{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+html[lang=en] .wc-title{min-height:2.8em}html[lang=en] .wc-hook{min-height:2.9em}
+.wc-badge{position:absolute;left:14px;top:14px;font-size:12px;font-weight:700;letter-spacing:.01em;color:#fff;background:#667866;border-radius:999px;padding:5px 11px}
+.wc-body{flex:1;display:flex;flex-direction:column;padding:18px 20px 18px}
+.wc-cat{margin:0 0 6px;font-size:12.5px;font-weight:700;color:#667866;letter-spacing:.01em}
+.wc-title{margin:0;font-size:18px;font-weight:700;line-height:1.4;color:#26313D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wc-hook{margin:4px 0 0;font-size:14px;color:#6B727A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wc-spec{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.wc-spec li{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#4A5460;background:#F4F6F3;border-radius:8px;padding:5px 9px;white-space:nowrap;font-variant-numeric:lining-nums}
+.wc-spec svg{width:14px;height:14px;fill:none;stroke:#8A9A8A;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wc-foot{margin-top:auto;padding-top:16px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.wc-foot{border-top:1px solid rgba(38,49,61,.07);margin-top:16px}
+.wc-body .wc-spec{margin-bottom:auto}
+.wc-price{display:flex;flex-direction:column;gap:2px;min-width:0}
+.wc-price b{font-size:18px;font-weight:800;color:#26313D;font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;letter-spacing:-.01em}
+.wc-price small{font-size:12px;color:#8A9098}
+.wc-team{display:flex;flex:none}
+.wc-team img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-8px;background:#E9ECE8}
+.wc-team img:first-child{margin-left:0}
 @media (max-width:1000px){.wlist{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:620px){.wlist{grid-template-columns:minmax(0,1fr)}}
 .wl-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 18px;padding-top:24px;border-top:1px solid rgba(38,49,61,.10)}
@@ -1397,7 +1410,7 @@ var W = [
    opt:'1박 2일로 늘리기 — 저녁 숲속 티 세션, 우리 팀 퀴즈·룰렛 게임 레크리에이션, 다음 날 아침 산책과 쇼케이스를 더해요.',
    tl:[['09:30','숲길 산책','핸드폰을 내려놓고 20분 걷고, 오늘 마실 차 고르기',1],['10:10','맞이','내 에이전트에게 이름과 말투를 정해 주고 첫 인사. 무엇을 맡길지 진단 (한성희·Simon)'],['10:50','3분 챌린지','차가 우러나는 3분 안에 에이전트가 끝내는 일을 눈앞에서 보기'],['11:30','에이전트 파트너 들이기','함께 지낼 약속 한 장을 쓰고, 메일·캘린더·문서에 연결해 매일 출근하게 걸어 둬요 (이준혁·Leo)'],['12:30','야외 점심','—'],['13:30','에이전트에게 배우기','내 업무를 털어놓고, 묻고 배우며 다섯 번 고쳐 완성'],['15:00','숲속 찻자리 · 30분','계절 차와 1:1 이야기 (이유진·Bayu)',1],['15:30','시음회 · 함께 해내기','서로의 에이전트를 소개하고 시연하기'],['16:40','찻자리 마무리','동료들과 마지막 잔을 나누며 2주 약속 적기',1],['17:30','끝','다음 날 결과 리포트 전달']]},
   {id:'club', kind:'시즌 · 4개월', hours:'월 1회 저녁 3시간 × 4회', badge:'정기 모임', title:'찻자리 클럽 · 한 시즌', sub:'같은 사람들이 4개월 동안 한 달에 한 번 모여요. 매달 계절 차 한 잔과 함께 각자의 에이전트를 한 단계씩 키우고, 사이 기간은 온라인으로 이어요',
-   photos:['fLounge','teaPour','notes'], more:['fTable','fSweets','fSetting','fWorkshop'], who:['lee','han'], size:'20~30명 고정 멤버', place:'귀사 라운지 또는 협력 공간', tools:'파트너 에이전트 1개를 4개월 동안 키워요',
+   photos:['fLounge','teaPour','notes'], more:['fTable','fSweets','fSetting','fWorkshop'], who:['lee','han'], size:'20~30명 · 고정 멤버', place:'귀사 라운지 또는 협력 공간', tools:'파트너 에이전트 1개를 4개월 동안 키워요',
    fit:'리더·대표 모임, 입주사 정기 프로그램, 사내 동호회처럼 꾸준히 모이고 싶을 때',
    make:['4개월 동안 키운 파트너 에이전트','매달 한 가지씩 맡긴 업무 기록','같은 테이블의 동료'],
    opt:'시즌 멤버 전원에게 온라인 일반 이용권을 드려요. 시즌 사이에는 오픈 Q&A로 이어져요.',
@@ -2062,19 +2075,43 @@ function flowSection(){
 var WHOOK = {evening:'네 잔의 차와 파트너 에이전트', office:'오후 한나절, 팀이 쓸 에이전트 하나', outdoor:'숲에서 보내는 팀의 하루', club:'같은 멤버, 4개월 동안 매달 한 잔', salon:'AI × 차 × 우리 술의 저녁', private:'대표·임원진만 모이는 닫힌 찻자리'};
 var WLEN = {evening:'4시간', office:'5~6시간', outdoor:'7시간', club:'4개월', salon:'3시간', private:'4~5시간'};
 var WWHEN = {evening:'저녁', office:'오후', outdoor:'하루', club:'월 1회', salon:'저녁 · 월 1회', private:'프라이빗'};
+/* 상품 카드 — 사진 · 분류 · 제목 · 한 줄 소개 · 스펙 3개 · 가격 | 강사 */
+var WCAT = {evening:'대표 워크샵', office:'워크샵 · 반나절', outdoor:'워크샵 · 하루', club:'정기 모임', salon:'살롱', private:'프라이빗'};
+var WPICK = {evening:'대표 · 추천', private:'신규'};
+var WIC = {
+  time:'<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.6V8l2.3 1.5"/></svg>',
+  people:'<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6" cy="5.6" r="2.4"/><path d="M1.8 13.4c.5-2.3 2.2-3.6 4.2-3.6s3.7 1.3 4.2 3.6"/><path d="M10.6 3.5a2.2 2.2 0 0 1 0 4.2M12 9.9c1.2.5 2 1.7 2.3 3.5"/></svg>',
+  when:'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M2 6.6h12M5.4 1.8v2.6M10.6 1.8v2.6"/></svg>'
+};
+function wPrice(w){
+  var it = sale(w.id);
+  if(w.quote || !it) return '<b>견적 문의</b><small>' + (w.quote ? '인원·방식 맞춤' : '상담 후 안내') + '</small>';
+  return '<b>' + esc(priceTxt(it)) + '</b><small>' + (it.head ? (w.id === 'club' ? '20명 기준 · 한 시즌' : '20명 기준') : '1인') + '</small>';
+}
 function wCard(w){
-  var hi = w.id === 'evening';
+  var hi = w.id === 'evening', pick = WPICK[w.id];
+  var size = w.size.split(' · ')[0];
   return '<a class="wcard2' + (hi ? ' hi' : '') + '" href="#w-' + w.id + '" data-kind="' + esc(w.kind) + '">' +
-    '<div class="wc-ph">' + ph(w.photos[0], 900) + '<span class="wc-badge">' + esc(hi ? '대표 · 추천' : w.badge.split(' · ')[0]) + '</span></div>' +
-    '<div class="wc-body"><h2 class="ol">' + esc(w.title) + '</h2><p class="wc-hook ol">' + esc(WHOOK[w.id] || w.sub) + '</p>' +
-    '<p class="wc-meta ol"><b>' + esc(WLEN[w.id] || w.hours) + '</b><i aria-hidden="true">·</i>' + esc(WWHEN[w.id] || '') + '<i aria-hidden="true">·</i>' + esc(w.size.split(' · ')[0]) + '</p>' +
-    '<p class="wc-who ol">' + who(w.who) + '</p></div></a>';
+    '<div class="wc-ph">' + ph(w.photos[0], 900) + (pick ? '<span class="wc-badge">' + esc(pick) + '</span>' : '') + '</div>' +
+    '<div class="wc-body">' +
+      '<p class="wc-cat">' + esc(WCAT[w.id] || w.kind) + '</p>' +
+      '<h2 class="wc-title">' + esc(w.title) + '</h2>' +
+      '<p class="wc-hook">' + esc(WHOOK[w.id] || w.sub) + '</p>' +
+      '<ul class="wc-spec">' +
+        '<li>' + WIC.time + esc(WLEN[w.id] || w.hours) + '</li>' +
+        '<li>' + WIC.people + esc(size) + '</li>' +
+        '<li>' + WIC.when + esc(WWHEN[w.id] || '') + '</li>' +
+      '</ul>' +
+      '<div class="wc-foot"><div class="wc-price">' + wPrice(w) + '</div>' +
+        '<div class="wc-team" aria-label="' + esc(who(w.who)) + '">' + w.who.map(function(k){ return '<img src="' + T[k].img + '" alt="" title="' + esc(T[k].nm) + '" loading="lazy">'; }).join('') + '</div>' +
+      '</div>' +
+    '</div></a>';
 }
 function bindWorkshop(){
   $$('[data-f]').forEach(function(b){ b.addEventListener('click', function(){
     var f = b.getAttribute('data-f');
     $$('[data-f]').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
-    $$('#wlist .wcard').forEach(function(c){ c.hidden = !(f === '전체' || c.getAttribute('data-kind') === f); });
+    $$('#wlist .wcard2').forEach(function(c){ c.hidden = !(f === '전체' || c.getAttribute('data-kind') === f); });
   }); });
 }
 

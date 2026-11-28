@@ -1072,20 +1072,33 @@ a.pchip:hover{border-color:#667866;box-shadow:0 8px 20px rgba(94,111,94,.14)}
 .hero.lite .photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 @media (max-width:900px){.hero.lite{grid-template-columns:minmax(0,1fr);gap:20px;padding-top:20px}.hero.lite .photo{order:-1;height:auto}}
 /* R17 워크샵 목록: 세로 카드 그리드 */
-.wlist{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;flex-direction:initial}
-.wcard2{display:flex;flex-direction:column;text-decoration:none;color:#26313D;border-radius:22px;transition:transform .35s}
-.wc-ph{position:relative;aspect-ratio:4/3;border-radius:20px;overflow:hidden;background:#F1F3F1}
+.wlist{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 22px;align-items:stretch;flex-direction:initial}
+.wcard2{display:flex;flex-direction:column;height:100%;text-decoration:none;color:#26313D;background:#fff;border:1px solid rgba(38,49,61,.08);border-radius:20px;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s}
+.wcard2:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(40,50,64,.10);border-color:rgba(38,49,61,.12)}
+.wcard2.hi{border-color:rgba(102,120,102,.45)}
+.wc-ph{position:relative;aspect-ratio:16/10;overflow:hidden;background:#F1F3F1}
 .wc-ph .photo,.wc-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.25,.7,.2,1)}
 .wcard2:hover .wc-ph img{transform:scale(1.04)}
-.wc-badge{position:absolute;left:14px;top:14px;font-size:12.5px;font-weight:700;color:#26313D;background:rgba(255,255,255,.94);border-radius:999px;padding:5px 11px;box-shadow:0 4px 12px rgba(0,0,0,.10)}
-.wcard2.hi .wc-badge{background:#667866;color:#fff}
-.wc-body{padding:14px 4px 0;display:flex;flex-direction:column;gap:4px}
-.wc-body h2{margin:0;font-size:18px;font-weight:700;line-height:1.4;color:#26313D}
-.wc-hook{margin:0;font-size:14.5px;color:#4A5460}
-.wc-meta{margin:4px 0 0;font-size:14px;color:#6B727A;display:flex;align-items:center;gap:6px;font-variant-numeric:lining-nums}
-.wc-meta b{color:#26313D;font-weight:800;font-family:'Pretendard','Noto Sans KR',sans-serif}
-.wc-meta i{font-style:normal;color:#C5CCC5}
-.wc-who{margin:0;font-size:13px;color:#8A9098}
+.wc-ph .photo,.wc-ph img{border-radius:0!important}
+html[lang=en] .wc-title,html[lang=en] .wc-hook{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+html[lang=en] .wc-title{min-height:2.8em}html[lang=en] .wc-hook{min-height:2.9em}
+.wc-badge{position:absolute;left:14px;top:14px;font-size:12px;font-weight:700;letter-spacing:.01em;color:#fff;background:#667866;border-radius:999px;padding:5px 11px}
+.wc-body{flex:1;display:flex;flex-direction:column;padding:18px 20px 18px}
+.wc-cat{margin:0 0 6px;font-size:12.5px;font-weight:700;color:#667866;letter-spacing:.01em}
+.wc-title{margin:0;font-size:18px;font-weight:700;line-height:1.4;color:#26313D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wc-hook{margin:4px 0 0;font-size:14px;color:#6B727A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wc-spec{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.wc-spec li{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#4A5460;background:#F4F6F3;border-radius:8px;padding:5px 9px;white-space:nowrap;font-variant-numeric:lining-nums}
+.wc-spec svg{width:14px;height:14px;fill:none;stroke:#8A9A8A;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wc-foot{margin-top:auto;padding-top:16px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.wc-foot{border-top:1px solid rgba(38,49,61,.07);margin-top:16px}
+.wc-body .wc-spec{margin-bottom:auto}
+.wc-price{display:flex;flex-direction:column;gap:2px;min-width:0}
+.wc-price b{font-size:18px;font-weight:800;color:#26313D;font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;letter-spacing:-.01em}
+.wc-price small{font-size:12px;color:#8A9098}
+.wc-team{display:flex;flex:none}
+.wc-team img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-8px;background:#E9ECE8}
+.wc-team img:first-child{margin-left:0}
 @media (max-width:1000px){.wlist{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:620px){.wlist{grid-template-columns:minmax(0,1fr)}}
 .wl-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 18px;padding-top:24px;border-top:1px solid rgba(38,49,61,.10)}
@@ -1405,11 +1418,11 @@ var W = [
    opt:'Extend to an overnight stay — add an evening forest tea session, team quiz and roulette games, and a morning walk and showcase the next day.',
    tl:[['09:30','Forest walk','Put your phone down, walk for 20 minutes, and choose today’s tea',1],['10:10','Welcome','Give your agent a name and a tone, say hello, and diagnose what to hand it (Sunghee Han · Simon)'],['10:50','3-minute challenge','Watch an agent finish a task in the three minutes the tea steeps'],['11:30','Onboard a partner','Write a one-page agreement for working together, connect it to mail, calendar and documents, and set it to show up for work every day (Junhyuck Lee · Leo)'],['12:30','Outdoor lunch','—'],['13:30','Learning from your agent','Lay out your work, ask, learn and refine five times until it’s done'],['15:00','Forest tea session · 30 min','Seasonal tea and 1:1 conversations (Yoojin Lee · Bayu)',1],['15:30','Tasting · Finishing together','Introduce and demo each other’s agents'],['16:40','Closing tea','Share a last cup with colleagues and write your two-week commitment',1],['17:30','End','Results report delivered the next day']]},
   {id:'club', kind:'Season · 4 months', hours:'3-hour evening × 4', badge:'Recurring circle', title:'Tea Table Club · One season', sub:'The same group meets once a month for four months. Each month, over a cup of seasonal tea, everyone grows their agent one step further, and the time in between continues online',
-   photos:['fLounge','teaPour','notes'], more:['fTable','fSweets','fSetting','fWorkshop'], who:['lee','han'], size:'20–30 regular members', place:'Your venue or ours', tools:'Grow one partner agent over four months',
+   photos:['fLounge','teaPour','notes'], more:['fTable','fSweets','fSetting','fWorkshop'], who:['lee','han'], size:'20–30 people · regular members', place:'Your venue or ours', tools:'Grow one partner agent over four months',
    fit:'When leader or CEO groups, tenant programs or in-house clubs want to meet regularly',
    make:['A partner agent grown over four months','A record of one task handed over each month','Colleagues at the same table'],
    opt:'All season members receive a standard online pass. Between seasons, open Q&A sessions keep things going.',
-   tl:[['Month 1','First cup · Welcome','Set up a partner agent following the same flow as the evening tea session',1],['Month 2','Second cup · Handing over','Choose one task to hand over for the month and connect it'],['Month 3','Third cup · Refining','Solve what got stuck together, and try each other’s agents',1],['Month 4','Fourth cup · Sharing','Share what changed over the season and plan the next one',1]]},
+   tl:[['Month 1','First cup · Welcome','Set up a partner agent following the same flow as the evening tea session',1],['Month 2','Second cup · Handing over','Choose one task to hand over for the month and connect it'],['Month 3','Third cup · Refining','Solve what got stuck together, and try each other’s agents',1],['4 months','Fourth cup · Sharing','Share what changed over the season and plan the next one',1]]},
   {id:'salon', kind:'Salon · 3 hours', hours:'19:00–22:00 · 3 hours · Once a month', badge:'Salon · Between tea and spirits', title:'Between Tea and Spirits — the CHA&I Salon', sub:'An evening that asks one humanities question each month, together with tea, Korean traditional spirits and AI. Beside the wait for tea to steep and the time it takes spirits to mature, we talk about what it means to be human in an age of AI that answers instantly',
    photos:['fSweets','teaPour','fLounge'], more:['fTable','fSetting','teaCup','fWorkshop'], who:['lee','han'], size:'12–24 people · ages 19+', place:'Partner venues such as traditional-spirits bars, breweries and hanok houses', tools:'Question of the month, philosophy question cards, and a salon note (the evening’s conversation organized by an agent)',
    fit:'Client and partner events, leader networking, year-end gatherings, and a regular salon where first-timers and regulars mix',
@@ -1544,7 +1557,7 @@ function pkgSection(){
     planGrid([
       {href: sale('pkg-before') ? (bigTicket(sale('pkg-before')) ? '#contact?type=package' : buyHref('pkg-before')) : '', btn: sale('pkg-before') ? (bigTicket(sale('pkg-before')) ? 'Get a quote · ' : 'Pay · ') + priceTxt(sale('pkg-before')) : '', tag:'01 · Before', name:'Steep ahead', big:'Videos + 4 hours', sub:'Prepare online, go deep on site', best:'Teams starting out', f:['Basic terms and access in advance','On site: tea, people, practice']},
       {href: sale('pkg-after') ? (bigTicket(sale('pkg-after')) ? '#contact?type=package' : buyHref('pkg-after')) : '', btn: sale('pkg-after') ? (bigTicket(sale('pkg-after')) ? 'Get a quote · ' : 'Pay · ') + priceTxt(sale('pkg-after')) : '', tag:'02 · After', hi:1, name:'Four weeks after the workshop', big:'4 hours + 4 weeks', sub:'4-week cohort from day 2', best:'To make it stick', f:['Premium cohort, same group','Partner onboarding · 60 min (Leo)']},
-      {href: sale('pkg-season') ? (bigTicket(sale('pkg-season')) ? '#contact?type=package' : buyHref('pkg-season')) : '', btn: sale('pkg-season') ? (bigTicket(sale('pkg-season')) ? 'Get a quote · ' : 'Pay · ') + priceTxt(sale('pkg-season')) : '', tag:'03 · Season', name:'Tea Table Club season', big:'Month 4', sub:'Monthly evening + online', best:'Leader groups, tenants', f:['Standard pass for everyone','One month: agent-partner session']},
+      {href: sale('pkg-season') ? (bigTicket(sale('pkg-season')) ? '#contact?type=package' : buyHref('pkg-season')) : '', btn: sale('pkg-season') ? (bigTicket(sale('pkg-season')) ? 'Get a quote · ' : 'Pay · ') + priceTxt(sale('pkg-season')) : '', tag:'03 · Season', name:'Tea Table Club season', big:'4 months', sub:'Monthly evening + online', best:'Leader groups, tenants', f:['Standard pass for everyone','One month: agent-partner session']},
       {href: sale('pkg-year') ? (bigTicket(sale('pkg-year')) ? '#contact?type=package' : buyHref('pkg-year')) : '', btn: sale('pkg-year') ? (bigTicket(sale('pkg-year')) ? 'Get a quote · ' : 'Pay · ') + priceTxt(sale('pkg-year')) : '', tag:'04 · One year', name:'One-year wellness', big:'1 year', sub:'Four seasons + champions', best:'Year-long partners', f:['Agent-partner check-in each quarter','Premium for leaders']}
     ], 4) +
     (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">Package prices are for 20 people. Packages 03 and 04 include a 10% bundle discount. Groups under 20 are priced as 20; for other group sizes we adjust the price after a consultation. (VAT included)</p>' : '') +
@@ -1593,7 +1606,7 @@ function faqSection(){
     FAQ_CORP.map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') + '</div></section>';
 }
 /* 인원별 고르기: 상품 카드 + 인원 선택 (R8) */
-var PCARD = [['Evening tea','4 hours','20–30 people','Four teas, one partner agent','#w-evening'],['Afternoon half day','5–6 hours','20–30 people','For teams that can’t clear a full day','#w-office'],['A day in the forest','7 hours','20–40 people','A team workshop in the forest','#w-outdoor'],['Tea Table Club','Month 4','20–30 people','Same group, monthly steps','#w-club'],['Between Tea and Spirits salon','3 hours','12–24 people','AI × tea × Korean spirits','#w-salon'],['AI Tea Lounge','2 hours','20–100 people','5-min conference experience','#contact'],['Tea talk','60–90 minutes','30–400 people','Company events, tea and AI','#contact'],['Four-season program','Quarterly','20–30 people','Seasonal agent check-ins','#program'],['Leaders’ Tea Table','4–5 hours','4–12 · executives','Execs only · custom quote','#w-private']];
+var PCARD = [['Evening tea','4 hours','20–30 people','Four teas, one partner agent','#w-evening'],['Afternoon half day','5–6 hours','20–30 people','For teams that can’t clear a full day','#w-office'],['A day in the forest','7 hours','20–40 people','A team workshop in the forest','#w-outdoor'],['Tea Table Club','4 months','20–30 people','Same group, monthly steps','#w-club'],['Between Tea and Spirits salon','3 hours','12–24 people','AI × tea × Korean spirits','#w-salon'],['AI Tea Lounge','2 hours','20–100 people','5-min conference experience','#contact'],['Tea talk','60–90 minutes','30–400 people','Company events, tea and AI','#contact'],['Four-season program','Quarterly','20–30 people','Seasonal agent check-ins','#program'],['Leaders’ Tea Table','4–5 hours','4–12 · executives','Execs only · custom quote','#w-private']];
 var PSIZE = [['Execs 4–12','Private · Salon',[8,4]],['20–40 people','One each + a team agent',[0,1,2,3,7]],['40–100 people','Team agents · 5-min taste',[1,5]],['100–400 people','Demo · reps practice',[6,5]]];
 function sizeSection(full){
   var on = PSIZE[1][2];
@@ -2018,7 +2031,7 @@ var PLANS = {
   evening:{tag:'Signature', name:'Evening tea', big:'4 hours', sub:'18:00~22:00', best:'When starting out', f:['20–30 people · tables of 6','Your lounge or room','Four teas · one an hour','One partner agent']},
   office:{tag:'Extended', name:'Afternoon half day', big:'5–6 hours', sub:'13:00~18:00', best:'To change team work', f:['20–30 people','Your office','Tea breaks + a closing cup','A team work agent']},
   outdoor:{tag:'Extended', name:'A day in the forest', big:'7 hours', sub:'09:30~17:30', best:'To finish a team project', f:['20–40 people','Outdoors near Seoul','Morning + forest tea','Extend to an overnight stay']},
-  club:{tag:'Recurring', name:'Tea Table Club', big:'Month 4', sub:'3-hour evening monthly', best:'To meet regularly', f:['20–30 regular members','Your venue or ours','Seasonal tea monthly','Standard online pass']},
+  club:{tag:'Recurring', name:'Tea Table Club', big:'4 months', sub:'3-hour evening monthly', best:'To meet regularly', f:['20–30 regular members','Your venue or ours','Seasonal tea monthly','Standard online pass']},
   private:{tag:'Private', name:'Leaders’ Tea Table', big:'4–5 hours', sub:'Half day · retreat · 1:1', best:'Executives only', f:['4–12 · executives','Exec room · hanok · tea room','One agent each · 1:1 help','Confidential · custom quote']},
   salon:{tag:'Salon', name:'Between tea and spirits', big:'3 hours', sub:'19:00–22:00 · Monthly', best:'To host clients', f:['12–24 people · ages 19+','Bars, breweries, hanok','Welcome tea → pairing','Tea-only option available']}
 };
@@ -2035,7 +2048,7 @@ function salonSection(){
     invite:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
     season:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01"/></svg>'
   };
-  var F = [['ticket','Monthly','Open salon','Anyone, with an individual ticket'],['invite','By invitation','Private salon','Client, partner and executive events'],['season','Month 4','Salon season','Same members, one theme a month']];
+  var F = [['ticket','Monthly','Open salon','Anyone, with an individual ticket'],['invite','By invitation','Private salon','Client, partner and executive events'],['season','4 months','Salon season','Same members, one theme a month']];
   var Q = [['Waiting','Tea','Waits 3 minutes','AI','Instant answers','Knowing quickly vs. knowing slowly'],
            ['Maturing','Spirits','Ages for months','AI','Learns from text','Can time make a person?'],
            ['Relationships','Tea','Poured in person','AI','Always answers','Is talking to AI a bond?'],
@@ -2068,21 +2081,45 @@ function flowSection(){
 }
 /* 워크샵 카드: 사진 위 · 제목 한 줄 · 한 줄 소개 · 핵심 정보 한 줄 (Airbnb·Maven식 세로 카드, R17) */
 var WHOOK = {evening:'Four teas, one partner agent', office:'One afternoon, one agent for the team', outdoor:'A team’s day in the forest', club:'Same members, a cup each month for four months', salon:'AI × tea × Korean spirits', private:'A closed tea table for CEOs and executives'};
-var WLEN = {evening:'4 hours', office:'5–6 hours', outdoor:'7 hours', club:'Month 4', salon:'3 hours', private:'4–5 hours'};
+var WLEN = {evening:'4 hours', office:'5–6 hours', outdoor:'7 hours', club:'4 months', salon:'3 hours', private:'4–5 hours'};
 var WWHEN = {evening:'Evening', office:'Afternoon', outdoor:'Full day', club:'Monthly', salon:'Evening · Monthly', private:'Private'};
+/* 상품 카드 — 사진 · 분류 · 제목 · 한 줄 소개 · 스펙 3개 · 가격 | 강사 */
+var WCAT = {evening:'Signature workshop', office:'Workshop · half day', outdoor:'Workshop · full day', club:'Recurring circle', salon:'Salon', private:'Private'};
+var WPICK = {evening:'Signature · Recommended', private:'New'};
+var WIC = {
+  time:'<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.6V8l2.3 1.5"/></svg>',
+  people:'<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6" cy="5.6" r="2.4"/><path d="M1.8 13.4c.5-2.3 2.2-3.6 4.2-3.6s3.7 1.3 4.2 3.6"/><path d="M10.6 3.5a2.2 2.2 0 0 1 0 4.2M12 9.9c1.2.5 2 1.7 2.3 3.5"/></svg>',
+  when:'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M2 6.6h12M5.4 1.8v2.6M10.6 1.8v2.6"/></svg>'
+};
+function wPrice(w){
+  var it = sale(w.id);
+  if(w.quote || !it) return '<b>Request a quote</b><small>' + (w.quote ? 'Tailored to your group' : 'After consultation') + '</small>';
+  return '<b>' + esc(priceTxt(it)) + '</b><small>' + (it.head ? (w.id === 'club' ? 'For 20 people · one season' : 'For 20 people') : 'Per person') + '</small>';
+}
 function wCard(w){
-  var hi = w.id === 'evening';
+  var hi = w.id === 'evening', pick = WPICK[w.id];
+  var size = w.size.split(' · ')[0];
   return '<a class="wcard2' + (hi ? ' hi' : '') + '" href="#w-' + w.id + '" data-kind="' + esc(w.kind) + '">' +
-    '<div class="wc-ph">' + ph(w.photos[0], 900) + '<span class="wc-badge">' + esc(hi ? 'Signature · Recommended' : w.badge.split(' · ')[0]) + '</span></div>' +
-    '<div class="wc-body"><h2 class="ol">' + esc(w.title) + '</h2><p class="wc-hook ol">' + esc(WHOOK[w.id] || w.sub) + '</p>' +
-    '<p class="wc-meta ol"><b>' + esc(WLEN[w.id] || w.hours) + '</b><i aria-hidden="true">·</i>' + esc(WWHEN[w.id] || '') + '<i aria-hidden="true">·</i>' + esc(w.size.split(' · ')[0]) + '</p>' +
-    '<p class="wc-who ol">' + who(w.who) + '</p></div></a>';
+    '<div class="wc-ph">' + ph(w.photos[0], 900) + (pick ? '<span class="wc-badge">' + esc(pick) + '</span>' : '') + '</div>' +
+    '<div class="wc-body">' +
+      '<p class="wc-cat">' + esc(WCAT[w.id] || w.kind) + '</p>' +
+      '<h2 class="wc-title">' + esc(w.title) + '</h2>' +
+      '<p class="wc-hook">' + esc(WHOOK[w.id] || w.sub) + '</p>' +
+      '<ul class="wc-spec">' +
+        '<li>' + WIC.time + esc(WLEN[w.id] || w.hours) + '</li>' +
+        '<li>' + WIC.people + esc(size) + '</li>' +
+        '<li>' + WIC.when + esc(WWHEN[w.id] || '') + '</li>' +
+      '</ul>' +
+      '<div class="wc-foot"><div class="wc-price">' + wPrice(w) + '</div>' +
+        '<div class="wc-team" aria-label="' + esc(who(w.who)) + '">' + w.who.map(function(k){ return '<img src="' + T[k].img + '" alt="" title="' + esc(T[k].nm) + '" loading="lazy">'; }).join('') + '</div>' +
+      '</div>' +
+    '</div></a>';
 }
 function bindWorkshop(){
   $$('[data-f]').forEach(function(b){ b.addEventListener('click', function(){
     var f = b.getAttribute('data-f');
     $$('[data-f]').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
-    $$('#wlist .wcard').forEach(function(c){ c.hidden = !(f === 'All' || c.getAttribute('data-kind') === f); });
+    $$('#wlist .wcard2').forEach(function(c){ c.hidden = !(f === 'All' || c.getAttribute('data-kind') === f); });
   }); });
 }
 
