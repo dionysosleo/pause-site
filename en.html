@@ -1282,6 +1282,50 @@ details.cu li:first-child{border-top:0}
 @media (max-width:1000px){.cd{grid-template-columns:minmax(0,1fr)}.cd-side{display:none}.ch{grid-template-columns:minmax(0,1fr);padding-top:28px}}
 @media (min-width:701px){.cgrid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.cd-next{grid-template-columns:minmax(0,1fr)}.cd-t{grid-template-columns:96px minmax(0,1fr)}.cu-d{display:none}}
+
+/* ===== UI 고도화: 진열대 · 상세 강사 · 후기 빈 상태 · 휴대폰 구매 바 ===== */
+.shelf-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px}
+.shelf-head .h2{margin:0}
+.shelf-more{font-size:14.5px;font-weight:700;color:#4A5460;text-decoration:none;white-space:nowrap;padding:8px 14px;border:1px solid rgba(38,49,61,.12);border-radius:999px;transition:background .2s}
+.shelf-more:hover{background:#F4F6F3}
+.olist4{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.olist4 .wc-title{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:2.8em;font-size:16.5px}
+.olist4 .wc-hook{display:none}
+.olist4 .wc-team1 span{display:none}
+.olist4 .wc-price b{font-size:16.5px}
+@media (max-width:1000px){.olist4{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width:620px){.olist4{grid-template-columns:minmax(0,1fr)!important}.olist4 .wc-title{min-height:0}.shelf-head{align-items:center}}
+.wd-hosts{display:grid;gap:10px;margin-top:6px}
+.wd-host{display:flex;gap:14px;align-items:center;padding:14px;border:1px solid rgba(38,49,61,.08);border-radius:16px;text-decoration:none;color:#26313D;background:#fff;transition:border-color .2s,box-shadow .2s}
+.wd-host:hover{border-color:rgba(102,120,102,.45);box-shadow:0 10px 24px rgba(40,50,64,.07)}
+.wd-host img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none;background:#E9ECE8}
+.wd-host span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.wd-host b{font-size:16px}
+.wd-host small{font-size:13px;color:#6B727A}
+.wd-host em{font-style:normal;font-size:14px;color:#4A5460;margin-top:2px}
+.rv-none{border:1px dashed rgba(38,49,61,.16);border-radius:16px;padding:22px;background:#FAFBF9}
+.rv-none p{margin:0}.rv-none p+p{margin-top:6px;font-size:14px}
+.buybar{display:none}
+@media (max-width:760px){
+  .buybar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:fixed;left:12px;right:12px;bottom:12px;z-index:45;padding:10px 10px 10px 18px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(38,49,61,.08);border-radius:20px;box-shadow:0 12px 32px rgba(40,50,64,.16)}
+  .buybar .bb-p{display:flex;flex-direction:column;min-width:0}
+  .buybar .bb-p b{font-size:17px;font-weight:800;color:#26313D;white-space:nowrap}
+  .buybar .bb-p s{font-size:12px;font-weight:500;color:#A0A6AC}
+  .buybar .bb-p small{font-size:11.5px;color:#8A9098;white-space:nowrap}
+  .buybar .btn{flex:none;padding:12px 22px}
+  body:has(.buybar) .tabbar{display:none!important}
+  body:has(.buybar) footer{padding-bottom:96px}
+}
+@media (max-width:560px){.it-grid{gap:10px!important}.it-grid>div{padding:16px 18px!important;gap:6px!important}.it-grid>div::before{display:none!important}.it-grid>div>dt::before{position:static!important;display:inline-block;width:16px!important;height:16px!important;vertical-align:-3px;margin-right:6px}.it-grid dd .ddl{gap:5px}.it-grid dd .ddl li{font-size:15px}}
+@media (max-width:620px){.shelf .wlist{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -20px;padding:2px 20px 10px;scrollbar-width:none}.shelf .wlist::-webkit-scrollbar{display:none}.shelf .wcard2{flex:0 0 80%;scroll-snap-align:start;height:auto}.shelf .wcard2:hover{transform:none}.shelf .wc-title{white-space:nowrap!important;display:block!important;-webkit-line-clamp:unset}}
+.lv-bar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}
+.lv-bar button{font:inherit;font-size:14px;font-weight:700;color:#4A5460;background:#fff;border:1px solid rgba(38,49,61,.12);border-radius:999px;padding:8px 16px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.lv-bar button span{font-weight:600;color:#8A9098;margin-left:2px}
+.lv-bar button[aria-pressed=true]{background:#26313D;border-color:#26313D;color:#fff}
+.lv-bar button[aria-pressed=true] span{color:#C9CED3}
+.olist .wcard2[hidden]{display:none}
+@media (max-width:760px){.sticky-cta{display:none!important}}
+@media (max-width:620px){.lv-bar{flex-wrap:nowrap;overflow-x:auto;margin:0 -20px 18px;padding:0 20px;scrollbar-width:none}.lv-bar button{flex:none}}
 </style>
 <style>/* 영어판: 영어 문장이 한글보다 길어 한 줄 원칙(R6)·기호 정렬(R13)을 지키도록 글자를 조금 줄임 */
 html[lang="en"] .ol,html[lang="en"] .pf{font-size:.86em;letter-spacing:-.01em}
@@ -1705,10 +1749,10 @@ function route(){
   if(h === 'intro'){ page(''); app.innerHTML = vIntro(); }
   else if(h === 'home'){ page('home'); app.innerHTML = vHome(); bindHome(); }
   else if(h === 'workshop'){ page('workshop'); app.innerHTML = vWorkshop(); bindWorkshop(); }
-  else if((m = h.match(/^w-(.+)$/)) && wById(m[1])){ page('wdetail'); app.innerHTML = vWDetail(wById(m[1])); detailNav('#workshop', 'Workshops', wById(m[1]).title); }
+  else if((m = h.match(/^w-(.+)$/)) && wById(m[1])){ page('wdetail'); app.innerHTML = vWDetail(wById(m[1])) + wBar(wById(m[1])); detailNav('#workshop', 'Workshops', wById(m[1]).title); }
   else if(h === 'program'){ page('program'); app.innerHTML = vProgram(); }
-  else if(h === 'online'){ page('online'); app.innerHTML = vOnline(); }
-  else if((m = h.match(/^c-(.+)$/)) && cById(m[1])){ page('course'); app.innerHTML = vCourse(cById(m[1])); bindCourse(cById(m[1])); detailNav('#online', 'Online courses', cById(m[1]).title); }
+  else if(h === 'online'){ page('online'); app.innerHTML = vOnline(); bindOnline(); }
+  else if((m = h.match(/^c-(.+)$/)) && cById(m[1])){ page('course'); app.innerHTML = vCourse(cById(m[1])) + cBar(cById(m[1])); bindCourse(cById(m[1])); detailNav('#online', 'Online courses', cById(m[1]).title); }
   else if(h === 'team' || /^t-(han|jun|lee)$/.test(h)){ page('team'); app.innerHTML = vTeam(); bindTeam(); if(h !== 'team'){ var el = document.getElementById(h); if(el){ setTimeout(function(){ el.scrollIntoView({behavior:'instant', block:'start'}); }, 0); } return; } }
   else if(h === 'day'){ page('day'); app.innerHTML = vDay(); bindDay(); }
   else if(POLICIES[h]){ page('policy'); app.innerHTML = vPolicy(h); bindPolicy(); }
@@ -1828,6 +1872,36 @@ function designNotes(){
     '<div class="notes">' + NOTES.map(function(x){ return '<article class="note"><span class="nn">' + x.n + '</span><h3 class="ol">' + esc(x.h) + '</h3>' + viz(x.v) + '<p class="nf ol">' + esc(x.c) + '</p><p class="nd"><span class="ol">' + esc(x.d) + '</span></p></article>'; }).join('') + '</div>' +
   '</div></section>';
 }
+/* 휴대폰 하단 구매 바 — 상세 화면에서만, 아래 탭 대신 */
+function wBar(w){
+  var it = sale(w.id), big = w.quote || bigTicket(it);
+  var price = w.quote || !it ? '<b>Request a quote</b><small>Tailored to your group</small>' : '<b>' + esc(priceTxt(it)) + '</b><small>' + (it.head ? 'For 20 people' : 'Per person') + '</small>';
+  var go = big || !it ? '<a class="btn btn-lime" href="#contact?type=' + w.id + '">Get a quote</a>' : '<a class="btn btn-lime" href="' + buyHref(w.id) + '">Pay now</a>';
+  return '<div class="buybar" role="region" aria-label="Book"><div class="bb-p">' + price + '</div>' + go + '</div>';
+}
+function cBar(c){
+  var it = sale(c.opts[0]);
+  if(!it) return '<div class="buybar" role="region" aria-label="Book"><div class="bb-p"><b>Opening soon</b><small>Get notified</small></div><button type="button" class="btn btn-lime" data-notify>Get launch updates</button></div>';
+  return '<div class="buybar" role="region" aria-label="Book"><div class="bb-p"><b>' + esc(priceTxt(it)) + (it.list > it.price ? ' <s>' + won(it.list) + '</s>' : '') + '</b><small>Pre-order price · VAT incl.</small></div><a class="btn btn-lime" href="' + buyHref(c.opts[0]) + '">' + (it.free ? 'Start for free' : 'Pay now') + '</a></div>';
+}
+/* 온라인 강의 난이도 필터 */
+function bindOnline(){
+  $$('[data-lv]').forEach(function(b){ b.addEventListener('click', function(){
+    var v = b.getAttribute('data-lv');
+    $$('[data-lv]').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+    $$('.olist .wcard2').forEach(function(c){ c.hidden = !(v === 'all' || c.getAttribute('data-lv') === v); });
+  }); });
+}
+/* 상품 진열대 — 소개 첫 화면 아래에 워크샵 3개 + 온라인 강의 4개 */
+function shelf(){
+  var ws = ['evening','office','outdoor'].map(wById).filter(Boolean);
+  return '<section class="section shelf"><div class="wrap">' +
+    '<div class="shelf-head"><div><p class="eyebrow">Workshops</p><h2 class="h2 one">Corporate workshops</h2></div><a class="shelf-more" href="#workshop">All workshops ' + W.length + ' →</a></div>' +
+    '<div class="wlist">' + ws.map(wCard).join('') + '</div>' +
+    '<div class="shelf-head" style="margin-top:64px"><div><p class="eyebrow">Online</p><h2 class="h2 one">Online courses</h2></div><a class="shelf-more" href="#online">All courses ' + C.length + ' →</a></div>' +
+    '<div class="wlist olist4">' + C.map(oCard).join('') + '</div>' +
+  '</div></section>';
+}
 function vIntro(){
   var step = function(n, t, d){ return '<li><span class="en">' + n + '</span><b>' + t + '</b><p>' + d + '</p></li>'; };
   return '' +
@@ -1843,11 +1917,12 @@ function vIntro(){
     '<div class="sec-head"><div><p class="eyebrow">At a glance</p><h2 class="h2 one">CHA&amp;I on one page</h2></div></div>' +
     '<dl class="it-grid">' +
       '<div><dt>What</dt><dd><ul class="ddl"><li class="ol">Everyone picks a real task</li><li class="ol">Hands-on agent workshop</li></ul></dd></div>' +
-      '<div><dt>How</dt><dd><ul class="ddl"><li class="ol">Forest day · 7 hours</li><li class="ol">Afternoon · 5–6 hours</li></ul></dd></div>' +
+      '<div><dt>How</dt><dd><ul class="ddl"><li class="ol">Evening tea · 4 hours</li><li class="ol">Afternoon · 5–6 hours</li><li class="ol">Forest day · 7 hours</li><li class="ol">Private · executives</li></ul></dd></div>' +
       '<div><dt>With whom</dt><dd><ul class="ddl"><li class="ol">Yoojin Lee (Bayu)</li><li class="ol">Sunghee Han (Simon)</li><li class="ol">Junhyuck Lee (Leo)</li></ul></dd></div>' +
       '<div><dt>What remains</dt><dd><ul class="ddl"><li class="ol">Team agents</li><li class="ol">Two-week commitment</li><li class="ol">Next-day one-page report</li><li class="ol">90-day check</li></ul></dd></div>' +
     '</dl>' +
   '</div></section>' +
+  shelf() +
   designNotes() +
   '<section class="section dark"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">The day</p><h2 class="h2 one">How the day flows</h2></div><p class="lead">Start with a cup of tea and finish at the tea table. More time with your hands than listening.</p></div>' +
@@ -2148,10 +2223,10 @@ function vWDetail(w){
       '<h2>Field photos <span class="muted" style="font-size:14px;font-weight:500">· Yoojin Lee (Bayu) at an on-site session</span></h2><div class="field-gal">' + (w.more || []).concat(w.photos.slice(1)).map(function(p){ return ph(p, 700); }).join('') + '</div>' +
       '<h2>What we ask for in advance (' + (w.prep ? 'D-14' : 'D-3') + ')</h2><ul class="checks">' + (w.prep || ['Internal security rules and whether external AI services can be accessed','One or two work templates each role uses weekly (used as practice examples)','Headcount and role mix, caffeine and allergy restrictions']).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h2>What continues afterwards</h2><ul class="checks">' + (w.after ? w.after.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '<li>Results report within 24 hours (one page for HR)</li><li>Commitment cards and practice tasks to each person within 48 hours</li><li>Review videos with the same examples</li><li>Continue with the 90-day follow-up if you’d like — <a href="#program">See recurring programs</a></li></ul>') +
-      '<h2>Hosts for this workshop</h2>' + w.who.map(function(k){ var t = T[k]; return '<p><b>' + t.nm + '</b> <span class="muted">· ' + esc(t.line) + '</span><br>Role in this workshop: ' + esc(t.job) + '</p>'; }).join('') +
-      (w.quote ? '<p class="muted" style="margin-top:28px">We don’t publish participants or reviews for private sessions.</p>' : '<h2>Participant reviews</h2><div class="reviews">' + (w.reviews && w.reviews.length ? w.reviews : [null, null, null]).map(function(r, i){ var pic = [w.photos[0]].concat(w.more || []).at(i) || w.photos[0];
+      '<h2>Hosts for this workshop</h2><div class="wd-hosts">' + w.who.map(function(k){ var t = T[k]; return '<a class="wd-host" href="#t-' + k + '"><img src="' + t.img + '" alt="" loading="lazy"><span><b>' + esc(t.nm) + '</b><small>' + esc(t.role) + ' · ' + esc(t.line) + '</small><em>' + esc(t.jobS || t.job) + '</em></span></a>'; }).join('') + '</div>' +
+      (w.quote ? '<p class="muted" style="margin-top:28px">We don’t publish participants or reviews for private sessions.</p>' : '<h2>Participant reviews</h2>' + (w.reviews && w.reviews.length ? '<div class="reviews">' + w.reviews.map(function(r, i){ var pic = [w.photos[0]].concat(w.more || []).at(i) || w.photos[0];
         return r ? '<figure class="rv">' + ph(r.photo || pic, 500) + '<blockquote>' + esc(r.text) + '</blockquote><figcaption>' + esc(r.who) + '</figcaption></figure>'
-                 : '<figure class="rv rv-empty" aria-hidden="true">' + ph(pic, 500) + '<div class="sk"><i></i><i></i><i style="width:60%"></i></div><div class="sk sk-who"><i style="width:40%"></i></div></figure>'; }).join('') + '</div>') +
+                 : ''; }).join('') + '</div>' : '<div class="rv-none"><p>We’re collecting our first public reviews.</p><p class="muted">See the session photos above and our <a href="#day">Field notes</a>.</p></div>')) +
     '</div>' +
     '<aside class="aside" aria-label="Workshop summary">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
@@ -2221,7 +2296,7 @@ var WIC2 = {
 function oCard(c){
   var it = sale(c.opts[0]), off = it && it.list > it.price ? Math.round((1 - it.price / it.list) * 100) : 0;
   var kit = (c.kind.split(' + ')[1] || ''); kit = kit.charAt(0).toUpperCase() + kit.slice(1);
-  return '<a class="wcard2" href="#c-' + c.id + '">' +
+  return '<a class="wcard2" href="#c-' + c.id + '" data-lv="' + esc(c.level) + '">' +
     '<div class="wc-ph">' + ph(c.photo, 900) + '<span class="wc-badge">Pre-order' + (off ? ' · ' + off + '%' : '') + '</span></div>' +
     '<div class="wc-body">' +
       '<p class="wc-cat">' + esc('Online · ' + c.level) + '</p>' +
@@ -2242,7 +2317,7 @@ function vOnline(){
     '<div class="ol-hero">' + ph('bookLaptop', 1000) + ph('teaCup', 700) + ph('manLaptop', 700) + '</div>' +
     '<p class="lead ol" style="margin-top:16px">From beginner to advanced, every course comes with a kit. Pre-orders are open now.</p>' +
   '</div></section>' +
-  '<section style="padding-bottom:88px"><div class="wrap"><div class="wlist olist">' +
+  '<section style="padding-bottom:88px"><div class="wrap"><div class="lv-bar" role="group" aria-label="Level"><button type="button" data-lv="all" aria-pressed="true">All <span>' + C.length + '</span></button>' + C.map(function(c){ return '<button type="button" data-lv="' + esc(c.level) + '" aria-pressed="false">' + esc(c.level) + '</button>'; }).join('') + '</div><div class="wlist olist">' +
     C.map(oCard).join('') +
   '</div></div></section>' + tierSection() + pkgSection();
 }
