@@ -16,7 +16,9 @@ export default function middleware(request) {
   const key = en ? url.pathname.slice(3) : url.pathname;
   const p = (MAP[en ? 'en' : 'ko'] || {})[key];
   if (!p) return;
-  const base = 'https://www.chaand.ai', page = base + url.pathname, img = base + '/' + p.i;
+  const ua = request.headers.get('user-agent') || '';
+  /* 카카오톡은 webp 미리보기가 안 뜰 수 있어 jpg 사진이 없으면 대표 이미지로 */
+  const base = 'https://www.chaand.ai', page = base + url.pathname, img = base + '/' + (/\.webp$/.test(p.i) && /kakaotalk/i.test(ua) ? 'og.png' : p.i);
   const title = p.t + ' — CHA&I';
   const html = '<!doctype html><html lang="' + (en ? 'en' : 'ko') + '"><head><meta charset="utf-8">' +
     '<title>' + esc(title) + '</title><meta name="description" content="' + esc(p.d) + '"><link rel="canonical" href="' + page + '">' +
