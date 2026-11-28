@@ -1771,7 +1771,7 @@ function afterRoute(h){
   var hsh = location.hash.slice(1); if(!HASH_MODE && hsh && !isRoute(hsh)){ var el = document.getElementById(hsh); if(el) setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60); }
   window.dispatchEvent(new Event('routechange'));
 }
-function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^[cp]-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {learn:'Online course inquiry', day:'Field notes', privacy:'Privacy Policy', brief:'One page for approval', workshop:'Workshops', program:'Programs', online:'Online courses', team:'Hosts', contact:'Workshop inquiry', proposal:'Get the brochure', login:'Log in', my:'My learning'}[h.split('?')[0]] || ''; }
+function titleFor(h){ var w, c; if((w = h.match(/^w-(.+)$/)) && wById(w[1])) return wById(w[1]).title; if((c = h.match(/^[cp]-(.+)$/)) && cById(c[1])) return cById(c[1]).title; return {learn:'Online course inquiry', day:'Field notes', privacy:'Privacy Policy', brief:'One page for approval', workshop:'Workshops', program:'Programs', online:'Online courses', team:'Hosts', contact:'Workshop inquiry', proposal:'Get the brochure', login:'Log in', my:'My learning', terms:'Terms of Service', refund:'Cancellation & Refund Policy', 'ai-policy':'AI Use Policy', copyright:'Copyright Policy', enroll:'Enroll'}[h.split('?')[0]] || ''; }
 function wById(id){ for(var i = 0; i < W.length; i++) if(W[i].id === id) return W[i]; return null; }
 function cById(id){ for(var i = 0; i < C.length; i++) if(C[i].id === id) return C[i]; return null; }
 function who(keys){ return keys.map(function(k){ return T[k].nick || T[k].nm; }).join(' · '); }
