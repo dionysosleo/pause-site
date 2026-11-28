@@ -960,7 +960,7 @@ html{font-variant-numeric:lining-nums}
 img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
 .photo,.ph{-webkit-touch-callout:none}
 html.veil body{filter:blur(18px)!important;transition:none}
-@media print{html:not(.qprint) body *{visibility:hidden!important}html:not(.qprint) body::after{content:'CHA&I · chaand.ai — For a printable version, please download the company brochure PDF.';visibility:visible;position:fixed;inset:40% 0 auto;text-align:center;font-size:16px;color:#26313D}}
+@media print{body *{visibility:hidden!important}body::after{content:'CHA&I · chaand.ai — For a printable version, please download the company brochure PDF.';visibility:visible;position:fixed;inset:40% 0 auto;text-align:center;font-size:16px;color:#26313D}}
 /* 글자 선택: 운영자만 */
 html:not(.owner) body{-webkit-user-select:none;user-select:none}
 html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit-user-select:text;user-select:text}
@@ -1331,12 +1331,6 @@ details.cu li:first-child{border-top:0}
 .olist .wcard2[hidden]{display:none}
 @media (max-width:760px){.sticky-cta{display:none!important}}
 @media (max-width:620px){.lv-bar{flex-wrap:nowrap;overflow-x:auto;margin:0 -20px 18px;padding:0 20px;scrollbar-width:none}.lv-bar button{flex:none}}
-.qest:empty{display:none}
-.qe{display:flex;flex-direction:column;gap:4px;padding:18px 20px;border-radius:16px;background:#F4F6F3;border:1px solid rgba(102,120,102,.25)}
-.qe-l{font-size:12.5px;font-weight:700;color:#5E6F5E}
-.qe b{font-size:24px;font-weight:800;color:#26313D;font-variant-numeric:lining-nums;letter-spacing:-.01em}
-.qe small{font-size:13px;color:#59616A}
-.qe-dim b{font-size:17px;color:#59616A}
 .cmp-note{margin:0;font-size:13.5px}
 .cmp-wrap{overflow-x:auto;border:1px solid rgba(38,49,61,.08);border-radius:22px;background:#fff}
 .cmp{width:100%;min-width:1040px;border-collapse:collapse;table-layout:fixed;color:#26313D}
@@ -1368,21 +1362,6 @@ details.cu li:first-child{border-top:0}
 .case blockquote{margin:16px 0 0;padding:14px 16px;background:#F4F6F3;border-radius:12px;font-size:15px}.case cite{display:block;margin-top:6px;font-style:normal;font-size:13px;color:#59616A}
 @media (max-width:760px){.cases{grid-template-columns:minmax(0,1fr)}}
 body:has(.dnav) .dgrid .aside{top:calc(var(--hdh,72px) + 72px)!important}
-.qe-pdf{align-self:flex-start;margin-top:8px}
-.qd{position:fixed;inset:0;z-index:90;background:rgba(30,36,44,.55);overflow:auto;padding:24px 16px 48px}
-.qd-bar{max-width:794px;margin:0 auto 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.qd-bar .muted{color:#E9ECEF;font-size:13px}
-.qd-page{max-width:794px;margin:0 auto;background:#fff;color:#1F2730;padding:48px 52px;border-radius:6px;font-size:14px;line-height:1.6}
-.qd-page header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #1F2730;padding-bottom:16px}
-.qd-page h1{margin:0;font-size:30px;letter-spacing:.2em}
-.qd-page header dl{display:grid;grid-template-columns:auto auto;gap:2px 14px;margin:0;font-size:13px}.qd-page header dt{color:#59616A}.qd-page header dd{margin:0;text-align:right}
-.qd-two{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:22px 0}.qd-page h2{font-size:12.5px;color:#59616A;margin:0 0 6px;letter-spacing:.04em}
-.qd-two p{margin:0}.qd-todo{color:#A0522D}
-.qd-sum{font-size:16px;background:#F4F6F3;border-radius:8px;padding:14px 18px;margin:0 0 18px}.qd-sum b{font-size:22px;margin-left:8px}.qd-sum span{color:#59616A;font-size:13px}
-.qd-page table{width:100%;border-collapse:collapse}.qd-page th,.qd-page td{padding:10px 8px;border-bottom:1px solid #DDE1E4;text-align:right}.qd-page th:first-child,.qd-page td:first-child{text-align:left}
-.qd-page thead th{background:#F7F8F6;font-size:13px}.qd-page tfoot td{color:#4A5460}.qd-page .qd-t td{font-weight:800;color:#1F2730;border-bottom:2px solid #1F2730}
-.qd-note{margin-top:22px}.qd-note ul{margin:0;padding-left:18px}.qd-page footer{margin-top:36px;font-size:12px;color:#59616A;text-align:right}
-@media print{html.qprint body>*:not(#qdoc){display:none!important}html.qprint #qdoc,html.qprint #qdoc *{visibility:visible!important}html.qprint .qd{position:static;background:none;padding:0;overflow:visible}html.qprint .qd-bar{display:none}html.qprint .qd-page{max-width:none;padding:0;border-radius:0}@page{size:A4;margin:16mm}}
-@media (max-width:600px){.qd-page{padding:24px 18px}.qd-two{grid-template-columns:1fr}.qd-page header{flex-direction:column;gap:10px}}
 .nlist{grid-template-columns:repeat(2,minmax(0,1fr))!important}.nl-lead{margin:6px 0 0;font-size:14.5px;color:#4A5460;line-height:1.6}
 @media (max-width:620px){.nlist{grid-template-columns:minmax(0,1fr)!important}}
 .artc h2{font-size:21px;margin:34px 0 10px}.artc p{font-size:16.5px;line-height:1.85;margin:0 0 14px;color:#26313D}
@@ -1695,7 +1674,7 @@ var FAQ_CORP = [
   ['Can we use photos of the session internally?','Yes. We select and send photos for which participants have given consent.'],
   ['Can we combine a talk and a workshop?','Yes. Opening with a talk for everyone and having team representatives continue in a workshop works well for organizations of 100+ people.'],
   ['Can we receive a proposal?','Leave your contact details under “Get the brochure” and you’ll receive it right away. You can also request it through the inquiry form.'],
-  ['Can we get a quote for internal approval right away?','Yes. On the workshop inquiry page, pick a program and group size to see an estimate, then use ‘Download quote PDF’ for a quote with supply amount and VAT shown separately. Once date and venue are set, we send a final quote.'],
+  ['Can we get a quote for internal approval?','Yes. After you send an inquiry, we confirm headcount, date and venue, then send a quote with supply amount and VAT shown separately.'],
   ['How do we pay? Can you issue a tax invoice?','You can pay on the site by card or virtual account, and companies can also pay by bank transfer after receiving a tax invoice, by the deadline set in the quote or contract. All prices are shown with VAT included.'],
   ['When do we confirm the final headcount?','Up to 3 days before the session. We prepare tea, snacks and materials for that number.'],
   ['What if we reschedule or cancel?','Up to 8 days before the session you can reschedule once at no charge. Cancellation fees depend on how many days remain and are listed by period in the ‘Cancellation & refunds’ policy at the bottom of the site.'],
@@ -1882,7 +1861,7 @@ function curRoute(){
   if(isRoute(hs)){ history.replaceState(null, '', routeUrl(hs)); return hs; }
   var p = decodeURIComponent(location.pathname.replace(/^\/en(?=\/|$)/, '').replace(/^\/+|\/+$/g, '')).replace(/\.html$/, '');
   p = p || 'intro';
-  return /^(learn|contact|login|enroll)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
+  return /^(learn|contact|login|enroll|review)$/.test(p) ? p + (location.search || '') : p; /* 광고·공유 꼬리표(?utm_, ?fbclid 등)는 무시 */
 }
 function nav(url, replace){
   if(HASH_MODE){ if(replace) location.replace(url); else location.hash = url.slice(1); return; }
@@ -3316,39 +3295,6 @@ function bindProposal(){
 }
 
 /* ===== 워크샵 문의 (사전 진단 겸용) ===== */
-/* 견적서 (예상) — 인쇄 창에서 'Save as PDF'. 금액은 부가세 포함 판매가를 공급가액·부가세로 나눠 보여 줌 */
-function quoteDoc(f){
-  var id = f.elements.type.value, n = f.elements.size.value, e = estimate(id, n), it = sale(id), w = wById(id);
-  if(!e || e.quote || e.over || !n || !it){ toast('Please choose a program and group size first'); return; }
-  var co = (f.elements.company.value || '').trim(); if(!co){ toast('Please enter your company name first'); f.elements.company.focus(); return; }
-  var today = new Date(), d2 = function(x){ return x.getFullYear() + '. ' + (x.getMonth() + 1) + '. ' + x.getDate() + '.'; };
-  var until = new Date(today.getTime() + 30 * 864e5), no = 'Q' + today.toISOString().slice(0, 10).replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
-  var name = (w ? w.title : it.name), lines = e.each ? [[name + '  · per person', won(e.each), e.n + ' people', won(e.total)]]
-    : [[name + '  · facilitation fee', won(it.head.base), '1 lot', won(it.head.base)], ['Participants' + (e.n < e.min ? ' (minimum ' + e.min + ' people)' : ''), won(it.head.per), e.bill + ' people', won(it.head.per * e.bill)]];
-  var supply = Math.round(e.total / 1.1), vat = e.total - supply;
-  var op = OPERATOR, biz = '<b>' + esc(bizName()) + '</b>' + (op.regNo ? '<br>Business registration number ' + esc(op.regNo) : '<br><span class="qd-todo">Business registration no. (shown after registration)</span>') + (op.ceo ? '<br>Signature ' + esc(op.ceo) : '') + (op.address ? '<br>' + esc(op.address) : '') + '<br>' + esc(op.email) + (op.phone ? ' · ' + esc(op.phone) : '');
-  var html = '<div class="qd" id="qdoc"><div class="qd-bar"><button type="button" class="btn btn-lime btn-sm" data-qprint>Save as PDF · Print</button><button type="button" class="btn btn-line btn-sm" data-qclose>Close</button><span class="muted">In the print window, choose ‘Save as PDF’ as the destination to get a file.</span></div>' +
-    '<article class="qd-page"><header><h1>Quote</h1><dl><dt>Quote no.</dt><dd>' + no + '</dd><dt>Date</dt><dd>' + d2(today) + '</dd><dt>Valid until</dt><dd>' + d2(until) + '</dd></dl></header>' +
-    '<div class="qd-two"><section><h2>Recipient</h2><p><b>' + esc(co) + '</b> (Attn.)' + (f.elements.name.value ? '<br>Contact ' + esc(f.elements.name.value) + '  ' : '') + '</p></section><section><h2>From</h2><p>' + biz + '</p></section></div>' +
-    '<p class="qd-sum">Total <b>' + won(e.total) + '</b> <span>(VAT incl.)</span></p>' +
-    '<table><thead><tr><th>Items</th><th>Unit price</th><th>Qty</th><th>Amount</th></tr></thead><tbody>' + lines.map(function(l){ return '<tr><td>' + esc(l[0]) + '</td><td>' + l[1] + '</td><td>' + l[2] + '</td><td>' + l[3] + '</td></tr>'; }).join('') + '</tbody>' +
-    '<tfoot><tr><td colspan="3">Supply amount</td><td>' + won(supply) + '</td></tr><tr><td colspan="3">VAT</td><td>' + won(vat) + '</td></tr><tr class="qd-t"><td colspan="3">Total</td><td>' + won(e.total) + '</td></tr></tfoot></table>' +
-    '<section class="qd-note"><h2>Notes</h2><ul>' +
-      '<li>Program: ' + esc(name) + (w ? ' (' + esc(w.hours) + ')' : '') + '</li>' +
-      (f.elements.when.value ? '<li>Preferred timing: ' + esc(f.elements.when.value) + '</li>' : '') +
-      (f.elements.place.value ? '<li>Venue: ' + esc(f.elements.place.value) + '</li>' : '') +
-      '<li>This quote is an estimate calculated on the site. We send a final quote after confirming date, venue and headcount.</li>' +
-      (it.company ? '<li>New clients get 10% off the first session, applied at consultation (not reflected above).</li>' : '') +
-      '<li>Venue rental and travel or lodging costs, if any, are quoted separately.</li>' +
-    '</ul></section><footer>CHA&amp;I · www.chaand.ai</footer></article></div>';
-  var old = $('#qdoc'); if(old) old.remove();
-  document.body.insertAdjacentHTML('beforeend', html);
-  var q = $('#qdoc');
-  q.querySelector('[data-qclose]').onclick = function(){ q.remove(); };
-  q.querySelector('[data-qprint]').onclick = function(){ document.documentElement.classList.add('qprint'); track('quote_pdf', id); window.print(); };
-  q.querySelector('[data-qclose]').focus();
-}
-window.addEventListener('afterprint', function(){ document.documentElement.classList.remove('qprint'); });
 /* 예상 금액 — 결제 화면과 같은 계산식(강사 진행비 + 1인 금액 × 인원, 최소 인원 기준) */
 function estimate(id, n){
   var w = wById(id), it = sale(id);
@@ -3362,15 +3308,6 @@ function estimate(id, n){
   }
   return {total: it.price * n, n:n, each:it.price};
 }
-function estHtml(e, nGiven){
-  if(!e) return '';
-  if(e.quote) return '<div class="qe"><span class="qe-l">Estimate</span><b>Quote after consultation</b><small>We quote to your group size, format and venue</small></div>';
-  if(!nGiven) return '<div class="qe qe-dim"><span class="qe-l">Estimate</span><b>Enter the group size</b><small>It calculates instantly</small></div>';
-  if(e.over) return '<div class="qe"><span class="qe-l">Estimate</span><b>Quote after consultation</b><small>' + e.max + '-plus groups get extra facilitators and a custom quote</small></div>';
-  return '<div class="qe"><span class="qe-l">Estimate · VAT incl.</span><b>' + won(e.total) + '</b><small>' +
-    (e.each ? 'Per person ' + won(e.each) + ' × ' + e.n + ' people' : e.bill + ' people' + (e.n < e.min ? ' (' + e.min + ' people minimum, billed as ' + e.min + ' people)' : '')) +
-    (e.company ? ' · 10% off the first session for new clients (applied at consultation)' : '') + '</small><small>We confirm the exact amount in a formal quote once date and venue are set.</small><button type="button" class="btn btn-line btn-sm qe-pdf" data-qdoc>Download quote PDF</button></div>';
-}
 function vContact(q){
   var type = (q.match(/type=([^&]+)/) || [])[1] || '';
   var L = savedLead() || {};
@@ -3379,7 +3316,7 @@ function vContact(q){
   return '<section class="ct-hero">' + ph('teapot', 1800, '', true) + '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Let&#39;s have tea</p><p class="h2 one" style="color:#fff">Let’s talk over a cup of tea.</p></div></section>' +
   '<section class="section tight"><div class="wrap" style="max-width:880px">' +
     '<p class="eyebrow">Contact</p><h1 class="h1" style="font-size:clamp(32px,4.6vw,52px)">Workshop inquiry</h1>' +
-    '<p class="lead" style="margin:16px 0 12px">Pick a program and group size to see an estimate right away. Fill in the rest as far as you know. We’ll get back to you, and once confirmed we send a short pre-session survey three days before.</p>' +
+    '<p class="lead" style="margin:16px 0 12px">Share only what you know. We’ll contact you as soon as we review it, and once confirmed, we’ll send a separate pre-check form three days before the session.</p>' +
     '<p style="margin:0 0 32px"><a class="lnk" href="#proposal">Just want the proposal first? → Get the brochure</a></p>' +
     '<form class="form" data-form="contact" novalidate>' +
       '<label class="field">Company *<input name="company" required autocomplete="organization"' + v('company') + '><span class="err">Please enter your company name</span></label>' +
@@ -3390,7 +3327,6 @@ function vContact(q){
       '<label class="field">Expected group size<input name="size" type="number" min="1" max="400" inputmode="numeric" placeholder="e.g. 25"></label>' +
       '<label class="field">Preferred timing<input name="when" placeholder="e.g., mid-January 2027"></label>' +
       '<label class="field full">Venue<select name="place"><option value="">Not sure yet</option><option>At our office</option><option>Please arrange a venue</option></select></label>' +
-      '<div class="full qest" id="qest" aria-live="polite"></div>' +
       '<fieldset class="field full" style="border:0;padding:0;margin:0"><legend style="margin-bottom:8px">Participant roles (select all that apply)</legend><div class="chips">' + ['Planning / PM','Marketing','Sales / CS','HR','Finance / General affairs','Engineering','Executives'].map(function(x){ return '<label><input type="checkbox" name="role" value="' + x + '">' + x + '</label>'; }).join('') + '</div></fieldset>' +
       '<label class="field full">Access to external AI services (e.g., Claude) at work<select name="access"><option value="">Not sure</option><option>Available</option><option>Blocked</option><option>Partially available</option></select></label>' +
       '<label class="field full">Anything you’d like to tell us<textarea name="msg" placeholder="Training goals, budget range, preferred retreat region, etc."></textarea><small class="hint">Please don’t include sensitive information such as health data or national ID numbers. We’ll ask about tea and refreshment considerations separately once the schedule is confirmed.</small></label>' +
@@ -3402,16 +3338,13 @@ function vContact(q){
 }
 function bindContact(){
   var f = $('form[data-form="contact"]');
-  var qe = $('#qest'), upd = function(){ var n = f.elements.size.value; qe.innerHTML = estHtml(estimate(f.elements.type.value, n), !!n); };
-  f.elements.type.addEventListener('change', upd); f.elements.size.addEventListener('input', upd); upd();
-  qe.addEventListener('click', function(e){ if(e.target.closest('[data-qdoc]')) quoteDoc(f); });
   bindForm(f, function(){
     var d = new FormData(f), ts = f.elements.type;
     var data = {_item:(f.elements.type.value || ''), kind:'Workshop inquiry', company:d.get('company'), name:d.get('name'), email:d.get('email'), phone:d.get('phone') || '', program:ts.options[ts.selectedIndex].text, size:d.get('size') ? d.get('size') + ' people' : '', when:d.get('when') || '', place:d.get('place') || '', estimate:(function(){ var e = estimate(d.get('type'), d.get('size')); return !e ? '' : e.quote || e.over ? 'Quote after consultation' : d.get('size') ? won(e.total) : ''; })(), roles:d.getAll('role').join(', '), access:d.get('access') || 'Unknown', proposal:d.get('proposal') ? 'Yes' : 'No', msg:d.get('msg') || ''};
     sendLead(data).then(function(sent){
       var withP = data.proposal === 'Yes';
       if(sent){ openDialog('<h2>We received your inquiry</h2><p style="margin:0">' + esc(data.email) + ' — we’ll reply to this address once we’ve reviewed it.</p>' + (withP ? proposalBox() : '') + '<button type="button" class="btn btn-line" data-close>Close</button>'); return; }
-      var txt = '[CHA&I workshop inquiry]\nCompany: ' + data.company + '\nContact: ' + data.name + '\nEmail: ' + data.email + '\nPhone: ' + (data.phone || '-') + '\nProgram: ' + data.program + '\nGroup size: ' + (data.size || '-') + '\nTiming: ' + (data.when || '-') + '\nVenue: ' + (data.place || '-') + '\nEstimate: ' + (data.estimate || '-') + '\nRoles: ' + (data.roles || '-') + '\nAI access: ' + data.access + '\nProposal needed: ' + data.proposal + '\nMessage: ' + (data.msg || '-');
+      var txt = '[CHA&I workshop inquiry]\nCompany: ' + data.company + '\nContact: ' + data.name + '\nEmail: ' + data.email + '\nPhone: ' + (data.phone || '-') + '\nProgram: ' + data.program + '\nGroup size: ' + (data.size || '-') + '\nTiming: ' + (data.when || '-') + '\nVenue: ' + (data.place || '-') + '\nRoles: ' + (data.roles || '-') + '\nAI access: ' + data.access + '\nProposal needed: ' + data.proposal + '\nMessage: ' + (data.msg || '-');
       copyDialog('Your inquiry is ready', txt, withP && LEAD_CONFIG.proposalUrl ? '<div>' + proposalBox() + '</div>' : '');
     });
   });
