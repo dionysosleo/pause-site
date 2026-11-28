@@ -810,7 +810,7 @@ html{font-variant-numeric:lining-nums}
 .note .nd span{font-size:18px;font-weight:700;line-height:1.5;color:#26313D;letter-spacing:-.01em}
 @media (max-width:860px){.note .nd span{font-size:16.5px}}
 /* R8 비교는 SaaS 플랜 카드 */
-.plans{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;align-items:stretch}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
 .plan{background:#fff;border-radius:18px;box-shadow:0 8px 24px rgba(30,42,54,.06);padding:22px 18px 18px;display:flex;flex-direction:column;border:1.5px solid transparent}
 .plan .ptag{align-self:flex-start;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:#F1F3F1;color:#5E6F5E;font-variant-numeric:lining-nums}
 .plan h3{margin:14px 0 0;font-size:17px;font-weight:700;color:#26313D}
@@ -862,7 +862,7 @@ html{font-variant-numeric:lining-nums}
 @media (max-width:700px){.sflow{padding:22px 14px 14px}.sflow ol{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:18px}.sflow .sf-line{display:none}}
 @media (prefers-reduced-motion: reduce){.sflow *{transition:none!important}}
 /* R8 인원 선택 + 상품 카드 */
-.psz{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.psz{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:18px}
 .psz button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:14px 10px;border-radius:16px;border:1.5px solid #E3E7E3;background:#fff;cursor:pointer;font:inherit;color:#26313D;transition:all .25s}
 .psz button b{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:20px;font-weight:800}
 .psz button span{font-size:12.5px;color:#6B727A}
@@ -940,7 +940,7 @@ html{font-variant-numeric:lining-nums}
 @media (max-width:700px){.sflow ol::before,.sflow ol::after{display:none}}
 /* 인원 선택: 움직이는 표시 + 켜지는 카드 차례로 (R7) */
 .psz{position:relative}
-.psz-ind{position:absolute;left:0;top:0;bottom:0;width:calc((100% - 30px) / 4);border-radius:16px;background:#667866;box-shadow:0 10px 24px rgba(94,111,94,.22);transform:translateX(calc(var(--k) * (100% + 10px)));transition:transform .45s cubic-bezier(.3,.7,.2,1);z-index:0}
+.psz-ind{position:absolute;left:0;top:0;bottom:0;width:calc((100% - 40px) / 5);border-radius:16px;background:#667866;box-shadow:0 10px 24px rgba(94,111,94,.22);transform:translateX(calc(var(--k) * (100% + 10px)));transition:transform .45s cubic-bezier(.3,.7,.2,1);z-index:0}
 .psz button{position:relative;z-index:1}
 .psz button.on{background:transparent;border-color:transparent;box-shadow:none}
 .pcard.pop{animation:pcPop .5s cubic-bezier(.3,.7,.2,1) backwards}
@@ -1379,19 +1379,19 @@ function blurb(t){ return (t.nm + ' (' + t.role + ') — ' + t.line + '. ' + t.b
 /* ===== 워크샵 ===== */
 var W = [
   {id:'evening', kind:'저녁 · 4시간', hours:'18:00~22:00 · 4시간', badge:'대표 프로그램', title:'차를 우리고, AI를 키우다', sub:'한 시간에 한 잔, 네 잔의 차를 우리며 나와 일과 관계를 돌아보고, AI를 나의 파트너로 세워 보는 저녁. 처음 CHA&I를 만나는 가장 기본 프로그램이에요',
-   photos:['fSetting','teapot','teaCup'], more:['fLounge','fTable','fSweets','fWorkshop'], who:['lee','han'], size:'10~20명 · 6인 1조', place:'귀사 라운지·교육장 또는 협력 공간', tools:'노트북 1인 1대 · 문서 5종으로 만드는 파트너 에이전트',
+   photos:['fSetting','teapot','teaCup'], more:['fLounge','fTable','fSweets','fWorkshop'], who:['lee','han'], size:'20~30명 · 6인 1조', place:'귀사 라운지·교육장 또는 협력 공간', tools:'노트북 1인 1대 · 문서 5종으로 만드는 파트너 에이전트',
    fit:'대표·리더 모임, 입주사·커뮤니티 정기 프로그램, 팀이 처음 CHA&I를 경험해 볼 때',
    make:['나를 설명하는 낱말','나만의 파트너 에이전트','이번 주에 할 일 목록','오늘의 기록','티백 우리는 법'],
    opt:'저녁 식사를 곁들일 수 있어요. 반응을 보고 오후 반나절·하루 프로그램으로 넓혀요.',
    tl:[['18:00','열기 · 첫 잔 백차','차에 얽힌 인문학 이야기로 문을 열고, 백차를 우리며 “내가 안다고 믿는 것”을 물어요 (이유진·Bayu)',1],['18:30','묻기 · 에이전트 철학','AI 에이전트를 파트너로 보는 철학을 나눠요 (한성희·Simon)'],['19:30','둘째 잔 대홍포 · 관계','AI와 사람, 나와 타인의 관계를 인문학으로 풀어 봐요 (이유진·Bayu)',1],['20:00','만들기 · 셋째 잔 티백','같은 티백도 우리는 법에 따라 맛이 달라요. 티백을 우리며 실습을 열어요 (이유진·Bayu)',1],['20:15','파트너 에이전트 실습','문서 5종으로 나만의 파트너 에이전트를 직접 세워요. 노트북 1인 1대 (한성희·Simon)'],['21:00','나누기 · 넷째 잔 한국차','마지막 잔으로 오늘의 질문을 나에게 돌려 놓아요 (이유진·Bayu)',1],['21:10','티타임 · 티키타카','만든 에이전트와 대화해 보고, 서로의 이야기로 닫아요 (함께)'],['22:00','끝','오늘의 기록과 함께 돌아가요']]},
   {id:'office', kind:'오후 · 사무실', hours:'13:00~18:00(5시간) 또는 19:00(6시간)', badge:'확장 · 반나절', title:'사무실에서 보내는 오후 반나절 워크샵', sub:'오전 업무를 마치고 귀사 교육장으로. 저녁 전까지 팀이 쓸 에이전트 하나를 만들고, 마무리는 차 한 잔과 시연이에요',
-   photos:['laptops','teaPour','notes'], more:['fWorkshop','fTable','fSweets','fSetting'], who:['lee','han','jun'], size:'10~30명', place:'귀사 교육장·회의실', tools:'Claude 1개로 집중',
+   photos:['laptops','teaPour','notes'], more:['fWorkshop','fTable','fSweets','fSetting'], who:['lee','han','jun'], size:'20~30명', place:'귀사 교육장·회의실', tools:'Claude 1개로 집중',
    fit:'한 팀이 같은 업무를 바꾸고 싶을 때, 하루를 통째로 비우기 어려울 때, 정기프로그램의 분기 회차',
    make:['팀이 매주 쓰는 보고서·회의록 정리 에이전트','고객 문의 답변 초안 봇 또는 경쟁사 조사 자동화','각자 “다음 2주에 해 볼 한 가지” 약속'],
    opt:'5시간은 18:00, 6시간은 시연을 늘려 19:00에 끝나요.',
    tl:[['13:00','맞이','내 에이전트에게 이름과 말투를 정해 주고 첫 인사. 무엇을 맡길지 진단 (한성희·Simon)'],['13:40','3분 챌린지','차가 우러나는 3분 안에 에이전트가 끝내는 일을 눈앞에서 보기'],['14:20','에이전트 파트너 들이기','함께 지낼 약속 한 장을 쓰고, 우리 팀 업무 도구에 연결하다 막히는 곳을 함께 고쳐요 (이준혁·Leo)'],['15:30','티 브레이크 · 20분','차 한 잔과 테이블마다 1:1 이야기 (이유진·Bayu)',1],['15:50','에이전트에게 배우기','묻고 배우며 다섯 번 고쳐 완성'],['17:00','시음회 · 함께 해내기','서로의 에이전트를 소개하고 시연하기'],['17:40','찻자리 마무리','동료들과 마지막 잔을 나누며 2주 약속 적기 (5시간 과정 18:00 종료)',1],['18:00~19:00','6시간 과정','찻자리를 길게, 다음 업무 후보 정하기']]},
   {id:'outdoor', kind:'종일 · 야외', hours:'09:30~17:30 · 7시간', badge:'확장 · 하루', title:'숲에서 보내는 하루 워크샵', sub:'사무실을 벗어나 서울 근교·강원 숲속 교육장에서 하루. 오전엔 걷고 차를 마시고, 낮엔 팀이 쓸 에이전트를 만들고, 오후엔 숲속 티 세션으로 닫아요',
-   photos:['birch','woods','cabin'], more:['fLounge','fTable','fSweets','fSetting'], who:['lee','han','jun'], size:'15~40명', place:'서울 근교·강원(홍천 등) 야외 교육장·숲속 숙소 — 장소 연결 가능', tools:'Claude + 팀 과제 1개',
+   photos:['birch','woods','cabin'], more:['fLounge','fTable','fSweets','fSetting'], who:['lee','han','jun'], size:'20~40명', place:'서울 근교·강원(홍천 등) 야외 교육장·숲속 숙소 — 장소 연결 가능', tools:'Claude + 팀 과제 1개',
    fit:'연말·분기 팀 워크샵을 교육 성과로 남기고 싶을 때, 하루를 통째로 집중해 팀 과제를 끝내고 싶을 때',
    make:['팀이 함께 쓰는 업무 에이전트 1개','직무별 에이전트 (보고서·데이터·CS 중 택)','다음 90일 팀 약속'],
    opt:'1박 2일로 늘리기 — 저녁 숲속 티 세션, 우리 팀 퀴즈·룰렛 게임 레크리에이션, 다음 날 아침 산책과 쇼케이스를 더해요.',
@@ -1407,7 +1407,15 @@ var W = [
    fit:'고객·파트너 초청 행사, 리더 네트워킹, 연말 모임, 처음 오는 분과 단골이 함께 어울리는 정기 살롱',
    make:['AI 시대의 나에게 던지는 질문 하나와 나의 대답','낯선 사람과 나눈 깊은 대화','차와 전통주 페어링 노트','다음 날 받는 살롱 노트 한 장'],
    opt:'술 없이 차만 즐기는 자리도 함께 준비해요. 이달의 주제에 맞춰 게스트(양조장·작가·철학자·창업가)와 전통주 소믈리에를 초청할 수 있어요.',
-   tl:[['19:00','문 열기 · 웰컴 티','차 한 잔과 함께 이달의 질문 카드를 받아요 (이유진·Bayu)',1],['19:20','첫 이야기 · 차의 인문학','이달의 질문을 차와 사람의 역사로 열어요. 예: 기다려야 우러나는 것들 (이유진·Bayu)',1],['19:40','둘째 이야기 · AI의 인문학','같은 질문을 AI의 눈으로 다시 물어요. 예: 바로 답하는 기계 앞에서 생각한다는 것 (한성희·Simon)'],['20:00','대화 메뉴','철학 질문 카드로 테이블마다 대화해요. “AI가 나보다 나를 잘 안다면?”'],['20:30','차와 술 사이','우림과 발효, 두 가지 시간을 맛봐요. 차를 우린 전통주와 차 하이볼 페어링 (이유진·Bayu · 게스트 소믈리에)',1],['21:00','둘러앉아 대화','가운데 자리를 비워 두고, 이달의 질문에 누구나 들어와 답해요'],['21:40','마지막 잔','전통주 한 잔과 함께, 이달의 질문에 대한 나의 한 문장을 남겨요',1],['22:00','끝','다음 날 살롱 노트와 다음 달 질문을 보내 드려요']]}
+   tl:[['19:00','문 열기 · 웰컴 티','차 한 잔과 함께 이달의 질문 카드를 받아요 (이유진·Bayu)',1],['19:20','첫 이야기 · 차의 인문학','이달의 질문을 차와 사람의 역사로 열어요. 예: 기다려야 우러나는 것들 (이유진·Bayu)',1],['19:40','둘째 이야기 · AI의 인문학','같은 질문을 AI의 눈으로 다시 물어요. 예: 바로 답하는 기계 앞에서 생각한다는 것 (한성희·Simon)'],['20:00','대화 메뉴','철학 질문 카드로 테이블마다 대화해요. “AI가 나보다 나를 잘 안다면?”'],['20:30','차와 술 사이','우림과 발효, 두 가지 시간을 맛봐요. 차를 우린 전통주와 차 하이볼 페어링 (이유진·Bayu · 게스트 소믈리에)',1],['21:00','둘러앉아 대화','가운데 자리를 비워 두고, 이달의 질문에 누구나 들어와 답해요'],['21:40','마지막 잔','전통주 한 잔과 함께, 이달의 질문에 대한 나의 한 문장을 남겨요',1],['22:00','끝','다음 날 살롱 노트와 다음 달 질문을 보내 드려요']]},
+  {id:'private', kind:'프라이빗 · 임원', hours:'반나절 4~5시간 · 1박 2일 · 1:1 3회 중 선택', badge:'프라이빗 · 따로 견적', quote:true, title:'리더의 찻자리 — 프라이빗 세션', sub:'대표·임원진만 모이는 닫힌 찻자리. 남이 하는 시연을 보는 대신 내 업무로 내 에이전트를 직접 만들고, 차 네 잔을 마시는 동안 우리 회사의 AI 원칙을 함께 정해요. 누가 왔고 무슨 이야기를 나눴는지는 밖으로 나가지 않아요',
+   photos:['fTable','teapot','fLounge'], more:['fSetting','teaPour','fSweets','teaCup'], who:['lee','han','jun'], size:'4~12명 · 대표·임원진', place:'귀사 임원 회의실·한옥·프라이빗 다실 — 장소 연결 가능', tools:'사전 인터뷰로 미리 세팅한 1인 1에이전트 · 두세 분마다 진행자 한 명',
+   fit:'대표·임원진이 먼저 직접 써 봐야 전사 도입을 정할 수 있을 때, 임원 워크숍·전략 회의 앞에 하루를 열 때, 사외이사·자문단·투자사 대표 모임',
+   make:['내 업무로 만든 나의 비서 에이전트 (보고 요약·결재 브리핑·일정 정리 중에서)','90일 동안 AI에게 넘길 내 일 목록','우리 회사 AI 원칙 한 장 — 어디에 쓰고, 어디엔 안 쓰고, 누가 확인하는지','팀에 내려보낼 첫 과제 하나'],
+   opt:'세 가지 방식 중에서 골라요. ① 반나절 찻자리 4~5시간 ② 1박 2일 리트리트 — 한옥·숲속 숙소에서 저녁 찻자리를 열고 다음 날 아침에 원칙을 정리해요 ③ 1:1 프라이빗 3회 — 한 분씩 한 달에 한 번 집무실로 찾아가요. 사내에서 AI를 잘 쓰는 직원을 짝으로 붙이는 리버스 멘토링도 더할 수 있어요.',
+   prep:['참가자 명단과 직책 (밖으로 공유하지 않아요)','사내 보안 규정과 외부 AI 서비스 접속 가능 여부','사전 인터뷰 일정 (한 분당 20분, 전화·화상)','비밀유지 약정 — 필요하면 귀사 양식으로 먼저 맺어요'],
+   after:['결과는 참가자 본인에게만 드리고, HR에는 참여 여부만 알려 드려요','우리 회사 AI 원칙 한 장 정리본','30일 뒤 한 분씩 1:1 점검','원하면 같은 원칙으로 팀 워크샵(20명 이상)까지 이어 가요'],
+   tl:[['D-14','사전 인터뷰 · 20분','한 분씩 짧게 통화해요. 요즘 시간을 가장 많이 쓰는 일과, AI에게 절대 맡기지 않을 일을 물어요 (이준혁·Leo)'],['D-3','에이전트 미리 세우기','인터뷰를 바탕으로 1인 1에이전트를 미리 세워 둬요. 실제 기밀 자료 대신 같은 모양의 예시 문서로 준비해요'],['첫 시간','첫 잔 · 내려놓기','휴대폰을 내려놓고 차 한 잔. 리더로서 내가 직접 해야만 하는 일을 적어요 (이유진·Bayu)',1],['둘째 시간','묻기 · 리더의 AI','시연이 아니라 대화로 시작해요. 무엇을 맡기고 무엇을 남길지, 판단과 책임의 자리를 이야기해요 (한성희·Simon)'],['셋째 시간','만들기 · 내 일로','두세 분마다 진행자 한 명이 곁에 앉아요. 내 보고서·메일·회의로 에이전트를 다섯 번 고쳐 완성해요 (한성희·Simon, 이준혁·Leo)'],['넷째 시간','마지막 잔 · 정하기','우리 회사 AI 원칙 한 장과 90일 동안 넘길 일 목록을 함께 정하고, 팀에 내려보낼 첫 과제를 골라요 (이유진·Bayu)',1],['+30일','1:1 점검','각자 에이전트를 잘 쓰고 있는지 한 분씩 확인하고 고쳐 드려요']]}
 ];
 /* 모든 워크샵에 공통으로 붙는 앞뒤 흐름 */
 var FLOW = [['D-3','사전 진단','사전 진단 + 사전학습 VOD. 보안·접속 확인, 기본 용어와 계정 점검'],['당일','다섯 번 고치기','만들고, 써 보고, 고치기를 다섯 번. 툴은 하나로'],['24시간','결과 리포트','HR 1쪽 — 참여율, 만든 결과물, 만족도, 다음 90일 제안'],['48시간','2주 약속 돌려받기','당일 적은 2주 약속 카드와 연습 과제가 각자에게'],['30일','30일 점검','짧은 설문 — 만든 에이전트를 아직 쓰는지'],['60~90일','90일 점검','처음 정한 업무 지표를 같이 봐요']];
@@ -1531,7 +1539,7 @@ function pkgSection(){
       {href: sale('pkg-season') ? (bigTicket(sale('pkg-season')) ? '#contact?type=package' : buyHref('pkg-season')) : '', btn: sale('pkg-season') ? (bigTicket(sale('pkg-season')) ? '견적 받기 · ' : '결제하기 · ') + priceTxt(sale('pkg-season')) : '', tag:'03 · 시즌', name:'찻자리 클럽 시즌', big:'4개월', sub:'월 1회 저녁 + 온라인', best:'리더 모임·입주사', f:['전원 일반 이용권','한 달은 에이전트 파트너 회차']},
       {href: sale('pkg-year') ? (bigTicket(sale('pkg-year')) ? '#contact?type=package' : buyHref('pkg-year')) : '', btn: sale('pkg-year') ? (bigTicket(sale('pkg-year')) ? '견적 받기 · ' : '결제하기 · ') + priceTxt(sale('pkg-year')) : '', tag:'04 · 1년', name:'1년 웰니스', big:'1년', sub:'사계절 + 사내 챔피언', best:'1년 함께할 회사', f:['분기마다 에이전트 파트너 점검','리더는 프리미엄으로']}
     ], 4) +
-    (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">패키지 금액은 20명 기준이에요. 03·04는 묶음 10% 할인을 적용했어요. 최소 15명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요. (부가세 포함)</p>' : '') +
+    (sale('pkg-before') ? '<p class="muted" style="text-align:center;margin:18px 0 0;font-size:14px">패키지 금액은 20명 기준이에요. 03·04는 묶음 10% 할인을 적용했어요. 20명보다 적어도 20명 기준으로 진행하고, 인원이 다르면 상담 후 금액을 맞춰 드려요. (부가세 포함)</p>' : '') +
     '<div class="btns" style="justify-content:center;margin-top:24px"><a class="btn btn-lime" href="#learn?t=package">패키지 상담</a><a class="btn btn-line" href="#proposal">제안서 받기</a></div>' +
   '</div></section>';
 }
@@ -1544,7 +1552,7 @@ var ACT = {
 };
 
 var FAQ_CORP = [
-  ['몇 명부터 되나요?','8명부터 진행해요. 8~20명은 퇴근 후 찻자리 클럽이나 오후 워크샵, 20~40명은 종일·오후 워크샵, 그 이상은 아래 인원별 안내를 봐 주세요. 8명보다 적으면 최소 진행 금액으로 안내해요.'],
+  ['몇 명부터 되나요?','워크샵은 20명부터 진행해요. 20~40명은 저녁 찻자리·오후 반나절·숲속 하루, 그 이상은 아래 인원별 안내를 봐 주세요. 20명보다 적으면 20명 기준 금액으로 진행해요. 10~20명이 꾸준히 모인다면 찻자리 클럽이나 살롱이 맞고, 대표·임원진만 모이는 자리는 프라이빗 ‘리더의 찻자리’로 따로 견적을 드려요.'],
   ['AI를 한 번도 안 써 봤어도 되나요?','네. 3일 전 사전학습 영상으로 출발선을 맞추고, 당일엔 테이블마다 1:1로 물어볼 수 있어요.'],
   ['우리 회사는 외부 AI 접속이 막혀 있어요.','3일 전에 보안 담당자와 접속 가능 여부를 확인해요. 막혀 있으면 교육용 실습 계정과 공개 자료로 진행해요.'],
   ['워크샵이 끝나면 에이전트는 어떻게 되나요?','설정과 사용법을 문서로 드려요. 각자 계정이나 회사 도구로 옮겨 계속 쓸 수 있고, 30일·90일에 잘 쓰고 있는지 함께 확인해요.'],
@@ -1556,33 +1564,35 @@ var FAQ_CORP = [
   ['제안서를 받아 볼 수 있나요?','‘제안서 받기’에서 담당자 정보를 남기면 바로 받아 보실 수 있어요. 문의 폼에서도 함께 신청할 수 있어요.']
 ];
 var SIZES = [
-  ['8~20명','저녁 찻자리 4시간 · 찻자리 클럽 시즌 · 오후 반나절','4시간 / 월 1회 × 4 / 5~6시간','1인 1에이전트, 가장 깊게'],
-  ['20~40명','종일 워크샵 · 오후 워크샵','7시간 / 5~6시간','1인 1에이전트 + 팀 공용 1개'],
+  ['임원 4~12명','리더의 찻자리 · 프라이빗','반나절 / 1박 2일 / 1:1 3회','1인 1에이전트, 1:1 진행 · 따로 견적'],
+  ['10~20명','찻자리 클럽 시즌 · 살롱','월 1회 × 4 / 3시간','고정 멤버, 매달 한 단계씩'],
+  ['20~40명','저녁 찻자리 · 오후 반나절 · 숲속 하루','4시간 / 5~6시간 / 7시간','1인 1에이전트 + 팀 공용 1개'],
   ['40~100명','오후 워크샵 + 보조 진행자 · AI 티 라운지','5~6시간 / 2시간','팀 단위 에이전트 / 5분 체험'],
   ['100~400명','동반자 AI × 찻자리 강연 + 대표 워크샵','60~90분','시연 관람, 대표 20~30명 실습']
 ];
 var PROGS = [
-  ['저녁 찻자리 4시간','10~20명 · 18~22시','처음 만나는 CHA&I. 네 잔의 차와 함께 나만의 파트너 에이전트를 세워요'],
-  ['오후 반나절 워크샵','10~30명 · 5~6시간','하루를 비우기 어려운 팀. 보조 진행자를 더하면 80명까지'],
-  ['하루 워크샵','15~40명 · 7시간','연말·분기 팀 워크샵. 숲에서 에이전트를 맞이하는 하루. 1박 2일 선택'],
+  ['저녁 찻자리 4시간','20~30명 · 18~22시','처음 만나는 CHA&I. 네 잔의 차와 함께 나만의 파트너 에이전트를 세워요'],
+  ['오후 반나절 워크샵','20~30명 · 5~6시간','하루를 비우기 어려운 팀. 보조 진행자를 더하면 80명까지'],
+  ['하루 워크샵','20~40명 · 7시간','연말·분기 팀 워크샵. 숲에서 에이전트를 맞이하는 하루. 1박 2일 선택'],
+  ['리더의 찻자리 · 프라이빗','4~12명 · 대표·임원진','대표·임원진만 모이는 닫힌 찻자리. 사전 인터뷰로 1인 1에이전트를 준비하고 회사의 AI 원칙을 함께 정해요. 따로 견적'],
   ['찻자리 클럽 · 시즌','10~20명 · 월 1회 × 4개월','리더 모임·입주사 정기 프로그램. 같은 멤버가 매달 한 잔과 에이전트를 한 단계씩 키워요'],
   ['차와 술 사이 · 살롱','12~24명 · 월 1회 3시간','AI × 차 × 전통주. 짧은 이야기 두 편, 질문 카드, 차와 우리 술 페어링으로 여는 저녁'],
   ['AI 티 라운지','20~100명 · 2시간','컨퍼런스·타운홀. 티 바와 내 에이전트 이름 짓기 5분 체험'],
   ['동반자 AI × 찻자리 강연','30~400명 · 60~90분','전사 행사. 차 이야기와 동반자 AI 토크'],
-  ['사계절 프로그램','10~30명 · 분기 1회','연간 정기. 계절마다 에이전트를 점검하고 업무 하나를 더해요']
+  ['사계절 프로그램','20~30명 · 분기 1회','연간 정기. 계절마다 에이전트를 점검하고 업무 하나를 더해요']
 ];
 function faqSection(){
   return '<section class="section"><div class="wrap faq" style="max-width:860px"><p class="eyebrow">FAQ</p><h2 class="h2" style="margin-bottom:12px">자주 묻는 질문</h2>' +
     FAQ_CORP.map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') + '</div></section>';
 }
 /* 인원별 고르기: 상품 카드 + 인원 선택 (R8) */
-var PCARD = [['저녁 찻자리','4시간','10~20명','네 잔의 차와 파트너 에이전트','#w-evening'],['오후 반나절','5~6시간','10~30명','하루를 비우기 어려운 팀에','#w-office'],['숲속 하루','7시간','15~40명','숲에서 보내는 팀 워크샵','#w-outdoor'],['찻자리 클럽','4개월','10~20명','같은 멤버, 매달 한 단계씩','#w-club'],['차와 술 사이 살롱','3시간','12~24명','AI × 차 × 전통주의 저녁','#w-salon'],['AI 티 라운지','2시간','20~100명','컨퍼런스·타운홀 5분 체험','#contact'],['찻자리 강연','60~90분','30~400명','전사 행사, 차와 AI 토크','#contact'],['사계절 프로그램','분기 1회','10~30명','계절마다 에이전트 점검','#program']];
-var PSIZE = [['8~20명','1인 1에이전트, 가장 깊게',[0,3,4,7,1]],['20~40명','1인 1에이전트 + 팀 공용',[2,1,7]],['40~100명','팀 단위 에이전트 · 5분 체험',[1,5]],['100~400명','시연 관람 · 대표 실습',[6,5]]];
+var PCARD = [['저녁 찻자리','4시간','20~30명','네 잔의 차와 파트너 에이전트','#w-evening'],['오후 반나절','5~6시간','20~30명','하루를 비우기 어려운 팀에','#w-office'],['숲속 하루','7시간','20~40명','숲에서 보내는 팀 워크샵','#w-outdoor'],['찻자리 클럽','4개월','10~20명','같은 멤버, 매달 한 단계씩','#w-club'],['차와 술 사이 살롱','3시간','12~24명','AI × 차 × 전통주의 저녁','#w-salon'],['AI 티 라운지','2시간','20~100명','컨퍼런스·타운홀 5분 체험','#contact'],['찻자리 강연','60~90분','30~400명','전사 행사, 차와 AI 토크','#contact'],['사계절 프로그램','분기 1회','20~30명','계절마다 에이전트 점검','#program'],['리더의 찻자리','4~5시간','4~12명 · 임원','대표·임원진만, 따로 견적','#w-private']];
+var PSIZE = [['임원 4~12명','프라이빗 · 따로 견적',[8,4]],['10~20명','고정 멤버 · 살롱',[3,4]],['20~40명','1인 1에이전트 + 팀 공용',[0,1,2,7]],['40~100명','팀 단위 에이전트 · 5분 체험',[1,5]],['100~400명','시연 관람 · 대표 실습',[6,5]]];
 function sizeSection(full){
-  var on = PSIZE[0][2];
+  var on = PSIZE[2][2];
   return '<section class="section paper" id="sizes"><div class="wrap">' +
-    '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">8명부터 400명까지</h2></div><p class="lead">인원을 누르면 맞는 프로그램이 켜져요.</p></div>' +
-    '<div class="psz" role="tablist" aria-label="인원 선택" style="--k:0"><span class="psz-ind" aria-hidden="true"></span>' + PSIZE.map(function(z, i){ return '<button type="button" role="tab" class="' + (i ? '' : 'on') + '" aria-selected="' + (i ? 'false' : 'true') + '" data-size="' + i + '"><b>' + esc(z[0]) + '</b><span class="ol">' + esc(z[1]) + '</span></button>'; }).join('') + '</div>' +
+    '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">임원 네 명부터 400명까지</h2></div><p class="lead">인원을 누르면 맞는 프로그램이 켜져요.</p></div>' +
+    '<div class="psz" role="tablist" aria-label="인원 선택" style="--k:2"><span class="psz-ind" aria-hidden="true"></span>' + PSIZE.map(function(z, i){ return '<button type="button" role="tab" class="' + (i === 2 ? 'on' : '') + '" aria-selected="' + (i === 2 ? 'true' : 'false') + '" data-size="' + i + '"><b>' + esc(z[0]) + '</b><span class="ol">' + esc(z[1]) + '</span></button>'; }).join('') + '</div>' +
     '<div class="pcards">' + PCARD.map(function(c, i){ return '<a class="pcard' + (on.indexOf(i) < 0 ? ' dim' : '') + '" data-pi="' + i + '" href="' + c[4] + '"><span class="pc-chip">' + esc(c[2]) + '</span><h3 class="ol">' + esc(c[0]) + '</h3><b class="pc-big">' + esc(c[1]) + '</b><p class="ol">' + esc(c[3]) + '</p><span class="pc-go" aria-hidden="true">→</span></a>'; }).join('') + '</div>' +
   '</div></section>';
 }
@@ -1974,9 +1984,9 @@ function bindHome(){
 }
 
 /* 페이지 머리: 긴 문단 대신 한 줄 + 경로 칩 (R16) */
-function pathChips(steps, extra){
+function pathChips(steps, extra, extra2){
   var chip = function(c){ var inner = '<b aria-hidden="true">' + esc(c[0]) + '</b><span>' + esc(c[1]) + '</span><small>' + esc(c[2]) + '</small>'; return c[3] ? '<a class="pchip" href="' + c[3] + '">' + inner + '</a>' : '<span class="pchip">' + inner + '</span>'; };
-  return '<div class="pchips">' + steps.map(chip).join('<span class="pc-ar" aria-hidden="true">→</span>') + (extra ? '<span class="pc-sep" aria-hidden="true"></span>' + chip(extra) : '') + '</div>';
+  return '<div class="pchips">' + steps.map(chip).join('<span class="pc-ar" aria-hidden="true">→</span>') + (extra ? '<span class="pc-sep" aria-hidden="true"></span>' + chip(extra) : '') + (extra2 ? chip(extra2) : '') + '</div>';
 }
 /* ===== 워크샵 목록 (사진 중심 카드) ===== */
 function vWorkshop(){
@@ -1998,10 +2008,11 @@ function vWorkshop(){
 }
 /* 워크샵 비교: SaaS 플랜 카드 (docs/ui-guide.md R8) — 칸마다 한 줄 */
 var PLANS = {
-  evening:{tag:'대표', name:'저녁 찻자리', big:'4시간', sub:'18:00~22:00', best:'처음 열 때', f:['10~20명 · 6인 1조','귀사 라운지·교육장','차 네 잔 · 시간당 한 잔','파트너 에이전트 1개']},
-  office:{tag:'확장', name:'오후 반나절', big:'5~6시간', sub:'13:00~18:00', best:'한 팀이 일을 바꿀 때', f:['10~30명','귀사 교육장·회의실','티 브레이크 + 마무리 잔','팀 업무 에이전트']},
-  outdoor:{tag:'확장', name:'숲속 하루', big:'7시간', sub:'09:30~17:30', best:'팀 과제를 끝낼 때', f:['15~40명','서울 근교·강원 야외','아침 차 + 숲속 티 세션','1박 2일로 늘리기']},
+  evening:{tag:'대표', name:'저녁 찻자리', big:'4시간', sub:'18:00~22:00', best:'처음 열 때', f:['20~30명 · 6인 1조','귀사 라운지·교육장','차 네 잔 · 시간당 한 잔','파트너 에이전트 1개']},
+  office:{tag:'확장', name:'오후 반나절', big:'5~6시간', sub:'13:00~18:00', best:'한 팀이 일을 바꿀 때', f:['20~30명','귀사 교육장·회의실','티 브레이크 + 마무리 잔','팀 업무 에이전트']},
+  outdoor:{tag:'확장', name:'숲속 하루', big:'7시간', sub:'09:30~17:30', best:'팀 과제를 끝낼 때', f:['20~40명','서울 근교·강원 야외','아침 차 + 숲속 티 세션','1박 2일로 늘리기']},
   club:{tag:'정기', name:'찻자리 클럽', big:'4개월', sub:'월 1회 저녁 3시간', best:'꾸준히 모일 때', f:['10~20명 고정 멤버','귀사 라운지·협력 공간','매달 계절 차 한 잔','온라인 일반 이용권']},
+  private:{tag:'프라이빗', name:'리더의 찻자리', big:'4~5시간', sub:'반나절 · 1박 2일 · 1:1 3회', best:'대표·임원진만 모일 때', f:['4~12명 · 임원','임원 회의실·한옥·다실','1인 1에이전트 · 1:1 진행','비공개 · 따로 견적']},
   salon:{tag:'살롱', name:'차와 술 사이', big:'3시간', sub:'19:00~22:00 · 월 1회', best:'고객·리더를 초청할 때', f:['12~24명 · 만 19세 이상','전통주 바·양조장·한옥','웰컴 티 → 전통주 페어링','차만 즐기는 자리도']}
 };
 function planCards(){
@@ -2049,9 +2060,9 @@ function flowSection(){
   '</div></section>';
 }
 /* 워크샵 카드: 사진 위 · 제목 한 줄 · 한 줄 소개 · 핵심 정보 한 줄 (Airbnb·Maven식 세로 카드, R17) */
-var WHOOK = {evening:'네 잔의 차와 파트너 에이전트', office:'오후 한나절, 팀이 쓸 에이전트 하나', outdoor:'숲에서 보내는 팀의 하루', club:'같은 멤버, 4개월 동안 매달 한 잔', salon:'AI × 차 × 우리 술의 저녁'};
-var WLEN = {evening:'4시간', office:'5~6시간', outdoor:'7시간', club:'4개월', salon:'3시간'};
-var WWHEN = {evening:'저녁', office:'오후', outdoor:'하루', club:'월 1회', salon:'저녁 · 월 1회'};
+var WHOOK = {evening:'네 잔의 차와 파트너 에이전트', office:'오후 한나절, 팀이 쓸 에이전트 하나', outdoor:'숲에서 보내는 팀의 하루', club:'같은 멤버, 4개월 동안 매달 한 잔', salon:'AI × 차 × 우리 술의 저녁', private:'대표·임원진만 모이는 닫힌 찻자리'};
+var WLEN = {evening:'4시간', office:'5~6시간', outdoor:'7시간', club:'4개월', salon:'3시간', private:'4~5시간'};
+var WWHEN = {evening:'저녁', office:'오후', outdoor:'하루', club:'월 1회', salon:'저녁 · 월 1회', private:'프라이빗'};
 function wCard(w){
   var hi = w.id === 'evening';
   return '<a class="wcard2' + (hi ? ' hi' : '') + '" href="#w-' + w.id + '" data-kind="' + esc(w.kind) + '">' +
@@ -2079,24 +2090,24 @@ function vWDetail(w){
       '<div style="display:flex;gap:6px;margin-bottom:14px"><span class="badge">' + esc(w.badge) + '</span><span class="badge ln">' + esc(w.kind) + '</span></div>' +
       '<h1 class="h1" style="font-size:clamp(30px,4.4vw,50px)">' + esc(w.title) + '</h1>' +
       '<p class="lead" style="margin-top:16px">' + esc(w.sub) + '</p>' +
-      (sale(w.id) ? '<div class="btns" style="margin-top:18px;align-items:center">' + (bigTicket(sale(w.id)) ? '<a class="btn btn-lime" href="#contact?type=' + w.id + '">견적 받기 · ' + priceTxt(sale(w.id)) + '</a><a class="btn btn-line" href="' + buyHref(w.id) + '">카드로 결제</a>' : '<a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기 · ' + priceTxt(sale(w.id)) + '</a>') + '<span class="muted" style="font-size:14px">' + esc(sale(w.id).head ? headLine(sale(w.id)) + ' · 부가세 포함' : sale(w.id).unit + ' · 부가세 포함') + '</span></div>' : '') +
+      (sale(w.id) ? '<div class="btns" style="margin-top:18px;align-items:center">' + (bigTicket(sale(w.id)) ? '<a class="btn btn-lime" href="#contact?type=' + w.id + '">견적 받기 · ' + priceTxt(sale(w.id)) + '</a><a class="btn btn-line" href="' + buyHref(w.id) + '">카드로 결제</a>' : '<a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기 · ' + priceTxt(sale(w.id)) + '</a>') + '<span class="muted" style="font-size:14px">' + esc(sale(w.id).head ? headLine(sale(w.id)) + ' · 부가세 포함' : sale(w.id).unit + ' · 부가세 포함') + '</span></div>' : w.quote ? '<div class="btns" style="margin-top:18px;align-items:center"><a class="btn btn-lime" href="#contact?type=' + w.id + '">견적 받기</a><span class="muted" style="font-size:14px">인원·방식·장소에 맞춰 따로 견적을 드려요</span></div>' : '') +
       '<p class="bio-proof" style="margin-top:20px">이럴 때 좋아요 — ' + esc(w.fit) + '</p>' +
       '<h2>만들어 가는 것</h2><ul class="checks">' + w.make.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h2>진행 순서</h2><ol class="tl">' + w.tl.map(function(r){ return '<li' + (r[3] ? ' class="tea"' : '') + '><span class="t">' + esc(r[0]) + '</span><b>' + esc(r[1]) + (r[3] ? ' ☕' : '') + '</b><span>' + esc(r[2]) + '</span></li>'; }).join('') + '</ol>' +
       (w.opt ? '<h2>더하기</h2><p>' + esc(w.opt) + '</p>' : '') +
       '<h2>현장 사진 <span class="muted" style="font-size:14px;font-weight:500">· 이유진(Bayu) 강사 출강 현장</span></h2><div class="field-gal">' + (w.more || []).concat(w.photos.slice(1)).map(function(p){ return ph(p, 700); }).join('') + '</div>' +
-      '<h2>담당자님께 미리 받는 것 (D-3)</h2><ul class="checks"><li>사내 보안 규정과 외부 AI 서비스 접속 가능 여부</li><li>직무별로 매주 쓰는 업무 양식 1~2개 (실습 예제로 씁니다)</li><li>참가 인원과 직무 구성, 카페인·알레르기 제한</li></ul>' +
-      '<h2>끝나고 이어지는 것</h2><ul class="checks"><li>24시간 안에 결과 리포트 (HR 1쪽)</li><li>48시간 안에 약속 카드와 연습 과제가 각자에게</li><li>사후 복습 VOD로 같은 예제를 다시</li><li>원하면 90일 후속으로 이어 가기 — <a href="#program">정기프로그램 보기</a></li></ul>' +
+      '<h2>담당자님께 미리 받는 것 (' + (w.prep ? 'D-14' : 'D-3') + ')</h2><ul class="checks">' + (w.prep || ['사내 보안 규정과 외부 AI 서비스 접속 가능 여부','직무별로 매주 쓰는 업무 양식 1~2개 (실습 예제로 씁니다)','참가 인원과 직무 구성, 카페인·알레르기 제한']).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+      '<h2>끝나고 이어지는 것</h2><ul class="checks">' + (w.after ? w.after.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '<li>24시간 안에 결과 리포트 (HR 1쪽)</li><li>48시간 안에 약속 카드와 연습 과제가 각자에게</li><li>사후 복습 VOD로 같은 예제를 다시</li><li>원하면 90일 후속으로 이어 가기 — <a href="#program">정기프로그램 보기</a></li></ul>') +
       '<h2>함께하는 강사</h2>' + w.who.map(function(k){ var t = T[k]; return '<p><b>' + t.nm + '</b> <span class="muted">· ' + esc(t.line) + '</span><br>이 워크샵에서 맡는 일: ' + esc(t.job) + '</p>'; }).join('') +
-      '<h2>참가자 후기</h2><div class="reviews">' + (w.reviews && w.reviews.length ? w.reviews : [null, null, null]).map(function(r, i){ var pic = [w.photos[0]].concat(w.more || []).at(i) || w.photos[0];
+      (w.quote ? '<p class="muted" style="margin-top:28px">프라이빗 세션은 참가자와 후기를 공개하지 않아요.</p>' : '<h2>참가자 후기</h2><div class="reviews">' + (w.reviews && w.reviews.length ? w.reviews : [null, null, null]).map(function(r, i){ var pic = [w.photos[0]].concat(w.more || []).at(i) || w.photos[0];
         return r ? '<figure class="rv">' + ph(r.photo || pic, 500) + '<blockquote>' + esc(r.text) + '</blockquote><figcaption>' + esc(r.who) + '</figcaption></figure>'
-                 : '<figure class="rv rv-empty" aria-hidden="true">' + ph(pic, 500) + '<div class="sk"><i></i><i></i><i style="width:60%"></i></div><div class="sk sk-who"><i style="width:40%"></i></div></figure>'; }).join('') + '</div>' +
+                 : '<figure class="rv rv-empty" aria-hidden="true">' + ph(pic, 500) + '<div class="sk"><i></i><i></i><i style="width:60%"></i></div><div class="sk sk-who"><i style="width:40%"></i></div></figure>'; }).join('') + '</div>') +
     '</div>' +
     '<aside class="aside" aria-label="워크샵 요약">' +
       '<h2 class="h3">' + esc(w.title) + '</h2>' +
       '<dl><dt>시간</dt><dd>' + esc(w.hours) + '</dd><dt>인원</dt><dd>' + esc(w.size) + '</dd><dt>장소</dt><dd>' + esc(w.place) + '</dd><dt>도구</dt><dd>' + esc(w.tools) + '</dd><dt>비용</dt><dd>' + (sale(w.id) ? '<b>' + priceTxt(sale(w.id)) + '</b> / ' + esc(sale(w.id).unit) + ' (부가세 포함)' + (sale(w.id).head ? '<br><span class="muted" style="font-weight:500">' + esc(headLine(sale(w.id))) + '</span>' : '') + (sale(w.id).company ? '<br><span class="muted" style="font-weight:500">처음 함께하는 회사는 첫 회 10% 할인 (상담 시 적용)</span>' : '') : '구성에 따라 견적') + '</dd></dl>' +
-      (sale(w.id) ? (bigTicket(sale(w.id)) ? '<a class="btn btn-lime" href="#contact?type=' + w.id + '">견적 받기</a><a class="btn btn-line" href="' + buyHref(w.id) + '">카드로 결제</a>' : '<a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기</a><a class="btn btn-line" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>') : '<a class="btn btn-lime" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>') +
-      '<a class="btn btn-line btn-sm" href="#program">1년 프로그램으로 이어 가기</a>' +
+      (sale(w.id) ? (bigTicket(sale(w.id)) ? '<a class="btn btn-lime" href="#contact?type=' + w.id + '">견적 받기</a><a class="btn btn-line" href="' + buyHref(w.id) + '">카드로 결제</a>' : '<a class="btn btn-lime" href="' + buyHref(w.id) + '">결제하기</a><a class="btn btn-line" href="#contact?type=' + w.id + '">이 워크샵 문의하기</a>') : '<a class="btn btn-lime" href="#contact?type=' + w.id + '">' + (w.quote ? '견적 받기' : '이 워크샵 문의하기') + '</a>') +
+      (w.quote ? '<a class="btn btn-line btn-sm" href="#workshop">팀 워크샵(20명 이상) 보기</a>' : '<a class="btn btn-line btn-sm" href="#program">1년 프로그램으로 이어 가기</a>') +
       '<p class="muted" style="margin:0;font-size:13px">제안서가 먼저 필요하면 <a href="#proposal">제안서 받기</a>에서 바로 받아 보세요.</p>' +
     '</aside>' +
   '</div></section>';
@@ -2292,7 +2303,7 @@ function bigTicket(it){ return !!(it && !it.free && it.price >= 1000000); }
 function priceTxt(it){ return it && it.free ? '무료' : won(it ? it.price : 0); }
 function won(n){ return Number(n).toLocaleString('ko-KR') + '원'; }
 function buyHref(id){ var it = SHOP && SHOP[id]; return it && it.free ? '#enroll?item=' + encodeURIComponent(id) : '/checkout?item=' + encodeURIComponent(id); }
-function headLine(it){ var h = it && it.head; return h ? '20명 기준 · 1명마다 ' + won(h.per) + ' · 최소 ' + h.min + '명 기준 진행' : ''; }
+function headLine(it){ var h = it && it.head; return h ? '20명 기준 · 1명마다 ' + won(h.per) + (h.min < h.ref ? ' · 최소 ' + h.min + '명 기준 진행' : '') : ''; }
 function buyBox(id, eyebrow){
   var it = sale(id); if(!it) return '';
   return '<div class="price-box"><div><p class="eyebrow">' + esc(eyebrow || 'Enroll') + '</p><div class="big">' + priceTxt(it) + '</div><p class="muted" style="margin:8px 0 0">' + esc([it.unit, it.period].filter(Boolean).join(' · ')) + ' · 부가세 포함</p></div><a class="btn btn-lime" href="' + buyHref(id) + '">결제하기</a></div>';
