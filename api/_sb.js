@@ -26,7 +26,9 @@ const isStaff = u => !!(u && u.app_metadata && u.app_metadata.role === 'staff');
 async function user(token, opt) {
   if (!token) return null;
   try {
-    const r = await fetch(URL_ + '/auth/v1/user', { headers: { apikey: PUBLIC, Authorization: 'Bearer ' + token } });
+    const get = () => fetch(URL_ + '/auth/v1/user', { headers: { apikey: PUBLIC, Authorization: 'Bearer ' + token } });
+    let r; try { r = await get(); } catch (e) { r = null; }
+    if (!r || r.status >= 500) { await new Promise(z => setTimeout(z, 300)); r = await get(); }
     if (!r.ok) return null; const u = await r.json(); if (!u || !u.id) return null;
     if (isStaff(u) && !(opt && opt.staff)) return null;
     return u;
@@ -36,10 +38,14 @@ function secret() { const k = process.env.SUPABASE_SECRET_KEY; if (!k) throw new
 /* 관리 권한(서버 키)으로 DB 읽기·쓰기 */
 async function rest(method, path, body, prefer) {
   const k = secret();
-  const r = await fetch(URL_ + '/rest/v1/' + path, {
+  const go = () => fetch(URL_ + '/rest/v1/' + path, {
     method, headers: Object.assign({ apikey: k, Authorization: 'Bearer ' + k, 'Content-Type': 'application/json' }, prefer ? { Prefer: prefer } : {}),
     body: body === undefined ? undefined : JSON.stringify(body)
   });
+  /* 함수가 막 깨어난 직후 첫 요청이 가끔 끊겨서, 읽기(GET)는 한 번만 다시 시도 */
+  let r;
+  try { r = await go(); } catch (e) { if (method !== 'GET') throw e; }
+  if (method === 'GET' && (!r || r.status >= 500)) { await new Promise(z => setTimeout(z, 300)); r = await go(); }
   const txt = await r.text(); let data = null; try { data = txt ? JSON.parse(txt) : null; } catch (e) {}
   return { ok: r.ok, status: r.status, data, text: r.ok ? '' : txt.slice(0, 300) };
 }
