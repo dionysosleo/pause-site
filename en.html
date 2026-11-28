@@ -1367,6 +1367,9 @@ body:has(.dnav) .dgrid .aside{top:calc(var(--hdh,72px) + 72px)!important}
 .artc h2{font-size:21px;margin:34px 0 10px}.artc p{font-size:16.5px;line-height:1.85;margin:0 0 14px;color:#26313D}
 .artc-ph{position:relative;aspect-ratio:16/8;border-radius:20px;overflow:hidden;margin:0 0 30px}.artc-ph .photo,.artc-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .artc-src{margin-top:34px;padding:18px 20px;background:#F7F8F6;border-radius:14px}.artc-src h2{font-size:14px;margin:0 0 8px}.artc-src ul{margin:0;padding-left:18px;font-size:14px;color:#4A5460}
+.btns{gap:12px 14px}
+.pchips + .btns{margin-top:30px}
+.btns + .muted{margin-top:12px}
 </style>
 <style>/* 영어판: 영어 문장이 한글보다 길어 한 줄 원칙(R6)·기호 정렬(R13)을 지키도록 글자를 조금 줄임 */
 html[lang="en"] .ol,html[lang="en"] .pf{font-size:.86em;letter-spacing:-.01em}
@@ -1439,24 +1442,24 @@ var PH = {
   fWorkshop:{local:'/img/field/tea-workshop.jpg', alt:'A team tea workshop, brewing tea at the table', by:'On site with Yoojin Lee (Bayu)'},
   fLounge:  {local:'/img/field/tea-lounge.jpg', alt:'A tea lounge serving tea on an outdoor terrace', by:'On site with Yoojin Lee (Bayu)'},
   desk:     {id:'1742764915162-20349ae0638f', alt:'A laptop, kettle and teacup on a wooden table', by:'Caroline Badran'},
-  desk2:    {id:'1746792613213-c154e2891449', alt:'A wooden desk with a laptop and a plant', by:'Andrea Stuart'},
-  teaCup:   {id:'1577016029703-cc22a7c0c28c', alt:'A teacup beside a brown teapot', by:'Sergey N'},
-  teaPour:  {id:'1678026557271-a178ec37f844', alt:'Hands pouring tea from a teapot into a cup', by:'Yu'},
-  laugh:    {id:'1572021335469-31706a17aaef', alt:'Four colleagues smiling at a laptop', by:'Jud Mackrill'},
-  team:     {id:'1624555130581-1d9cca783bc0', alt:'A team talking around a table', by:'Memento Media'},
-  laptops:  {id:'1677078610072-7f11ebc4d4d7', alt:'Four people working together on laptops in a meeting room', by:'Paymo'},
+  desk2:     {id:'1591375779766-bf562a2a19c8', alt:'A laptop and a teacup on a wooden desk', by:'Unsplash'},
+  teaCup:    {id:'1558160074-4d7d8bdf4256', alt:'A teapot and cup on a wooden tray', by:'Unsplash'},
+  teaPour:   {id:'1531969179221-3946e6b5a5e7', alt:'A hand pouring tea from a teapot', by:'Unsplash'},
+  laugh:     {id:'1565598571120-4081876df4f7', alt:'Colleagues talking over laptops', by:'Unsplash'},
+  team:      {id:'1565350897149-38dfafa81d83', alt:'A team working together around a table with laptops', by:'Unsplash'},
+  laptops:   {id:'1565598469107-2bd14ae7e7e4', alt:'A hands-on workshop with laptops in front of a screen', by:'Unsplash'},
   cabin:    {id:'1768011850213-0eade0808bc5', alt:'A wooden lodge on a hill under the trees', by:'Nguyễn Hiệp'},
   woods:    {id:'1720555336006-7778af030c5d', alt:'People resting on a bench in the forest', by:'T2 Graphy'},
   forest:   {id:'1718507097319-90a4303b034d', alt:'A house surrounded by forest and garden', by:'Uyen Nguyen Thi Dieu'},
-  notes:    {id:'1759884247134-89b8fc25f726', alt:'A hand putting sticky notes on a wall', by:'Sigmund'},
-  brainstorm:{id:'1758876203195-69a51e4145f0', alt:'Two people sharing ideas in front of a sticky-note wall', by:''},
-  pointNotes:{id:'1758876202507-f789e0ab34e1', alt:'A person pointing at colorful sticky notes on a wall', by:''},
+  notes:     {id:'1758876201787-bd6ad98b7d6c', alt:'A person putting a note on a sticky-note wall', by:'Unsplash'},
+  brainstorm: {id:'1758876022363-542ba727f641', alt:'Two people sharing ideas in front of a sticky-note wall', by:'Unsplash'},
+  pointNotes: {id:'1758876201723-9f050343325c', alt:'A person thinking in front of a sticky-note wall', by:'Unsplash'},
   birch:    {id:'1683099376418-52225aeb60d5', alt:'A path through a birch forest', by:'YANG CHULOH'},
   pine:     {id:'1685092714519-797261b69352', alt:'A pine forest trail', by:'Jisoo Park'},
   sunForest:{id:'1752342625787-7b9e8acd2096', alt:'Sunlight through tall trees', by:'insung yoon'},
-  bookLaptop:{id:'1717768023403-a4ffad3a8eee', alt:'A person sitting with books and a drink in front of a laptop', by:'Ebru Doğan'},
+  bookLaptop: {id:'1703914647827-5e4d2e7d5365', alt:'A glass of tea next to a laptop', by:'Unsplash'},
   teapot:   {id:'1629440404898-4a527437484f', alt:'A brown ceramic teapot on a wooden table', by:'jay huang'},
-  manLaptop:{id:'1573183205228-df337e65dab0', alt:'A person working on a laptop at a table', by:'Miguel Dominguez'}
+  manLaptop: {id:'1634790778908-bdaf7700bf06', alt:'A person studying on a laptop, holding a cup of tea', by:'Unsplash'}
 };
 /* 사진은 사이트 안(img/u/, WebP)에서. 작은 칸은 800px, 큰 칸은 1600px 파일 (원본: Unsplash, 사진가 표기는 PH.by) */
 function src(k, w){ if(PH[k].local) return PH[k].local; return '/img/u/' + k + '-' + ((w || 1200) <= 800 ? 800 : 1600) + '.webp'; }
