@@ -95,7 +95,8 @@
         "min": 20,
         "max": 30,
         "ref": 20
-      }
+      },
+      "quoteOnly": true
     },
     "pkg-before": {
       "name": "패키지 01 · 미리 우리고 오기",

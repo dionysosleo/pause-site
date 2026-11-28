@@ -33,7 +33,7 @@ async function check(c, itemId, list, email) {
 const MSG = { NOT_FOUND: '없는 코드예요.', NOT_STARTED: '아직 쓸 수 없는 코드예요.', ENDED: '기간이 끝난 코드예요.', NOT_FOR_ITEM: '이 상품에는 쓸 수 없는 코드예요.', MIN_AMOUNT: '최소 결제 금액이 모자라요.', SOLD_OUT: '준비한 수량이 모두 사용됐어요.', USED: '이미 사용한 코드예요.' };
 async function quote({ itemId, qty, code, email }) {
   const item = CATALOG[itemId];
-  if (!item || !item.price) return { ok: false, code: 'NOT_READY' };
+  if (!item || !item.price || item.quoteOnly) return { ok: false, code: 'NOT_READY' };   // quoteOnly: 협의 후 견적으로만 (1년 프로그램)
   qty = Number(qty);
   if (!Number.isInteger(qty) || qty < 1 || qty > (item.qtyMax || 1)) return { ok: false, code: 'BAD_QTY' };
   const list = listPrice(item, qty);
