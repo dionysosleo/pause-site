@@ -52,7 +52,8 @@ async function record({ orderId, item, itemId, qty, price, pay, mode, buyer, tok
       item_id: itemId, qty, amount: price.amount, list_amount: price.list, discount: price.discount, coupon_code: price.coupon ? price.coupon.code : null,
       payment_key: pay.paymentKey || null, method: pay.method || null,
       status: waiting ? 'waiting' : 'paid', paid_at: waiting ? null : (pay.approvedAt || new Date().toISOString()), grants_course: item.grants || null, is_test: mode !== 'live',
-      pg_secret: pay.secret || null, source: 'pg', vbank: pay.vbank || null, due_at: pay.vbank && pay.vbank.due || null
+      pg_secret: pay.secret || null, source: 'pg', vbank: pay.vbank || null, due_at: pay.vbank && pay.vbank.due || null,
+      memo: buyer.when ? ('희망 진행 시기: ' + String(buyer.when).replace(/[\r\n]/g, ' ').slice(0, 60)) : null
     };
     const o = await sbInsert('orders', row, 'id');
     if (!o.ok) {

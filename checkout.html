@@ -59,6 +59,7 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
         <label class="f">이름 <span class="req">*</span><input id="nm" autocomplete="name" maxlength="40" required></label>
         <label class="f">이메일 <span class="req">*</span> <span class="mut">(수강·일정 안내와 영수증을 보내 드려요)</span><input id="em" type="email" autocomplete="email" maxlength="100" required></label>
         <label class="f">휴대폰 번호 <span class="req">*</span><input id="ph" type="tel" inputmode="numeric" autocomplete="tel" maxlength="13" placeholder="01012345678" required></label>
+        <label class="f" id="whenWrap" hidden>희망 진행 시기 (선택)<input id="when" maxlength="60" placeholder="예: 2027년 1월 셋째 주, 평일 저녁"><span class="hint" style="display:block;font-size:12.5px;color:#6B727A;margin-top:4px">결제 뒤 담당자가 연락드려 일정을 확정해요.</span></label>
       </form>
     </section>
 
@@ -135,6 +136,7 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
     $('iKv').innerHTML='';kv.forEach(function(x){var a=document.createElement('dt');a.textContent=x[0];var b=document.createElement('dd');b.textContent=x[1];$('iKv').appendChild(a);$('iKv').appendChild(b);});
     $('rfSec').textContent='‘'+item.refund+'’';
     $('coWrap').hidden=!item.company;
+    $('whenWrap').hidden=!item.head;
     var mx=item.qtyMax||1, h=item.head; $('qtyBox').hidden=mx<2;
     $('qLab').textContent=h?'인원':'수량'; $('qMax').textContent=h?'(최대 '+mx+'명)':'(최대 '+mx+')';
     $('qVal').textContent=h?qty+'명':qty; $('sQtyL').textContent=h?'인원':'수량'; $('sQty').textContent=h?qty+'명'+(qty<h.min?' ('+h.min+'명 기준 청구)':''):qty;
@@ -182,7 +184,7 @@ details{font-size:13px;color:var(--mut);margin:-4px 0 6px 30px}details table{bor
     if(!widgets){$('err').textContent='결제 수단을 불러오지 못했어요. 새로고침해 주세요.';return;}
     $('err').textContent='';$('pay').disabled=true;
     if(!price||price.qty!==qty){$('err').textContent='금액을 확인하고 있어요. 잠시 뒤 다시 눌러 주세요.';$('pay').disabled=false;quote();return;}
-    try{sessionStorage.setItem('chai_buyer',JSON.stringify({email:em,name:(co?co+' ':'')+nm,phone:ph}));sessionStorage.setItem('chai_coupon',price.coupon?price.coupon.code:'');}catch(e){}
+    try{sessionStorage.setItem('chai_buyer',JSON.stringify({email:em,name:(co?co+' ':'')+nm,phone:ph,when:(item.head&&$('when').value.trim().slice(0,60))||''}));sessionStorage.setItem('chai_coupon',price.coupon?price.coupon.code:'');}catch(e){}
     widgets.requestPayment({
       orderId:id+'_'+qty+'_'+rid(),
       orderName:(item.name+(item.head?' · '+qty+'명':(qty>1?' × '+qty:''))).slice(0,100),

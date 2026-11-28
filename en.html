@@ -1333,23 +1333,23 @@ details.cu li:first-child{border-top:0}
 @media (max-width:620px){.lv-bar{flex-wrap:nowrap;overflow-x:auto;margin:0 -20px 18px;padding:0 20px;scrollbar-width:none}.lv-bar button{flex:none}}
 .cmp-note{margin:0;font-size:13.5px}
 .cmp-wrap{overflow-x:auto;border:1px solid rgba(38,49,61,.08);border-radius:22px;background:#fff}
-.cmp{width:100%;min-width:1040px;border-collapse:collapse;table-layout:fixed;color:#26313D}
-.cmp th,.cmp td{padding:14px 14px;text-align:center;vertical-align:middle;border-bottom:1px solid rgba(38,49,61,.06)}
-.cmp thead th{padding:16px 12px 18px;vertical-align:top;font-weight:400}
-.cmp thead th:first-child{width:108px}
-.cmp thead th a{color:inherit;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.wcmp{width:100%;min-width:1040px;border-collapse:collapse;table-layout:fixed;color:#26313D}
+.wcmp th,.wcmp td{padding:14px 14px;text-align:center;vertical-align:middle;border-bottom:1px solid rgba(38,49,61,.06)}
+.wcmp thead th{padding:16px 12px 18px;vertical-align:top;font-weight:400}
+.wcmp thead th:first-child{width:108px}
+.wcmp thead th a{color:inherit;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px}
 .cmp-ph{display:block;position:relative;width:100%;aspect-ratio:16/10;border-radius:14px;overflow:hidden;margin-bottom:8px;background:#F1F3F1}
 .cmp-ph .photo,.cmp-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0!important;transition:transform .5s}
-.cmp thead th a:hover .cmp-ph img{transform:scale(1.05)}
+.wcmp thead th a:hover .cmp-ph img{transform:scale(1.05)}
 .cmp-cat{font-size:12px;font-weight:700;color:#5E6F5E}
-.cmp thead b{font-size:16.5px;font-weight:800}
+.wcmp thead b{font-size:16.5px;font-weight:800}
 .cmp-best{font-size:12.5px;color:#4A5460;background:#F4F6F3;border-radius:999px;padding:3px 10px;margin-top:4px}
-.cmp tbody th{font-size:13px;font-weight:700;color:#59616A;white-space:nowrap;text-align:left;background:#FCFCFB;position:sticky;left:0;z-index:1}
+.wcmp tbody th{font-size:13px;font-weight:700;color:#59616A;white-space:nowrap;text-align:left;background:#FCFCFB;position:sticky;left:0;z-index:1}
 .cmp-ic{display:inline-flex;vertical-align:-3px;margin-right:6px}.cmp-ic svg{width:15px;height:15px;fill:none;stroke:#8A9A8A;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.cmp td{font-size:14px;font-weight:600;color:#26313D}
+.wcmp td{font-size:14px;font-weight:600;color:#26313D}
 .cmp-big{display:block;font-size:19px;font-weight:800;letter-spacing:-.01em;font-variant-numeric:lining-nums}
-.cmp td small{display:block;font-size:12.5px;font-weight:500;color:#59616A;margin-top:2px}
-.cmp td .wc-team{justify-content:center}
+.wcmp td small{display:block;font-size:12.5px;font-weight:500;color:#59616A;margin-top:2px}
+.wcmp td .wc-team{justify-content:center}
 .cmp-cost td{background:#FAFBF9}.cmp-cost th{background:#F4F6F3!important}
 .cmp-cost .wc-price{align-items:center}
 .cmp-go td{padding:14px 10px 18px;border-bottom:0}.cmp-go th{border-bottom:0}
@@ -2246,7 +2246,7 @@ function wCompare(){
   var row = function(lbl, ic, f){ return '<tr><th scope="row"><span class="cmp-ic">' + ic + '</span>' + lbl + '</th>' + W.map(function(w){ return '<td>' + f(w) + '</td>'; }).join('') + '</tr>'; };
   return '<section class="section tight cmp-sec"><div class="wrap">' +
     '<div class="shelf-head"><div><p class="eyebrow">Compare</p><h2 class="h2 one">Compare at a glance</h2></div><p class="muted cmp-note">Prices include VAT · for 20 people</p></div>' +
-    '<div class="cmp-wrap"><table class="cmp"><thead><tr><th scope="col"><span class="sr">Items</span></th>' + W.map(function(w){ return '<th scope="col"><a href="#w-' + w.id + '"><span class="cmp-ph">' + ph(w.photos[0], 800) + '</span><span class="cmp-cat">' + esc(WCAT[w.id] || '') + '</span><b>' + esc((PLANS[w.id] || {}).name || w.title) + '</b><span class="cmp-best">' + esc((PLANS[w.id] || {}).best || '') + '</span></a></th>'; }).join('') + '</tr></thead><tbody>' +
+    '<div class="cmp-wrap"><table class="wcmp"><thead><tr><th scope="col"><span class="sr">Items</span></th>' + W.map(function(w){ return '<th scope="col"><a href="#w-' + w.id + '"><span class="cmp-ph">' + ph(w.photos[0], 800) + '</span><span class="cmp-cat">' + esc(WCAT[w.id] || '') + '</span><b>' + esc((PLANS[w.id] || {}).name || w.title) + '</b><span class="cmp-best">' + esc((PLANS[w.id] || {}).best || '') + '</span></a></th>'; }).join('') + '</tr></thead><tbody>' +
       row('Time', WIC.time, function(w){ return '<b class="cmp-big">' + esc(WLEN[w.id] || '') + '</b><small>' + esc(WWHEN[w.id] || '') + '</small>'; }) +
       row('Group size', WIC.people, function(w){ return '<b class="cmp-big">' + esc(w.size.split(' · ')[0]) + '</b>'; }) +
       row('Venue', WIC.when, function(w){ return esc(WPLACE[w.id] || w.place.split(' — ')[0]); }) +
@@ -2342,7 +2342,7 @@ function vProgram(){
   return '<section class="hero lite">' +
     '<div class="hero-copy"><p class="eyebrow">Annual program</p><h1 class="h1 one" style="font-size:clamp(30px,3.2vw,46px)">We partner with one company for a full year</h1>' +
     '<p class="lead ol">Not a one-off lecture — until AI becomes the way the team works.</p>' + pathChips([['1','Diagnose','Start of quarter'],['2','Build','Team agents'],['3','Demo','Share internally'],['4','Results','Quarterly report']]) + '' +
-    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="#contact?type=annual">Quote & 1-year program inquiry</a><a class="btn btn-line" href="' + buyHref('annual') + '">Pay by card · ' + priceTxt(sale('annual')) + '</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">Once a quarter · ' + esc(headLine(sale('annual'))) + ' · VAT incl.</p>' : '<a class="btn btn-lime" href="#contact?type=annual">One-year program consultation</a>') + '<a class="btn btn-line" href="#proposal">Get the brochure</a></div></div>' +
+    '<div class="btns">' + (sale('annual') ? '<a class="btn btn-lime" href="#contact?type=annual">Quote & 1-year program inquiry</a><a class="btn btn-line" href="' + buyHref('annual') + '">Pay by card · ' + priceTxt(sale('annual')) + '</a><a class="btn btn-line" href="#proposal">Get the brochure</a><p class="muted" style="flex-basis:100%;margin:4px 0 0;font-size:14px">Once a quarter · ' + esc(headLine(sale('annual'))) + ' · VAT incl.</p>' : '<a class="btn btn-lime" href="#contact?type=annual">One-year program consultation</a><a class="btn btn-line" href="#proposal">Get the brochure</a>') + '</div></div>' +
     ph('team', 1600, '', true) +
   '</section>' +
   '<section class="section paper"><div class="wrap">' +
@@ -2622,11 +2622,11 @@ function vBrief(){
     '<h2 class="bh">2. How we measure results</h2><div class="tbl-wrap"><table class="cmp bt"><thead><tr><th scope="col">When</th><th scope="col">Metric</th></tr></thead><tbody>' +
       '<tr><td>On the day</td><td>Share of participants who completed an agent</td></tr><tr><td>30 days</td><td>Share still using the agent they built (survey)</td></tr><tr><td>60–90 days</td><td>Work metric agreed at the start (e.g., time spent writing the weekly report)</td></tr>' +
     '</tbody></table></div>' +
-    '<h2 class="bh">3. Format and fee structure</h2><div class="tbl-wrap"><table class="cmp bt"><thead><tr><th scope="col"></th>' + W.map(function(w){ return '<th scope="col">' + esc(w.title) + '</th>'; }).join('') + '</tr></thead><tbody>' +
-      '<tr><td>Time</td>' + W.map(function(w){ return '<td>' + esc(w.hours) + '</td>'; }).join('') + '</tr>' +
-      '<tr><td>Group size</td>' + W.map(function(w){ return '<td>' + esc(w.size) + '</td>'; }).join('') + '</tr>' +
-      '<tr><td>Included in the fee</td><td colspan="2">Three hosts, pre-check and pre-session videos, practice materials, tea breaks, 24-hour report and 48-hour follow-up. Quoted by group size and venue</td></tr>' +
-    '</tbody></table></div>' +
+    '<h2 class="bh">3. Format and fee structure</h2><div class="tbl-wrap"><table class="cmp bt"><thead><tr><th scope="col"></th>' + W.map(function(w){ return '<th scope="col">' + esc((PLANS[w.id] || {}).name || w.title) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      '<tr><td>Time</td>' + W.map(function(w){ return '<td>' + esc(WLEN[w.id] || w.hours) + '<br><span class="muted">' + esc(WWHEN[w.id] || '') + '</span></td>'; }).join('') + '</tr>' +
+      '<tr><td>Group size</td>' + W.map(function(w){ return '<td>' + esc(w.size.split(' · ')[0]) + '</td>'; }).join('') + '</tr>' +
+      '<tr><td>Fee</td>' + W.map(function(w){ var it = sale(w.id); return '<td>' + (w.quote || !it ? 'Custom quote' : esc(priceTxt(it)) + '<br><span class="muted">' + (it.head ? 'For 20 people' : 'Per person') + '</span>') + '</td>'; }).join('') + '</tr>' +
+    '</tbody></table></div><p class="muted" style="font-size:14px;margin:10px 0 0">Included: facilitation, pre-session survey and prep videos, practice materials, tea break, 24-hour report and 48-hour follow-up. Prices include VAT; the final quote depends on group size and venue.</p>' +
     '<h2 class="bh">4. How we reduce risk</h2><ul class="checks"><li>Security rules and external AI access checked three days before the session. If blocked, we use public material and separate practice accounts</li><li>Real company material is used only after a security review</li><li>One tool only, to reduce confusion on site</li></ul>' +
     '<h2 class="bh">5. Who leads it</h2><ul class="checks">' + ['lee','han','jun'].map(function(k){ var t = T[k]; return '<li><b>' + t.nm + '</b> — ' + esc(t.line) + '. ' + esc(t.proof) + '</li>'; }).join('') + '</ul>' +
     '<h2 class="bh">6. Next steps</h2><p style="margin:0;line-height:1.8">Workshop → <b>90-day follow-up</b> (2–3 monthly check-ins) → <b>Four-season program</b> (annual · quarterly in person + year-end results report). Decide on the next step after seeing each step’s results.</p>' +
