@@ -9,8 +9,9 @@ const BOT = /kakaotalk-scrap|facebookexternalhit|facebot|twitterbot|slackbot|lin
 const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 export default function middleware(request) {
-  if (!BOT.test(request.headers.get('user-agent') || '')) return;
   const url = new URL(request.url);
+  /* ?_og=1 : 사람이 미리보기 결과를 확인할 때 */
+  if (!BOT.test(request.headers.get('user-agent') || '') && url.searchParams.get('_og') !== '1') return;
   const en = url.pathname.startsWith('/en/');
   const key = en ? url.pathname.slice(3) : url.pathname;
   const p = (MAP[en ? 'en' : 'ko'] || {})[key];
