@@ -55,7 +55,7 @@ function courseOpen(p) {
 }
 /* 4-1) 문의 접수 확인 (워크샵 문의·제안서 요청) — 무엇을 받았는지와 다음 단계 */
 function leadAck(p) {
-  const rows = [['접수', p.kind], ['회사', p.company || '-'], ['프로그램', p.program || '-'], ['인원', p.size || '-'], ['희망 시기', p.when || '-']].concat(p.estimate ? [['예상 금액', p.estimate + ' (부가세 포함)']] : []);
+  const rows = [['접수', p.kind], ['회사', p.company || '-'], ['프로그램', p.program || '-'], ['인원', p.size || '-'], ['희망 시기', p.when || '-']];
   const body = '<p style="margin:0">' + (p.name ? p.name + ' 님, ' : '') + 'CHA&amp;I에 문의해 주셔서 고마워요. 아래 내용으로 받았어요.</p>';
   const next = ['영업일 기준 1~2일 안에 담당자가 메일이나 전화로 연락드려요.', '일정·장소·인원을 확인한 뒤 최종 견적서를 보내 드려요.', '확정되면 출강 3일 전에 사전 진단 폼을 따로 보내 드려요.'];
   const foot = '<p style="margin:16px 0 6px"><b>다음 단계</b></p><ol style="margin:0;padding-left:18px">' + next.map(x => '<li>' + x + '</li>').join('') + '</ol>' +

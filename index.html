@@ -960,7 +960,7 @@ html{font-variant-numeric:lining-nums}
 img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
 .photo,.ph{-webkit-touch-callout:none}
 html.veil body{filter:blur(18px)!important;transition:none}
-@media print{html:not(.qprint) body *{visibility:hidden!important}html:not(.qprint) body::after{content:'CHA&I · chaand.ai — 인쇄용 자료는 소개서 PDF를 받아 주세요.';visibility:visible;position:fixed;inset:40% 0 auto;text-align:center;font-size:16px;color:#26313D}}
+@media print{body *{visibility:hidden!important}body::after{content:'CHA&I · chaand.ai — 인쇄용 자료는 소개서 PDF를 받아 주세요.';visibility:visible;position:fixed;inset:40% 0 auto;text-align:center;font-size:16px;color:#26313D}}
 /* 글자 선택: 운영자만 */
 html:not(.owner) body{-webkit-user-select:none;user-select:none}
 html:not(.owner) input,html:not(.owner) textarea,html:not(.owner) select{-webkit-user-select:text;user-select:text}
@@ -1331,12 +1331,6 @@ details.cu li:first-child{border-top:0}
 .olist .wcard2[hidden]{display:none}
 @media (max-width:760px){.sticky-cta{display:none!important}}
 @media (max-width:620px){.lv-bar{flex-wrap:nowrap;overflow-x:auto;margin:0 -20px 18px;padding:0 20px;scrollbar-width:none}.lv-bar button{flex:none}}
-.qest:empty{display:none}
-.qe{display:flex;flex-direction:column;gap:4px;padding:18px 20px;border-radius:16px;background:#F4F6F3;border:1px solid rgba(102,120,102,.25)}
-.qe-l{font-size:12.5px;font-weight:700;color:#5E6F5E}
-.qe b{font-size:24px;font-weight:800;color:#26313D;font-variant-numeric:lining-nums;letter-spacing:-.01em}
-.qe small{font-size:13px;color:#59616A}
-.qe-dim b{font-size:17px;color:#59616A}
 .cmp-note{margin:0;font-size:13.5px}
 .cmp-wrap{overflow-x:auto;border:1px solid rgba(38,49,61,.08);border-radius:22px;background:#fff}
 .cmp{width:100%;min-width:1040px;border-collapse:collapse;table-layout:fixed;color:#26313D}
@@ -1368,21 +1362,6 @@ details.cu li:first-child{border-top:0}
 .case blockquote{margin:16px 0 0;padding:14px 16px;background:#F4F6F3;border-radius:12px;font-size:15px}.case cite{display:block;margin-top:6px;font-style:normal;font-size:13px;color:#59616A}
 @media (max-width:760px){.cases{grid-template-columns:minmax(0,1fr)}}
 body:has(.dnav) .dgrid .aside{top:calc(var(--hdh,72px) + 72px)!important}
-.qe-pdf{align-self:flex-start;margin-top:8px}
-.qd{position:fixed;inset:0;z-index:90;background:rgba(30,36,44,.55);overflow:auto;padding:24px 16px 48px}
-.qd-bar{max-width:794px;margin:0 auto 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.qd-bar .muted{color:#E9ECEF;font-size:13px}
-.qd-page{max-width:794px;margin:0 auto;background:#fff;color:#1F2730;padding:48px 52px;border-radius:6px;font-size:14px;line-height:1.6}
-.qd-page header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #1F2730;padding-bottom:16px}
-.qd-page h1{margin:0;font-size:30px;letter-spacing:.2em}
-.qd-page header dl{display:grid;grid-template-columns:auto auto;gap:2px 14px;margin:0;font-size:13px}.qd-page header dt{color:#59616A}.qd-page header dd{margin:0;text-align:right}
-.qd-two{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:22px 0}.qd-page h2{font-size:12.5px;color:#59616A;margin:0 0 6px;letter-spacing:.04em}
-.qd-two p{margin:0}.qd-todo{color:#A0522D}
-.qd-sum{font-size:16px;background:#F4F6F3;border-radius:8px;padding:14px 18px;margin:0 0 18px}.qd-sum b{font-size:22px;margin-left:8px}.qd-sum span{color:#59616A;font-size:13px}
-.qd-page table{width:100%;border-collapse:collapse}.qd-page th,.qd-page td{padding:10px 8px;border-bottom:1px solid #DDE1E4;text-align:right}.qd-page th:first-child,.qd-page td:first-child{text-align:left}
-.qd-page thead th{background:#F7F8F6;font-size:13px}.qd-page tfoot td{color:#4A5460}.qd-page .qd-t td{font-weight:800;color:#1F2730;border-bottom:2px solid #1F2730}
-.qd-note{margin-top:22px}.qd-note ul{margin:0;padding-left:18px}.qd-page footer{margin-top:36px;font-size:12px;color:#59616A;text-align:right}
-@media print{html.qprint body>*:not(#qdoc){display:none!important}html.qprint #qdoc,html.qprint #qdoc *{visibility:visible!important}html.qprint .qd{position:static;background:none;padding:0;overflow:visible}html.qprint .qd-bar{display:none}html.qprint .qd-page{max-width:none;padding:0;border-radius:0}@page{size:A4;margin:16mm}}
-@media (max-width:600px){.qd-page{padding:24px 18px}.qd-two{grid-template-columns:1fr}.qd-page header{flex-direction:column;gap:10px}}
 .nlist{grid-template-columns:repeat(2,minmax(0,1fr))!important}.nl-lead{margin:6px 0 0;font-size:14.5px;color:#4A5460;line-height:1.6}
 @media (max-width:620px){.nlist{grid-template-columns:minmax(0,1fr)!important}}
 .artc h2{font-size:21px;margin:34px 0 10px}.artc p{font-size:16.5px;line-height:1.85;margin:0 0 14px;color:#26313D}
@@ -1687,7 +1666,7 @@ var FAQ_CORP = [
   ['진행 사진을 사내에 써도 되나요?','네. 참가자 동의를 받은 사진을 골라 보내 드려요.'],
   ['강연과 워크샵을 함께 할 수 있나요?','네. 강연으로 전체의 문을 열고, 팀 대표들이 워크샵을 이어 받는 구성이 100명 이상 조직에 잘 맞아요.'],
   ['제안서를 받아 볼 수 있나요?','‘제안서 받기’에서 담당자 정보를 남기면 바로 받아 보실 수 있어요. 문의 폼에서도 함께 신청할 수 있어요.'],
-  ['내부 결재용 견적서를 바로 받을 수 있나요?','네. 워크샵 문의 화면에서 프로그램과 인원을 고르면 예상 금액이 나오고, ‘견적서 PDF 받기’로 공급가액·부가세가 나뉜 견적서를 바로 내려받을 수 있어요. 일정·장소가 정해지면 최종 견적서를 다시 드려요.'],
+  ['내부 결재용 견적서를 받을 수 있나요?','네. 문의를 남기면 인원·일정·장소를 확인한 뒤 공급가액과 부가세를 나눈 견적서를 보내 드려요.'],
   ['결제는 어떻게 하나요? 세금계산서도 되나요?','사이트에서 카드나 가상계좌로 결제할 수 있고, 기업은 견적서·계약서에서 정한 기한에 세금계산서를 받은 뒤 계좌이체로 낼 수도 있어요. 금액은 모두 부가세 포함으로 표시해요.'],
   ['최종 인원은 언제까지 알려 주면 되나요?','진행일 3일 전까지 알려 주세요. 차·다과와 준비물을 그 인원에 맞춰 준비해요.'],
   ['일정을 바꾸거나 취소하면요?','진행일 8일 전까지는 한 번 수수료 없이 일정을 바꿀 수 있어요. 취소 수수료는 남은 날짜에 따라 달라지고, 사이트 아래 ‘취소·환불정책’에 구간별로 적어 두었어요.'],
@@ -3308,39 +3287,6 @@ function bindProposal(){
 }
 
 /* ===== 워크샵 문의 (사전 진단 겸용) ===== */
-/* 견적서 (예상) — 인쇄 창에서 'PDF로 저장'. 금액은 부가세 포함 판매가를 공급가액·부가세로 나눠 보여 줌 */
-function quoteDoc(f){
-  var id = f.elements.type.value, n = f.elements.size.value, e = estimate(id, n), it = sale(id), w = wById(id);
-  if(!e || e.quote || e.over || !n || !it){ toast('프로그램과 인원을 먼저 골라 주세요'); return; }
-  var co = (f.elements.company.value || '').trim(); if(!co){ toast('회사명을 먼저 적어 주세요'); f.elements.company.focus(); return; }
-  var today = new Date(), d2 = function(x){ return x.getFullYear() + '. ' + (x.getMonth() + 1) + '. ' + x.getDate() + '.'; };
-  var until = new Date(today.getTime() + 30 * 864e5), no = 'Q' + today.toISOString().slice(0, 10).replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
-  var name = (w ? w.title : it.name), lines = e.each ? [[name + ' · 1인 참가', won(e.each), e.n + '명', won(e.total)]]
-    : [[name + ' · 강사 진행비', won(it.head.base), '1식', won(it.head.base)], ['참가 인원' + (e.n < e.min ? ' (최소 ' + e.min + '명 기준)' : ''), won(it.head.per), e.bill + '명', won(it.head.per * e.bill)]];
-  var supply = Math.round(e.total / 1.1), vat = e.total - supply;
-  var op = OPERATOR, biz = '<b>' + esc(bizName()) + '</b>' + (op.regNo ? '<br>사업자등록번호 ' + esc(op.regNo) : '<br><span class="qd-todo">사업자등록번호 (등록 후 표시)</span>') + (op.ceo ? '<br>대표 ' + esc(op.ceo) : '') + (op.address ? '<br>' + esc(op.address) : '') + '<br>' + esc(op.email) + (op.phone ? ' · ' + esc(op.phone) : '');
-  var html = '<div class="qd" id="qdoc"><div class="qd-bar"><button type="button" class="btn btn-lime btn-sm" data-qprint>PDF로 저장 · 인쇄</button><button type="button" class="btn btn-line btn-sm" data-qclose>닫기</button><span class="muted">인쇄 창에서 대상(프린터)을 ‘PDF로 저장’으로 고르면 파일로 받을 수 있어요.</span></div>' +
-    '<article class="qd-page"><header><h1>견적서</h1><dl><dt>견적 번호</dt><dd>' + no + '</dd><dt>견적일</dt><dd>' + d2(today) + '</dd><dt>유효 기간</dt><dd>' + d2(until) + '까지</dd></dl></header>' +
-    '<div class="qd-two"><section><h2>받는 곳</h2><p><b>' + esc(co) + '</b> 귀중' + (f.elements.name.value ? '<br>담당 ' + esc(f.elements.name.value) + ' 님' : '') + '</p></section><section><h2>보내는 곳</h2><p>' + biz + '</p></section></div>' +
-    '<p class="qd-sum">합계 금액 <b>' + won(e.total) + '</b> <span>(부가세 포함)</span></p>' +
-    '<table><thead><tr><th>항목</th><th>단가</th><th>수량</th><th>금액</th></tr></thead><tbody>' + lines.map(function(l){ return '<tr><td>' + esc(l[0]) + '</td><td>' + l[1] + '</td><td>' + l[2] + '</td><td>' + l[3] + '</td></tr>'; }).join('') + '</tbody>' +
-    '<tfoot><tr><td colspan="3">공급가액</td><td>' + won(supply) + '</td></tr><tr><td colspan="3">부가세</td><td>' + won(vat) + '</td></tr><tr class="qd-t"><td colspan="3">합계</td><td>' + won(e.total) + '</td></tr></tfoot></table>' +
-    '<section class="qd-note"><h2>안내</h2><ul>' +
-      '<li>프로그램: ' + esc(name) + (w ? ' (' + esc(w.hours) + ')' : '') + '</li>' +
-      (f.elements.when.value ? '<li>희망 시기: ' + esc(f.elements.when.value) + '</li>' : '') +
-      (f.elements.place.value ? '<li>장소: ' + esc(f.elements.place.value) + '</li>' : '') +
-      '<li>이 견적은 사이트에서 계산한 예상 금액이에요. 일정·장소·인원을 확인한 뒤 최종 견적서를 다시 드려요.</li>' +
-      (it.company ? '<li>처음 함께하는 회사는 첫 회 10% 할인을 상담 시 적용해요 (위 금액에는 반영 전).</li>' : '') +
-      '<li>외부 장소 대관비·이동 숙박비가 생기면 따로 안내해요.</li>' +
-    '</ul></section><footer>CHA&amp;I · www.chaand.ai</footer></article></div>';
-  var old = $('#qdoc'); if(old) old.remove();
-  document.body.insertAdjacentHTML('beforeend', html);
-  var q = $('#qdoc');
-  q.querySelector('[data-qclose]').onclick = function(){ q.remove(); };
-  q.querySelector('[data-qprint]').onclick = function(){ document.documentElement.classList.add('qprint'); track('quote_pdf', id); window.print(); };
-  q.querySelector('[data-qclose]').focus();
-}
-window.addEventListener('afterprint', function(){ document.documentElement.classList.remove('qprint'); });
 /* 예상 금액 — 결제 화면과 같은 계산식(강사 진행비 + 1인 금액 × 인원, 최소 인원 기준) */
 function estimate(id, n){
   var w = wById(id), it = sale(id);
@@ -3354,15 +3300,6 @@ function estimate(id, n){
   }
   return {total: it.price * n, n:n, each:it.price};
 }
-function estHtml(e, nGiven){
-  if(!e) return '';
-  if(e.quote) return '<div class="qe"><span class="qe-l">예상 금액</span><b>상담 후 견적</b><small>인원·방식·장소에 맞춰 따로 견적을 드려요</small></div>';
-  if(!nGiven) return '<div class="qe qe-dim"><span class="qe-l">예상 금액</span><b>인원을 넣어 주세요</b><small>넣는 순간 바로 계산돼요</small></div>';
-  if(e.over) return '<div class="qe"><span class="qe-l">예상 금액</span><b>상담 후 견적</b><small>' + e.max + '명이 넘으면 진행자를 더해 따로 맞춰 드려요</small></div>';
-  return '<div class="qe"><span class="qe-l">예상 금액 · 부가세 포함</span><b>' + won(e.total) + '</b><small>' +
-    (e.each ? '1인 ' + won(e.each) + ' × ' + e.n + '명' : e.bill + '명 기준' + (e.n < e.min ? ' (' + e.min + '명보다 적어도 ' + e.min + '명 기준)' : '')) +
-    (e.company ? ' · 처음 함께하는 회사는 첫 회 10% 할인 (상담 시 적용)' : '') + '</small><small>정확한 금액은 일정·장소를 확인한 뒤 견적서로 드려요.</small><button type="button" class="btn btn-line btn-sm qe-pdf" data-qdoc>견적서 PDF 받기</button></div>';
-}
 function vContact(q){
   var type = (q.match(/type=([^&]+)/) || [])[1] || '';
   var L = savedLead() || {};
@@ -3371,7 +3308,7 @@ function vContact(q){
   return '<section class="ct-hero">' + ph('teapot', 1800, '', true) + '<div class="wrap"><p class="eyebrow" style="color:var(--lime)">Let&#39;s have tea</p><p class="h2 one" style="color:#fff">차 한 잔 하면서 이야기 나눠요.</p></div></section>' +
   '<section class="section tight"><div class="wrap" style="max-width:880px">' +
     '<p class="eyebrow">Contact</p><h1 class="h1" style="font-size:clamp(32px,4.6vw,52px)">워크샵 문의</h1>' +
-    '<p class="lead" style="margin:16px 0 12px">프로그램과 인원을 고르면 예상 금액이 바로 나와요. 나머지는 아는 만큼만 적어 주세요. 확인하는 대로 연락드리고, 확정되면 출강 3일 전에 사전 진단 폼을 따로 보내 드려요.</p>' +
+    '<p class="lead" style="margin:16px 0 12px">아는 만큼만 적어 주세요. 확인하는 대로 연락드리고, 확정되면 출강 3일 전에 사전 진단 폼을 따로 보내 드려요.</p>' +
     '<p style="margin:0 0 32px"><a class="lnk" href="#proposal">제안서만 먼저 받고 싶다면 → 제안서 받기</a></p>' +
     '<form class="form" data-form="contact" novalidate>' +
       '<label class="field">회사명 *<input name="company" required autocomplete="organization"' + v('company') + '><span class="err">회사명을 입력해 주세요</span></label>' +
@@ -3382,7 +3319,6 @@ function vContact(q){
       '<label class="field">예상 인원<input name="size" type="number" min="1" max="400" inputmode="numeric" placeholder="예: 25"></label>' +
       '<label class="field">희망 시기<input name="when" placeholder="예: 2027년 1월 중"></label>' +
       '<label class="field full">장소<select name="place"><option value="">아직 모르겠어요</option><option>우리 회사 공간에서</option><option>외부 장소를 연결해 주세요</option></select></label>' +
-      '<div class="full qest" id="qest" aria-live="polite"></div>' +
       '<fieldset class="field full" style="border:0;padding:0;margin:0"><legend style="margin-bottom:8px">참가자 직무 (여러 개 선택)</legend><div class="chips">' + ['기획·PM','마케팅','영업·CS','HR','재무·총무','개발','경영진'].map(function(x){ return '<label><input type="checkbox" name="role" value="' + x + '">' + x + '</label>'; }).join('') + '</div></fieldset>' +
       '<label class="field full">외부 AI 서비스(Claude 등) 사내 접속<select name="access"><option value="">잘 모르겠어요</option><option>가능해요</option><option>막혀 있어요</option><option>일부만 가능해요</option></select></label>' +
       '<label class="field full">하고 싶은 이야기<textarea name="msg" placeholder="교육 목적, 예산 범위, 리트리트 희망 지역 등"></textarea><small class="hint">건강 정보, 주민등록번호 같은 민감한 정보는 적지 말아 주세요. 차·다과 관련 유의 사항은 일정이 확정된 뒤 따로 여쭤볼게요.</small></label>' +
@@ -3394,16 +3330,13 @@ function vContact(q){
 }
 function bindContact(){
   var f = $('form[data-form="contact"]');
-  var qe = $('#qest'), upd = function(){ var n = f.elements.size.value; qe.innerHTML = estHtml(estimate(f.elements.type.value, n), !!n); };
-  f.elements.type.addEventListener('change', upd); f.elements.size.addEventListener('input', upd); upd();
-  qe.addEventListener('click', function(e){ if(e.target.closest('[data-qdoc]')) quoteDoc(f); });
   bindForm(f, function(){
     var d = new FormData(f), ts = f.elements.type;
     var data = {_item:(f.elements.type.value || ''), kind:'워크샵 문의', company:d.get('company'), name:d.get('name'), email:d.get('email'), phone:d.get('phone') || '', program:ts.options[ts.selectedIndex].text, size:d.get('size') ? d.get('size') + '명' : '', when:d.get('when') || '', place:d.get('place') || '', estimate:(function(){ var e = estimate(d.get('type'), d.get('size')); return !e ? '' : e.quote || e.over ? '상담 후 견적' : d.get('size') ? won(e.total) : ''; })(), roles:d.getAll('role').join(', '), access:d.get('access') || '모름', proposal:d.get('proposal') ? '예' : '아니요', msg:d.get('msg') || ''};
     sendLead(data).then(function(sent){
       var withP = data.proposal === '예';
       if(sent){ openDialog('<h2>문의를 받았어요</h2><p style="margin:0">' + esc(data.email) + '로 확인하는 대로 연락드릴게요.</p>' + (withP ? proposalBox() : '') + '<button type="button" class="btn btn-line" data-close>닫기</button>'); return; }
-      var txt = '[CHA&I 워크샵 문의]\n회사: ' + data.company + '\n담당자: ' + data.name + '\n이메일: ' + data.email + '\n연락처: ' + (data.phone || '-') + '\n프로그램: ' + data.program + '\n인원: ' + (data.size || '-') + '\n시기: ' + (data.when || '-') + '\n장소: ' + (data.place || '-') + '\n예상 금액: ' + (data.estimate || '-') + '\n직무: ' + (data.roles || '-') + '\nAI 접속: ' + data.access + '\n제안서 필요: ' + data.proposal + '\n내용: ' + (data.msg || '-');
+      var txt = '[CHA&I 워크샵 문의]\n회사: ' + data.company + '\n담당자: ' + data.name + '\n이메일: ' + data.email + '\n연락처: ' + (data.phone || '-') + '\n프로그램: ' + data.program + '\n인원: ' + (data.size || '-') + '\n시기: ' + (data.when || '-') + '\n장소: ' + (data.place || '-') + '\n직무: ' + (data.roles || '-') + '\nAI 접속: ' + data.access + '\n제안서 필요: ' + data.proposal + '\n내용: ' + (data.msg || '-');
       copyDialog('문의 내용이 준비됐어요', txt, withP && LEAD_CONFIG.proposalUrl ? '<div>' + proposalBox() + '</div>' : '');
     });
   });
