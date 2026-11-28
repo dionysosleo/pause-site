@@ -3,6 +3,7 @@
 name: photos
 on:
   push:
+    branches: [programs-v1]
     paths: ['.github/photos.txt']
   workflow_dispatch:
 permissions:
@@ -21,6 +22,7 @@ jobs:
           while read -r key id; do
             [ -z "$key" ] && continue
             for w in 800 1600; do
+              [ -f "img/u/${key}-${w}.webp" ] && continue   # 이미 있으면 건너뜀 (손으로 줄인 파일을 덮지 않게)
               curl -sfL --retry 3 -o /tmp/p.jpg "https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80&fm=jpg"
               cwebp -quiet -q 72 /tmp/p.jpg -o "img/u/${key}-${w}.webp"
             done
