@@ -549,7 +549,7 @@ var LST={new:['새 문의','red'],talking:['상담 중','amber'],proposal:['견�
 var LKEY={program:'프로그램',size:'인원',when:'희망 시기',roles:'직무',access:'AI 접속',proposal:'제안서',role:'부서·직책',course:'관심 강의',ask:'궁금한 점',job:'하는 일',level:'AI 경험',slot:'가능 시간',plan:'형태',pay:'결제·증빙',pkg:'패키지',place:'장소',msg:'내용',group:'실습 묶음',tasks:'지난주 한 일',rep:'반복 업무(시간/주)',ontime:'정시 퇴근(일/5)',after:'퇴근 후 확인(번/일)',weekend:'주말 근무(시간)',burden:'AI로 일 늘었다(1~5)',real:'실제 자료'};
 V.leads=function(m,pre){
   m.innerHTML='<h1>문의 접수함</h1><p class="sub">사이트 문의·제안서 요청·오픈 알림·사전 진단이 여기와 구글 시트에 같이 들어와요. 상태를 바꾸면 시트의 \'처리 상태\'도 같이 바뀌어요. 접수 후 1년이 지나면 둘 다 자동으로 지워져요.</p>'+
-    '<div class="bar"><input type="search" id="lq" placeholder="회사, 이름, 이메일, 휴대폰, 메모"><select id="lsel"><option value="">전체 상태</option>'+Object.keys(LST).map(function(k){return '<option value="'+k+'">'+LST[k][0]+'</option>';}).join('')+'</select><select id="lk"><option value="">전체 종류</option></select></div><div id="lsum" class="todo-strip"></div><div id="ll"></div>';
+    '<div class="bar"><input type="search" id="lq" placeholder="회사, 이름, 이메일, 휴대폰, 메모"><select id="lsel"><option value="">전체 상태</option>'+Object.keys(LST).map(function(k){return '<option value="'+k+'">'+LST[k][0]+'</option>';}).join('')+'</select><select id="lk"><option value="">전체 종류</option></select>'+rangeBox('ld')+'</div><div id="lsum" class="todo-strip"></div><div id="ll"></div>';
   if(pre)$('#lsel').value=pre;
   var load=function(){api('leads',Object.assign({q:$('#lq').value,status:$('#lsel').value,kind:$('#lk').value},rangeVal('ld'))).then(function(d){
     var ks=$('#lk'),cur=ks.value;ks.innerHTML='<option value="">전체 종류</option>'+d.kinds.map(function(k){return '<option'+(k===cur?' selected':'')+'>'+esc(k)+'</option>';}).join('');
