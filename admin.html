@@ -56,6 +56,7 @@ dialog h3{margin:0 0 14px;font-size:18px}
 .mtabs{display:none}
 .dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}.dhead .sub{margin:0}
 .dctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.dctl .ck{display:flex;gap:6px;align-items:center;font-size:14px;color:var(--mut)}
+.fn{display:grid;gap:8px;margin-top:12px}.fn-r{display:grid;grid-template-columns:130px 1fr 60px;align-items:center;gap:10px;font-size:13.5px}.fn-r i{height:10px;background:var(--soft);border-radius:6px;overflow:hidden}.fn-r b{display:block;height:100%;background:#667866;border-radius:6px}.fn-r em{font-style:normal;font-weight:700;text-align:right}
 .seg{display:inline-flex;background:var(--soft);border-radius:999px;padding:3px}.seg button{border:0;background:none;height:32px;min-width:44px;padding:0 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--mut);cursor:pointer}.seg button[aria-selected=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .todo-strip{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.todo-strip a{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;background:#FDECEA;color:var(--red);text-decoration:none;font-size:14px;font-weight:600}.todo-strip a.amb{background:#FFF4DB;color:var(--amber)}.sel{height:38px;border:1px solid var(--line);border-radius:999px;background:#fff;padding:0 12px;font-weight:600;font-size:14px}.todo-strip.ok{color:var(--sage);font-size:14px;font-weight:600}
 .brief{margin:0 0 16px;border-color:#D7DED9;background:linear-gradient(180deg,#F7FAF8,#fff)}.bf-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.bf-k{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--sage)}.bf-d{margin:2px 0 0;font-size:18px}.bf-nav{display:flex;gap:6px;align-items:center}
@@ -230,6 +231,18 @@ function listBars(rows,fmt){var mx=Math.max.apply(null,rows.map(function(r){retu
 
 /* 데일리 브리핑 (대시보드 맨 위): 기본은 어제 하루. ◀ ▶ 로 날짜 이동, '오늘'은 지금까지 실시간 */
 var BRF={day:null,cache:{}};
+function funnelLoad(host){if(!host)return;var days=FUN.days;host.innerHTML='<p class="muted small" style="margin:0">전환 데이터를 불러오는 중…</p>';
+  api('funnel',{days:days}).then(function(d){if(!d||!d.ok){host.innerHTML='<p class="muted small" style="margin:0">전환 데이터를 불러오지 못했어요.</p>';return;}
+    var b=d.by,st=[['quote_click','견적 버튼 클릭'],['lead_submit','문의 제출'],['proposal_submit','제안서 요청'],['buy_click','결제 버튼 클릭'],['checkout_view','결제 화면 진입'],['pay_done','결제 완료']];
+    var mx=Math.max.apply(null,st.map(function(x){return b[x[0]]||0;}).concat([1]));
+    var it=Object.keys(d.items).sort(function(x,y){return (d.items[y].quote+d.items[y].buy)-(d.items[x].quote+d.items[x].buy);}).slice(0,8);
+    host.innerHTML='<div class="ch"><div><h3>전환 흐름</h3><p class="small muted">최근 '+days+'일 · 익명 집계(개인정보 없음) · 방문자 수는 Vercel 대시보드 Analytics</p></div><div class="seg">'+[7,30,90].map(function(n){return '<button aria-selected="'+(n===days)+'" data-fd="'+n+'">'+n+'일</button>';}).join('')+'</div></div>'+
+      '<div class="fn">'+st.map(function(x){var v=b[x[0]]||0;return '<div class="fn-r"><span>'+x[1]+'</span><i><b style="width:'+(v/mx*100).toFixed(1)+'%"></b></i><em>'+v.toLocaleString('ko-KR')+'</em></div>';}).join('')+'</div>'+
+      (it.length?'<h4>상품별 클릭</h4><table><thead><tr><th>상품</th><th>견적</th><th>결제</th></tr></thead><tbody>'+it.map(function(k){return '<tr><td>'+esc(k)+'</td><td>'+d.items[k].quote+'</td><td>'+d.items[k].buy+'</td></tr>';}).join('')+'</tbody></table>':'<p class="small muted" style="margin:10px 0 0">아직 쌓인 클릭이 없어요.</p>');
+    host.querySelectorAll('[data-fd]').forEach(function(x){x.onclick=function(){FUN.days=+x.getAttribute('data-fd');funnelLoad(host);};});
+  });
+}
+var FUN={days:30};
 function briefLoad(host,fresh){if(!host)return;var key=BRF.day||'_';
   var draw=function(d){var b=d.brief,today=d.today,day=b.day,prev=new Date(Date.parse(day+'T00:00:00Z')-864e5).toISOString().slice(0,10),next=new Date(Date.parse(day+'T00:00:00Z')+864e5).toISOString().slice(0,10);
     var wd='일월화수목금토'[new Date(day+'T00:00:00Z').getUTCDay()];
@@ -272,6 +285,7 @@ V.home=function(m){
       '<div class="kpis">'+kpi('net',c.net)+kpi('gross',c.gross)+kpi('orders',c.orders)+kpi('aov',c.aov)+kpi('refund',c.refund,true,c.gross?'환불률 '+(c.refund/c.gross*100).toFixed(1)+'%':'')+kpi('signup',c.signup)+'</div>'+
       '<section class="box cbox"><div class="ch"><div><h3>'+mk[0]+' 추이</h3><p class="small muted">'+mk[1]+' · 위 카드를 누르면 지표가 바뀌어요</p></div><b class="tot">'+fmtM(c[DASH.metric],mk[2])+'</b></div><div class="chart" id="cMain"></div></section>'+
       '<section class="box cbox"><div class="ch"><div><h3>회원 추이</h3><p class="small muted"><i class="lg br"></i>신규 가입 <i class="lg ln"></i>누적 회원(오른쪽 눈금)</p></div><b class="tot">'+tm.toLocaleString('ko-KR')+'명</b></div><div class="chart" id="cMem"></div></section>'+
+      '<section class="box" id="funnel"></section>'+
       '<div class="grid3">'+
         '<section class="box"><h3>분야별 순매출</h3>'+listBars(cats,won)+'<h4>상품별 순매출'+(DASH.cat?' · '+CAT[DASH.cat]:'')+'</h4>'+listBars(items,won)+'</section>'+
         '<section class="box"><h3>결제 수단</h3>'+listBars(methods,won)+'</section>'+
@@ -295,7 +309,7 @@ V.home=function(m){
     $('#dCat',m).onchange=function(){DASH.cat=this.value;render();};
     var tb=$('#dTest',m);if(tb)tb.onchange=function(){DASH.test=tb.checked;render();};
     $('#dRe',m).onclick=function(){load();};
-    briefLoad($('#brief',m));
+    briefLoad($('#brief',m)); funnelLoad($('#funnel',m));
   };
   var load=function(){var pr=DASH.pre||api('dashboard');DASH.pre=null;pr.then(function(d){if(!d||!d.ok){m.innerHTML='<p class="muted">불러오지 못했어요. 새로고침해 주세요.</p>';return;}DASH.data=d;render();});};
   load();

@@ -52,4 +52,4 @@ p{margin:0 0 14px}.mut{color:var(--mut);font-size:14px}
   })
   .catch(function(){show('결제 확인이 늦어지고 있어요','인터넷 연결을 확인하고 이 화면을 새로고침해 주세요. 결제가 두 번 되지는 않아요.','bad');});
 })();
-</script></body></html>
+</script><script>try{var _q=new URLSearchParams(location.search);fetch('/api/lead',{method:'POST',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({ev:'pay_done',path:location.pathname,item:(_q.get('item')||'').replace(/[^a-z0-9-]/g,'')})}).catch(function(){})}catch(e){}</script><script defer src="/_vercel/insights/script.js"></script></body></html>

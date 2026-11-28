@@ -54,7 +54,7 @@ async function notifyOpen(courseId) {
 }
 
 /* 권한: 'all' 이면 전부. 화면·작업마다 필요한 권한 */
-const PERM_READ = { voices: 'courses', brief: 'dash', dashboard: 'dash', orders: 'orders', orders_csv: 'orders', members: 'members', member: 'members', companies: 'companies', company: 'companies', courses: 'courses', shipments: 'ship', logs: 'logs', leads: 'leads', coupons: 'coupons', admins: 'admins', backups: 'admins', launch: 'admins', kits: 'courses' };
+const PERM_READ = { voices: 'courses', brief: 'dash', funnel: 'dash', dashboard: 'dash', orders: 'orders', orders_csv: 'orders', members: 'members', member: 'members', companies: 'companies', company: 'companies', courses: 'courses', shipments: 'ship', logs: 'logs', leads: 'leads', coupons: 'coupons', admins: 'admins', backups: 'admins', launch: 'admins', kits: 'courses' };
 const PERM_ACT = { refund: 'refund', cancel_waiting: 'refund', order_manual: 'refund', pg_sync: 'orders', order_memo: 'orders', grant: 'members', revoke: 'members',
   company_create: 'companies', company_admin: 'companies', seat_add: 'companies', company_invite: 'companies', company_assign: 'companies', company_unassign: 'companies', company_remove: 'companies',
   course_open: 'courses', lesson_save: 'courses', lesson_delete: 'courses', lesson_publish: 'courses', voice_save: 'courses', voice_delete: 'courses', media_upload: 'courses', video_init: 'courses', video_status: 'courses', kit_upload: 'courses', kit_save: 'courses', kit_delete: 'courses',
@@ -69,6 +69,15 @@ const PRESETS = {
 const PERM_NAMES = { dash: '대시보드', orders: '주문 보기', refund: '환불·직접 등록', members: '회원', companies: '기업', leads: '문의 접수함', courses: '강의·키트', ship: '키트 발송', coupons: '할인 코드', logs: '작업 기록', admins: '권한·백업·출시 점검' };
 
 const READ = {
+  /* 전환 퍼널 (익명 이벤트): 최근 N일 · 이벤트별 건수와 상품별 견적·결제 클릭 */
+  async funnel(q) {
+    const days = Math.min(365, Math.max(1, parseInt(q.days, 10) || 30));
+    const since = new Date(Date.now() - days * 864e5).toISOString();
+    const rows = await get('events?select=name,item&at=gte.' + encodeURIComponent(since) + '&limit=50000');
+    const by = {}, items = {};
+    rows.forEach(r => { by[r.name] = (by[r.name] || 0) + 1; if (r.item && (r.name === 'quote_click' || r.name === 'buy_click')) { const k = r.item; items[k] = items[k] || { quote: 0, buy: 0 }; items[k][r.name === 'quote_click' ? 'quote' : 'buy']++; } });
+    return { days, by, items };
+  },
   async voices() { return { voices: await get('testimonials?select=*&order=sort,id') }; },
   /* 데일리 브리핑: 지난 날은 저장된 것(없으면 만들어 저장), 오늘은 지금까지 실시간 */
   async brief(q) {

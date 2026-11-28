@@ -22,11 +22,18 @@ module.exports = async (req, res) => {
   if (!S.sameOrigin(req)) return out(403, 'origin');
   const d = await S.readJson(req, 40000);
   if (!d || typeof d !== 'object') return out(400, 'bad');
+  /* 전환 이벤트 (익명): {ev, path, item} — 개인정보 없이 이름·경로·상품만 남김 */
+  if (d.ev) {
+    const EV = ['quote_click', 'buy_click', 'checkout_view', 'pay_done', 'lead_submit', 'proposal_submit', 'notify_submit'];
+    if (!EV.includes(d.ev)) return out(400, 'bad');
+    try { await S.rest('POST', 'events', { name: d.ev, path: clip(d.path, 200).replace(/[?#].*$/, '') || null, item: clip(d.item, 60) || null }, 'return=minimal'); } catch (e) {}
+    return out(200, 'ok');
+  }
   if (d.website) return out(200, 'ok');                                   // 스팸 방지 칸이 채워지면 저장하지 않음
   const email = clip(d.email, 160).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return out(400, 'bad');
   const kind = clip(d.kind, 60) || '문의';
-  const detail = {}; Object.keys(d).forEach(k => { if (!TOP.includes(k) && d[k] !== '' && d[k] != null && /^[a-zA-Z_]{1,30}$/.test(k)) detail[k] = clip(d[k], 1500); });
+  const detail = {}; Object.keys(d).forEach(k => { if (k.charAt(0) !== '_' && !TOP.includes(k) && d[k] !== '' && d[k] != null && /^[a-zA-Z_]{1,30}$/.test(k)) detail[k] = clip(d[k], 1500); });
   let id = null;
   try {
     /* 같은 이메일·종류로 1분 안에 다시 들어오면 한 건으로 봄 (두 번 누름 방지) */
@@ -35,7 +42,8 @@ module.exports = async (req, res) => {
     const r = await S.rest('POST', 'leads', { kind, company: clip(d.company, 120) || null, name: clip(d.name, 80) || null, email, phone: clip(d.phone, 40).replace(/[^0-9+]/g, '') || null, page: clip(d.page, 300) || null, detail }, 'return=representation');
     if (r.ok && r.data[0]) id = r.data[0].id; else console.error('lead insert', r.status, r.text);
   } catch (e) { console.error('lead db', e && e.message); }
-  const sheetOk = await toSheet(Object.assign({}, d, { email, id: id ? 'L' + id : '' }));
+  const pub = {}; Object.keys(d).forEach(k => { if (k.charAt(0) !== '_') pub[k] = d[k]; });
+  const sheetOk = await toSheet(Object.assign(pub, { email, id: id ? 'L' + id : '' }));
   if (id && sheetOk) await S.rest('PATCH', 'leads?id=eq.' + id, { sheet_ok: true }, 'return=minimal');
   if (id && !sheetOk && kind !== '사전 진단') await OPS.alert('lead_sheet_fail', 'L' + id, '새 접수 (시트 저장 실패, 관리자 화면에는 있어요) · ' + kind, [['회사', d.company || '-'], ['이름', d.name || '-'], ['이메일', email]], '/admin#leads');
   return (id || sheetOk) ? out(200, 'ok') : out(502, 'fail');
