@@ -53,6 +53,16 @@ function courseOpen(p) {
   const foot = '<p style="margin:16px 0 0"><a href="' + SITE + (p.buyer ? '/my' : '/learn') + '" style="display:inline-block;background:#26313D;color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px">' + (p.buyer ? '내 학습으로' : '강의 보러 가기') + '</a></p>' + (p.buyer ? '<p style="font-size:13px;color:#6B727A">수강 시작일은 오늘이에요. 취소·환불은 오늘부터 정책 기준을 따라요.</p>' : '<p style="font-size:13px;color:#6B727A">알림 신청에 따라 한 번만 보내는 안내예요.</p>');
   return send(p.email, '[CHA&I] ' + p.course + ' 강의가 열렸어요', wrap(p.course + ' 강의가 열렸어요', [], body, foot), text(p.course + ' 강의가 열렸어요', [], [SITE + (p.buyer ? '/my' : '/learn')]));
 }
+/* 4-1) 문의 접수 확인 (워크샵 문의·제안서 요청) — 무엇을 받았는지와 다음 단계 */
+function leadAck(p) {
+  const rows = [['접수', p.kind], ['회사', p.company || '-'], ['프로그램', p.program || '-'], ['인원', p.size || '-'], ['희망 시기', p.when || '-']].concat(p.estimate ? [['예상 금액', p.estimate + ' (부가세 포함)']] : []);
+  const body = '<p style="margin:0">' + (p.name ? p.name + ' 님, ' : '') + 'CHA&amp;I에 문의해 주셔서 고마워요. 아래 내용으로 받았어요.</p>';
+  const next = ['영업일 기준 1~2일 안에 담당자가 메일이나 전화로 연락드려요.', '일정·장소·인원을 확인한 뒤 최종 견적서를 보내 드려요.', '확정되면 출강 3일 전에 사전 진단 폼을 따로 보내 드려요.'];
+  const foot = '<p style="margin:16px 0 6px"><b>다음 단계</b></p><ol style="margin:0;padding-left:18px">' + next.map(x => '<li>' + x + '</li>').join('') + '</ol>' +
+    (p.proposalUrl ? '<p style="margin:16px 0 0"><a href="' + p.proposalUrl + '" style="display:inline-block;background:#26313D;color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px">제안서 받기</a></p>' : '') +
+    '<p style="margin:16px 0 0;color:#59616A;font-size:13px">이 메일은 보내기 전용이에요. 더 전할 내용은 help@chaandai.com으로 보내 주세요.</p>';
+  return send(p.email, '[CHA&I] 문의를 받았어요', wrap('문의를 받았어요', rows, body, foot), text('문의를 받았어요', rows, next.concat(p.proposalUrl ? ['제안서: ' + p.proposalUrl] : [])));
+}
 /* 5) 운영자 알림 (OPS_EMAIL, 없으면 보내는 계정으로) */
 function ops(subject, lines, link) {
   const to = process.env.OPS_EMAIL || process.env.SMTP_USER;
@@ -60,4 +70,4 @@ function ops(subject, lines, link) {
   const foot = '<p style="margin:16px 0 0"><a href="' + SITE + (link || '/admin') + '">관리자 화면에서 보기</a></p>';
   return send(to, '[CHA&I 운영] ' + subject, wrap(subject, rows, '', foot), text(subject, rows, [SITE + (link || '/admin')]));
 }
-module.exports = { ready, send, orderConfirm, refundDone, companyInvite, courseOpen, ops };
+module.exports = { ready, send, orderConfirm, refundDone, companyInvite, courseOpen, leadAck, ops };

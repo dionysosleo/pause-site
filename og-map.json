@@ -1,0 +1,106 @@
+{
+"ko": {
+"/w-evening": {
+"t": "차를 우리고, AI를 키우다",
+"d": "한 시간에 한 잔, 네 잔의 차를 우리며 나와 일과 관계를 돌아보고, AI를 나의 파트너로 세워 보는 저녁. 처음 CHA&I를 만나는 가장 기본 프로그램이에요",
+"i": "img/field/tea-setting.jpg"
+},
+"/w-office": {
+"t": "사무실에서 보내는 오후 반나절 워크샵",
+"d": "오전 업무를 마치고 귀사 교육장으로. 저녁 전까지 팀이 쓸 에이전트 하나를 만들고, 마무리는 차 한 잔과 시연이에요",
+"i": "img/u/laptops-1600.webp"
+},
+"/w-outdoor": {
+"t": "숲에서 보내는 하루 워크샵",
+"d": "사무실을 벗어나 서울 근교·강원 숲속 교육장에서 하루. 오전엔 걷고 차를 마시고, 낮엔 팀이 쓸 에이전트를 만들고, 오후엔 숲속 티 세션으로 닫아요",
+"i": "img/u/birch-1600.webp"
+},
+"/w-club": {
+"t": "찻자리 클럽 · 한 시즌",
+"d": "같은 사람들이 4개월 동안 한 달에 한 번 모여요. 매달 계절 차 한 잔과 함께 각자의 에이전트를 한 단계씩 키우고, 사이 기간은 온라인으로 이어요",
+"i": "img/field/tea-lounge.jpg"
+},
+"/w-salon": {
+"t": "차와 술 사이 — CHA&I 살롱",
+"d": "매달 하나의 인문학 질문을 차와 우리 술, 그리고 AI와 함께 묻는 저녁. 차가 우러나는 기다림과 술이 익는 시간 곁에서, 빠르게 답하는 AI 시대에 사람다움이 무엇인지 이야기해요",
+"i": "img/field/tea-sweets.jpg"
+},
+"/w-private": {
+"t": "리더의 찻자리 — 프라이빗 세션",
+"d": "대표·임원진만 모이는 닫힌 찻자리. 남이 하는 시연을 보는 대신 내 업무로 내 에이전트를 직접 만들고, 차 네 잔을 마시는 동안 우리 회사의 AI 원칙을 함께 정해요. 누가 왔고 무슨 이야기를 나눴는지는 밖으로 나가지 않아요",
+"i": "img/field/tea-table.jpg"
+},
+"/c-ai-onboard": {
+"t": "AI 입사식 키트: 클로드 세팅 + 나의 AI 파트너",
+"d": "클로드를 쓸 때마다 처음부터 설명하고 있나요? 파일을 붙여 넣기만 하면 나를 아는 클로드가 되고, 반복 업무 하나를 맡은 AI 파트너가 출근해요.",
+"i": "img/u/desk-1600.webp"
+},
+"/c-vibe-web": {
+"t": "바이브코딩으로 내 웹 만들기",
+"d": "코딩을 몰라도 말로 만들어요. 이 사이트도 같은 방법으로 결제까지 직접 만들었어요. AI 파트너와 함께 내 웹페이지를 만들어 인터넷에 공개합니다.",
+"i": "img/u/laptops-1600.webp"
+},
+"/c-agent-team": {
+"t": "혼자서 팀처럼 일하기: AI 에이전트 팀 세팅",
+"d": "혼자 일해도 팀처럼. 무엇을 AI에게 맡기고 무엇을 내가 정할지부터 설계해, 에이전트 팀과 내 아이디어 하나를 시제품까지 끝내요.",
+"i": "img/u/brainstorm-1600.webp"
+},
+"/c-tea-brand": {
+"t": "하루 한 잔 홈티, 그리고 나만의 차 브랜드",
+"d": "내 하루에 맞는 차 한 잔을 찾고, 그 차를 내 이름의 첫 상품까지 만들어요. 블렌딩은 티 디렉터와, 이름·라벨·알리기는 AI와 함께해요.",
+"i": "img/u/teaPour-1600.webp"
+}
+},
+"en": {
+"/w-evening": {
+"t": "Steep the tea, grow the AI",
+"d": "An evening of four cups — one every hour — to reflect on yourself, your work and your relationships, and to set up AI as your partner. Our core progra",
+"i": "/img/field/tea-setting.jpg"
+},
+"/w-office": {
+"t": "An afternoon half-day workshop at your office",
+"d": "Finish the morning’s work and come to your training room. Before dinner, build one agent the team will use, then wrap up with a cup of tea and a demo",
+"i": "img/u/laptops-1600.webp"
+},
+"/w-outdoor": {
+"t": "A forest day workshop",
+"d": "Leave the office for a forest venue near Seoul or in Gangwon. Walk and drink tea in the morning, build the team’s agent during the day, and close with",
+"i": "img/u/birch-1600.webp"
+},
+"/w-club": {
+"t": "Tea Table Club · One season",
+"d": "The same group meets once a month for four months. Each month, over a cup of seasonal tea, everyone grows their agent one step further, and the time i",
+"i": "/img/field/tea-lounge.jpg"
+},
+"/w-salon": {
+"t": "Between Tea and Spirits — the CHA&I Salon",
+"d": "An evening that asks one humanities question each month, together with tea, Korean traditional spirits and AI. Beside the wait for tea to steep and th",
+"i": "/img/field/tea-sweets.jpg"
+},
+"/w-private": {
+"t": "The Leaders’ Tea Table — a private session",
+"d": "A closed tea table for CEOs and executives only. Instead of watching someone else’s demo, each leader builds their own agent from their own work, and ",
+"i": "/img/field/tea-table.jpg"
+},
+"/c-ai-onboard": {
+"t": "AI Onboarding Kit: Claude setup + my AI partner",
+"d": "Explaining yourself to Claude from scratch every time? Paste in a few files and Claude knows you, and an AI partner starts work on one repetitive task",
+"i": "img/u/desk-1600.webp"
+},
+"/c-vibe-web": {
+"t": "Build my website with vibe coding",
+"d": "No coding, you build by talking. This very site, payments included, was made the same way. With your AI partner you build your own web page and put it",
+"i": "img/u/laptops-1600.webp"
+},
+"/c-agent-team": {
+"t": "Work like a team on your own: setting up an AI agent team",
+"d": "Work alone, like a team. Start by deciding what AI handles and what you decide, then take one idea all the way to a prototype with your agent team.",
+"i": "img/u/brainstorm-1600.webp"
+},
+"/c-tea-brand": {
+"t": "A cup a day at home, and your own tea brand",
+"d": "Find the cup that fits your day, then turn it into your first product under your own name. Blend with a tea director; name, label and promote it with ",
+"i": "img/u/teaPour-1600.webp"
+}
+}
+}
