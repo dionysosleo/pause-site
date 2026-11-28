@@ -99,6 +99,7 @@ button,input,select,textarea{font:inherit}
 .hero-copy{display:flex;flex-direction:column;justify-content:center;gap:24px;padding:72px 48px 72px max(24px,calc((100vw - var(--max))/2 + 24px))}
 .hero .photo{min-height:420px}
 .hero .photo>img{position:absolute;inset:0}
+.hero .hero-h1{font-size:clamp(30px,3.3vw,50px);line-height:1.22;margin:0}
 .hero-tag{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:var(--muted)}
 .hero-about{margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1.5px solid var(--ink)}
 .hero-about div{padding:14px 16px 0 0}
@@ -1044,7 +1045,7 @@ a.pchip:hover{border-color:#667866;box-shadow:0 8px 20px rgba(94,111,94,.14)}
 .pc-ar{color:#B9C3B9;font-size:16px}
 .pc-sep{width:1px;height:26px;background:#E3E7E3;margin:0 4px}
 @media (max-width:760px){.pchips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.pchips::-webkit-scrollbar{display:none}.pchip{flex:none}}
-.hero .pchips{flex-wrap:nowrap;gap:6px}
+.hero .pchips{gap:8px 6px}
 .hero .pchip{padding:5px 12px 5px 5px;gap:7px}
 .hero .pchip b{width:24px;height:24px;font-size:12px}
 .hero .pchip span{font-size:14px}
@@ -1085,7 +1086,7 @@ html[lang=en] .wc-title{min-height:2.8em}html[lang=en] .wc-hook{min-height:2.9em
 .wc-badge{position:absolute;left:14px;top:14px;font-size:12px;font-weight:700;letter-spacing:.01em;color:#fff;background:#667866;border-radius:999px;padding:5px 11px}
 .wc-body{flex:1;display:flex;flex-direction:column;padding:18px 20px 18px}
 .wc-cat{margin:0 0 6px;font-size:12.5px;font-weight:700;color:#667866;letter-spacing:.01em}
-.wc-title{margin:0;font-size:18px;font-weight:700;line-height:1.4;color:#26313D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wc-title{margin:0;font-size:18px;font-weight:700;line-height:1.4;color:#26313D;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .wc-hook{margin:4px 0 0;font-size:14px;color:#6B727A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .wc-spec{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .wc-spec li{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#4A5460;background:#F4F6F3;border-radius:8px;padding:5px 9px;white-space:nowrap;font-variant-numeric:lining-nums}
@@ -2026,7 +2027,7 @@ function vHome(){
   '<section class="hero lite">' +
     '<div class="hero-copy">' +
       '<p class="hero-tag"><span aria-hidden="true"></span>CHA&amp;I · Tea and AI, steeped into life.</p>' +
-      '<h1 class="h1 one" style="font-size:clamp(26px,2.6vw,42px)">One task, turned into an AI agent in a single day.</h1>' +
+      '<h1 class="h1 hero-h1">One task, turned into<br>an AI agent in a single day.</h1>' +
       '<p class="lead ol">Everyone turns one task into an agent that day.</p>' +
       '<dl class="hero-about">' +
         '<div><dt>With whom</dt><dd><ul class="ddl"><li class="ol">Tea Director</li><li class="ol">AI Coach</li><li class="ol">Agent Builder</li></ul></dd></div>' +
