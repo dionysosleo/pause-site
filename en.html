@@ -862,7 +862,7 @@ html{font-variant-numeric:lining-nums}
 @media (max-width:700px){.sflow{padding:22px 14px 14px}.sflow ol{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:18px}.sflow .sf-line{display:none}}
 @media (prefers-reduced-motion: reduce){.sflow *{transition:none!important}}
 /* R8 인원 선택 + 상품 카드 */
-.psz{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.psz{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
 .psz button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:14px 10px;border-radius:16px;border:1.5px solid #E3E7E3;background:#fff;cursor:pointer;font:inherit;color:#26313D;transition:all .25s}
 .psz button b{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:20px;font-weight:800}
 .psz button span{font-size:12.5px;color:#6B727A}
@@ -940,7 +940,7 @@ html{font-variant-numeric:lining-nums}
 @media (max-width:700px){.sflow ol::before,.sflow ol::after{display:none}}
 /* 인원 선택: 움직이는 표시 + 켜지는 카드 차례로 (R7) */
 .psz{position:relative}
-.psz-ind{position:absolute;left:0;top:0;bottom:0;width:calc((100% - 40px) / 5);border-radius:16px;background:#667866;box-shadow:0 10px 24px rgba(94,111,94,.22);transform:translateX(calc(var(--k) * (100% + 10px)));transition:transform .45s cubic-bezier(.3,.7,.2,1);z-index:0}
+.psz-ind{position:absolute;left:0;top:0;bottom:0;width:calc((100% - 30px) / 4);border-radius:16px;background:#667866;box-shadow:0 10px 24px rgba(94,111,94,.22);transform:translateX(calc(var(--k) * (100% + 10px)));transition:transform .45s cubic-bezier(.3,.7,.2,1);z-index:0}
 .psz button{position:relative;z-index:1}
 .psz button.on{background:transparent;border-color:transparent;box-shadow:none}
 .pcard.pop{animation:pcPop .5s cubic-bezier(.3,.7,.2,1) backwards}
@@ -1405,7 +1405,7 @@ var W = [
    opt:'Extend to an overnight stay — add an evening forest tea session, team quiz and roulette games, and a morning walk and showcase the next day.',
    tl:[['09:30','Forest walk','Put your phone down, walk for 20 minutes, and choose today’s tea',1],['10:10','Welcome','Give your agent a name and a tone, say hello, and diagnose what to hand it (Sunghee Han · Simon)'],['10:50','3-minute challenge','Watch an agent finish a task in the three minutes the tea steeps'],['11:30','Onboard a partner','Write a one-page agreement for working together, connect it to mail, calendar and documents, and set it to show up for work every day (Junhyuck Lee · Leo)'],['12:30','Outdoor lunch','—'],['13:30','Learning from your agent','Lay out your work, ask, learn and refine five times until it’s done'],['15:00','Forest tea session · 30 min','Seasonal tea and 1:1 conversations (Yoojin Lee · Bayu)',1],['15:30','Tasting · Finishing together','Introduce and demo each other’s agents'],['16:40','Closing tea','Share a last cup with colleagues and write your two-week commitment',1],['17:30','End','Results report delivered the next day']]},
   {id:'club', kind:'Season · 4 months', hours:'3-hour evening × 4', badge:'Recurring circle', title:'Tea Table Club · One season', sub:'The same group meets once a month for four months. Each month, over a cup of seasonal tea, everyone grows their agent one step further, and the time in between continues online',
-   photos:['fLounge','teaPour','notes'], more:['fTable','fSweets','fSetting','fWorkshop'], who:['lee','han'], size:'10–20 fixed members', place:'Your venue or ours', tools:'Grow one partner agent over four months',
+   photos:['fLounge','teaPour','notes'], more:['fTable','fSweets','fSetting','fWorkshop'], who:['lee','han'], size:'20–30 regular members', place:'Your venue or ours', tools:'Grow one partner agent over four months',
    fit:'When leader or CEO groups, tenant programs or in-house clubs want to meet regularly',
    make:['A partner agent grown over four months','A record of one task handed over each month','Colleagues at the same table'],
    opt:'All season members receive a standard online pass. Between seasons, open Q&A sessions keep things going.',
@@ -1560,7 +1560,7 @@ var ACT = {
 };
 
 var FAQ_CORP = [
-  ['What’s the minimum group size?','Workshops start at 20 people. For 20–40, choose the evening tea, afternoon or forest day; for larger groups see the headcount guide below. Groups under 20 are priced as 20. For 10–20 people meeting regularly, the Tea Club or Salon fits better, and gatherings of CEOs and executives get a custom quote for the private Leaders’ Tea Table.'],
+  ['What’s the minimum group size?','Workshops start at 20 people. For 20–40, choose the evening tea, afternoon, forest day or Tea Club; for larger groups see the headcount guide below. Groups under 20 are priced as 20. For evening groups under 20, the Salon (12–24) fits better, and gatherings of CEOs and executives get a custom quote for the private Leaders’ Tea Table.'],
   ['Is it okay if we’ve never used AI?','Yes. A pre-session video three days before levels the starting line, and on the day you can ask questions 1:1 at every table.'],
   ['External AI access is blocked at our company.','Three days before, we check access with your security officer. If it’s blocked, we run the session with training accounts and public material.'],
   ['What happens to the agents after the workshop?','We provide the setup and usage guide as documents. Everyone can move their agent to their own account or company tools and keep using it, and we check in together at 30 and 90 days.'],
@@ -1573,8 +1573,7 @@ var FAQ_CORP = [
 ];
 var SIZES = [
   ['Execs 4–12','Leaders’ Tea Table · private','Half day / overnight / three 1:1s','One agent each, 1:1 facilitation · custom quote'],
-  ['10–20 people','Tea Club season · Salon','Monthly × 4 / 3 hours','Same members, one step each month'],
-  ['20–40 people','Evening tea · afternoon · forest day','4 h / 5–6 h / 7 h','One each + a team agent'],
+  ['20–40 people','Evening tea · afternoon · forest day · Tea Club','4 h / 5–6 h / 7 h / monthly × 4','One each + a team agent'],
   ['40–100 people','Afternoon workshop with assistant facilitators · AI Tea Lounge','5–6 hours / 2 hours','Team-level agents / 5-minute experience'],
   ['100–400 people','Companion AI × tea talk + representatives’ workshop','60–90 minutes','Live demo for all, hands-on practice for 20–30 representatives']
 ];
@@ -1583,7 +1582,7 @@ var PROGS = [
   ['Afternoon half-day workshop','20–30 people · 5–6 hours','For teams that can’t clear a full day. Up to 80 people with assistant facilitators'],
   ['Full-day workshop','20–40 people · 7 hours','Year-end or quarterly team workshop. A day of welcoming agents in the forest. Overnight stay optional'],
   ['Leaders’ Tea Table · private','4–12 people · CEOs and executives','A closed tea table for CEOs and executives. One agent each, prepared from a pre-interview, and the company’s AI principles set together. Custom quote'],
-  ['Tea Table Club · Season','10–20 people · monthly × 4 months','Recurring programs for leader groups and tenant companies. The same members grow their agents one step each month over a cup of tea'],
+  ['Tea Table Club · Season','20–30 people · monthly × 4 months','Recurring programs for leader groups and tenant companies. The same members grow their agents one step each month over a cup of tea'],
   ['Between Tea and Spirits · Salon','12–24 people · monthly, 3 hours','AI × tea × traditional spirits. An evening opened with two short stories, question cards and a pairing of tea and Korean spirits'],
   ['AI Tea Lounge','20–100 people · 2 hours','Conferences and town halls. A tea bar and a 5-minute “name your agent” experience'],
   ['Companion AI × Tea Talk','30–400 people · 60–90 minutes','Company-wide events. Stories of tea and a talk on companion AI'],
@@ -1594,13 +1593,13 @@ function faqSection(){
     FAQ_CORP.map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') + '</div></section>';
 }
 /* 인원별 고르기: 상품 카드 + 인원 선택 (R8) */
-var PCARD = [['Evening tea','4 hours','20–30 people','Four teas, one partner agent','#w-evening'],['Afternoon half day','5–6 hours','20–30 people','For teams that can’t clear a full day','#w-office'],['A day in the forest','7 hours','20–40 people','A team workshop in the forest','#w-outdoor'],['Tea Table Club','Month 4','10–20 people','Same group, monthly steps','#w-club'],['Between Tea and Spirits salon','3 hours','12–24 people','AI × tea × Korean spirits','#w-salon'],['AI Tea Lounge','2 hours','20–100 people','5-min conference experience','#contact'],['Tea talk','60–90 minutes','30–400 people','Company events, tea and AI','#contact'],['Four-season program','Quarterly','20–30 people','Seasonal agent check-ins','#program'],['Leaders’ Tea Table','4–5 hours','4–12 · executives','Execs only · custom quote','#w-private']];
-var PSIZE = [['Execs 4–12','Private · custom quote',[8,4]],['10–20 people','Fixed members · Salon',[3,4]],['20–40 people','One each + a team agent',[0,1,2,7]],['40–100 people','Team agents · 5-min taste',[1,5]],['100–400 people','Demo · reps practice',[6,5]]];
+var PCARD = [['Evening tea','4 hours','20–30 people','Four teas, one partner agent','#w-evening'],['Afternoon half day','5–6 hours','20–30 people','For teams that can’t clear a full day','#w-office'],['A day in the forest','7 hours','20–40 people','A team workshop in the forest','#w-outdoor'],['Tea Table Club','Month 4','20–30 people','Same group, monthly steps','#w-club'],['Between Tea and Spirits salon','3 hours','12–24 people','AI × tea × Korean spirits','#w-salon'],['AI Tea Lounge','2 hours','20–100 people','5-min conference experience','#contact'],['Tea talk','60–90 minutes','30–400 people','Company events, tea and AI','#contact'],['Four-season program','Quarterly','20–30 people','Seasonal agent check-ins','#program'],['Leaders’ Tea Table','4–5 hours','4–12 · executives','Execs only · custom quote','#w-private']];
+var PSIZE = [['Execs 4–12','Private · Salon',[8,4]],['20–40 people','One each + a team agent',[0,1,2,3,7]],['40–100 people','Team agents · 5-min taste',[1,5]],['100–400 people','Demo · reps practice',[6,5]]];
 function sizeSection(full){
-  var on = PSIZE[2][2];
+  var on = PSIZE[1][2];
   return '<section class="section paper" id="sizes"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">From four executives to 400 people</h2></div><p class="lead">Tap a group size to highlight the right programs.</p></div>' +
-    '<div class="psz" role="tablist" aria-label="Choose group size" style="--k:2"><span class="psz-ind" aria-hidden="true"></span>' + PSIZE.map(function(z, i){ return '<button type="button" role="tab" class="' + (i === 2 ? 'on' : '') + '" aria-selected="' + (i === 2 ? 'true' : 'false') + '" data-size="' + i + '"><b>' + esc(z[0]) + '</b><span class="ol">' + esc(z[1]) + '</span></button>'; }).join('') + '</div>' +
+    '<div class="psz" role="tablist" aria-label="Choose group size" style="--k:1"><span class="psz-ind" aria-hidden="true"></span>' + PSIZE.map(function(z, i){ return '<button type="button" role="tab" class="' + (i === 1 ? 'on' : '') + '" aria-selected="' + (i === 1 ? 'true' : 'false') + '" data-size="' + i + '"><b>' + esc(z[0]) + '</b><span class="ol">' + esc(z[1]) + '</span></button>'; }).join('') + '</div>' +
     '<div class="pcards">' + PCARD.map(function(c, i){ return '<a class="pcard' + (on.indexOf(i) < 0 ? ' dim' : '') + '" data-pi="' + i + '" href="' + c[4] + '"><span class="pc-chip">' + esc(c[2]) + '</span><h3 class="ol">' + esc(c[0]) + '</h3><b class="pc-big">' + esc(c[1]) + '</b><p class="ol">' + esc(c[3]) + '</p><span class="pc-go" aria-hidden="true">→</span></a>'; }).join('') + '</div>' +
   '</div></section>';
 }
@@ -2019,7 +2018,7 @@ var PLANS = {
   evening:{tag:'Signature', name:'Evening tea', big:'4 hours', sub:'18:00~22:00', best:'When starting out', f:['20–30 people · tables of 6','Your lounge or room','Four teas · one an hour','One partner agent']},
   office:{tag:'Extended', name:'Afternoon half day', big:'5–6 hours', sub:'13:00~18:00', best:'To change team work', f:['20–30 people','Your office','Tea breaks + a closing cup','A team work agent']},
   outdoor:{tag:'Extended', name:'A day in the forest', big:'7 hours', sub:'09:30~17:30', best:'To finish a team project', f:['20–40 people','Outdoors near Seoul','Morning + forest tea','Extend to an overnight stay']},
-  club:{tag:'Recurring', name:'Tea Table Club', big:'Month 4', sub:'3-hour evening monthly', best:'To meet regularly', f:['10–20 fixed members','Your venue or ours','Seasonal tea monthly','Standard online pass']},
+  club:{tag:'Recurring', name:'Tea Table Club', big:'Month 4', sub:'3-hour evening monthly', best:'To meet regularly', f:['20–30 regular members','Your venue or ours','Seasonal tea monthly','Standard online pass']},
   private:{tag:'Private', name:'Leaders’ Tea Table', big:'4–5 hours', sub:'Half day · retreat · 1:1', best:'Executives only', f:['4–12 · executives','Exec room · hanok · tea room','One agent each · 1:1 help','Confidential · custom quote']},
   salon:{tag:'Salon', name:'Between tea and spirits', big:'3 hours', sub:'19:00–22:00 · Monthly', best:'To host clients', f:['12–24 people · ages 19+','Bars, breweries, hanok','Welcome tea → pairing','Tea-only option available']}
 };

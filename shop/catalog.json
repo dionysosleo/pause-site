@@ -58,15 +58,15 @@
       "cat": "workshop",
       "price": 4950000,
       "unit": "1회 (한 시즌 월 1회 × 4회 · 묶음 10% 할인가)",
-      "qtyMax": 20,
+      "qtyMax": 30,
       "period": "4개월",
       "refund": "기업 워크샵·출강 (기업 고객)",
       "company": true,
       "head": {
         "base": 3150000,
         "per": 90000,
-        "min": 15,
-        "max": 20,
+        "min": 20,
+        "max": 30,
         "ref": 20
       }
     },

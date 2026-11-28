@@ -862,7 +862,7 @@ html{font-variant-numeric:lining-nums}
 @media (max-width:700px){.sflow{padding:22px 14px 14px}.sflow ol{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:18px}.sflow .sf-line{display:none}}
 @media (prefers-reduced-motion: reduce){.sflow *{transition:none!important}}
 /* R8 인원 선택 + 상품 카드 */
-.psz{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.psz{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
 .psz button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:14px 10px;border-radius:16px;border:1.5px solid #E3E7E3;background:#fff;cursor:pointer;font:inherit;color:#26313D;transition:all .25s}
 .psz button b{font-family:'Pretendard','Noto Sans KR',sans-serif;font-variant-numeric:lining-nums;font-size:20px;font-weight:800}
 .psz button span{font-size:12.5px;color:#6B727A}
@@ -940,7 +940,7 @@ html{font-variant-numeric:lining-nums}
 @media (max-width:700px){.sflow ol::before,.sflow ol::after{display:none}}
 /* 인원 선택: 움직이는 표시 + 켜지는 카드 차례로 (R7) */
 .psz{position:relative}
-.psz-ind{position:absolute;left:0;top:0;bottom:0;width:calc((100% - 40px) / 5);border-radius:16px;background:#667866;box-shadow:0 10px 24px rgba(94,111,94,.22);transform:translateX(calc(var(--k) * (100% + 10px)));transition:transform .45s cubic-bezier(.3,.7,.2,1);z-index:0}
+.psz-ind{position:absolute;left:0;top:0;bottom:0;width:calc((100% - 30px) / 4);border-radius:16px;background:#667866;box-shadow:0 10px 24px rgba(94,111,94,.22);transform:translateX(calc(var(--k) * (100% + 10px)));transition:transform .45s cubic-bezier(.3,.7,.2,1);z-index:0}
 .psz button{position:relative;z-index:1}
 .psz button.on{background:transparent;border-color:transparent;box-shadow:none}
 .pcard.pop{animation:pcPop .5s cubic-bezier(.3,.7,.2,1) backwards}
@@ -1397,7 +1397,7 @@ var W = [
    opt:'1박 2일로 늘리기 — 저녁 숲속 티 세션, 우리 팀 퀴즈·룰렛 게임 레크리에이션, 다음 날 아침 산책과 쇼케이스를 더해요.',
    tl:[['09:30','숲길 산책','핸드폰을 내려놓고 20분 걷고, 오늘 마실 차 고르기',1],['10:10','맞이','내 에이전트에게 이름과 말투를 정해 주고 첫 인사. 무엇을 맡길지 진단 (한성희·Simon)'],['10:50','3분 챌린지','차가 우러나는 3분 안에 에이전트가 끝내는 일을 눈앞에서 보기'],['11:30','에이전트 파트너 들이기','함께 지낼 약속 한 장을 쓰고, 메일·캘린더·문서에 연결해 매일 출근하게 걸어 둬요 (이준혁·Leo)'],['12:30','야외 점심','—'],['13:30','에이전트에게 배우기','내 업무를 털어놓고, 묻고 배우며 다섯 번 고쳐 완성'],['15:00','숲속 찻자리 · 30분','계절 차와 1:1 이야기 (이유진·Bayu)',1],['15:30','시음회 · 함께 해내기','서로의 에이전트를 소개하고 시연하기'],['16:40','찻자리 마무리','동료들과 마지막 잔을 나누며 2주 약속 적기',1],['17:30','끝','다음 날 결과 리포트 전달']]},
   {id:'club', kind:'시즌 · 4개월', hours:'월 1회 저녁 3시간 × 4회', badge:'정기 모임', title:'찻자리 클럽 · 한 시즌', sub:'같은 사람들이 4개월 동안 한 달에 한 번 모여요. 매달 계절 차 한 잔과 함께 각자의 에이전트를 한 단계씩 키우고, 사이 기간은 온라인으로 이어요',
-   photos:['fLounge','teaPour','notes'], more:['fTable','fSweets','fSetting','fWorkshop'], who:['lee','han'], size:'10~20명 고정 멤버', place:'귀사 라운지 또는 협력 공간', tools:'파트너 에이전트 1개를 4개월 동안 키워요',
+   photos:['fLounge','teaPour','notes'], more:['fTable','fSweets','fSetting','fWorkshop'], who:['lee','han'], size:'20~30명 고정 멤버', place:'귀사 라운지 또는 협력 공간', tools:'파트너 에이전트 1개를 4개월 동안 키워요',
    fit:'리더·대표 모임, 입주사 정기 프로그램, 사내 동호회처럼 꾸준히 모이고 싶을 때',
    make:['4개월 동안 키운 파트너 에이전트','매달 한 가지씩 맡긴 업무 기록','같은 테이블의 동료'],
    opt:'시즌 멤버 전원에게 온라인 일반 이용권을 드려요. 시즌 사이에는 오픈 Q&A로 이어져요.',
@@ -1552,7 +1552,7 @@ var ACT = {
 };
 
 var FAQ_CORP = [
-  ['몇 명부터 되나요?','워크샵은 20명부터 진행해요. 20~40명은 저녁 찻자리·오후 반나절·숲속 하루, 그 이상은 아래 인원별 안내를 봐 주세요. 20명보다 적으면 20명 기준 금액으로 진행해요. 10~20명이 꾸준히 모인다면 찻자리 클럽이나 살롱이 맞고, 대표·임원진만 모이는 자리는 프라이빗 ‘리더의 찻자리’로 따로 견적을 드려요.'],
+  ['몇 명부터 되나요?','워크샵은 20명부터 진행해요. 20~40명은 저녁 찻자리·오후 반나절·숲속 하루·찻자리 클럽, 그 이상은 아래 인원별 안내를 봐 주세요. 20명보다 적으면 20명 기준 금액으로 진행해요. 20명보다 적은 저녁 모임은 살롱(12~24명)이 맞고, 대표·임원진만 모이는 자리는 프라이빗 ‘리더의 찻자리’로 따로 견적을 드려요.'],
   ['AI를 한 번도 안 써 봤어도 되나요?','네. 3일 전 사전학습 영상으로 출발선을 맞추고, 당일엔 테이블마다 1:1로 물어볼 수 있어요.'],
   ['우리 회사는 외부 AI 접속이 막혀 있어요.','3일 전에 보안 담당자와 접속 가능 여부를 확인해요. 막혀 있으면 교육용 실습 계정과 공개 자료로 진행해요.'],
   ['워크샵이 끝나면 에이전트는 어떻게 되나요?','설정과 사용법을 문서로 드려요. 각자 계정이나 회사 도구로 옮겨 계속 쓸 수 있고, 30일·90일에 잘 쓰고 있는지 함께 확인해요.'],
@@ -1565,8 +1565,7 @@ var FAQ_CORP = [
 ];
 var SIZES = [
   ['임원 4~12명','리더의 찻자리 · 프라이빗','반나절 / 1박 2일 / 1:1 3회','1인 1에이전트, 1:1 진행 · 따로 견적'],
-  ['10~20명','찻자리 클럽 시즌 · 살롱','월 1회 × 4 / 3시간','고정 멤버, 매달 한 단계씩'],
-  ['20~40명','저녁 찻자리 · 오후 반나절 · 숲속 하루','4시간 / 5~6시간 / 7시간','1인 1에이전트 + 팀 공용 1개'],
+  ['20~40명','저녁 찻자리 · 오후 반나절 · 숲속 하루 · 찻자리 클럽','4시간 / 5~6시간 / 7시간 / 월 1회 × 4','1인 1에이전트 + 팀 공용 1개'],
   ['40~100명','오후 워크샵 + 보조 진행자 · AI 티 라운지','5~6시간 / 2시간','팀 단위 에이전트 / 5분 체험'],
   ['100~400명','동반자 AI × 찻자리 강연 + 대표 워크샵','60~90분','시연 관람, 대표 20~30명 실습']
 ];
@@ -1575,7 +1574,7 @@ var PROGS = [
   ['오후 반나절 워크샵','20~30명 · 5~6시간','하루를 비우기 어려운 팀. 보조 진행자를 더하면 80명까지'],
   ['하루 워크샵','20~40명 · 7시간','연말·분기 팀 워크샵. 숲에서 에이전트를 맞이하는 하루. 1박 2일 선택'],
   ['리더의 찻자리 · 프라이빗','4~12명 · 대표·임원진','대표·임원진만 모이는 닫힌 찻자리. 사전 인터뷰로 1인 1에이전트를 준비하고 회사의 AI 원칙을 함께 정해요. 따로 견적'],
-  ['찻자리 클럽 · 시즌','10~20명 · 월 1회 × 4개월','리더 모임·입주사 정기 프로그램. 같은 멤버가 매달 한 잔과 에이전트를 한 단계씩 키워요'],
+  ['찻자리 클럽 · 시즌','20~30명 · 월 1회 × 4개월','리더 모임·입주사 정기 프로그램. 같은 멤버가 매달 한 잔과 에이전트를 한 단계씩 키워요'],
   ['차와 술 사이 · 살롱','12~24명 · 월 1회 3시간','AI × 차 × 전통주. 짧은 이야기 두 편, 질문 카드, 차와 우리 술 페어링으로 여는 저녁'],
   ['AI 티 라운지','20~100명 · 2시간','컨퍼런스·타운홀. 티 바와 내 에이전트 이름 짓기 5분 체험'],
   ['동반자 AI × 찻자리 강연','30~400명 · 60~90분','전사 행사. 차 이야기와 동반자 AI 토크'],
@@ -1586,13 +1585,13 @@ function faqSection(){
     FAQ_CORP.map(function(q){ return '<details><summary>' + esc(q[0]) + '</summary><p>' + esc(q[1]) + '</p></details>'; }).join('') + '</div></section>';
 }
 /* 인원별 고르기: 상품 카드 + 인원 선택 (R8) */
-var PCARD = [['저녁 찻자리','4시간','20~30명','네 잔의 차와 파트너 에이전트','#w-evening'],['오후 반나절','5~6시간','20~30명','하루를 비우기 어려운 팀에','#w-office'],['숲속 하루','7시간','20~40명','숲에서 보내는 팀 워크샵','#w-outdoor'],['찻자리 클럽','4개월','10~20명','같은 멤버, 매달 한 단계씩','#w-club'],['차와 술 사이 살롱','3시간','12~24명','AI × 차 × 전통주의 저녁','#w-salon'],['AI 티 라운지','2시간','20~100명','컨퍼런스·타운홀 5분 체험','#contact'],['찻자리 강연','60~90분','30~400명','전사 행사, 차와 AI 토크','#contact'],['사계절 프로그램','분기 1회','20~30명','계절마다 에이전트 점검','#program'],['리더의 찻자리','4~5시간','4~12명 · 임원','대표·임원진만, 따로 견적','#w-private']];
-var PSIZE = [['임원 4~12명','프라이빗 · 따로 견적',[8,4]],['10~20명','고정 멤버 · 살롱',[3,4]],['20~40명','1인 1에이전트 + 팀 공용',[0,1,2,7]],['40~100명','팀 단위 에이전트 · 5분 체험',[1,5]],['100~400명','시연 관람 · 대표 실습',[6,5]]];
+var PCARD = [['저녁 찻자리','4시간','20~30명','네 잔의 차와 파트너 에이전트','#w-evening'],['오후 반나절','5~6시간','20~30명','하루를 비우기 어려운 팀에','#w-office'],['숲속 하루','7시간','20~40명','숲에서 보내는 팀 워크샵','#w-outdoor'],['찻자리 클럽','4개월','20~30명','같은 멤버, 매달 한 단계씩','#w-club'],['차와 술 사이 살롱','3시간','12~24명','AI × 차 × 전통주의 저녁','#w-salon'],['AI 티 라운지','2시간','20~100명','컨퍼런스·타운홀 5분 체험','#contact'],['찻자리 강연','60~90분','30~400명','전사 행사, 차와 AI 토크','#contact'],['사계절 프로그램','분기 1회','20~30명','계절마다 에이전트 점검','#program'],['리더의 찻자리','4~5시간','4~12명 · 임원','대표·임원진만, 따로 견적','#w-private']];
+var PSIZE = [['임원 4~12명','프라이빗 · 살롱',[8,4]],['20~40명','1인 1에이전트 + 팀 공용',[0,1,2,3,7]],['40~100명','팀 단위 에이전트 · 5분 체험',[1,5]],['100~400명','시연 관람 · 대표 실습',[6,5]]];
 function sizeSection(full){
-  var on = PSIZE[2][2];
+  var on = PSIZE[1][2];
   return '<section class="section paper" id="sizes"><div class="wrap">' +
     '<div class="sec-head"><div><p class="eyebrow">By headcount</p><h2 class="h2 one">임원 네 명부터 400명까지</h2></div><p class="lead">인원을 누르면 맞는 프로그램이 켜져요.</p></div>' +
-    '<div class="psz" role="tablist" aria-label="인원 선택" style="--k:2"><span class="psz-ind" aria-hidden="true"></span>' + PSIZE.map(function(z, i){ return '<button type="button" role="tab" class="' + (i === 2 ? 'on' : '') + '" aria-selected="' + (i === 2 ? 'true' : 'false') + '" data-size="' + i + '"><b>' + esc(z[0]) + '</b><span class="ol">' + esc(z[1]) + '</span></button>'; }).join('') + '</div>' +
+    '<div class="psz" role="tablist" aria-label="인원 선택" style="--k:1"><span class="psz-ind" aria-hidden="true"></span>' + PSIZE.map(function(z, i){ return '<button type="button" role="tab" class="' + (i === 1 ? 'on' : '') + '" aria-selected="' + (i === 1 ? 'true' : 'false') + '" data-size="' + i + '"><b>' + esc(z[0]) + '</b><span class="ol">' + esc(z[1]) + '</span></button>'; }).join('') + '</div>' +
     '<div class="pcards">' + PCARD.map(function(c, i){ return '<a class="pcard' + (on.indexOf(i) < 0 ? ' dim' : '') + '" data-pi="' + i + '" href="' + c[4] + '"><span class="pc-chip">' + esc(c[2]) + '</span><h3 class="ol">' + esc(c[0]) + '</h3><b class="pc-big">' + esc(c[1]) + '</b><p class="ol">' + esc(c[3]) + '</p><span class="pc-go" aria-hidden="true">→</span></a>'; }).join('') + '</div>' +
   '</div></section>';
 }
@@ -2011,7 +2010,7 @@ var PLANS = {
   evening:{tag:'대표', name:'저녁 찻자리', big:'4시간', sub:'18:00~22:00', best:'처음 열 때', f:['20~30명 · 6인 1조','귀사 라운지·교육장','차 네 잔 · 시간당 한 잔','파트너 에이전트 1개']},
   office:{tag:'확장', name:'오후 반나절', big:'5~6시간', sub:'13:00~18:00', best:'한 팀이 일을 바꿀 때', f:['20~30명','귀사 교육장·회의실','티 브레이크 + 마무리 잔','팀 업무 에이전트']},
   outdoor:{tag:'확장', name:'숲속 하루', big:'7시간', sub:'09:30~17:30', best:'팀 과제를 끝낼 때', f:['20~40명','서울 근교·강원 야외','아침 차 + 숲속 티 세션','1박 2일로 늘리기']},
-  club:{tag:'정기', name:'찻자리 클럽', big:'4개월', sub:'월 1회 저녁 3시간', best:'꾸준히 모일 때', f:['10~20명 고정 멤버','귀사 라운지·협력 공간','매달 계절 차 한 잔','온라인 일반 이용권']},
+  club:{tag:'정기', name:'찻자리 클럽', big:'4개월', sub:'월 1회 저녁 3시간', best:'꾸준히 모일 때', f:['20~30명 고정 멤버','귀사 라운지·협력 공간','매달 계절 차 한 잔','온라인 일반 이용권']},
   private:{tag:'프라이빗', name:'리더의 찻자리', big:'4~5시간', sub:'반나절 · 1박 2일 · 1:1 3회', best:'대표·임원진만 모일 때', f:['4~12명 · 임원','임원 회의실·한옥·다실','1인 1에이전트 · 1:1 진행','비공개 · 따로 견적']},
   salon:{tag:'살롱', name:'차와 술 사이', big:'3시간', sub:'19:00~22:00 · 월 1회', best:'고객·리더를 초청할 때', f:['12~24명 · 만 19세 이상','전통주 바·양조장·한옥','웰컴 티 → 전통주 페어링','차만 즐기는 자리도']}
 };
